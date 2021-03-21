@@ -51,10 +51,10 @@ module.exports.managePrice = async (req, res) => {
 
 module.exports.deleteDatabase = async (req, res) => {
    await Skin.deleteMany({});
-   res.send('cleared Database');
+   res.send('deleted Database');
 };
 
 module.exports.clear = (req, res) => {
    clearHistory();
-   res.send('cleared history')
+   res.send('cleared History')
 };
