@@ -31,11 +31,17 @@ const seedDB = async () => {
       })
 
       for (let item of data[collection]) {
-         const { skin, name, rarity, prices } = item;
+         const { skin, name, rarity } = item;
          const newItem = new Skin({
             name,
             skin,
-            prices,
+            prices: {
+               'Factory New': '0zł',
+               'Minimal Wear': '0zł',
+               'Field-Tested': '0zł',
+               'Well-Worn': '0zł',
+               'Battle-Scarred': '0zł',
+            },
             rarity,
 
          });
