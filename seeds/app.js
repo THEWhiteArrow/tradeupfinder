@@ -34,9 +34,10 @@ const seedDB = async () => {
          const { skin, name, rarity, prices } = item;
          const newItem = new Skin({
             name,
+            skin,
             prices,
             rarity,
-            skin,
+
          });
 
          newCollection.skins.push(newItem);

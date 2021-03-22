@@ -14,7 +14,7 @@ module.exports = {
       },
       {
          name: 'SG 553',
-         skin: 'Rusty',
+         skin: "Ol' Rusty",
          rarity: 'blue',
          prices: {
             'Factory New': '0zł',

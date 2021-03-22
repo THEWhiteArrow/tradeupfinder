@@ -26,7 +26,13 @@ const skinSchema = new Schema({
    },
    rarity: {
       type: String,
+      required: [true, 'Skin must be of certain rarity!']
+   },
+   skin: {
+      type: String,
+      required: [true, "Skin must have it's own skin!"]
    }
+
    // case: {
    //    type: Schema.Types.ObjectId,
    //    ref: 'Case'
