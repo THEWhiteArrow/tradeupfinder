@@ -16,12 +16,13 @@
 <body>
    <h1>Skiny</h1>
    <a href="/skins/update">Odśwież ceny</a>
+   <a href="/skins/check">Szukaj trade'u !</a>
    <% for(let skin of skins) {%>
       <h2>
          <%=skin.name %>
       </h2>
       <p>
-         <%=skin.case %>
+         <%=skin.rarity %>
       </p>
       <ul>
          <% for(let key of qualities) {%>

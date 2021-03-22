@@ -3,16 +3,15 @@ const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
 
 
-// const getData = async (url) => {
-//    // const res = await fetch(url);
-//    // const data = await res.json();
+module.exports.checkTrades = async (req, res) => {
 
-//    const data = 'lolo';
-//    return data;
-// }
+
+
+   res.redirect('/skins');
+}
 
 module.exports.updatePrices = async (req, res) => {
-   // const collections = await Case.find({}).populate('skins');
+   const collections = await Case.find({}).populate('skins');
    const skins = await Skin.find({});
 
    for (let item of skins) {
@@ -31,7 +30,7 @@ module.exports.updatePrices = async (req, res) => {
             const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
 
             const data = await getData(url, 3000);
-            updatedPrices[q] = data.lowest_price || 'error';
+            updatedPrices[q] = data.lowest_price || 'none';
 
          }
       }
@@ -44,8 +43,6 @@ module.exports.updatePrices = async (req, res) => {
 
 
 }
-
-
 
 module.exports.showIndex = async (req, res) => {
    const qualities = ['Factory New', 'Minimal Wear', 'Field-Tested', 'Well-Worn', 'Battle-Scarred']
