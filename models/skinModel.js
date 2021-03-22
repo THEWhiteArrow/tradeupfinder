@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+// const Case = require('./caseModel');
 
 const skinSchema = new Schema({
    name: {
@@ -22,7 +23,14 @@ const skinSchema = new Schema({
       'Battle-Scarred': {
          type: String,
       },
+   },
+   rarity: {
+      type: String,
    }
+   // case: {
+   //    type: Schema.Types.ObjectId,
+   //    ref: 'Case'
+   // }
 });
 
 const Skin = mongoose.model('Skin', skinSchema);

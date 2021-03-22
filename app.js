@@ -34,8 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // CODE
-
-app.use('/', skinRoutes)
+app.get('/', (req, res) => {
+   res.send('WELCOME TO CONTRACT BOT !')
+})
+app.use('/skins', skinRoutes)
 
 
 
