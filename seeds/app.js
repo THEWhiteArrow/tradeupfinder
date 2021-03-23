@@ -46,7 +46,7 @@ const seedDB = async () => {
 
          });
 
-         newCollection.skins.push(newItem);
+         newCollection.skins[rarity].push(newItem);
          await newItem.save();
       }
 

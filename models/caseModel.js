@@ -7,12 +7,20 @@ const caseSchema = new Schema({
       type: String,
       required: [true, 'Collection must have a name!']
    },
-   skins: [
-      {
-         type: Schema.Types.ObjectId,
-         ref: 'Skin'
-      }
-   ]
+   // skins: [
+   //    {
+   //       type: Schema.Types.ObjectId,
+   //       ref: 'Skin'
+   //    }
+   // ]
+   skins: {
+      blue: [
+         {
+            type: Schema.Types.ObjectId,
+            ref: 'Skin'
+         }
+      ]
+   }
 });
 
 const Case = mongoose.model('Case', caseSchema);

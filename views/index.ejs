@@ -6,36 +6,76 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Skins</title>
-   <style>
-      h2 {
-         margin-top: 2rem;
+   <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+   <style type="text/css">
+      html {
+         min-height: 100vh;
+         height: 100%;
+         width: 100%;
+      }
+
+      body {
+
+         background-image: url('/assets/Circuit Board.svg');
+         background-size: cover;
       }
    </style>
 </head>
 
 <body>
-   <h1>Skiny</h1>
-   <a href="/skins/update">Odśwież ceny</a>
-   <a href="/skins/check">Szukaj trade'u !</a>
-   <% for(let skin of skins) {%>
-      <h2>
-         <%=skin.name %>
-      </h2>
-      <p>
-         <%=skin.rarity %>
-      </p>
-      <ul>
-         <% for(let key of qualities) {%>
-            <li>
-               <%= key %> - <strong>
-                     <%= skin.prices[key] %>
-                  </strong>
-            </li>
-            <% }%>
-      </ul>
+   <div class="container">
+      <h1 class="mt-4">Skiny</h1>
+      <a class="btn btn-primary mt-2" href="/skins/update">Odśwież ceny</a>
+      <a class="btn btn-success mt-2" href="/skins/check">Szukaj trade'u !</a>
+
+      <div class="row">
+         <%let i=0; %>
+            <% for(let collection of collections){ %>
+               <div class="col-12 col-sm-6 col-md-4 col-lg-3">
 
 
-      <% }%>
+                  <h2 class="mt-4">
+                     <%=collection.name%>
+                  </h2>
+                  <% for(let rarity of rarities){ %>
+
+                     <button class="btn btn-info text-white" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExample<%=i%>" aria-expanded="false"
+                        aria-controls="collapseExample<%=i%>">
+
+                        <%= rarity %>
+                     </button>
+                     <div class="collapse show mt-3" id="collapseExample<%=i%>">
+                        <% i+=1; %>
+                           <div class="card card-body px-2">
+                              <% for(let skin of collection.skins[rarity]) {%>
+                                 <h6>
+                                    <%=skin.name %> - <%=skin.skin %>
+                                 </h6>
+                                 <ul>
+                                    <% for(let key of qualities) {%>
+                                       <li>
+                                          <%= key %> - <strong>
+                                                <%= skin.prices[key] %>
+                                             </strong>
+                                       </li>
+                                       <% }%>
+                                 </ul>
+
+                                 <% } %>
+                           </div>
+                     </div>
+                     <% } %>
+               </div>
+               <% } %>
+      </div>
+   </div>
+
+
+   <script src="/javascripts/popper.min.js"></script>
+   <script src="/javascripts/bootstrap.min.js"></script>
+
+   <script src="/javascripts/index.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,12 @@
 const fetch = require('node-fetch');
 
+module.exports.convertToPrice = (n, q) => {
+
+   let index = n.prices[`${q}`].indexOf('z');
+   let price = Number(n.prices[`${q}`].substr(0, index).replace(',', '.'));
+
+   return price;
+}
 
 module.exports.mayReplaceSpace = (n) => {
    if (n.indexOf(' ') !== -1) n = n.replace(' ', '%20');
