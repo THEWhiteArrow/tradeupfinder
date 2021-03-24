@@ -24,17 +24,28 @@ const seedDB = async () => {
    await Case.deleteMany({});
    await Skin.deleteMany({});
 
-   for (let collection of dataKeys) {
+   for (let collectionName of dataKeys) {
       const newCollection = new Case({
-         name: collection,
-         skins: []
+         name: collectionName,
+         skins: {
+            'light_blue': [],
+            'blue': [],
+            'purple': [],
+            'pink': [],
+            'red': [],
+         }
       })
 
-      for (let item of data[collection]) {
-         const { skin, name, rarity } = item;
-         const newItem = new Skin({
+      for (let item of data[collectionName]) {
+         const { skin, name, rarity, min_float, max_float } = item;
+
+         // console.log(skin, name, rarity, min_float, max_float)
+         const newSkin = new Skin({
             name,
             skin,
+            rarity,
+            min_float,
+            max_float,
             prices: {
                'Factory New': '0zł',
                'Minimal Wear': '0zł',
@@ -42,15 +53,15 @@ const seedDB = async () => {
                'Well-Worn': '0zł',
                'Battle-Scarred': '0zł',
             },
-            rarity,
+         })
 
-         });
+         newCollection.skins[rarity].push(newSkin);
+         await newSkin.save();
 
-         newCollection.skins[rarity].push(newItem);
-         await newItem.save();
       }
 
       await newCollection.save();
+
    }
 }
 

@@ -2,6 +2,9 @@ const fetch = require('node-fetch');
 
 module.exports.convertToPrice = (n, q) => {
 
+   if (n.prices[q] === 'none') {
+      return 'none';
+   }
    let index = n.prices[`${q}`].indexOf('z');
    let price = Number(n.prices[`${q}`].substr(0, index).replace(',', '.'));
 

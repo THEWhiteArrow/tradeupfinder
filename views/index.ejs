@@ -26,7 +26,7 @@
    <div class="container">
       <h1 class="mt-4">Skiny</h1>
       <a class="btn btn-primary mt-2" href="/skins/update">Odśwież ceny</a>
-      <a class="btn btn-success mt-2" href="/skins/check">Szukaj trade'u !</a>
+      <a class="btn btn-success mt-2" href="/skins/trades">Szukaj trade'u !</a>
 
       <div class="row">
          <%let i=0; %>
@@ -37,33 +37,39 @@
                   <h2 class="mt-4">
                      <%=collection.name%>
                   </h2>
+
+
                   <% for(let rarity of rarities){ %>
+                     <div class="d-flex flex-column">
+                        <button class="btn btn-info text-white" type="button" data-bs-toggle="collapse"
+                           data-bs-target="#collapseExample<%=i%>" aria-expanded="false"
+                           aria-controls="collapseExample<%=i%>">
 
-                     <button class="btn btn-info text-white" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseExample<%=i%>" aria-expanded="false"
-                        aria-controls="collapseExample<%=i%>">
-
-                        <%= rarity %>
-                     </button>
-                     <div class="collapse show mt-3" id="collapseExample<%=i%>">
-                        <% i+=1; %>
-                           <div class="card card-body px-2">
+                           <%= rarity %>
+                        </button>
+                        <div class="collapse show" id="collapseExample<%=i%>">
+                           <% i+=1; %>
                               <% for(let skin of collection.skins[rarity]) {%>
-                                 <h6>
-                                    <%=skin.name %> - <%=skin.skin %>
-                                 </h6>
-                                 <ul>
-                                    <% for(let key of qualities) {%>
-                                       <li>
-                                          <%= key %> - <strong>
-                                                <%= skin.prices[key] %>
-                                             </strong>
-                                       </li>
-                                       <% }%>
-                                 </ul>
+                                 <% if(skin){ %>
+                                    <div class="card card-body px-2">
 
-                                 <% } %>
-                           </div>
+                                       <!-- console.log(skin) -->
+                                       <h6>
+                                          <%=skin.name %> - <%=skin.skin %>
+                                       </h6>
+                                       <ul>
+                                          <% for(let key of qualities) {%>
+                                             <li>
+                                                <%= key %> - <strong>
+                                                      <%= skin.prices[key] %>
+                                                   </strong>
+                                             </li>
+                                             <% }%>
+                                       </ul>
+                                    </div>
+                                    <% } %>
+                                       <% } %>
+                        </div>
                      </div>
                      <% } %>
                </div>

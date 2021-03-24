@@ -4,78 +4,15 @@ const { qualities, rarities } = require('../utils/variables');
 const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
 
-module.exports.showTradesPage = async (req, res) => {
-
-   res.render('trades');
-}
-
-module.exports.checkTrades = async (req, res) => {
-   const collections = await Case.find({}).populate({
-      path: 'skins',
-      populate: {
-         path: 'blue',
-         model: 'Skin'
-      }
-   });
 
 
-   let collectionIndex = 0;
-   let trade = {};
-   for (let collection of collections) {
+module.exports.prepareTrades = async (req, res) => {
+   const trades = await mapSkins();
+   const profitable = findProfitableTrades(trades);
+   console.log(trades);
 
-      for (let rarity of rarities) {
-         let lowId, highId;
-         let min = 1000, max = 0;
-
-         for (let skin of collection.skins[rarity]) {
-            let price = convertToPrice(skin, 'Minimal Wear');
-
-            if (price < min) {
-               min = price;
-               lowId = skin._id;
-            }
-            if (price > max) {
-               max = price;
-               highId = skin._id;
-            }
-         }
-
-         const lowestSkin = await Skin.findById({ _id: lowId });
-         const highestSkin = await Skin.findById({ _id: highId });
-
-         let lowest = `${collection.name} - ${lowestSkin.rarity} - ${lowestSkin.name} ${lowestSkin.skin} - ${lowestSkin.prices['Minimal Wear']} -- ${convertToPrice(lowestSkin, 'Minimal Wear') * 10}`;
-         let highest = `${collection.name} - ${highestSkin.rarity} - ${highestSkin.name} ${highestSkin.skin} - ${highestSkin.prices['Minimal Wear']}`;
-
-         let collectionName = collections[collectionIndex].name;
-         trade[collectionName] = {
-            [rarity]: {
-               lowestData: {
-                  name: lowestSkin.name,
-                  skin: lowestSkin.skin,
-                  price: convertToPrice(lowestSkin, 'Minimal Wear')
-               },
-               highestData: {
-                  name: highestSkin.name,
-                  skin: highestSkin.skin,
-                  price: convertToPrice(highestSkin, 'Minimal Wear')
-               }
-            }
-
-         }
-
-         console.log(lowest);
-         console.log(highest);
-
-      }
-      console.log(` `);
-      collectionIndex += 1;
-   }
-
-   console.log(trade)
-
-   // res.redirect('/skins');
-   res.redirect('/skins/trades');
-}
+   res.render('trades', { profitable });
+};
 
 module.exports.updatePrices = async (req, res) => {
    // const collections = await Case.find({}).populate('skins');
@@ -107,17 +44,94 @@ module.exports.updatePrices = async (req, res) => {
    }
 
    res.redirect('/skins')
-}
+};
 
 module.exports.showIndex = async (req, res) => {
-   const collections = await Case.find({}).populate({
-      path: 'skins',
-      populate: {
-         path: 'blue',
-         model: 'Skin'
-      }
-   });
+   const collections = await Case.find({})
+      .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
 
-   res.render('index', { collections, qualities, rarities })
+   res.render('index', { collections, qualities, rarities });
 };
+
+const mapSkins = async (req, res) => {
+
+   const collections = await Case.find({})
+      .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+
+   const trades = {};
+
+   for (let collection of collections) {
+      let collectionName = collection.name;
+      trades[collectionName] = {};
+
+      for (let rarity of rarities) {
+         trades[collectionName][rarity] = {};
+         let lowId, highId;
+         let min = 1000, max = 0;
+
+         for (let skin of collection.skins[rarity]) {
+            let price = convertToPrice(skin, 'Minimal Wear');
+            if (price !== 'none') {
+
+               if (price < min) {
+                  min = price;
+                  lowId = skin._id;
+               }
+               if (price > max) {
+                  max = price;
+                  highId = skin._id;
+               }
+            }
+         }
+
+
+         if (lowId && highId) {
+            const lowestSkin = await Skin.findById({ _id: lowId });
+            const highestSkin = await Skin.findById({ _id: highId });
+
+            let lowest = `${collection.name} - ${lowestSkin.rarity} - ${lowestSkin.name} ${lowestSkin.skin} - ${lowestSkin.prices['Minimal Wear']} -- ${Math.round(convertToPrice(lowestSkin, 'Minimal Wear') * 10 * 100) / 100}`;
+            let highest = `${collection.name} - ${highestSkin.rarity} - ${highestSkin.name} ${highestSkin.skin} - ${highestSkin.prices['Minimal Wear']}`;
+
+            // console.log(lowest);
+            // console.log(highest);
+
+            trades[collectionName][rarity] = {
+               lowestData: {
+                  name: lowestSkin.name,
+                  skin: lowestSkin.skin,
+                  price: convertToPrice(lowestSkin, 'Minimal Wear')
+               },
+               highestData: {
+                  name: highestSkin.name,
+                  skin: highestSkin.skin,
+                  price: convertToPrice(highestSkin, 'Minimal Wear')
+               }
+            };
+
+
+            // console.log(lowest);
+            // console.log(highest);
+
+         }
+         // console.log(' ');
+      }
+   }
+
+   return trades;
+}
+
+const findProfitableTrades = (trades) => {
+
+   return trades;
+}
