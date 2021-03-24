@@ -9,7 +9,7 @@ const Case = require('../models/caseModel');
 module.exports.prepareTrades = async (req, res) => {
    const trades = await mapSkins();
    const profitable = findProfitableTrades(trades);
-   console.log(trades);
+   // console.log(trades);
 
    res.render('trades', { profitable });
 };
@@ -80,49 +80,58 @@ const mapSkins = async (req, res) => {
          let lowId, highId;
          let min = 1000, max = 0;
 
-         for (let skin of collection.skins[rarity]) {
-            let price = convertToPrice(skin, 'Minimal Wear');
-            if (price !== 'none') {
+         for (let q of qualities) {
 
-               if (price < min) {
-                  min = price;
-                  lowId = skin._id;
-               }
-               if (price > max) {
-                  max = price;
-                  highId = skin._id;
+            // trades[collectionName][rarity][q] = {};
+
+            for (let skin of collection.skins[rarity]) {
+
+
+               let price = convertToPrice(skin, q);
+               if (price !== 'none') {
+
+                  if (price < min) {
+                     min = price;
+                     lowId = skin._id;
+                  }
+                  if (price > max) {
+                     max = price;
+                     highId = skin._id;
+                  }
                }
             }
-         }
+
+            if (lowId && highId) {
+               const lowestSkin = await Skin.findById({ _id: lowId });
+               const highestSkin = await Skin.findById({ _id: highId });
+
+               let lowest = `${collection.name} - ${lowestSkin.rarity} - ${lowestSkin.name} ${lowestSkin.skin} - ${lowestSkin.prices[q]} -- ${Math.round(convertToPrice(lowestSkin, q) * 10 * 100) / 100}`;
+               let highest = `${collection.name} - ${highestSkin.rarity} - ${highestSkin.name} ${highestSkin.skin} - ${highestSkin.prices[q]}`;
+
+               // console.log(lowest);
+               // console.log(highest);
+
+               trades[collectionName][rarity][q] = {
+                  lowestData: {
+                     name: lowestSkin.name,
+                     skin: lowestSkin.skin,
+                     price: convertToPrice(lowestSkin, q),
+                     taxed: Math.round(convertToPrice(lowestSkin, q) * 0.87 * 100) / 100,
+                  },
+                  highestData: {
+                     name: highestSkin.name,
+                     skin: highestSkin.skin,
+                     price: convertToPrice(highestSkin, q),
+                     taxed: Math.round(convertToPrice(highestSkin, q) * 0.87 * 100) / 100,
+                  },
+
+               };
 
 
-         if (lowId && highId) {
-            const lowestSkin = await Skin.findById({ _id: lowId });
-            const highestSkin = await Skin.findById({ _id: highId });
+               // console.log(lowest);
+               // console.log(highest);
 
-            let lowest = `${collection.name} - ${lowestSkin.rarity} - ${lowestSkin.name} ${lowestSkin.skin} - ${lowestSkin.prices['Minimal Wear']} -- ${Math.round(convertToPrice(lowestSkin, 'Minimal Wear') * 10 * 100) / 100}`;
-            let highest = `${collection.name} - ${highestSkin.rarity} - ${highestSkin.name} ${highestSkin.skin} - ${highestSkin.prices['Minimal Wear']}`;
-
-            // console.log(lowest);
-            // console.log(highest);
-
-            trades[collectionName][rarity] = {
-               lowestData: {
-                  name: lowestSkin.name,
-                  skin: lowestSkin.skin,
-                  price: convertToPrice(lowestSkin, 'Minimal Wear')
-               },
-               highestData: {
-                  name: highestSkin.name,
-                  skin: highestSkin.skin,
-                  price: convertToPrice(highestSkin, 'Minimal Wear')
-               }
-            };
-
-
-            // console.log(lowest);
-            // console.log(highest);
-
+            }
          }
          // console.log(' ');
       }
@@ -132,6 +141,36 @@ const mapSkins = async (req, res) => {
 }
 
 const findProfitableTrades = (trades) => {
+
+   const keys = Object.keys(trades);
+   console.log(keys)
+
+   for (let key of keys) {
+
+      const rarity = Object.keys(trades[key]);
+
+
+      rarity.forEach((el, i, arr) => {
+         const quality = Object.keys(trades[key][el]);
+
+         if (quality.length > 0) {
+
+            console.log(key, el, trades[key][el]['Factory New'])
+         }
+      })
+
+      // for (let r of rarity) {
+
+      //    const quality = Object.keys(trades[key][r]);
+      //    if (quality.length > 0) {
+
+      //       console.log(key, r, trades[key][r]['Factory New'])
+      //    }
+
+      // }
+
+   }
+
 
    return trades;
 }
