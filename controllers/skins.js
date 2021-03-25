@@ -8,10 +8,10 @@ const Case = require('../models/caseModel');
 
 module.exports.prepareTrades = async (req, res) => {
    const trades = await mapSkins();
-   const profitable = findProfitableTrades(trades);
+   const profit = findProfitableTrades(trades);
    // console.log(trades);
 
-   res.render('trades', { profitable });
+   res.render('trades', { profit });
 };
 
 module.exports.updatePrices = async (req, res) => {
@@ -105,9 +105,8 @@ const mapSkins = async (req, res) => {
                const lowestSkin = await Skin.findById({ _id: lowId });
                const highestSkin = await Skin.findById({ _id: highId });
 
-               let lowest = `${collection.name} - ${lowestSkin.rarity} - ${lowestSkin.name} ${lowestSkin.skin} - ${lowestSkin.prices[q]} -- ${Math.round(convertToPrice(lowestSkin, q) * 10 * 100) / 100}`;
-               let highest = `${collection.name} - ${highestSkin.rarity} - ${highestSkin.name} ${highestSkin.skin} - ${highestSkin.prices[q]}`;
-
+               // let lowest = `${collection.name} - ${lowestSkin.rarity} - ${lowestSkin.name} ${lowestSkin.skin} - ${lowestSkin.prices[q]} -- ${Math.round(convertToPrice(lowestSkin, q) * 10 * 100) / 100}`;
+               // let highest = `${collection.name} - ${highestSkin.rarity} - ${highestSkin.name} ${highestSkin.skin} - ${highestSkin.prices[q]}`;
                // console.log(lowest);
                // console.log(highest);
 
@@ -141,36 +140,57 @@ const mapSkins = async (req, res) => {
 }
 
 const findProfitableTrades = (trades) => {
-
+   const profitGwarantowany = [];
+   const profitStatystyczny = [];
+   // const q = 'Minimal Wear';
    const keys = Object.keys(trades);
    console.log(keys)
 
    for (let key of keys) {
-
       const rarity = Object.keys(trades[key]);
 
+      for (let i = 0; i < rarity.length - 1; i++) {
 
-      rarity.forEach((el, i, arr) => {
-         const quality = Object.keys(trades[key][el]);
-
-         if (quality.length > 0) {
-
-            console.log(key, el, trades[key][el]['Factory New'])
+         for (let q of qualities) {
+            const instance = trades[key][rarity[i]][q];
+            const nextInstance = trades[key][rarity[i + 1]][q];
+            if (instance && nextInstance) {
+               // console.log(q, rarity[i], instance.lowestData.name, instance.lowestData.skin, ' => ', nextInstance.highestData.name, nextInstance.highestData.skin)
+               // console.log(`${instance.lowestData.price} (${Math.round(instance.lowestData.price * 10 * 100) / 100}) => ${nextInstance.lowestData.taxed} or ${nextInstance.highestData.taxed}`);
+               if ((Math.round(instance.lowestData.price * 10 * 100) / 100) < nextInstance.lowestData.taxed) {
+                  // console.log((Math.round(instance.lowestData.price * 10 * 100) / 100), nextInstance.lowestData.taxed);
+                  const pom = {
+                     rarity: rarity[i],
+                     quality: q,
+                     collection: key,
+                     instance,
+                     nextInstance
+                  }
+                  profitGwarantowany.push(pom);
+               } else if ((Math.round(instance.lowestData.price * 10 * 100) / 100) < nextInstance.highestData.taxed) {
+                  const pom = {
+                     rarity: rarity[i],
+                     quality: q,
+                     collection: key,
+                     instance,
+                     nextInstance
+                  }
+                  profitStatystyczny.push(pom);
+               }
+            }
+            // console.log(' ');
          }
-      })
-
-      // for (let r of rarity) {
-
-      //    const quality = Object.keys(trades[key][r]);
-      //    if (quality.length > 0) {
-
-      //       console.log(key, r, trades[key][r]['Factory New'])
-      //    }
-
-      // }
-
+      }
+      // SPACJA POMIĘDZY KOLEKCJAMI
+      // console.log(' ');
+      // console.log(' ');
    }
 
+   // console.log(profitGwarantowany[0].quality, profitGwarantowany[0].instance.lowestData.name, profitGwarantowany[0].instance.lowestData.skin);
+   console.log('profitGwarantowany', profitGwarantowany.length)
+   console.log('profitStatystyczny', profitStatystyczny.length)
 
-   return trades;
+
+   const profit = { profitGwarantowany, profitStatystyczny };
+   return profit;
 }
