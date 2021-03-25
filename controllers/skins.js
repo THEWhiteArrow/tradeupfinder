@@ -1,5 +1,5 @@
 const { mayReplaceSpace, getData, convertToPrice, toName, getSkinPage, clearHistory } = require('../utils/functions');
-const { qualities, rarities } = require('../utils/variables');
+const { qualities, rarities, avg_floats } = require('../utils/variables');
 
 const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
@@ -7,10 +7,12 @@ const Case = require('../models/caseModel');
 
 
 module.exports.prepareTrades = async (req, res) => {
-   const trades = await mapSkins();
-   const profit = findProfitableTrades(trades);
+   const extremeSkinsPrices = await mapSkins();
+   const profit = findProfitableTrades(extremeSkinsPrices);
+   // const profit = checkProfit(findedTrades);
    // console.log(trades);
-
+   // console.log(profit)
+   // res.render('trades', { profit });
    res.render('trades', { profit });
 };
 
@@ -59,6 +61,7 @@ module.exports.showIndex = async (req, res) => {
    res.render('index', { collections, qualities, rarities });
 };
 
+// MAPPING LOWEST AND HIGHEST SKINS PRICES
 const mapSkins = async (req, res) => {
 
    const collections = await Case.find({})
@@ -114,12 +117,16 @@ const mapSkins = async (req, res) => {
                   lowestData: {
                      name: lowestSkin.name,
                      skin: lowestSkin.skin,
+                     min_float: lowestSkin.min_float,
+                     max_float: lowestSkin.max_float,
                      price: convertToPrice(lowestSkin, q),
                      taxed: Math.round(convertToPrice(lowestSkin, q) * 0.87 * 100) / 100,
                   },
                   highestData: {
                      name: highestSkin.name,
                      skin: highestSkin.skin,
+                     min_float: highestSkin.min_float,
+                     max_float: highestSkin.max_float,
                      price: convertToPrice(highestSkin, q),
                      taxed: Math.round(convertToPrice(highestSkin, q) * 0.87 * 100) / 100,
                   },
@@ -152,11 +159,21 @@ const findProfitableTrades = (trades) => {
       for (let i = 0; i < rarity.length - 1; i++) {
 
          for (let q of qualities) {
+
+
+
             const instance = trades[key][rarity[i]][q];
             const nextInstance = trades[key][rarity[i + 1]][q];
             if (instance && nextInstance) {
                // console.log(q, rarity[i], instance.lowestData.name, instance.lowestData.skin, ' => ', nextInstance.highestData.name, nextInstance.highestData.skin)
                // console.log(`${instance.lowestData.price} (${Math.round(instance.lowestData.price * 10 * 100) / 100}) => ${nextInstance.lowestData.taxed} or ${nextInstance.highestData.taxed}`);
+               // const newSkinFloat =n
+
+               // const floatLowerSkin = (nextInstance.lowestData.max_float - nextInstance.lowestData.min_float) * avg_floats[q] - nextInstance.lowestData.min_float;
+               // const floatHigherSkin = (nextInstance.highestData.max_float - nextInstance.highestData.min_float) * avg_floats[q] - nextInstance.highestData.min_float;
+               // console.log(floatLowerSkin, ' - ', floatHigherSkin);
+
+
                if ((Math.round(instance.lowestData.price * 10 * 100) / 100) < nextInstance.lowestData.taxed) {
                   // console.log((Math.round(instance.lowestData.price * 10 * 100) / 100), nextInstance.lowestData.taxed);
                   const pom = {
@@ -173,12 +190,15 @@ const findProfitableTrades = (trades) => {
                      quality: q,
                      collection: key,
                      instance,
-                     nextInstance
+                     nextInstance,
                   }
                   profitStatystyczny.push(pom);
                }
             }
-            // console.log(' ');
+            console.log(' ');
+
+
+
          }
       }
       // SPACJA POMIĘDZY KOLEKCJAMI
@@ -187,10 +207,18 @@ const findProfitableTrades = (trades) => {
    }
 
    // console.log(profitGwarantowany[0].quality, profitGwarantowany[0].instance.lowestData.name, profitGwarantowany[0].instance.lowestData.skin);
-   console.log('profitGwarantowany', profitGwarantowany.length)
-   console.log('profitStatystyczny', profitStatystyczny.length)
+
+   // console.log('profitGwarantowany', profitGwarantowany.length)
+   // console.log('profitStatystyczny', profitStatystyczny.length)
 
 
    const profit = { profitGwarantowany, profitStatystyczny };
    return profit;
 }
+
+// const checkProfit = (findedTrades) => {
+//    const profit;
+//    return profit;
+// }
+
+
