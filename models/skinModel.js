@@ -39,6 +39,9 @@ const skinSchema = new Schema({
       'Battle-Scarred': {
          type: String,
       },
+      floated: {
+         type: Object
+      }
    },
 
    // case: {

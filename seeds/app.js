@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const data = require('./data.js')
 const Case = require('../models/caseModel');
 const Skin = require('../models/skinModel');
+const { floatedPrices } = require('../utils/functions.js');
 // MONGO DATABASE
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
 mongoose.connect(dbUrl, {
@@ -52,8 +53,12 @@ const seedDB = async () => {
                'Field-Tested': '0zł',
                'Well-Worn': '0zł',
                'Battle-Scarred': '0zł',
+               floated: {},
             },
          })
+
+         newSkin.prices.floated = floatedPrices(newSkin);
+         // console.log(newSkin)
 
          newCollection.skins[rarity].push(newSkin);
          await newSkin.save();

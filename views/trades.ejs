@@ -19,6 +19,27 @@
          background-image: url('/assets/Circuit Board.svg');
          background-size: cover;
       }
+
+      .text-underline {
+         display: inline-flex;
+         height: 100%;
+         border-bottom: 2px solid rgb(0, 155, 13);
+      }
+
+      svg {
+         color: green;
+         height: 12px;
+         transform: translate3d(-6px, -6px, 0);
+      }
+
+      svg.down {
+         color: red;
+         transform: translate3d(-6px, 4px, 0) rotate(180deg);
+      }
+
+      .red {
+         border-bottom: 2px solid red;
+      }
    </style>
 </head>
 
@@ -33,39 +54,89 @@
       <div>
          <h2>Profit Gwarantowany</h2>
          <ul>
-            <% for(let i of profit.profitGwarantowany){ %>
-               <li class="my-2">
-                  <%= i.collection %>
-                     <span class="rarity me-2 ">
-                        <%= i.rarity %>
-                     </span>
-                     <%= i.quality %> - <%= i.instance.lowestData.name %>
-                           <%= i.instance.lowestData.skin %>
-                              | <%= i.instance.lowestData.price %> => <%= i.nextInstance.highestData.name %>
-                                    <%= i.nextInstance.highestData.skin %>
-                                       <%= i.nextInstance.highestData.taxed %>
-               </li>
-               <%} %>
+            <% let lastCase='' ; %>
+               <% for(let i of profit.profitGwarantowany){ %>
+                  <% if(i.collection!==lastCase) {%>
+                     <%= i.collection %>
+                        <% lastCase=i.collection;} %>
+
+
+                           <li class="my-2">
+                              <span class="rarity me-2 ">
+                                 <%= i.rarity %>
+                              </span>
+                              <%= i.quality %> - <%= i.instance.lowestData.name %>
+                                    <%= i.instance.lowestData.skin %>
+                                       | <%= i.instance.lowestData.price %> => <%= i.nextInstance.highestData.name %>
+                                             <%= i.nextInstance.highestData.skin %>
+                                                <%= i.nextPrice %>
+                                                   <%= i.nextQuality %>
+                                                      <span class="text-underline">
+                                                         <%= i.chance %>%
+                                                      </span>
+                           </li>
+                           <%} %>
          </ul>
       </div>
 
-      <div>
+      <div class="row">
          <h2>Profit Statystyczny</h2>
-         <ul>
-            <% for(let i of profit.profitStatystyczny){ %>
-               <li class="my-2">
-                  <%= i.collection %>
-                     <span class="rarity me-2">
-                        <%= i.rarity %>
-                     </span>
-                     <%= i.quality %> - <%= i.instance.lowestData.name %>
-                           <%= i.instance.lowestData.skin %>
-                              | <%= i.instance.lowestData.price %> => <%= i.nextInstance.highestData.name %>
-                                    <%= i.nextInstance.highestData.skin %>
-                                       <%= i.nextInstance.highestData.taxed %>
-               </li>
-               <%} %>
-         </ul>
+         <ol class="">
+            <% lastCase='' ; %>
+               <% profit.profitStatystyczny.forEach( (i, c, arr)=> {%>
+                  <% if(i.collection!==lastCase) {%>
+                     <li>
+                        <%= i.collection %>
+                     </li>
+                     <ul class="ps-0">
+
+                        <% lastCase=i.collection;} %>
+
+                           <li class="my-2 ms-5">
+                              <span class="rarity me-2">
+                                 <%= i.rarity %>
+                              </span>
+                              <%= shortcuts[i.quality] %> - <%= i.instance.lowestData.name %> | <%=
+                                       i.instance.lowestData.skin %>
+                                       (<%= Math.round(i.instance.lowestData.price*10*10)/10 %>)
+                                          =>
+                                          <%=shortcuts[i.nextQuality] %> -
+                                             <%=i.nextInstance.highestData.name %> |
+                                                <%= i.nextInstance.highestData.skin %> (<%= i.nextPrice %>) -.-
+                                                      <span class="text-underline ms-2">
+                                                         <%= i.chance %>%
+                                                      </span>
+                                                      <span class="text-underline ms-1 d-inline-block">
+                                                         <%=Math.round( (i.nextPrice - (i.instance.lowestData.price*10))
+                                                            *100)/100 %>zł
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                               height="16" fill="currentColor" class="bi bi-arrow-up up"
+                                                               viewBox="0 0 16 16">
+                                                               <path fill-rule="evenodd"
+                                                                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                                                            </svg>
+                                                      </span>
+                                                      <span class="text-underline red ms-2">
+                                                         <%= 100 - i.chance %>%
+                                                      </span>
+                                                      <span class="text-underline red ms-1 d-inline-block">
+                                                         <%=Math.round( (i.nextPrice - (i.instance.lowestData.price*10))
+                                                            *100)/100 %>zł
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                               height="16" fill="currentColor"
+                                                               class="bi bi-arrow-up down" viewBox="0 0 16 16">
+                                                               <path fill-rule="evenodd"
+                                                                  d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                                                            </svg>
+                                                      </span>
+
+                           </li>
+                           <% if( (c+1<arr.length&&profit.profitStatystyczny[`${c+1}`].collection!==lastCase) ||
+                              c+1===arr.length) {%>
+                     </ul>
+                     <% } %>
+                        <% })%>
+         </ol>
       </div>
 
    </div>

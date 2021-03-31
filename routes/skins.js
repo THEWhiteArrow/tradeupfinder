@@ -12,8 +12,14 @@ router.route('/')
 router.route('/update')
    .get(catchAsync(skin.updatePrices));
 
+router.route('/update-targeted-prices')
+   .get(catchAsync(skin.updateTargetedPrices));
+
 router.route('/trades')
    .get(catchAsync(skin.prepareTrades));
+
+router.route('/test')
+   .get(catchAsync(skin.test));
 
 
 

@@ -19,6 +19,18 @@
          background-image: url('/assets/Circuit Board.svg');
          background-size: cover;
       }
+
+      #displayFloat {
+         display: flex;
+         flex: 1;
+         justify-content: center;
+         align-items: center;
+
+      }
+
+      .bg-white {
+         background-color: white !important;
+      }
    </style>
 </head>
 
@@ -27,8 +39,53 @@
       <h1 class="mt-4">Skiny</h1>
       <a class="btn btn-primary mt-2" href="/skins/update">Odśwież ceny</a>
       <a class="btn btn-success mt-2" href="/skins/trades">Szukaj trade'u !</a>
+      <a class="btn btn-sm btn-dark" href="/skins/test">testy</a>
 
       <div class="row">
+
+         <div class=" d-flex mt-2 col-12 col-md-4">
+            <form class="d-fle col-12 flex-columnx">
+               <input class="form-control my-1" type="number" placeholder="min_float" aria-label=".form-control example"
+                  step="0.01">
+               <input class="form-control my-1" type="number" placeholder="max_float" aria-label=".form-control example"
+                  step="0.01">
+               <input class="form-control my-1" type="number" placeholder="avg_float" aria-label=".form-control example"
+                  step="0.001">
+               <div class="d-flex">
+                  <button id="submit" class="btn btn-danger btn-sm col-7">Znajdź float'a</button>
+                  <span class="bg-white col-5" id="displayFloat" class="ms-2"></span>
+               </div>
+            </form>
+         </div>
+
+         <div class=" d-flex mt-2 col-12 col-md-4">
+            <form class="d-flex col-12 flex-column" action="/skins/update-targeted-prices" method="GET">
+               <input class="form-control my-1" type="number" name="fn" placeholder="factory new  0-0.07"
+                  aria-label=".form-control example" step="0.001">
+               <input class="form-control my-1" type="number" name="mw" placeholder="minimal wear  0.07-0.15"
+                  aria-label=".form-control example" step="0.001">
+               <input class="form-control my-1" type="number" name="ft" placeholder="field-tested  0.15-0.38"
+                  aria-label=".form-control example" step="0.001">
+               <input class="form-control my-1" type="number" name="ww" placeholder="well-worn  0.38-0.45"
+                  aria-label=".form-control example" step="0.001">
+               <input class="form-control my-1" type="number" name="bs" placeholder="battle-scarred  0.45-1"
+                  aria-label=".form-control example" step="0.001">
+               <div class="d-flex">
+                  <button class="btn btn-danger btn-sm col-12">Zmień średnie floaty</button>
+               </div>
+            </form>
+         </div>
+
+         <div class=" mt-2 col-12 col-md-4">
+            <a href="/skins/update-targeted-prices?resetFloats=true"
+               class="mt-1 btn btn-warning text-white btn-sm col-12">Zesetuj średnie floaty</a>
+         </div>
+         </form>
+      </div>
+
+
+
+      <div class="row d-flex justify-content-between">
          <%let i=0; %>
             <% for(let collection of collections){ %>
                <div class="col-12 col-sm-6 col-md-4 col-lg-3">

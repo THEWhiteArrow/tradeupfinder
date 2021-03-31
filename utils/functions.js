@@ -1,7 +1,52 @@
 const fetch = require('node-fetch');
 
-module.exports.convertToPrice = (n, q) => {
+const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
 
+
+
+module.exports.floatedPrices = (skin, set_floats = avg_floats) => {
+
+   let prices = {};
+   for (let quality of qualities) {
+      let avg;
+      if (skin.min_float > set_floats[quality]) {
+         avg = skin.min_float;
+      } else {
+         avg = set_floats[quality];
+      }
+
+      const float = Math.round(((skin.max_float - skin.min_float) * avg + skin.min_float) * 1000) / 1000;
+      let floatedQuality = '';
+      if (float < 0.07) {
+         floatedQuality = 'Factory New';
+      } else if (float < 0.15) {
+         floatedQuality = 'Minimal Wear';
+      } else if (float < 0.38) {
+         floatedQuality = 'Field-Tested';
+      } else if (float < 0.45) {
+         floatedQuality = 'Well-Worn';
+      } else {
+         floatedQuality = 'Battle-Scarred'
+      }
+
+
+      prices[quality] = skin.prices[floatedQuality];
+
+   }
+   return prices;
+}
+
+module.exports.convertToPriceFloated = (n, q) => {
+   if (n.prices.floated[q] === 'none') {
+      return 'none';
+   }
+   let index = n.prices.floated[q].indexOf('z');
+   let price = Number(n.prices.floated[q].substr(0, index).replace(',', '.'));
+
+   return price;
+}
+
+module.exports.convertToPrice = (n, q) => {
    if (n.prices[q] === 'none') {
       return 'none';
    }
@@ -10,6 +55,10 @@ module.exports.convertToPrice = (n, q) => {
 
    return price;
 }
+
+
+
+
 
 module.exports.mayReplaceSpace = (n) => {
    if (n.indexOf(' ') !== -1) n = n.replace(' ', '%20');

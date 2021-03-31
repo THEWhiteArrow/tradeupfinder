@@ -5,5 +5,12 @@ module.exports.avg_floats = {
    'Minimal Wear': 0.11,
    'Field-Tested': 0.265,
    'Well-Worn': 0.415,
-   'Battle-Scatted': 0.725
+   'Battle-Scarred': 0.725
+};
+module.exports.shortcuts = {
+   'Factory New': 'FN',
+   'Minimal Wear': 'MW',
+   'Field-Tested': 'FT',
+   'Well-Worn': 'WW',
+   'Battle-Scarred': 'BS'
 };
