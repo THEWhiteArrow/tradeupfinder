@@ -43,6 +43,9 @@ const skinSchema = new Schema({
          type: Object
       }
    },
+   floatedQualities: {
+      type: Object,
+   }
 
    // case: {
    //    type: Schema.Types.ObjectId,

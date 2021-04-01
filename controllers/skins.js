@@ -1,4 +1,4 @@
-const { mayReplaceSpace, getData, convertToPrice, convertToPriceFloated, floatedPrices } = require('../utils/functions');
+const { mayReplaceSpace, getData, convertToPrice, convert, convertToPriceFloated, floatedPrices, floatedQualities } = require('../utils/functions');
 const { qualities, rarities, avg_floats, shortcuts } = require('../utils/variables');
 
 const Skin = require('../models/skinModel');
@@ -9,12 +9,12 @@ const Case = require('../models/caseModel');
 module.exports.prepareTrades = async (req, res) => {
    const extremeSkinsPrices = await mapSkins();
    const probableProfit = findProfitableTrades(extremeSkinsPrices);
+   const profit = await checkReallWorth(probableProfit);
 
-   const checkedProfit = await checkReallWorth(probableProfit);
+   // const { map, nOfSkins } = await getMappedSkins();
+   // const profit = await getTrades(map, nOfSkins);
 
-
-
-   res.render('trades', { profit: checkedProfit, shortcuts });
+   res.render('trades', { profit, shortcuts });
 };
 
 module.exports.updatePrices = async (req, res) => {
@@ -24,31 +24,48 @@ module.exports.updatePrices = async (req, res) => {
    for (let item of skins) {
       const updatedPrices = {};
       const { name, skin, prices, _id } = item;
-      console.log(_id)
+      // console.log(_id)
+      // console.log(name);
 
       const keys = Object.keys(prices);
-      console.log(name);
 
       // const oldSkin = await Skin.findById({ _id });
 
-
-
       for (let q of keys) {
-         if (q !== '$init') {
-
+         if (q !== '$init' && q !== 'floated') {
+            console.log(q)
 
             const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
             const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
-
             const data = await getData(url, 3000);
             updatedPrices[q] = data.lowest_price || 'none';
-
          }
       }
 
+      // for (let q of keys) {
+      //    if (q !== '$init') {
+
+
+      //       const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+      //       const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
+
+      //       const data = await getData(url, 3000);
+      //       updatedPrices[q] = data.lowest_price || 'none';
+
+      //    }
+      // }
+
+      // keys[2] to środek
+      updatedPrices[keys[1]] === 'none' ? updatedPrices[keys[1]] = updatedPrices[keys[2]] : null;
+      updatedPrices[keys[0]] === 'none' ? updatedPrices[keys[0]] = updatedPrices[keys[1]] : null;
+      updatedPrices[keys[3]] === 'none' ? updatedPrices[keys[3]] = updatedPrices[keys[2]] : null;
+      updatedPrices[keys[4]] === 'none' ? updatedPrices[keys[4]] = updatedPrices[keys[3]] : null;
+
+      //item to dany skin
       item.prices = updatedPrices;
       const pricesFloated = floatedPrices(item);
       updatedPrices.floated = pricesFloated;
+
 
       const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
       console.log(updatedSkin.prices);
@@ -72,14 +89,16 @@ module.exports.updateTargetedPrices = async (req, res) => {
       for (let skin of skins) {
          let skinPrices = skin.prices;
          skinPrices.floated = floatedPrices(skin, custom_floats);
-         const updatedSkin = await Skin.findByIdAndUpdate(skin._id, { prices: skinPrices }, { new: true });
+         const qualitiesFloated = floatedQualities(skin, custom_floats);
+         const updatedSkin = await Skin.findByIdAndUpdate(skin._id, { prices: skinPrices, floatedQualities: qualitiesFloated }, { new: true });
       }
    } else if (resetFloats) {
       const skins = await Skin.find({});
       for (let skin of skins) {
          let skinPrices = skin.prices;
          skinPrices.floated = floatedPrices(skin);
-         const updatedSkin = await Skin.findByIdAndUpdate(skin._id, { prices: skinPrices }, { new: true });
+         const qualitiesFloated = floatedQualities(skin);
+         const updatedSkin = await Skin.findByIdAndUpdate(skin._id, { prices: skinPrices, floatedQualities: qualitiesFloated }, { new: true });
       }
    }
 
@@ -102,11 +121,8 @@ module.exports.showIndex = async (req, res) => {
 
 module.exports.test = async (req, res) => {
    const { map, nOfSkins } = await getMappedSkins();
-   // console.log(map.PrismaCase.blue);
-   const trades = await getTrades(map, nOfSkins);
-
-
-   res.render('test');
+   const profit = await getTrades(map, nOfSkins);
+   res.render('test', { profit, shortcuts });
 }
 
 
@@ -142,41 +158,53 @@ const getMappedSkins = async () => {
          map[collectionName][rarity] = {};
 
          //FOR EVENTUALL FLOATED PRICES
-         for (let skin of collection.skins[rarity]) {
-            skin.prices.floated = floatedPrices(skin);
-         }
-
-
-
-
-
+         // for (let skin of collection.skins[rarity]) {
+         //    skin.prices.floated = floatedPrices(skin);
+         // }
 
          for (let quality of qualities) {
-            let minId, maxId;
+            let minId = null, maxId = null;
             let min = 1000, max = 0;
             let totalFloated = 0;
 
+            // let invalidTotal = false;
             //CHECKING LOWEST PRICED SKIN AND TARGETED PRICE FLOATED SKIN IN EACH QUALITY
             for (let skin of collection.skins[rarity]) {
 
                let price = convertToPrice(skin, quality);
                let priceFloated = convertToPriceFloated(skin, quality);
 
-               if (price !== 'none' && price < min) {
+
+               if (price < min) {
                   min = price;
                   minId = skin._id;
                }
-               if (priceFloated !== 'none' && price > max) {
+               if (priceFloated > max) {
                   max = priceFloated;
                   maxId = skin._id;
                }
-               if (priceFloated !== 'none') totalFloated += priceFloated;
+               totalFloated += priceFloated;
+               // if (price !== 'none' && price < min) {
+               //    min = price;
+               //    minId = skin._id;
+               // }
+               // if (priceFloated !== 'none' && price > max) {
+               //    max = priceFloated;
+               //    maxId = skin._id;
+               // }
+
+               // if (priceFloated !== 'none' && price !== 'none') {
+               //    totalFloated += priceFloated;
+               // } else {
+               //    invalidTotal = true;
+               // }
             }
-            totalFloated = Math.round(totalFloated * 100) / 100;
+
 
             if (minId && maxId) {
                const lowestSkin = await Skin.findById({ _id: minId });
                const targetedSkin = await Skin.findById({ _id: maxId });
+
 
                map[collectionName][rarity][quality] = {
                   lowestSkin: {
@@ -185,8 +213,10 @@ const getMappedSkins = async () => {
                      skin: lowestSkin.skin,
                      min_float: lowestSkin.min_float,
                      max_float: lowestSkin.max_float,
-                     price: convertToPrice(lowestSkin, quality),
-                     taxed: Math.round(convertToPrice(lowestSkin, quality) * 0.87 * 100) / 100
+                     floatedQualities: lowestSkin.floatedQualities,
+                     prices: lowestSkin.prices,
+                     price: min,
+                     taxed: Math.round(min * 0.87 * 100) / 100
                   },
                   targetedSkin: {
                      _id: maxId,
@@ -194,8 +224,10 @@ const getMappedSkins = async () => {
                      skin: targetedSkin.skin,
                      min_float: targetedSkin.min_float,
                      max_float: targetedSkin.max_float,
-                     price: convertToPriceFloated(targetedSkin, quality),
-                     taxed: Math.round(convertToPriceFloated(targetedSkin, quality) * 0.87 * 100) / 100
+                     floatedQualities: targetedSkin.floatedQualities,
+                     prices: targetedSkin.prices,
+                     price: max,
+                     taxed: Math.round(max * 0.87 * 100) / 100
                   },
                   total: totalFloated,
 
@@ -217,62 +249,65 @@ const getMappedSkins = async () => {
 }
 
 const getTrades = async (map, nOfSkins) => {
-   const profitGwarantowany = [];
-   const profitStatystyczny = [];
-   const keys = Object.keys(map);
+   const Gwarantowany = [];
+   const Statystyczny = [];
 
+   const keys = Object.keys(map);
    for (let key of keys) {
 
       const rarity = Object.keys(map[key]);
-
       for (let i = 0; i < rarity.length - 1; i++) {
 
          for (let q of qualities) {
 
 
-
+            //instance = skins from this rarity - lowest and targeted (which is not important, tho)
+            //nextInstance = skin from next rarity and lowest skin is for profitGwarantowany and targeted skin is for profitStatystyczny
             const instance = map[key][rarity[i]][q];
             const nextInstance = map[key][rarity[i + 1]][q];
+
             if (instance && nextInstance) {
 
+               // console.log(convert(instance.lowestSkin.prices[q]))
+               // console.log(convert(nextInstance.lowestSkin.prices.floated[q]) * 0.87)
 
-               if ((Math.round(instance.lowestSkin.price * 10 * 100) / 100) < nextInstance.lowestSkin.taxed) {
+               if ((Math.round(convert(instance.lowestSkin.prices[q]) * 10 * 100) / 100) < Math.round(convert(nextInstance.lowestSkin.prices.floated[q]) * 0.87 * 100) / 100) {
                   const pom = {
                      rarity: rarity[i],
                      nextRarity: rarity[i + 1],
                      quality: q,
+                     nextQuality: nextInstance.targetedSkin.floatedQualities[q],
                      collection: key,
                      instance,
                      nextInstance,
+                     nOfSkins: nOfSkins[key][rarity[i + 1]],
                      chance: Math.round(1 / nOfSkins[key][rarity[i + 1]] * 1000) / 10
                   }
-                  profitGwarantowany.push(pom);
-               } else if ((Math.round(instance.lowestSkin.price * 10 * 100) / 100) < nextInstance.targetedSkin.taxed) {
+                  Gwarantowany.push(pom);
+
+               } else if ((Math.round(convert(instance.lowestSkin.prices[q]) * 10 * 100) / 100) < Math.round(convert(nextInstance.targetedSkin.prices.floated[q]) * 0.87 * 100) / 100) {
                   const pom = {
                      rarity: rarity[i],
                      nextRarity: rarity[i + 1],
                      quality: q,
+                     nextQuality: nextInstance.targetedSkin.floatedQualities[q],
                      collection: key,
                      instance,
                      nextInstance,
+                     nOfSkins: nOfSkins[key][rarity[i + 1]],
                      chance: Math.round(1 / nOfSkins[key][rarity[i + 1]] * 1000) / 10
                   }
-                  profitStatystyczny.push(pom);
+                  Statystyczny.push(pom);
                }
 
-               // for (let quality of qualities) {
-               //    const lowestSkin = map[key][rarity[i]][quality];
-               //    const targetedSkin = map[key][rarity[i + 1]][quality];
-               //    console.log(lowestSkin, targetedSkin);
-               // }
+
 
             }
          }
       }
    }
 
-   const profit = { profitGwarantowany, profitStatystyczny };
-
+   const profit = { Gwarantowany, Statystyczny };
    return profit;
 }
 

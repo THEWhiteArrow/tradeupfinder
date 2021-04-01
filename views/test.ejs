@@ -7,14 +7,121 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
    <title>Test</title>
+   <style type="text/css">
+      html {
+         min-height: 100vh;
+         height: 100%;
+         width: 100%;
+      }
+
+      body {
+
+         background-image: url('/assets/Circuit Board.svg');
+         background-size: cover;
+      }
+
+      .text-underline {
+         display: inline-flex;
+         height: 100%;
+         border-bottom: 2px solid rgb(0, 155, 13);
+      }
+
+      svg {
+         color: green;
+         height: 12px;
+         transform: translate3d(-6px, -6px, 0);
+      }
+
+      svg.down {
+         color: red;
+         transform: translate3d(-6px, 4px, 0) rotate(180deg);
+      }
+
+      .red {
+         border-bottom: 2px solid red;
+      }
+   </style>
 </head>
 
 <body class="mt-3">
-   <div class="container">
+   <div class="container-fluid">
 
       <a href="/skins" class="btn btn btn-success">Index</a>
       <a href="/skins/test" class="btn btn btn-dark">test</a>
+
+
+
+
+
+
+
+      <div class="row mt-4">
+         <h2>Profit Statystyczny</h2>
+
+         <ul>
+            <% for(let item of profit.Statystyczny){ %>
+               <li class="d-flex flex-row justify-content-between flex-wrap">
+                  <span class="">
+                     <!-- skin for a trade -->
+                     <%= item.collection %>
+                        <span class="color">
+                           <%= item.rarity %>
+                        </span>
+                        [<%= shortcuts[item.quality] %>]
+                           <%= item.instance.lowestSkin.name %> |
+                              <%= item.instance.lowestSkin.skin %>
+                                 (<%= Math.round(item.instance.lowestSkin.price*10*10)/10 %>)
+                                    =>
+                                    <!-- skin to get from a trade -->
+                                    [<%= shortcuts[item.nextQuality] %>]
+                                       <%= item.nextInstance.targetedSkin.name %> |
+                                          <%= item.nextInstance.targetedSkin.skin %>
+                                             (<%= item.nextInstance.targetedSkin.price%>)
+                  </span>
+                  <span class="me-2">
+                     <span class="text-underline ms-2">
+                        <%= Math.round( (item.nextInstance.targetedSkin.taxed -
+                           item.instance.lowestSkin.price*10)*100)/100 %>zł
+                     </span>
+                     <span class="text-underline ms-2">
+                        <%= item.chance %>%
+                     </span>
+                     <% if(item.nOfSkins>1){ %>
+                        <span class="text-underline ms-2 red">
+                           <% let help=item.nextInstance.targetedSkin.prices.floated[item.nextQuality]; %>
+                              <%= Math.round( (item.nextInstance.total -
+                                 help.replace(',','.').slice(0,help.length-2))*100)/100 /(item.nOfSkins-1) %>
+
+
+                                 <!-- <%= Math.round( (item.instance.lowestSkin.price*10 - (item.nextInstance.total -
+                              item.nextInstance.targetedSkin.price)/(item.nOfSkins-1))*100)/100 %> -->
+                                 <!-- <%= item.nOfSkins %> -->zł
+                        </span>
+                        <span class="text-underline ms-2 red">
+                           <%= 100- item.chance %>%
+                        </span>
+                        <% } %>
+                  </span>
+
+               </li>
+
+               <% } %>
+         </ul>
+      </div>
+
+
+
    </div>
+
+   <script>
+      const spans = document.querySelectorAll('span.color');
+
+      for (let span of spans) {
+         let bg = span.innerText;
+         if (bg === 'light_blue') bg = 'light blue';
+         span.style.backgroundColor = bg;
+      }
+   </script>
 </body>
 
 </html>
