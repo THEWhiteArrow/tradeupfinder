@@ -6,6 +6,7 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+   <script src="/javascripts/test.js" defer></script>
    <title>Test</title>
    <style type="text/css">
       html {
@@ -40,6 +41,10 @@
       .red {
          border-bottom: 2px solid red;
       }
+
+      .perTrade {
+         border-bottom: 2px solid rgb(132, 0, 255);
+      }
    </style>
 </head>
 
@@ -55,6 +60,9 @@
 
 
 
+
+
+
       <div class="row mt-4">
          <h2>Profit Statystyczny</h2>
 
@@ -62,7 +70,6 @@
             <% for(let item of profit.Statystyczny){ %>
                <li class="d-flex flex-row justify-content-between flex-wrap">
                   <span class="">
-                     <!-- skin for a trade -->
                      <%= item.collection %>
                         <span class="color">
                            <%= item.rarity %>
@@ -70,39 +77,47 @@
                         [<%= shortcuts[item.quality] %>]
                            <%= item.instance.lowestSkin.name %> |
                               <%= item.instance.lowestSkin.skin %>
-                                 (<%= Math.round(item.instance.lowestSkin.price*10*10)/10 %>)
+                                 (<%= Math.round(item.instance.lowestSkin.price*10*100)/100 %>)
                                     =>
                                     <!-- skin to get from a trade -->
                                     [<%= shortcuts[item.nextQuality] %>]
                                        <%= item.nextInstance.targetedSkin.name %> |
                                           <%= item.nextInstance.targetedSkin.skin %>
-                                             (<%= item.nextInstance.targetedSkin.price%>)
+                                             <% let
+                                                taxed=item.nextInstance.targetedSkin.prices.floated[item.nextQuality]%>
+                                                <% let
+                                                   taxedNumber=Math.round(taxed.slice(0,taxed.length-2).replace(',','.')*0.87*100)/100%>
+                                                   (<%= taxedNumber %>)
                   </span>
                   <span class="me-2">
                      <span class="text-underline ms-2">
-                        <%= Math.round( (item.nextInstance.targetedSkin.taxed -
-                           item.instance.lowestSkin.price*10)*100)/100 %>zł
+
+
+                        <% let win=Math.round( (taxedNumber - item.instance.lowestSkin.price*10)*100)/100 %>
+                           <%= win %>zł
                      </span>
                      <span class="text-underline ms-2">
                         <%= item.chance %>%
                      </span>
                      <% if(item.nOfSkins>1){ %>
                         <span class="text-underline ms-2 red">
-                           <% let help=item.nextInstance.targetedSkin.prices.floated[item.nextQuality]; %>
-                              <%= Math.round( (item.nextInstance.total -
-                                 help.replace(',','.').slice(0,help.length-2))*100)/100 /(item.nOfSkins-1) %>
 
 
-                                 <!-- <%= Math.round( (item.instance.lowestSkin.price*10 - (item.nextInstance.total -
-                              item.nextInstance.targetedSkin.price)/(item.nOfSkins-1))*100)/100 %> -->
-                                 <!-- <%= item.nOfSkins %> -->zł
+
+                           <% let avgLeftSkinsPrice=Math.round( (item.nextInstance.total -taxedNumber)*100)/100
+                              /(item.nOfSkins-1) %>
+                              <% let lose=Math.round((item.instance.lowestSkin.price*10 - avgLeftSkinsPrice)*100)/100 %>
+                                 <%= lose %>
+
                         </span>
                         <span class="text-underline ms-2 red">
                            <%= 100- item.chance %>%
                         </span>
+                        <span class="underline ms-4 perTrade">
+                           <%= Math.round( (win*item.chance/100 - lose*(100-item.chance)/100)*100)/100%>
+                        </span>
                         <% } %>
                   </span>
-
                </li>
 
                <% } %>
@@ -113,15 +128,6 @@
 
    </div>
 
-   <script>
-      const spans = document.querySelectorAll('span.color');
-
-      for (let span of spans) {
-         let bg = span.innerText;
-         if (bg === 'light_blue') bg = 'light blue';
-         span.style.backgroundColor = bg;
-      }
-   </script>
 </body>
 
 </html>

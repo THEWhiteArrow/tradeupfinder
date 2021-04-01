@@ -167,7 +167,6 @@ const getMappedSkins = async () => {
             let min = 1000, max = 0;
             let totalFloated = 0;
 
-            // let invalidTotal = false;
             //CHECKING LOWEST PRICED SKIN AND TARGETED PRICE FLOATED SKIN IN EACH QUALITY
             for (let skin of collection.skins[rarity]) {
 
@@ -178,28 +177,14 @@ const getMappedSkins = async () => {
                if (price < min) {
                   min = price;
                   minId = skin._id;
-               }
-               if (priceFloated > max) {
+               } else if (priceFloated > max) {
                   max = priceFloated;
                   maxId = skin._id;
                }
                totalFloated += priceFloated;
-               // if (price !== 'none' && price < min) {
-               //    min = price;
-               //    minId = skin._id;
-               // }
-               // if (priceFloated !== 'none' && price > max) {
-               //    max = priceFloated;
-               //    maxId = skin._id;
-               // }
 
-               // if (priceFloated !== 'none' && price !== 'none') {
-               //    totalFloated += priceFloated;
-               // } else {
-               //    invalidTotal = true;
-               // }
             }
-
+            totalFloated = totalFloated * 0.87;
 
             if (minId && maxId) {
                const lowestSkin = await Skin.findById({ _id: minId });
@@ -248,6 +233,7 @@ const getMappedSkins = async () => {
    return { map, nOfSkins };
 }
 
+
 const getTrades = async (map, nOfSkins) => {
    const Gwarantowany = [];
    const Statystyczny = [];
@@ -268,24 +254,25 @@ const getTrades = async (map, nOfSkins) => {
 
             if (instance && nextInstance) {
 
-               // console.log(convert(instance.lowestSkin.prices[q]))
+
                // console.log(convert(nextInstance.lowestSkin.prices.floated[q]) * 0.87)
 
-               if ((Math.round(convert(instance.lowestSkin.prices[q]) * 10 * 100) / 100) < Math.round(convert(nextInstance.lowestSkin.prices.floated[q]) * 0.87 * 100) / 100) {
-                  const pom = {
-                     rarity: rarity[i],
-                     nextRarity: rarity[i + 1],
-                     quality: q,
-                     nextQuality: nextInstance.targetedSkin.floatedQualities[q],
-                     collection: key,
-                     instance,
-                     nextInstance,
-                     nOfSkins: nOfSkins[key][rarity[i + 1]],
-                     chance: Math.round(1 / nOfSkins[key][rarity[i + 1]] * 1000) / 10
-                  }
-                  Gwarantowany.push(pom);
+               // if ((Math.round(instance.lowestSkin.price * 10 * 100) / 100) < Math.round(convert(nextInstance.lowestSkin.prices.floated[q]) * 0.87 * 100) / 100) {
+               //    const pom = {
+               //       rarity: rarity[i],
+               //       nextRarity: rarity[i + 1],
+               //       quality: q,
+               //       nextQuality: nextInstance.targetedSkin.floatedQualities[q],
+               //       collection: key,
+               //       instance,
+               //       nextInstance,
+               //       nOfSkins: nOfSkins[key][rarity[i + 1]],
+               //       chance: Math.round(1 / nOfSkins[key][rarity[i + 1]] * 1000) / 10
+               //    }
+               //    Gwarantowany.push(pom);
 
-               } else if ((Math.round(convert(instance.lowestSkin.prices[q]) * 10 * 100) / 100) < Math.round(convert(nextInstance.targetedSkin.prices.floated[q]) * 0.87 * 100) / 100) {
+               // } else 
+               if ((Math.round(instance.lowestSkin.price * 10 * 100) / 100) < Math.round(convert(nextInstance.targetedSkin.prices.floated[q]) * 0.87 * 100) / 100) {
                   const pom = {
                      rarity: rarity[i],
                      nextRarity: rarity[i + 1],
