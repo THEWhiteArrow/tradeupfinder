@@ -7,6 +7,10 @@ const caseSchema = new Schema({
       type: String,
       required: [true, 'Collection must have a name!']
    },
+   nOfSkins: {
+      type: Number,
+      required: [true, 'Collection must have exact number of skins!']
+   },
    skins: {
       grey: [
          {

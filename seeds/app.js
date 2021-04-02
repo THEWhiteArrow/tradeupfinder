@@ -28,6 +28,7 @@ const seedDB = async () => {
    for (let collectionName of dataKeys) {
       const newCollection = new Case({
          name: collectionName,
+         nOfSkins: 0,
          skins: {
             'light_blue': [],
             'blue': [],
@@ -37,13 +38,16 @@ const seedDB = async () => {
          }
       })
 
+      let nOfSkins = 0;
       for (let item of data[collectionName]) {
+         nOfSkins += 1;
          const { skin, name, rarity, min_float, max_float } = item;
 
          // console.log(skin, name, rarity, min_float, max_float)
          const newSkin = new Skin({
             name,
             skin,
+            case: collectionName,
             rarity,
             min_float,
             max_float,
@@ -66,6 +70,7 @@ const seedDB = async () => {
 
       }
 
+      newCollection.nOfSkins = nOfSkins;
       await newCollection.save();
 
    }

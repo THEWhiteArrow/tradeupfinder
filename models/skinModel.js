@@ -15,6 +15,10 @@ const skinSchema = new Schema({
       type: String,
       required: [true, "Skin must have it's own skin!"]
    },
+   case: {
+      type: String,
+      required: [true, "Skin must belong to a collection!"]
+   },
    min_float: {
       type: Number,
       required: [true, "Skin must have it's minimal float!"]

@@ -19,87 +19,116 @@ module.exports.prepareTrades = async (req, res) => {
 
 module.exports.updatePrices = async (req, res) => {
    // const collections = await Case.find({}).populate('skins');
+
+   const collectionsToUpdate = ['FractureCase', 'PrismaCase', 'Dust2', 'Inferno', 'Inferno2018', 'Nuke2018', 'GloveCase', 'Havoc', 'Control'];
+
    const skins = await Skin.find({});
-   const length = skins.length;
-   let count = 0;
+   const collections = await Case.find({});
 
-   for (let item of skins) {
-      count+=1;
-      console.log(`${count} / ${length}`);
+   let count = 0, length = 0;
 
-      const updatedPrices = {};
-      const { name, skin, prices, _id } = item;
-      // console.log(_id)
-      // console.log(name);
-
-      const keys = Object.keys(prices);
-
-      // const oldSkin = await Skin.findById({ _id });
-
-      for (let q of keys) {
-         if (q !== '$init' && q !== 'floated') {
-            // console.log(q)
-
-            const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
-            const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
-            const data = await getData(url, 3000);
-            updatedPrices[q] = data.lowest_price || 'none';
+   for (let collection of collections) {
+      for (let updatingCollection of collectionsToUpdate) {
+         if (collection.name === updatingCollection) {
+            length += collection.nOfSkins;
          }
       }
-
-      // for (let q of keys) {
-      //    if (q !== '$init') {
+   }
 
 
-      //       const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
-      //       const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
 
-      //       const data = await getData(url, 3000);
-      //       updatedPrices[q] = data.lowest_price || 'none';
 
-      //    }
-      // }
+   for (let item of skins) {
+      let isToBeUpdated = false;
 
-      // WYPEŁNIA LUKI W CENACH SKINÓW (DLA KTÓRYCH CENY NIE ISTNIEJĄ BO NIEISTNIEJĄ ODPOWIEDNIE JAKOŚCI)
-      // updatedPrices[keys[1]] === 'none' ? updatedPrices[keys[1]] = updatedPrices[keys[2]] : null;
-      // updatedPrices[keys[0]] === 'none' ? updatedPrices[keys[0]] = updatedPrices[keys[1]] : null;
-      // updatedPrices[keys[3]] === 'none' ? updatedPrices[keys[3]] = updatedPrices[keys[2]] : null;
-      // updatedPrices[keys[4]] === 'none' ? updatedPrices[keys[4]] = updatedPrices[keys[3]] : null;
 
-      let p1 = updatedPrices[keys[0]];
-      let p2 = updatedPrices[keys[1]];
-      let p3 = updatedPrices[keys[2]];
-      let p4 = updatedPrices[keys[3]];
-      let p5 = updatedPrices[keys[4]];
-
-      if(p3!=='none'){
-         if(p2==='none')p2=p3;
-         if(p4==='none')p4=p3;
-         if(p5==='none')p5=p4;
-         if(p1==='none')p1=p2;
+      for (let collection of collectionsToUpdate) {
+         item.case === collection ? isToBeUpdated = true : null;
       }
-      if(p2!=='none'){
-         if(p1==='none')p1=p2;
-         if(p3==='none')p3=p2;
-         if(p4==='none')p4=p3;
-         if(p5==='none')p5=p4;
+
+      if (isToBeUpdated) {
+
+
+         count += 1;
+         console.log(`${count} / ${length}`);
+
+         const updatedPrices = {};
+         const { name, skin, prices, _id } = item;
+         // console.log(_id)
+         // console.log(name);
+
+         const keys = Object.keys(prices);
+
+         // const oldSkin = await Skin.findById({ _id });
+
+         for (let q of keys) {
+            if (q !== '$init' && q !== 'floated') {
+               // console.log(q)
+
+               const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+               const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
+               const data = await getData(url, 6200);
+               updatedPrices[q] = data.lowest_price || 'none';
+            }
+         }
+
+         // for (let q of keys) {
+         //    if (q !== '$init') {
+
+
+         //       const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+         //       const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
+
+         //       const data = await getData(url, 3000);
+         //       updatedPrices[q] = data.lowest_price || 'none';
+
+         //    }
+         // }
+
+         // WYPEŁNIA LUKI W CENACH SKINÓW (DLA KTÓRYCH CENY NIE ISTNIEJĄ BO NIEISTNIEJĄ ODPOWIEDNIE JAKOŚCI)
+         // updatedPrices[keys[1]] === 'none' ? updatedPrices[keys[1]] = updatedPrices[keys[2]] : null;
+         // updatedPrices[keys[0]] === 'none' ? updatedPrices[keys[0]] = updatedPrices[keys[1]] : null;
+         // updatedPrices[keys[3]] === 'none' ? updatedPrices[keys[3]] = updatedPrices[keys[2]] : null;
+         // updatedPrices[keys[4]] === 'none' ? updatedPrices[keys[4]] = updatedPrices[keys[3]] : null;
+
+         let p1 = updatedPrices[keys[0]];
+         let p2 = updatedPrices[keys[1]];
+         let p3 = updatedPrices[keys[2]];
+         let p4 = updatedPrices[keys[3]];
+         let p5 = updatedPrices[keys[4]];
+
+         if (p3 !== 'none') {
+            if (p2 === 'none') p2 = p3;
+            if (p4 === 'none') p4 = p3;
+            if (p5 === 'none') p5 = p4;
+            if (p1 === 'none') p1 = p2;
+         }
+         if (p2 !== 'none') {
+            if (p1 === 'none') p1 = p2;
+            if (p3 === 'none') p3 = p2;
+            if (p4 === 'none') p4 = p3;
+            if (p5 === 'none') p5 = p4;
+         }
+         if (p4 !== 'none') {
+            if (p5 === 'none') p5 = p4;
+            if (p3 === 'none') p3 = p4;
+            if (p2 === 'none') p2 = p3;
+            if (p1 === 'none') p1 = p2;
+         }
+
+
+         //item to dany skin
+         item.prices = updatedPrices;
+         const pricesFloated = floatedPrices(item);
+         updatedPrices.floated = pricesFloated;
+
+
+         const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
+         // console.log(updatedSkin.prices);
+
       }
-      if(p4!=='none'){
-         if(p5==='none')p5=p4;
-         if(p3==='none')p3=p4;
-         if(p2==='none')p2=p3;
-         if(p1==='none')p1=p2;
-      }
-      
-
-      //item to dany skin
-      item.prices = updatedPrices;
-      const pricesFloated = floatedPrices(item);
-      updatedPrices.floated = pricesFloated;
 
 
-      const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
-      // console.log(updatedSkin.prices);
    }
 
    res.redirect('/skins')
