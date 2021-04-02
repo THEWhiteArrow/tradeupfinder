@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Error</title>
+   <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+   <style type="text/css">
+      html {
+         min-height: 100vh;
+         height: 100%;
+         width: 100%;
+      }
+
+      body {
+
+         background-image: url('/assets/Circuit Board.svg');
+         background-size: cover;
+      }
+
+      #displayFloat {
+         display: flex;
+         flex: 1;
+         justify-content: center;
+         align-items: center;
+
+      }
+
+      .bg-white {
+         background-color: white !important;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="container py-5">
+      <div class="card">
+         <div class="card-body">
+            <div class="card-title">
+               <h1>Error</h1>
+            </div>
+            <p class="lead mb-0">
+               <%= err.message %>
+            </p>
+            <p class="lead mt-0">
+               <%= err.info %>
+            </p>
+            <a href="/skins/" class="btn btn-danger">Index</a>
+         </div>
+      </div>
+   </div>
+</body>
+
+</html>

@@ -404,7 +404,7 @@ module.exports = {
 
    Inferno: [
       {
-         name: 'Te-9',
+         name: 'Tec-9',
          skin: 'Brass',
          rarity: 'blue',
          min_float: 0,
