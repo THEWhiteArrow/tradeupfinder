@@ -20,10 +20,11 @@ module.exports.prepareTrades = async (req, res) => {
 module.exports.updatePrices = async (req, res) => {
    // const collections = await Case.find({}).populate('skins');
    const skins = await Skin.find({});
-   const length = skin.length;
-   let count = 1;
+   const length = skins.length;
+   let count = 0;
 
    for (let item of skins) {
+      count+=1;
       console.log(`${count} / ${length}`);
 
       const updatedPrices = {};
