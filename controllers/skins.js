@@ -110,8 +110,10 @@ module.exports.useServers = async (req, res) => {
    const server2Url = `https://steam-market-server2.herokuapp.com/skins/update/?updateStart=${server2.start}&updateEnd=${server2.end}&useServers=true`;
    const server3Url = `https://steam-market-server3.herokuapp.com/skins/update/?updateStart=${server3.start}&updateEnd=${server3.end}&useServers=true`;
 
-   const response2 = await fetch(server2Url, { method: 'GET' });
-   const response3 = await fetch(server3Url, { method: 'GET' });
+   // const response2 = await fetch(server2Url, { method: 'GET' });
+   // const response3 = await fetch(server3Url, { method: 'GET' });
+   const response2 = fetch(server2Url, { method: 'GET' });
+   const response3 = fetch(server3Url, { method: 'GET' });
    res.redirect(server1Url)
 };
 
