@@ -15,7 +15,7 @@ module.exports.useServers = async (req, res) => {
    // console.log(req.body)
    const server1Url = `https://steam-market-server1.herokuapp.com/skins/update/?updateStart=${server1.start}&updateEnd=${server1.end}`;
    const server2Url = `https://steam-market-server2.herokuapp.com/skins/update/?updateStart=${server2.start}&updateEnd=${server2.end}`;
-   const server3Url = `https://steam-market-server2.herokuapp.com/skins/update/?updateStart=${server3.start}&updateEnd=${server3.end}`;
+   const server3Url = `https://steam-market-server3.herokuapp.com/skins/update/?updateStart=${server3.start}&updateEnd=${server3.end}`;
 
    const response2 = await fetch(server2Url, { method: 'GET' });
    const response3 = await fetch(server3Url, { method: 'GET' });
@@ -52,9 +52,8 @@ module.exports.updatePrices = async (req, res, next) => {
    }
 
    const { updateStart = 0, updateEnd = length } = req.query;
-
    if (updateStart !== 0) {
-      res.send('server woke up')
+      res.send('server woken up')
    }
 
 
