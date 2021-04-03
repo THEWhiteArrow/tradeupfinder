@@ -13,9 +13,9 @@ module.exports.useServers = async (req, res) => {
    console.log(server2)
    console.log(server3)
    // console.log(req.body)
-   const server1Url = `https://steam-market-server1.herokuapp.com/skins/update/?updateStart=${server1.start}&updateEnd=${server1.end}`;
-   const server2Url = `https://steam-market-server2.herokuapp.com/skins/update/?updateStart=${server2.start}&updateEnd=${server2.end}`;
-   const server3Url = `https://steam-market-server3.herokuapp.com/skins/update/?updateStart=${server3.start}&updateEnd=${server3.end}`;
+   const server1Url = `https://steam-market-server1.herokuapp.com/skins/update/?updateStart=${server1.start}&updateEnd=${server1.end}&useServers=true`;
+   const server2Url = `https://steam-market-server2.herokuapp.com/skins/update/?updateStart=${server2.start}&updateEnd=${server2.end}&useServers=true`;
+   const server3Url = `https://steam-market-server3.herokuapp.com/skins/update/?updateStart=${server3.start}&updateEnd=${server3.end}&useServers=true`;
 
    const response2 = await fetch(server2Url, { method: 'GET' });
    const response3 = await fetch(server3Url, { method: 'GET' });
@@ -51,9 +51,9 @@ module.exports.updatePrices = async (req, res, next) => {
       }
    }
 
-   const { updateStart = 0, updateEnd = length } = req.query;
+   const { updateStart = 0, updateEnd = length, useServers = false } = req.query;
    if (updateStart !== 0) {
-      res.send('server woken up')
+      res.send('server woken up');
    }
 
 
@@ -90,12 +90,12 @@ module.exports.updatePrices = async (req, res, next) => {
                   const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
                   const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
                   let data;
-                  if (count % 50 === 0) {
-                     console.log(`${count % 50}min break out of 5min`)
-                     data = await getData(url, 1000 * 60);
-                  } else {
-                     data = await getData(url, 3100);
-                  }
+                  // if (count % 50 === 0) {
+                  //    console.log(`${count % 50}min break out of 5min`)
+                  //    data = await getData(url, 1000 * 60);
+                  // } else {
+                  data = await getData(url, 3100);
+                  // }
                   if (data === null) {
                      return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                   }
@@ -122,30 +122,36 @@ module.exports.updatePrices = async (req, res, next) => {
             // updatedPrices[keys[3]] === 'none' ? updatedPrices[keys[3]] = updatedPrices[keys[2]] : null;
             // updatedPrices[keys[4]] === 'none' ? updatedPrices[keys[4]] = updatedPrices[keys[3]] : null;
 
-            let p1 = updatedPrices[keys[0]];
-            let p2 = updatedPrices[keys[1]];
-            let p3 = updatedPrices[keys[2]];
-            let p4 = updatedPrices[keys[3]];
-            let p5 = updatedPrices[keys[4]];
 
-            if (updatedPrices[keys[2]] !== 'none') {
-               if (updatedPrices[keys[1]] === 'none') updatedPrices[keys[1]] = updatedPrices[keys[2]];
-               if (updatedPrices[keys[3]] === 'none') updatedPrices[keys[3]] = updatedPrices[keys[2]];
-               if (updatedPrices[keys[4]] === 'none') updatedPrices[keys[4]] = updatedPrices[keys[3]];
-               if (updatedPrices[keys[0]] === 'none') updatedPrices[keys[0]] = updatedPrices[keys[1]];
-            }
-            if (updatedPrices[keys[1]] !== 'none') {
-               if (updatedPrices[keys[0]] === 'none') updatedPrices[keys[0]] = updatedPrices[keys[1]];
-               if (updatedPrices[keys[2]] === 'none') updatedPrices[keys[2]] = updatedPrices[keys[1]];
-               if (updatedPrices[keys[3]] === 'none') updatedPrices[keys[3]] = updatedPrices[keys[2]];
-               if (updatedPrices[keys[4]] === 'none') updatedPrices[keys[4]] = updatedPrices[keys[3]];
-            }
-            if (updatedPrices[keys[3]] !== 'none') {
-               if (updatedPrices[keys[4]] === 'none') updatedPrices[keys[4]] = updatedPrices[keys[3]];
-               if (updatedPrices[keys[2]] === 'none') updatedPrices[keys[2]] = updatedPrices[keys[3]];
-               if (updatedPrices[keys[1]] === 'none') updatedPrices[keys[1]] = updatedPrices[keys[2]];
-               if (updatedPrices[keys[0]] === 'none') updatedPrices[keys[0]] = updatedPrices[keys[1]];
-            }
+
+
+
+
+
+            // let p1 = updatedPrices[keys[0]];
+            // let p2 = updatedPrices[keys[1]];
+            // let p3 = updatedPrices[keys[2]];
+            // let p4 = updatedPrices[keys[3]];
+            // let p5 = updatedPrices[keys[4]];
+
+            // if (updatedPrices[keys[2]] !== 'none') {
+            //    if (updatedPrices[keys[1]] === 'none') updatedPrices[keys[1]] = updatedPrices[keys[2]];
+            //    if (updatedPrices[keys[3]] === 'none') updatedPrices[keys[3]] = updatedPrices[keys[2]];
+            //    if (updatedPrices[keys[4]] === 'none') updatedPrices[keys[4]] = updatedPrices[keys[3]];
+            //    if (updatedPrices[keys[0]] === 'none') updatedPrices[keys[0]] = updatedPrices[keys[1]];
+            // }
+            // if (updatedPrices[keys[1]] !== 'none') {
+            //    if (updatedPrices[keys[0]] === 'none') updatedPrices[keys[0]] = updatedPrices[keys[1]];
+            //    if (updatedPrices[keys[2]] === 'none') updatedPrices[keys[2]] = updatedPrices[keys[1]];
+            //    if (updatedPrices[keys[3]] === 'none') updatedPrices[keys[3]] = updatedPrices[keys[2]];
+            //    if (updatedPrices[keys[4]] === 'none') updatedPrices[keys[4]] = updatedPrices[keys[3]];
+            // }
+            // if (updatedPrices[keys[3]] !== 'none') {
+            //    if (updatedPrices[keys[4]] === 'none') updatedPrices[keys[4]] = updatedPrices[keys[3]];
+            //    if (updatedPrices[keys[2]] === 'none') updatedPrices[keys[2]] = updatedPrices[keys[3]];
+            //    if (updatedPrices[keys[1]] === 'none') updatedPrices[keys[1]] = updatedPrices[keys[2]];
+            //    if (updatedPrices[keys[0]] === 'none') updatedPrices[keys[0]] = updatedPrices[keys[1]];
+            // }
 
 
             //item to dany skin
@@ -162,7 +168,9 @@ module.exports.updatePrices = async (req, res, next) => {
 
    }
 
-   res.redirect('/skins')
+   if (!useServers) {
+      res.redirect('/skins');
+   }
 };
 
 module.exports.updateTargetedPrices = async (req, res) => {
@@ -264,26 +272,31 @@ const getMappedSkins = async () => {
             let min = 1000, max = 0;
             let totalFloated = 0;
 
+            let allowAll = true;
             //CHECKING LOWEST PRICED SKIN AND TARGETED PRICE FLOATED SKIN IN EACH QUALITY
             for (let skin of collection.skins[rarity]) {
 
                let price = convertToPrice(skin, quality);
                let priceFloated = convertToPriceFloated(skin, quality);
 
+               if (price !== 'none' && priceFloated !== 'none') {
 
-               if (price < min) {
-                  min = price;
-                  minId = skin._id;
-               } else if (priceFloated > max) {
-                  max = priceFloated;
-                  maxId = skin._id;
+                  if (price < min) {
+                     min = price;
+                     minId = skin._id;
+                  } else if (priceFloated > max) {
+                     max = priceFloated;
+                     maxId = skin._id;
+                  }
+               } else {
+                  allowAll = false;
                }
                totalFloated += priceFloated;
 
             }
             totalFloated = totalFloated * 0.87;
 
-            if (minId && maxId) {
+            if (minId && maxId && allowAll) {
                const lowestSkin = await Skin.findById({ _id: minId });
                const targetedSkin = await Skin.findById({ _id: maxId });
 
