@@ -8,14 +8,17 @@ const Case = require('../models/caseModel');
 
 
 module.exports.useServers = async (req, res) => {
-   const { server1, server2 } = req.body;
+   const { server1, server2, server3 } = req.body;
    console.log(server1)
    console.log(server2)
+   console.log(server3)
    // console.log(req.body)
-   const server1Url = `https://steam-api-server1.herokuapp.com/skins/update?updateStart=${server1.start}&updateEnd=${server1.end}`;
-   const server2Url = `https://steam-api-server2.herokuapp.com/skins/update?updateStart=${server2.start}&updateEnd=${server2.end}`;
+   const server1Url = `https://steam-api-server1.herokuapp.com/skins/update/?updateStart=${server1.start}&updateEnd=${server1.end}`;
+   const server2Url = `https://steam-api-server2.herokuapp.com/skins/update/?updateStart=${server2.start}&updateEnd=${server2.end}`;
+   const server3Url = `https://steam-api-server2.herokuapp.com/skins/update/?updateStart=${server3.start}&updateEnd=${server3.end}`;
 
-   const response = await fetch(server2Url);
+   const response2 = await fetch(server2Url);
+   const response3 = await fetch(server3Url);
    res.redirect(server1Url)
 }
 
@@ -50,7 +53,9 @@ module.exports.updatePrices = async (req, res, next) => {
 
    const { updateStart = 0, updateEnd = length } = req.params;
 
-
+   if (updateStart !== 0) {
+      res.send('server woke up')
+   }
 
 
    for (let item of skins) {
