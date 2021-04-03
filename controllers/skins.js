@@ -13,7 +13,7 @@ module.exports.useServers = async (req, res) => {
    console.log(server2)
    // console.log(req.body)
    const server1Url = `https://steam-api-server1.herokuapp.com/skins/update?updateStart=${server1.start}&updateEnd=${server1.end}`;
-   const server2Url = `/skins/update?updateStart=${server1.start}&updateEnd=${server1.end}`;
+   const server2Url = `https://steam-api-server2.herokuapp.com/skins/update?updateStart=${server2.start}&updateEnd=${server2.end}`;
 
    const response = await fetch(server2Url);
    res.redirect(server1Url)
