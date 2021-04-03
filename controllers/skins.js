@@ -71,7 +71,13 @@ module.exports.updatePrices = async (req, res, next) => {
 
                   const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
                   const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
-                  const data = await getData(url, 3200);
+                  let data;
+                  if (count === 50 || count === 100 || count === 120) {
+                     console.log('5min break')
+                     data = await getData(url, 1000 * 60 * 5);
+                  } else {
+                     data = await getData(url, 3100);
+                  }
                   if (data === null) {
                      return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                   }

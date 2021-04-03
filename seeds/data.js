@@ -526,7 +526,7 @@ module.exports = {
          max_float: 1,
       },
       {
-         name: 'R8 Revelover',
+         name: 'R8 Revolver',
          skin: 'Nitro',
          rarity: 'light_blue',
          min_float: 0.06,
@@ -585,7 +585,7 @@ module.exports = {
       },
       {
          name: 'Tec-9',
-         skin: 'Remote control',
+         skin: 'Remote Control',
          rarity: 'pink',
          min_float: 0,
          max_float: 1,
