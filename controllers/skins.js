@@ -39,10 +39,8 @@ module.exports.updatePrices = async (req, res, next) => {
       }
    }
 
-   const { updateStart = 0, updateEnd = length, useServers = false } = req.query;
-   // if (updateStart !== 0) {
-   //    res.send('server woken up');
-   // }
+   const { start = 0, end = length, useServers = false } = req.query;
+
 
 
    for (let item of skins) {
@@ -57,7 +55,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
          count += 1;
-         if (count >= updateStart && count <= updateEnd) {
+         if (count >= start && count <= end) {
 
 
             console.log(`${count} / ${length - updateStart}`);
@@ -76,8 +74,7 @@ module.exports.updatePrices = async (req, res, next) => {
                   let data;
                   data = await getData(url, 3100);
                   if (data === null) {
-
-                     return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
+                     next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                   }
                   updatedPrices[q] = convert(data.lowest_price) || -1;
                } else if (item.prices[q] !== -1) {
@@ -95,10 +92,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
    }
 
-   if (!useServers) {
-      console.log('updating finished!')
-      res.redirect('/skins');
-   }
+   res.redirect('/skins');
 };
 
 module.exports.useServers = async (req, res) => {
@@ -107,9 +101,9 @@ module.exports.useServers = async (req, res) => {
    console.log(server2)
    console.log(server3)
    // console.log(req.body)
-   const server1Url = `https://steam-market-server1.herokuapp.com/skins/update/?updateStart=${server1.start}&updateEnd=${server1.end}&useServers=true`;
-   const server2Url = `https://steam-market-server2.herokuapp.com/skins/update/?updateStart=${server2.start}&updateEnd=${server2.end}&useServers=true`;
-   const server3Url = `https://steam-market-server3.herokuapp.com/skins/update/?updateStart=${server3.start}&updateEnd=${server3.end}&useServers=true`;
+   const server1Url = `https://steam-market-server1.herokuapp.com/skins/update?updateStart=${server1.start}&updateEnd=${server1.end}&useServers=true`;
+   const server2Url = `https://steam-market-server2.herokuapp.com/skins/update?updateStart=${server2.start}&updateEnd=${server2.end}&useServers=true`;
+   const server3Url = `https://steam-market-server3.herokuapp.com/skins/update?updateStart=${server3.start}&updateEnd=${server3.end}&useServers=true`;
 
    // const response2 = await fetch(server2Url, { method: 'GET' });
    // const response3 = await fetch(server3Url, { method: 'GET' });
