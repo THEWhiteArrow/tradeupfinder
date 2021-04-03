@@ -43,13 +43,13 @@ const skinSchema = new Schema({
       'Battle-Scarred': {
          type: Number,
       },
-      floated: {
-         type: Object
-      }
+      // floated: {
+      //    type: Object
+      // }
    },
-   floatedQualities: {
-      type: Object,
-   }
+   // floatedQualities: {
+   //    type: Object,
+   // }
 
    // case: {
    //    type: Schema.Types.ObjectId,

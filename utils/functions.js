@@ -4,39 +4,20 @@ const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
 
 
 
-module.exports.floatedQualities = (skin, set_floats = avg_floats) => {
-   let floatedQ = {
-      'Factory New': '',
-      'Minimal Wear': '',
-      'Field-Tested': '',
-      'Well-Worn': '',
-      'Battle-Scarred': ''
-   }
-   for (let quality of qualities) {
-      let avg;
-      if (skin.min_float > set_floats[quality]) {
-         avg = skin.min_float;
-      } else {
-         avg = set_floats[quality];
-      }
+module.exports.checkQuality = (float) => {
 
-      const float = Math.round(((skin.max_float - skin.min_float) * avg + skin.min_float) * 1000) / 1000;
-      if (float < 0.07) {
-         floatedQ[quality] = 'Factory New';
-      } else if (float < 0.15) {
-         floatedQ[quality] = 'Minimal Wear';
-      } else if (float < 0.38) {
-         floatedQ[quality] = 'Field-Tested';
-      } else if (float < 0.45) {
-         floatedQ[quality] = 'Well-Worn';
-      } else {
-         floatedQ[quality] = 'Battle-Scarred'
-      }
-
-
+   if (float < 0.07) {
+      return 'Factory New';
+   } else if (float < 0.15) {
+      return 'Minimal Wear';
+   } else if (float < 0.38) {
+      return 'Field-Tested';
+   } else if (float < 0.45) {
+      return 'Well-Worn';
+   } else {
+      return 'Battle-Scarred'
    }
 
-   return floatedQ;
 }
 
 module.exports.floatedPrices = (skin, set_floats = avg_floats) => {
