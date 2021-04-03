@@ -69,7 +69,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
             for (let q of keys) {
-               if (q !== '$init' && q !== 'floated') {
+               if (q !== '$init' && q !== 'floated' && item.prices[q] !== -1) {
 
                   const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
                   const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
@@ -83,7 +83,6 @@ module.exports.updatePrices = async (req, res, next) => {
             }
 
 
-            item.prices = updatedPrices;
 
 
             const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });

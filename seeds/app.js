@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+   require('dotenv').config();
+}
+
 const mongoose = require('mongoose');
 const data = require('./data.js')
 const Case = require('../models/caseModel');
