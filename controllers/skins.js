@@ -13,9 +13,9 @@ module.exports.useServers = async (req, res) => {
    console.log(server2)
    console.log(server3)
    // console.log(req.body)
-   const server1Url = `https://steam-api-server1.herokuapp.com/skins/update/?updateStart=${server1.start}&updateEnd=${server1.end}`;
-   const server2Url = `https://steam-api-server2.herokuapp.com/skins/update/?updateStart=${server2.start}&updateEnd=${server2.end}`;
-   const server3Url = `https://steam-api-server2.herokuapp.com/skins/update/?updateStart=${server3.start}&updateEnd=${server3.end}`;
+   const server1Url = `https://steam-market-server1.herokuapp.com/skins/update/?updateStart=${server1.start}&updateEnd=${server1.end}`;
+   const server2Url = `https://steam-market-server2.herokuapp.com/skins/update/?updateStart=${server2.start}&updateEnd=${server2.end}`;
+   const server3Url = `https://steam-market-server2.herokuapp.com/skins/update/?updateStart=${server3.start}&updateEnd=${server3.end}`;
 
    const response2 = await fetch(server2Url, { method: 'GET' });
    const response3 = await fetch(server3Url, { method: 'GET' });
@@ -73,7 +73,7 @@ module.exports.updatePrices = async (req, res, next) => {
          if (count >= updateStart && count <= updateEnd) {
 
 
-            console.log(`${count} / ${length}`);
+            console.log(`${count} / ${length - updateStart + 1}`);
 
             const updatedPrices = {};
             const { name, skin, prices, _id } = item;
