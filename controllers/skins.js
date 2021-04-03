@@ -79,6 +79,8 @@ module.exports.updatePrices = async (req, res, next) => {
                      return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                   }
                   updatedPrices[q] = convert(data.lowest_price) || -1;
+               } else if (item.prices[q] !== -1) {
+                  updatedPrices[q] = -1;
                }
             }
 
