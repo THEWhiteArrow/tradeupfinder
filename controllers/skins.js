@@ -39,7 +39,7 @@ module.exports.updatePrices = async (req, res, next) => {
       }
    }
 
-   const { start = 0, end = length, useServers = false } = req.query;
+   const { start = 0, end = length } = req.query;
 
 
 
@@ -58,7 +58,7 @@ module.exports.updatePrices = async (req, res, next) => {
          if (count >= start && count <= end) {
 
 
-            console.log(`${count} / ${length - updateStart}`);
+            console.log(`${count} / ${length} - ${item.name} | ${item.skin}`);
 
             const updatedPrices = {};
             const { name, skin, prices, _id } = item;
@@ -71,17 +71,18 @@ module.exports.updatePrices = async (req, res, next) => {
 
                   const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
                   const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
-                  let data;
-                  data = await getData(url, 3100);
+                  const data = await getData(url, 3300);
+                  console.log(data)
                   if (data === null) {
-                     next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
+                     return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                   }
-                  updatedPrices[q] = convert(data.lowest_price) || -1;
-               } else if (item.prices[q] !== -1) {
+
+                  const price = data.lowest_price || data.median_price;
+                  updatedPrices[q] = convert(price) || -1;
+               } else if (item.prices[q] === -1) {
                   updatedPrices[q] = -1;
                }
             }
-
 
 
 
