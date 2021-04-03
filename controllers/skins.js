@@ -23,8 +23,8 @@ module.exports.showIndex = async (req, res) => {
 };
 
 module.exports.updatePrices = async (req, res, next) => {
-   // const collectionsToUpdate = ['FractureCase', 'PrismaCase', 'Dust2', 'Inferno', 'Inferno2018', 'Nuke2018', 'GloveCase', 'Havoc', 'Control'];
-   const collectionsToUpdate = ['FractureCase'];
+   const collectionsToUpdate = ['FractureCase', 'PrismaCase', 'Dust2', 'Inferno', 'Inferno2018', 'Nuke2018', 'GloveCase', 'Havoc', 'Control'];
+   // const collectionsToUpdate = ['FractureCase'];
 
    const skins = await Skin.find({});
    const collections = await Case.find({});
@@ -40,13 +40,13 @@ module.exports.updatePrices = async (req, res, next) => {
    }
 
    const { updateStart = 0, updateEnd = length, useServers = false } = req.query;
-   // if (updateStart !== 0) {
-   //    res.send('server woken up');
-   // }
+   if (updateStart !== 0) {
+      res.send('server woken up');
+   }
 
 
    for (let item of skins) {
-      let isToBeUpdated = false;
+      let isToBeUpdated = true;
 
 
       for (let collection of collectionsToUpdate) {
@@ -111,7 +111,8 @@ module.exports.useServers = async (req, res) => {
    const response2 = await fetch(server2Url, { method: 'GET' });
    const response3 = await fetch(server3Url, { method: 'GET' });
    res.redirect(server1Url)
-}
+};
+
 module.exports.updateTargetedPrices = async (req, res) => {
    const { fn, mw, ft, ww, bs, resetFloats } = req.query;
    if (fn && mw && ft && ww && bs) {
@@ -142,7 +143,7 @@ module.exports.updateTargetedPrices = async (req, res) => {
 
    res.redirect('/skins')
 
-}
+};
 
 
 
