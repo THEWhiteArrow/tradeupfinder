@@ -52,18 +52,18 @@ const seedDB = async () => {
             min_float,
             max_float,
             prices: {
-               'Factory New': '0zł',
-               'Minimal Wear': '0zł',
-               'Field-Tested': '0zł',
-               'Well-Worn': '0zł',
-               'Battle-Scarred': '0zł',
+               'Factory New': 0,
+               'Minimal Wear': 0,
+               'Field-Tested': 0,
+               'Well-Worn': 0,
+               'Battle-Scarred': 0,
                floated: {},
             },
             floatedQualities: {}
          })
 
-         newSkin.prices.floated = floatedPrices(newSkin);
-         newSkin.floatedQualities = floatedQualities(newSkin);
+         // newSkin.prices.floated = floatedPrices(newSkin);
+         // newSkin.floatedQualities = floatedQualities(newSkin);
 
          newCollection.skins[rarity].push(newSkin);
          await newSkin.save();

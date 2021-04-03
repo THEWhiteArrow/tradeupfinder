@@ -29,19 +29,19 @@ const skinSchema = new Schema({
    },
    prices: {
       'Factory New': {
-         type: String,
+         type: Number,
       },
       'Minimal Wear': {
-         type: String,
+         type: Number,
       },
       'Field-Tested': {
-         type: String,
+         type: Number,
       },
       'Well-Worn': {
-         type: String,
+         type: Number,
       },
       'Battle-Scarred': {
-         type: String,
+         type: Number,
       },
       floated: {
          type: Object

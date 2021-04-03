@@ -99,7 +99,7 @@ module.exports.updatePrices = async (req, res, next) => {
                   if (data === null) {
                      return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                   }
-                  updatedPrices[q] = data.lowest_price || 'none';
+                  updatedPrices[q] = convert(data.lowest_price) || -1;
                }
             }
 
@@ -233,6 +233,30 @@ module.exports.webscrapping = async (req, res) => {
 
 
 
+// NEWEST
+module.exports.test2 = async (req, res) => {
+
+   res.render('test2')
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// NEW
 const getMappedSkins = async () => {
    const map = {};
    let collections = await Case.find({})
@@ -427,7 +451,7 @@ const getSkinPage = async (url) => {
 
 
 
-
+// OLD
 // MAPPING LOWEST AND HIGHEST SKINS PRICES
 const mapSkins = async (req, res) => {
 
