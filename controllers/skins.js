@@ -163,50 +163,77 @@ module.exports.prepareTrades = async (req, res) => {
    let profit = [];
 
    for (let collection of collections) {
+      if (collection.name === 'FractureCase') {
 
-      for (let r = 0; r < rarities.length - 1; r++) {
-         // SKINY Z OBECNEJ RZADKOŚCI
-         let skins = collection.skins[rarities[r]];
-         // SKINY Z KOLEJNEJ RZADKOŚCI
-         let targetedSkins = collection.skins[rarities[r + 1]];
 
-         for (let quality of qualities) {
 
-            for (let skin of skins) {
-               if (skin.prices[quality] !== -1) {
-                  let total = 0;
+         for (let r = 0; r < rarities.length - 1; r++) {
+            // SKINY Z OBECNEJ RZADKOŚCI
+            let skins = collection.skins[rarities[r]];
+            // SKINY Z KOLEJNEJ RZADKOŚCI
+            let targetedSkins = collection.skins[rarities[r + 1]];
 
-                  for (let targetedSkin of targetedSkins) {
-                     // SPRAWDZA CZY ŚREDNIA NIE WYKRACZA POZA MIN I MAX FLOAT SKINA DO TRADÓW
-                     let avg = avg_floats[quality];
-                     avg < skin.min_float ? avg = skin.min_float : null;
-                     avg > skin.max_float ? avg = skin.max_float : null;
+            for (let quality of qualities) {
 
-                     const float = (targetedSkin.max_float - targetedSkin.min_float) * avg + targetedSkin.min_float;
-                     const targetedQuality = checkQuality(float);
+               for (let skin of skins) {
+                  if (skin.prices[quality] !== -1) {
+                     let total = 0;
+                     let tradesArr = [];
+                     let trade = {};
+                     let isProfitable = false;
 
-                     const price = Math.round(skin.prices[quality] * 10 * 100) / 100;
-                     const targetedPrice = Math.round(targetedSkin.prices[targetedQuality] * steamTax * 100) / 100;
-                     total += targetedPrice;
+                     for (let targetedSkin of targetedSkins) {
+                        // SPRAWDZA CZY ŚREDNIA NIE WYKRACZA POZA MIN I MAX FLOAT SKINA DO TRADÓW
+                        let avg = avg_floats[quality];
+                        avg < skin.min_float ? avg = skin.min_float : null;
+                        avg > skin.max_float ? avg = skin.max_float : null;
 
-                     if (price < targetedPrice) {
+                        const float = (targetedSkin.max_float - targetedSkin.min_float) * avg + targetedSkin.min_float;
+                        const targetedQuality = checkQuality(float);
+
+                        const rawPrice = skin.prices[quality];
+                        const price = Math.round(skin.prices[quality] * 10 * 100) / 100;
+                        const targetedPrice = Math.round(targetedSkin.prices[targetedQuality] * steamTax * 100) / 100;
+                        total += targetedPrice;
+
+                        if (price < targetedPrice) {
+                           isProfitable = true;
+                           trade = {
+                              skin,
+                              quality,
+                              targetedSkin,
+                              targetedQuality,
+                              rawPrice,
+                              price,
+                              targetedPrice,
+                           };
+                           tradesArr.push(trade);
+                        }
 
                      }
 
-                  }
+                     if (isProfitable) {
+                        let instance = {
+                           tradesArr,
+                           total
+                        }
+                        profit.push(instance);
+                        console.log(instance);
+                     }
 
+                  }
                }
+
             }
 
+
+
+
          }
-
-
-
-
       }
    }
 
-   res.render('trades')
+   res.render('trades', { profit });
 }
 
 
