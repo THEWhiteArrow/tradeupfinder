@@ -714,7 +714,7 @@ module.exports = {
       },
       {
          name: 'SSG 08',
-         skin: 'Dragonfir',
+         skin: 'Dragonfire',
          rarity: 'red',
          min_float: 0,
          max_float: 0.5,

@@ -1,11 +1,23 @@
 const { mayReplaceSpace, getData, convertToPrice, convert, convertToPriceFloated, floatedPrices, floatedQualities } = require('../utils/functions');
 const { qualities, rarities, avg_floats, shortcuts } = require('../utils/variables');
 const ExpressError = require('../utils/ExpressError');
+const fetch = require('node-fetch');
 
 const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
 
 
+module.exports.useServers = async (req, res) => {
+   const { server1, server2 } = req.body;
+   console.log(server1)
+   console.log(server2)
+   // console.log(req.body)
+   const server1Url = `http://localhost:3000/skins/update?updateStart=${server1.start}&updateEnd=${server1.end}`;
+   const server2Url = `/skins/update?updateStart=${server1.start}&updateEnd=${server1.end}`;
+
+   const response = await fetch(server2Url);
+   res.redirect(server1Url)
+}
 
 module.exports.prepareTrades = async (req, res) => {
    const extremeSkinsPrices = await mapSkins();
@@ -36,6 +48,10 @@ module.exports.updatePrices = async (req, res, next) => {
       }
    }
 
+   const { updateStart = 0, updateEnd = length } = req.params;
+   if (!updateStart === 0) {
+      res.send('server woke up');
+   }
 
 
 
@@ -51,7 +67,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
          count += 1;
-         if (count >= 0) {
+         if (count >= updateStart && count <= updateEnd) {
 
 
             console.log(`${count} / ${length}`);
@@ -74,7 +90,7 @@ module.exports.updatePrices = async (req, res, next) => {
                   let data;
                   if (count === 50 || count === 100 || count === 120) {
                      console.log('5min break')
-                     data = await getData(url, 1000 * 60 * 5);
+                     data = await getData(url, 1000 * 60);
                   } else {
                      data = await getData(url, 3100);
                   }
@@ -196,6 +212,12 @@ module.exports.test = async (req, res) => {
    const { map, nOfSkins } = await getMappedSkins();
    const profit = await getTrades(map, nOfSkins);
    res.render('test', { profit, shortcuts });
+}
+
+module.exports.webscrapping = async (req, res) => {
+   const data = await getSkinPage(`https://steamcommunity.com/market/listings/730/AK-47 | Safari Mesh (Minimal Wear)`);
+   // const data = await getSkinPage(`https://steamcommunity.com/login/home/?goto=market%2Flistings%2F730%2FAK-47+%7C+Safari+Mesh+%28Minimal+Wear%29`);
+   res.render('webscrapping', { data })
 }
 
 
@@ -370,12 +392,13 @@ const getTrades = async (map, nOfSkins) => {
    return profit;
 }
 
+const getSkinPage = async (url) => {
+   const res = await fetch(url);
+   const data = await res.text();
+   let dataString = await String(data);
 
-
-
-
-
-
+   return dataString;
+}
 
 
 
