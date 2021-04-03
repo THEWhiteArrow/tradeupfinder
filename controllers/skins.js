@@ -40,9 +40,9 @@ module.exports.updatePrices = async (req, res, next) => {
    }
 
    const { updateStart = 0, updateEnd = length, useServers = false } = req.query;
-   if (updateStart !== 0) {
-      res.send('server woken up');
-   }
+   // if (updateStart !== 0) {
+   //    res.send('server woken up');
+   // }
 
 
    for (let item of skins) {
@@ -76,6 +76,7 @@ module.exports.updatePrices = async (req, res, next) => {
                   let data;
                   data = await getData(url, 3100);
                   if (data === null) {
+
                      return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                   }
                   updatedPrices[q] = convert(data.lowest_price) || -1;
