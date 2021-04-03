@@ -49,9 +49,7 @@ module.exports.updatePrices = async (req, res, next) => {
    }
 
    const { updateStart = 0, updateEnd = length } = req.params;
-   if (!updateStart === 0) {
-      res.send('server woke up');
-   }
+
 
 
 
@@ -88,8 +86,8 @@ module.exports.updatePrices = async (req, res, next) => {
                   const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
                   const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
                   let data;
-                  if (count === 50 || count === 100 || count === 120) {
-                     console.log('5min break')
+                  if (count % 50 === 0) {
+                     console.log(`${count % 50}min break out of 5min`)
                      data = await getData(url, 1000 * 60);
                   } else {
                      data = await getData(url, 3100);
