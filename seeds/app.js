@@ -71,10 +71,10 @@ const seedDB = async () => {
          if (min_float > 0.38) newSkin.prices['Field-Tested'] = -1;
          if (min_float > 0.45) newSkin.prices['Well-Worn'] = -1;
 
-         if (max_float < 0.07) newSkin.prices['Minimal Wear'] = -1;
-         if (max_float < 0.15) newSkin.prices['Field-Tested'] = -1;
-         if (max_float < 0.38) newSkin.prices['Well-Worn'] = -1;
-         if (max_float < 0.45) newSkin.prices['Battle-Scarred'] = -1;
+         if (max_float <= 0.07) newSkin.prices['Minimal Wear'] = -1;
+         if (max_float <= 0.15) newSkin.prices['Field-Tested'] = -1;
+         if (max_float <= 0.38) newSkin.prices['Well-Worn'] = -1;
+         if (max_float <= 0.45) newSkin.prices['Battle-Scarred'] = -1;
 
 
          // newSkin.prices.floated = floatedPrices(newSkin);

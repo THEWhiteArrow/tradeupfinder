@@ -92,7 +92,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
    }
-
+   console.log('updating finished!')
    res.redirect('/skins');
 };
 
@@ -144,10 +144,6 @@ module.exports.updateTargetedPrices = async (req, res) => {
    res.redirect('/skins')
 
 };
-
-
-
-
 
 
 // NEWEST
@@ -231,7 +227,6 @@ module.exports.prepareTrades = async (req, res) => {
                         chance: Math.round(100 / nOfTargetedSkins),
                      }
                      profit.push(instance);
-                     console.log(instance);
                   }
 
                }
@@ -246,7 +241,7 @@ module.exports.prepareTrades = async (req, res) => {
       }
    }
 
-   res.render('trades', { profit });
+   res.render('trades', { profit, shortcuts });
 }
 
 
