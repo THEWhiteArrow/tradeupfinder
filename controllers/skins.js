@@ -1,4 +1,4 @@
-const { mayReplaceSpace, getData, convertToPrice, convert, convertToPriceFloated, floatedPrices } = require('../utils/functions');
+const { mayReplaceSpace, getData, getPageData, convertToPrice, convert, convertToPriceFloated, floatedPrices } = require('../utils/functions');
 const { checkQuality } = require('../utils/functions');
 const { qualities, rarities, avg_floats, shortcuts } = require('../utils/variables');
 const ExpressError = require('../utils/ExpressError');
@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 
 const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
+const e = require('express');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
@@ -243,11 +244,65 @@ module.exports.prepareTrades = async (req, res) => {
 
    res.render('trades', { profit, shortcuts });
 }
-module.exports.mapCollection = async (req, res) => {
 
-   res.render('mapCollection')
+
+
+//MAPPING COLLECTIONS
+let pages = [];
+let collectionNameServer = '';
+let skinsServer = [];
+let showCollection = false;
+
+
+module.exports.showMappingPage = async (req, res) => {
+   if (showCollection) {
+      showCollection = false;
+      res.render('map', { collectionNameServer, skinsServer });
+      collectionNameServer = '';
+      skinsServer = [];
+   } else {
+      res.render('map');
+   }
 }
 
+module.exports.mapCollection = async (req, res) => {
+   const { url, collectionName, floats = [] } = req.body;
+
+   if (floats.length === 0) {
+      const data = await getPageData(url, 100);
+      res.render('mappingCollection', { data, collectionName })
+   } else {
+      for (let i = 0; i < skinsServer.length; i++) {
+         skinsServer[i].min_float = floats[i].min_float;
+         skinsServer[i].max_float = floats[i].max_float;
+      }
+      showCollection = true;
+      console.log('kolekcja przygotowana!')
+      res.send('kolekcja został przygotowana')
+
+
+   }
+
+}
+
+
+module.exports.mapFloatsPost = async (req, res) => {
+   const { collectionName, skins, hrefs } = req.body;
+   collectionNameServer = collectionName;
+   skinsServer = skins;
+
+
+   for (let href of hrefs) {
+      const data = await getPageData(href, 100);
+      pages.push(data)
+   }
+   console.log('finished downloading pages data')
+
+   res.send('collection data recived')
+}
+module.exports.mapFloatsGet = async (req, res) => {
+   res.render('mappingFloats', { pages })
+}
 
 
 

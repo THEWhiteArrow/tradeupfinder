@@ -107,6 +107,17 @@ module.exports.getData = (url, delay) => {
    });
 }
 
+module.exports.getPageData = (url, delay) => {
+   return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+         const res = await fetch(url);
+         const data = await res.text();
+
+         resolve(data);
+      }, delay);
+   });
+}
+
 module.exports.toName = (name, status) => {
    if (name.indexOf(' ') !== -1) name = name.replace(' ', '%20%7C%20');
    if (name.indexOf(' ') !== -1) name = name.replace(' ', '%20');

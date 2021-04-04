@@ -16,7 +16,13 @@ router.route('/update')
    .get(catchAsync(skin.updatePrices));
 
 router.route('/map-collection')
-   .get(catchAsync(skin.mapCollection))
+   .get(catchAsync(skin.showMappingPage))
+   .post(catchAsync(skin.mapCollection));
+
+router.route('/map-collection/floats')
+   .get(catchAsync(skin.mapFloatsGet))
+   .post(catchAsync(skin.mapFloatsPost));
+
 
 router.route('/update-targeted-prices')
    .get(catchAsync(skin.updateTargetedPrices));

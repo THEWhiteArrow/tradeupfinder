@@ -1,5 +1,6 @@
 const buttons = document.querySelectorAll('button');
 const form = document.querySelector('form#findFloat');
+const formCollection = document.querySelector('form#formCollection');
 const floatSpan = document.querySelector('#displayFloat');
 
 for (let button of buttons) {
