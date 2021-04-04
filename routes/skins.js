@@ -15,6 +15,8 @@ router.route('/trades')
 router.route('/update')
    .get(catchAsync(skin.updatePrices));
 
+router.route('/map-collection')
+   .get(catchAsync(skin.mapCollection))
 
 router.route('/update-targeted-prices')
    .get(catchAsync(skin.updateTargetedPrices));

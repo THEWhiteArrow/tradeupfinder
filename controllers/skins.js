@@ -243,6 +243,10 @@ module.exports.prepareTrades = async (req, res) => {
 
    res.render('trades', { profit, shortcuts });
 }
+module.exports.mapCollection = async (req, res) => {
+
+   res.render('mapCollection')
+}
 
 
 

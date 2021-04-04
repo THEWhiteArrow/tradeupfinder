@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Map Collection</title>
+   <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+   <style type="text/css">
+      html {
+         min-height: 100vh;
+         height: 100%;
+         width: 100%;
+      }
+
+      body {
+
+         background-image: url('/assets/Circuit Board.svg');
+         background-size: cover;
+      }
+
+      #displayFloat {
+         display: flex;
+         flex: 1;
+         justify-content: center;
+         align-items: center;
+
+      }
+
+      .bg-white {
+         background-color: white !important;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="container py-3">
+      <h1 class="mt-4">Zmaouj kolekcje</h1>
+      <a class="btn btn-primary mt-2" href="/skins">Index</a>
+
+
+      <div class=" d-flex mt-2 col-12 ">
+         <form id="collectionUrlForm" class="d-fle col-12 flex-columnx">
+            <label for="url" class="mt-4">
+               <h4>Podaj Url do kolekcji ze strony SkinStash</h4>
+            </label>
+            <input id="url" class="form-control my-1" type="text" name="url"
+               placeholder="Collection URL from SkinStash page">
+
+
+            <div class="d-flex">
+               <button class="btn btn-primary btn-sm col-12">Zacznij mapować kolekcję</button>
+            </div>
+         </form>
+      </div>
+
+      <div id="content"></div>
+
+   </div>
+
+   <script src="/javascripts/mapCollection.js"></script>
+</body>
+
+</html>
