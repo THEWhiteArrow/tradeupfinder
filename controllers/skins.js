@@ -6,7 +6,6 @@ const fetch = require('node-fetch');
 
 const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
-const e = require('express');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
@@ -20,6 +19,9 @@ module.exports.showIndex = async (req, res) => {
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
+   // res.cookie('testtoken', '12345');
+   // res.clearCookie("key");
+   // console.log(req.cookies)
    res.render('index', { collections, qualities, rarities });
 };
 
@@ -260,6 +262,7 @@ module.exports.showMappingPage = async (req, res) => {
       res.render('map', { collectionNameServer, skinsServer });
       collectionNameServer = '';
       skinsServer = [];
+      pages = [];
    } else {
       res.render('map');
    }
@@ -298,7 +301,8 @@ module.exports.mapFloatsPost = async (req, res) => {
    }
    console.log('finished downloading pages data')
 
-   res.send('collection data recived')
+   const feedback = { success: true };
+   res.json(feedback);
 }
 module.exports.mapFloatsGet = async (req, res) => {
    res.render('mappingFloats', { pages })

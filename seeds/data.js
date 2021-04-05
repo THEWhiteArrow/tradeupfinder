@@ -1216,7 +1216,127 @@ module.exports = {
          max_float: 0.8,
       },
    ],
-
+   ClutchCase: [
+      {
+         name: 'M4A4',
+         skin: 'Neo-Noir',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.9
+      },
+      {
+         name: 'MP7',
+         skin: 'Bloodsport',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.65
+      },
+      {
+         name: 'USP-S',
+         skin: 'Cortex',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'AWP',
+         skin: 'Mortis',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.64
+      },
+      {
+         name: 'AUG',
+         skin: 'Stymphalian',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.63
+      },
+      {
+         name: 'Glock-18',
+         skin: 'Moonrise',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.65
+      },
+      {
+         name: 'UMP-45',
+         skin: 'Arctic Wolf',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'MAG-7',
+         skin: 'SWAG-7',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.92
+      },
+      {
+         name: 'Negev',
+         skin: 'Lionfish',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.55
+      },
+      {
+         name: 'Nova',
+         skin: 'Wild Six',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'MP9',
+         skin: 'Black Sand',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'SG 553',
+         skin: 'Aloha',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.55
+      },
+      {
+         name: 'R8 Revolver',
+         skin: 'Grip',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Five-SeveN',
+         skin: 'Flame Test',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.65
+      },
+      {
+         name: 'P2000',
+         skin: 'Urban Hazard',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'PP-Bizon',
+         skin: 'Night Riot',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'XM1014',
+         skin: 'Oxide Blaze',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.7
+      },
+   ],
    RevolverCase: [
       {
          name: 'M4A4',
@@ -1543,6 +1663,1309 @@ module.exports = {
          rarity: 'blue',
          min_float: 0.1,
          max_float: 0.2
+      },
+   ],
+   Chrome3Case: [
+      {
+         name: 'M4A1-S',
+         skin: "Chantico's Fire",
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.99
+      },
+      {
+         name: 'PP-Bizon',
+         skin: 'Judgement of Anubis',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'P250',
+         skin: 'Asiimov',
+         rarity: 'pink',
+         min_float: 0.1,
+         max_float: 1
+      },
+      {
+         name: 'AUG',
+         skin: 'Fleet Flock',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'UMP-45',
+         skin: 'Primal Saber',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.77
+      },
+      {
+         name: 'SSG 08',
+         skin: 'Ghost Crusader',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'XM1014',
+         skin: 'Black Tie',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.75
+      },
+      {
+         name: 'Galil AR',
+         skin: 'Firefight',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Tec-9',
+         skin: 'Re-Entry',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.43
+      },
+      {
+         name: 'CZ75-Auto',
+         skin: 'Red Astor',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'MP9',
+         skin: 'Bioleak',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'SG 553',
+         skin: 'Atlas',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.81
+      },
+      {
+         name: 'Dual Berettas',
+         skin: 'Ventilators',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.45
+      },
+      {
+         name: 'M249',
+         skin: 'Spectre',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'G3SG1',
+         skin: 'Orange Crash',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.52
+      },
+      {
+         name: 'P2000',
+         skin: 'Oceanic',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'Sawed-Off',
+         skin: 'Fubar',
+         rarity: 'blue',
+         min_float: 0.4,
+         max_float: 1
+      },
+   ],
+   SpectrumCase: [
+      {
+         name: 'AK-47',
+         skin: 'Bloodsport',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.45
+      },
+      {
+         name: 'USP-S',
+         skin: 'Neo-Noir',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'M4A1-S',
+         skin: 'Decimator',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.85
+      },
+      {
+         name: 'AWP',
+         skin: 'Fever Dream',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.55
+      },
+      {
+         name: 'CZ75-Auto',
+         skin: 'Xiangliu',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.56
+      },
+      {
+         name: 'XM1014',
+         skin: 'Seasons',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'Galil AR',
+         skin: 'Crimson Tsunami',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.55
+      },
+      {
+         name: 'M249',
+         skin: 'Emerald Poison Dart',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.45
+      },
+      {
+         name: 'MAC-10',
+         skin: 'Last Dive',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.52
+      },
+      {
+         name: 'UMP-45',
+         skin: 'Scaffold',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Desert Eagle',
+         skin: 'Oxide Blaze',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'Five-SeveN',
+         skin: 'Capillary',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'SCAR-20',
+         skin: 'Blueprint',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.75
+      },
+      {
+         name: 'P250',
+         skin: 'Ripple',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'Sawed-Off',
+         skin: 'Zander',
+         rarity: 'blue',
+         min_float: 0.05,
+         max_float: 1
+      },
+      {
+         name: 'MP7',
+         skin: 'Akoben',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'PP-Bizon',
+         skin: 'Jungle Slipstream',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+   ],
+   Spectrum2Case: [
+      {
+         name: 'AK-47',
+         skin: 'The Empress',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'P250',
+         skin: 'See Ya Later',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'M4A1-S',
+         skin: 'Leaded Glass',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'PP-Bizon',
+         skin: 'High Roller',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'R8 Revolver',
+         skin: 'Llama Cannon',
+         rarity: 'pink',
+         min_float: 0.03,
+         max_float: 0.7
+      },
+      {
+         name: 'MP9',
+         skin: 'Goo',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'SG 553',
+         skin: 'Phantom',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'CZ75-Auto',
+         skin: 'Tacticat',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'XM1014',
+         skin: 'Ziggy',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.72
+      },
+      {
+         name: 'UMP-45',
+         skin: 'Exposure',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.55
+      },
+      {
+         name: 'Glock-18',
+         skin: 'Off World',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'AUG',
+         skin: 'Triqua',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'MAC-10',
+         skin: 'Oceanic',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'Tec-9',
+         skin: 'Cracked Opal',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Sawed-Off',
+         skin: 'Morris',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'G3SG1',
+         skin: 'Hunter',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'SCAR-20',
+         skin: 'Jungle Slipstream',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+   ],
+   GammaCase: [
+      {
+         name: 'M4A1-S',
+         skin: 'Mecha Industries',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'Glock-18',
+         skin: 'Wasteland Rebel',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.54
+      },
+      {
+         name: 'M4A4',
+         skin: 'Desolate Space',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'SCAR-20',
+         skin: 'Bloodsport',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.45
+      },
+      {
+         name: 'P2000',
+         skin: 'Imperial Dragon',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.63
+      },
+      {
+         name: 'AWP',
+         skin: 'Phobos',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.4
+      },
+      {
+         name: 'R8 Revolver',
+         skin: 'Reboot',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'P90',
+         skin: 'Chopper',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'AUG',
+         skin: 'Aristocrat',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.66
+      },
+      {
+         name: 'Sawed-Off',
+         skin: 'Limelight',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Five-SeveN',
+         skin: 'Violent Daimyo',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'SG 553',
+         skin: 'Aerial',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'Tec-9',
+         skin: 'Ice Cap',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'MAC-10',
+         skin: 'Carnivore',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'P250',
+         skin: 'Iron Clad',
+         rarity: 'blue',
+         min_float: 0.05,
+         max_float: 0.8
+      },
+      {
+         name: 'Nova',
+         skin: 'Exo',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'PP-Bizon',
+         skin: 'Harvester',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+   ],
+   Gama2Case: [
+      {
+         name: 'AK-47',
+         skin: 'Neon Revolution',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'FAMAS',
+         skin: 'Roll Cage',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'AUG',
+         skin: 'Syd Mead',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'Tec-9',
+         skin: 'Fuel Injector',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'MP9',
+         skin: 'Airlock',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Desert Eagle',
+         skin: 'Directive',
+         rarity: 'purple',
+         min_float: 0.06,
+         max_float: 1
+      },
+      {
+         name: 'Glock-18',
+         skin: 'Weasel',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'SG 553',
+         skin: 'Triarch',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'MAG-7',
+         skin: 'Petroglyph',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.44
+      },
+      {
+         name: 'SCAR-20',
+         skin: 'Powercore',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'P90',
+         skin: 'Grim',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'Negev',
+         skin: 'Dazzle',
+         rarity: 'blue',
+         min_float: 0.1,
+         max_float: 0.65
+      },
+      {
+         name: 'UMP-45',
+         skin: 'Briefing',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'CZ75-Auto',
+         skin: 'Imprint',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'XM1014',
+         skin: 'Slipstream',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'Five-SeveN',
+         skin: 'Scumbria',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'G3SG1',
+         skin: 'Ventilator',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.45
+      },
+   ],
+   HorizonCase: [
+      {
+         name: 'AK-47',
+         skin: 'Neon Rider',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'Desert Eagle',
+         skin: 'Code Red',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'M4A1-S',
+         skin: 'Nightmare',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Sawed-Off',
+         skin: 'Devourer',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'FAMAS',
+         skin: 'Eye of Athena',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'AWP',
+         skin: 'PAW',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'CZ75-Auto',
+         skin: 'Eco',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'G3SG1',
+         skin: 'High Seas',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'MP7',
+         skin: 'Powercore',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'Nova',
+         skin: 'Toy Soldier',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Glock-18',
+         skin: 'Warhawk',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'P90',
+         skin: 'Traction',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'MP9',
+         skin: 'Capillary',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'Tec-9',
+         skin: 'Snek-9',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'AUG',
+         skin: 'Amber Slipstream',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.55
+      },
+      {
+         name: 'Dual Berettas',
+         skin: 'Shred',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'R8 Revolver',
+         skin: 'Survivalist',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.7
+      },
+   ],
+   ShadowCase: [
+      {
+         name: 'USP-S',
+         skin: 'Kill Confirmed',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'M4A1-S',
+         skin: 'Golden Coil',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'AK-47',
+         skin: 'Frontside Misty',
+         rarity: 'pink',
+         min_float: 0.02,
+         max_float: 0.87
+      },
+      {
+         name: 'G3SG1',
+         skin: 'Flux',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.9
+      },
+      {
+         name: 'SSG 08',
+         skin: 'Big Iron',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.64
+      },
+      {
+         name: 'Galil AR',
+         skin: 'Stone Cold',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.9
+      },
+      {
+         name: 'M249',
+         skin: 'Nebula Crusader',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'P250',
+         skin: 'Wingshot',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.9
+      },
+      {
+         name: 'MP7',
+         skin: 'Special Delivery',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.62
+      },
+      {
+         name: 'Dual Berettas',
+         skin: 'Dualing Dragons',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Glock-18',
+         skin: 'Wraiths',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'FAMAS',
+         skin: 'Survivor Z',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'MAC-10',
+         skin: 'Rangeen',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'SCAR-20',
+         skin: 'Green Marine',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'XM1014',
+         skin: 'Scumbria',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'MAG-7',
+         skin: 'Cobalt Core',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.5
+      },
+   ],
+   FalchionCase: [
+      {
+         name: 'AWP',
+         skin: 'Hyper Beast',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'AK-47',
+         skin: 'Aquamarine Revenge',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'SG 553',
+         skin: 'Cyrex',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'MP7',
+         skin: 'Nemesis',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.32
+      },
+      {
+         name: 'CZ75-Auto',
+         skin: 'Yellow Jacket',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'M4A4',
+         skin: 'Evil Daimyo',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.52
+      },
+      {
+         name: 'Negev',
+         skin: 'Loudmouth',
+         rarity: 'purple',
+         min_float: 0.14,
+         max_float: 0.65
+      },
+      {
+         name: 'MP9',
+         skin: 'Ruby Poison Dart',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'P2000',
+         skin: 'Handgun',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'FAMAS',
+         skin: 'Neural Net',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'Galil AR',
+         skin: 'Rocket Pop',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'USP-S',
+         skin: 'Torque',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.46
+      },
+      {
+         name: 'P90',
+         skin: 'Elite Build',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Glock-18',
+         skin: 'Bunsen Burner',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'UMP-45',
+         skin: 'Riot',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'Nova',
+         skin: 'Ranger',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+   ],
+   ShatteredWebCase: [
+      {
+         name: 'AWP',
+         skin: 'Containment Breach',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'MAC-10',
+         skin: 'Stalker',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'SSG 08',
+         skin: 'Bloodshot',
+         rarity: 'pink',
+         min_float: 0.14,
+         max_float: 0.6
+      },
+      {
+         name: 'SG 553',
+         skin: 'Colony IV',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Tec-9',
+         skin: 'Decimator',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.75
+      },
+      {
+         name: 'AK-47',
+         skin: 'Rat Rod',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'AUG',
+         skin: 'Arctic Wolf',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'MP7',
+         skin: 'Neon Ply',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'P2000',
+         skin: 'Obsidian',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'PP-Bizon',
+         skin: 'Embargo',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Dual Berettas',
+         skin: 'Balance',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'R8 Revolver',
+         skin: 'Memento',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'M249',
+         skin: 'Warbird',
+         rarity: 'blue',
+         min_float: 0.05,
+         max_float: 0.65
+      },
+      {
+         name: 'MP5-SD',
+         skin: 'Acid Wash',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.68
+      },
+      {
+         name: 'Nova',
+         skin: 'Plume',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'SCAR-20',
+         skin: 'Torn',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.45
+      },
+      {
+         name: 'G3SG1',
+         skin: 'Black Sand',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.8
+      },
+   ],
+   CS20Case: [
+      {
+         name: 'AWP',
+         skin: 'Wildfire',
+         rarity: 'red',
+         min_float: 0.01,
+         max_float: 0.7
+      },
+      {
+         name: 'FAMAS',
+         skin: 'Commemoration',
+         rarity: 'red',
+         min_float: 0,
+         max_float: 0.5
+      },
+      {
+         name: 'MP9',
+         skin: 'Hydra',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'AUG',
+         skin: 'Death by Puppy',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.4
+      },
+      {
+         name: 'P90',
+         skin: 'Nostalgia',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.57
+      },
+      {
+         name: 'MP5-SD',
+         skin: 'Agent',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'P250',
+         skin: 'Inferno',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.68
+      },
+      {
+         name: 'UMP-45',
+         skin: 'Plastique',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'Five-SeveN',
+         skin: 'Buddy',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.55
+      },
+      {
+         name: 'M249',
+         skin: 'Aztec',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 0.75
+      },
+      {
+         name: 'Glock-18',
+         skin: 'Sacrifice',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'FAMAS',
+         skin: 'Decommissioned',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'MAC-10',
+         skin: 'Classic Crate',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
+      },
+      {
+         name: 'Dual Berettas',
+         skin: 'Elite 1.6',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'MAG-7',
+         skin: 'Popdog',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.8
+      },
+      {
+         name: 'Tec-9',
+         skin: 'Flash Out',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.7
+      },
+      {
+         name: 'SCAR-20',
+         skin: 'Assault',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.62
+      },
+   ],
+   MirageCollection: [
+      {
+         name: 'MAG-7',
+         skin: 'Bulldozer',
+         rarity: 'purple',
+         min_float: 0.06,
+         max_float: 0.8
+      },
+      {
+         name: 'MP9',
+         skin: 'Hot Rod',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.08
+      },
+      {
+         name: 'UMP-45',
+         skin: 'Blaze',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.08
+      },
+      {
+         name: 'MAC-10',
+         skin: 'Amber Fade',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.4
+      },
+      {
+         name: 'Glock-18',
+         skin: 'Groundwater',
+         rarity: 'light_blue',
+         min_float: 0.06,
+         max_float: 0.8
+      },
+      {
+         name: 'SSG 08',
+         skin: 'Tropical Storm',
+         rarity: 'light_blue',
+         min_float: 0.06,
+         max_float: 0.8
+      },
+      {
+         name: 'MP7',
+         skin: 'Orange Peel',
+         rarity: 'light_blue',
+         min_float: 0.06,
+         max_float: 0.8
+      },
+      {
+         name: 'SG 553',
+         skin: 'Gator Mesh',
+         rarity: 'light_blue',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'Negev',
+         skin: 'CaliCamo',
+         rarity: 'light_blue',
+         min_float: 0,
+         max_float: 0.6
+      },
+      {
+         name: 'AUG',
+         skin: 'Colony',
+         rarity: 'grey',
+         min_float: 0.06,
+         max_float: 0.8
+      },
+      {
+         name: 'Five-SeveN',
+         skin: 'Contractor',
+         rarity: 'grey',
+         min_float: 0.06,
+         max_float: 0.8
+      },
+      {
+         name: 'P90',
+         skin: 'Scorched',
+         rarity: 'grey',
+         min_float: 0.06,
+         max_float: 0.8
+      },
+      {
+         name: 'G3SG1',
+         skin: 'Safari Mesh',
+         rarity: 'grey',
+         min_float: 0.06,
+         max_float: 0.8
+      },
+      {
+         name: 'P250',
+         skin: 'Bone Mask',
+         rarity: 'grey',
+         min_float: 0.06,
+         max_float: 0.8
+      },
+      {
+         name: 'Galil AR',
+         skin: 'Hunting Blind',
+         rarity: 'grey',
+         min_float: 0,
+         max_float: 0.6
       },
    ],
 

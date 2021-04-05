@@ -6,9 +6,12 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const skinRoutes = require('./routes/skins');
+const session = require('express-session');
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
+// const mongoStore = require('connect-mongo')(new session);
+const cookieParser = require('cookie-parser');
 
 // MONGO DATABASE
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
 mongoose.connect(dbUrl, {
    useNewUrlParser: true,
    useCreateIndex: true,
@@ -33,8 +36,30 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+const secret = process.env.SECRET || 'thisshoulbeabettersecret!';
+// const store = new MongoStore({
+//    url: dbUrl,
+//    secret: secret,
+//    touchAfter: 60 * 60 * 24
+// })
 
-
+// store.on('error', function (e) {
+//    console.log('SESSION STORE ERROR', e)
+// })
+const sessionConfig = {
+   // store,
+   name: 'session',
+   secret: secret,
+   resave: false,
+   saveUninitialized: true,
+   cookie: {
+      httpOnly: true,
+      expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+      maxAge: 1000 * 60 * 60 * 24 * 7
+   }
+}
+app.use(session(sessionConfig));
+app.use(cookieParser(secret));
 
 
 // CODE
