@@ -49,7 +49,7 @@ module.exports.updatePrices = async (req, res, next) => {
       if (count >= start && count <= end) {
 
 
-         console.log(`${count} / ${length} - ${item.name} | ${item.skin}`);
+         console.log(`${count} / ${end} - ${item.name} | ${item.skin}`);
 
          const updatedPrices = {};
          const { name, skin, prices, _id } = item;
@@ -63,7 +63,7 @@ module.exports.updatePrices = async (req, res, next) => {
                const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
                const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
                const data = await getData(url, 3300);
-               console.log(data)
+               // console.log(data)
                if (data === null) {
                   return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                }
