@@ -26,7 +26,7 @@ module.exports.showIndex = async (req, res) => {
 };
 
 module.exports.updatePrices = async (req, res, next) => {
-   const collectionsToUpdate = ['FractureCase', 'PrismaCase', 'Dust2', 'Inferno', 'Inferno2018', 'Nuke2018', 'GloveCase', 'Havoc', 'Control'];
+   // const collectionsToUpdate = ['FractureCase', 'PrismaCase', 'Dust2', 'Inferno', 'Inferno2018', 'Nuke2018', 'GloveCase', 'Havoc', 'Control'];
    // const collectionsToUpdate = ['FractureCase'];
 
    const skins = await Skin.find({});
@@ -34,63 +34,56 @@ module.exports.updatePrices = async (req, res, next) => {
 
    let count = 0, length = 0;
 
-   for (let collection of collections) {
-      for (let updatingCollection of collectionsToUpdate) {
-         if (collection.name === updatingCollection) {
-            length += collection.nOfSkins;
-         }
-      }
+   for (let c of collections) {
+      length += c.nOfSkins;
    }
 
+
    const { start = 0, end = length } = req.query;
-
-
-
    for (let item of skins) {
-      let isToBeUpdated = true;
 
 
       for (let collection of collectionsToUpdate) {
          item.case === collection ? isToBeUpdated = true : null;
       }
 
-      if (isToBeUpdated) {
 
 
-         count += 1;
-         if (count >= start && count <= end) {
+
+      count += 1;
+      if (count >= start && count <= end) {
 
 
-            console.log(`${count} / ${length} - ${item.name} | ${item.skin}`);
+         console.log(`${count} / ${length} - ${item.name} | ${item.skin}`);
 
-            const updatedPrices = {};
-            const { name, skin, prices, _id } = item;
+         const updatedPrices = {};
+         const { name, skin, prices, _id } = item;
 
-            const keys = Object.keys(prices);
+         const keys = Object.keys(prices);
 
 
-            for (let q of keys) {
-               if (q !== '$init' && q !== 'floated' && item.prices[q] !== -1) {
+         for (let q of keys) {
+            if (q !== '$init' && q !== 'floated' && item.prices[q] !== -1) {
 
-                  const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
-                  const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
-                  const data = await getData(url, 3300);
-                  console.log(data)
-                  if (data === null) {
-                     return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
-                  }
-
-                  const price = data.lowest_price || data.median_price;
-                  updatedPrices[q] = convert(price) || -1;
-               } else if (item.prices[q] === -1) {
-                  updatedPrices[q] = -1;
+               const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+               const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
+               const data = await getData(url, 3300);
+               console.log(data)
+               if (data === null) {
+                  return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                }
+
+               const price = data.lowest_price || data.median_price;
+               updatedPrices[q] = convert(price) || -1;
+            } else if (item.prices[q] === -1) {
+               updatedPrices[q] = -1;
             }
-
-
-
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
          }
+
+
+
+         const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
+
       }
 
 
@@ -306,182 +299,4 @@ module.exports.mapFloatsPost = async (req, res) => {
 }
 module.exports.mapFloatsGet = async (req, res) => {
    res.render('mappingFloats', { pages })
-}
-
-
-
-
-// NEW
-const getMappedSkins = async () => {
-   const map = {};
-   let collections = await Case.find({})
-      .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
-
-   const nOfSkins = {};
-   for (let c of collections) {
-      nOfSkins[c.name] = {
-         grey: c.skins.grey.length,
-         light_blue: c.skins.light_blue.length,
-         blue: c.skins.blue.length,
-         purple: c.skins.purple.length,
-         pink: c.skins.pink.length,
-         red: c.skins.red.length,
-      }
-   }
-
-   for (let collection of collections) {
-      let collectionName = collection.name;
-      map[collectionName] = {};
-
-      for (let rarity of rarities) {
-         map[collectionName][rarity] = {};
-
-         //FOR EVENTUALL FLOATED PRICES
-         // for (let skin of collection.skins[rarity]) {
-         //    skin.prices.floated = floatedPrices(skin);
-         // }
-
-         for (let quality of qualities) {
-            let minId = null, maxId = null;
-            let min = 1000, max = 0;
-            let totalFloated = 0;
-
-            let allowAll = true;
-            //CHECKING LOWEST PRICED SKIN AND TARGETED PRICE FLOATED SKIN IN EACH QUALITY
-            for (let skin of collection.skins[rarity]) {
-
-               let price = convertToPrice(skin, quality);
-               let priceFloated = convertToPriceFloated(skin, quality);
-
-               if (price !== 'none' && priceFloated !== 'none') {
-
-                  if (price < min) {
-                     min = price;
-                     minId = skin._id;
-                  } else if (priceFloated > max) {
-                     max = priceFloated;
-                     maxId = skin._id;
-                  }
-               } else {
-                  allowAll = false;
-               }
-               totalFloated += priceFloated;
-
-            }
-            totalFloated = totalFloated * 0.87;
-
-            if (minId && maxId && allowAll) {
-               const lowestSkin = await Skin.findById({ _id: minId });
-               const targetedSkin = await Skin.findById({ _id: maxId });
-
-
-               map[collectionName][rarity][quality] = {
-                  lowestSkin: {
-                     _id: minId,
-                     name: lowestSkin.name,
-                     skin: lowestSkin.skin,
-                     min_float: lowestSkin.min_float,
-                     max_float: lowestSkin.max_float,
-                     floatedQualities: lowestSkin.floatedQualities,
-                     prices: lowestSkin.prices,
-                     price: min,
-                     taxed: Math.round(min * 0.87 * 100) / 100
-                  },
-                  targetedSkin: {
-                     _id: maxId,
-                     name: targetedSkin.name,
-                     skin: targetedSkin.skin,
-                     min_float: targetedSkin.min_float,
-                     max_float: targetedSkin.max_float,
-                     floatedQualities: targetedSkin.floatedQualities,
-                     prices: targetedSkin.prices,
-                     price: max,
-                     taxed: Math.round(max * 0.87 * 100) / 100
-                  },
-                  total: totalFloated,
-
-               }
-
-               // console.log(map[collectionName][rarity][quality]);
-
-            }
-
-         }
-
-
-
-
-      }
-   }
-
-   return { map, nOfSkins };
-}
-
-const getTrades = async (map, nOfSkins) => {
-   const Gwarantowany = [];
-   const Statystyczny = [];
-
-   const keys = Object.keys(map);
-   for (let key of keys) {
-
-      const rarity = Object.keys(map[key]);
-      for (let i = 0; i < rarity.length - 1; i++) {
-
-         for (let q of qualities) {
-
-
-            //instance = skins from this rarity - lowest and targeted (which is not important, tho)
-            //nextInstance = skin from next rarity and lowest skin is for profitGwarantowany and targeted skin is for profitStatystyczny
-            const instance = map[key][rarity[i]][q];
-            const nextInstance = map[key][rarity[i + 1]][q];
-
-            if (instance && nextInstance) {
-
-
-               // console.log(convert(nextInstance.lowestSkin.prices.floated[q]) * 0.87)
-
-               // if ((Math.round(instance.lowestSkin.price * 10 * 100) / 100) < Math.round(convert(nextInstance.lowestSkin.prices.floated[q]) * 0.87 * 100) / 100) {
-               //    const pom = {
-               //       rarity: rarity[i],
-               //       nextRarity: rarity[i + 1],
-               //       quality: q,
-               //       nextQuality: nextInstance.targetedSkin.floatedQualities[q],
-               //       collection: key,
-               //       instance,
-               //       nextInstance,
-               //       nOfSkins: nOfSkins[key][rarity[i + 1]],
-               //       chance: Math.round(1 / nOfSkins[key][rarity[i + 1]] * 1000) / 10
-               //    }
-               //    Gwarantowany.push(pom);
-
-               // } else 
-               if ((Math.round(instance.lowestSkin.price * 10 * 100) / 100) < Math.round(convert(nextInstance.targetedSkin.prices.floated[q]) * 0.87 * 100) / 100) {
-                  const pom = {
-                     rarity: rarity[i],
-                     nextRarity: rarity[i + 1],
-                     quality: q,
-                     nextQuality: nextInstance.targetedSkin.floatedQualities[q],
-                     collection: key,
-                     instance,
-                     nextInstance,
-                     nOfSkins: nOfSkins[key][rarity[i + 1]],
-                     chance: Math.round(1 / nOfSkins[key][rarity[i + 1]] * 1000) / 10
-                  }
-                  Statystyczny.push(pom);
-               }
-
-
-
-            }
-         }
-      }
-   }
-
-   const profit = { Gwarantowany, Statystyczny };
-   return profit;
 }
