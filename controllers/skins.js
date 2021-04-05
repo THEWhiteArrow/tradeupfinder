@@ -299,3 +299,96 @@ module.exports.mapFloatsPost = async (req, res) => {
 module.exports.mapFloatsGet = async (req, res) => {
    res.render('mappingFloats', { pages })
 }
+
+
+
+module.exports.advancedAlgorithm = async (req, res) => {
+   let counter = 0;
+
+   const collections = await Case.find({})
+      .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+
+   const nOfSkins = {};
+   for (let collection of collections) {
+      nOfSkins[collection.name] = {
+         grey: collection.skins.grey.length,
+         light_blue: collection.skins.light_blue.length,
+         blue: collection.skins.blue.length,
+         purple: collection.skins.purple.length,
+         pink: collection.skins.pink.length,
+         red: collection.skins.red.length,
+      }
+   }
+
+   // PRZESZUKIWANIE W STOSUNKU 4 DO 6 (SKINS COOPERATIVESKIN)
+   for (let r = 0; r < rarities.length - 1; r++) {
+      for (let collection of collections) {
+         for (let skin of collection.skins[rarities[r]]) {
+            const skinId = skin._id;
+            for (let quality of qualities) {
+               if (skin.prices[quality] !== -1) {
+                  for (let cooperativeCollection of collections) {
+                     for (let cooperativeSkin of cooperativeCollection.skins[rarities[r]]) {
+                        if (cooperativeSkin._id !== skinId) {
+                           for (let cooperativeQuality of qualities) {
+                              if (cooperativeSkin.prices[cooperativeQuality] !== -1) {
+
+                                 let skinAvgFloat = avg_floats[quality];
+                                 let cooperativeSkinAvgFloat = avg_floats[cooperativeQuality];
+
+                                 if (skinAvgFloat > skin.max_float) skinAvgFloat = skin.max_float;
+                                 if (skinAvgFloat < skin.min_float) skinAvgFloat = skin.min_float;
+                                 if (cooperativeSkinAvgFloat > cooperativeSkin.max_float) cooperativeSkinAvgFloat = cooperativeSkin.max_float;
+                                 if (cooperativeSkinAvgFloat < cooperativeSkin.min_float) cooperativeSkinAvgFloat = cooperativeSkin.min_float;
+                                 const avg = Math.round(((4 * skinAvgFloat + 6 * cooperativeSkinAvgFloat) / 10) * 1000) / 1000;
+                                 const price = skin.prices[quality];
+                                 const cooperativePrice = cooperativeSkin.prices[cooperativeQuality];
+
+                                 let targetedSkinsArr = [];
+
+                                 for (let targetedCollection of collections) {
+                                    if (targetedCollection.name === skin.case || targetedCollection === cooperativeSkin.case) {
+                                       for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
+                                          targetedSkinsArr.push(targetedSkin);
+                                          counter += 1;
+                                       }
+                                    }
+                                 }
+
+
+                                 let targetedSkinsNumber = 0;
+                                 let total = 0;
+                                 for (let targetedSkin of targetedSkinsArr) {
+                                    targetedSkinsNumber += 1;
+                                    const { min_float, max_float, prices, rarity } = targetedSkin;
+                                    const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
+                                    const targetedQuality = checkQuality(float);
+
+                                    const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
+                                    //
+
+                                    counter += 1;
+                                 }
+
+
+
+                                 counter += 1;
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+
+   console.log(counter)
+   return 0;
+}
