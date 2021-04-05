@@ -141,6 +141,7 @@ module.exports.updateTargetedPrices = async (req, res) => {
 
 // NEWEST
 module.exports.prepareTrades = async (req, res) => {
+   let counter = 0;
    const collections = await Case.find({})
       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
@@ -194,6 +195,7 @@ module.exports.prepareTrades = async (req, res) => {
                      const price = Math.round(skin.prices[quality] * 10 * 100) / 100;
                      const targetedPrice = Math.round(targetedSkin.prices[targetedQuality] * steamTax * 100) / 100;
                      total += targetedPrice;
+                     counter += 1;
 
                      if (price < targetedPrice) {
                         isProfitable = true;
@@ -233,7 +235,7 @@ module.exports.prepareTrades = async (req, res) => {
 
       }
    }
-
+   console.log(counter)
    res.render('trades', { profit, shortcuts });
 }
 

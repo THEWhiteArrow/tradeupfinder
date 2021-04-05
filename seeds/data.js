@@ -591,6 +591,13 @@ module.exports = {
          max_float: 1,
       },
       {
+         name: 'MAG-7',
+         skin: 'Core Breach',
+         rarity: 'purple',
+         min_float: 0,
+         max_float: 1,
+      },
+      {
          name: 'Glock-18',
          skin: 'Nuclear Garden',
          rarity: 'purple',
@@ -600,7 +607,7 @@ module.exports = {
       {
          name: 'MAG-7',
          skin: 'Core Breach',
-         rarity: 'pink',
+         rarity: 'purple',
          min_float: 0,
          max_float: 1,
       },
