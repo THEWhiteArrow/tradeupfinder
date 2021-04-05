@@ -236,7 +236,7 @@ module.exports.prepareTrades = async (req, res) => {
       }
    }
    console.log(counter)
-   res.render('trades', { profit, shortcuts });
+   res.render('trades/trades', { profit, shortcuts });
 }
 
 
@@ -251,12 +251,12 @@ let showCollection = false;
 module.exports.showMappingPage = async (req, res) => {
    if (showCollection) {
       showCollection = false;
-      res.render('map', { collectionNameServer, skinsServer });
+      res.render('mapping/map', { collectionNameServer, skinsServer });
       collectionNameServer = '';
       skinsServer = [];
       pages = [];
    } else {
-      res.render('map');
+      res.render('mapping/map');
    }
 }
 
@@ -265,7 +265,7 @@ module.exports.mapCollection = async (req, res) => {
 
    if (floats.length === 0) {
       const data = await getPageData(url, 100);
-      res.render('mappingCollection', { data, collectionName })
+      res.render('mapping/mappingCollection', { data, collectionName })
    } else {
       for (let i = 0; i < skinsServer.length; i++) {
          skinsServer[i].min_float = floats[i].min_float;
@@ -297,13 +297,14 @@ module.exports.mapFloatsPost = async (req, res) => {
    res.json(feedback);
 }
 module.exports.mapFloatsGet = async (req, res) => {
-   res.render('mappingFloats', { pages })
+   res.render('mapping/mappingFloats', { pages })
 }
 
 
 
-module.exports.advancedAlgorithm = async (req, res) => {
+module.exports.mixedAlgorithm = async (req, res) => {
    let counter = 0;
+   let trades = [];
 
    const collections = await Case.find({})
       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
@@ -313,17 +314,17 @@ module.exports.advancedAlgorithm = async (req, res) => {
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
-   const nOfSkins = {};
-   for (let collection of collections) {
-      nOfSkins[collection.name] = {
-         grey: collection.skins.grey.length,
-         light_blue: collection.skins.light_blue.length,
-         blue: collection.skins.blue.length,
-         purple: collection.skins.purple.length,
-         pink: collection.skins.pink.length,
-         red: collection.skins.red.length,
-      }
-   }
+   // const nOfSkins = {};
+   // for (let collection of collections) {
+   //    nOfSkins[collection.name] = {
+   //       grey: collection.skins.grey.length,
+   //       light_blue: collection.skins.light_blue.length,
+   //       blue: collection.skins.blue.length,
+   //       purple: collection.skins.purple.length,
+   //       pink: collection.skins.pink.length,
+   //       red: collection.skins.red.length,
+   //    }
+   // }
 
    // PRZESZUKIWANIE W STOSUNKU 4 DO 6 (SKINS COOPERATIVESKIN)
    for (let r = 0; r < rarities.length - 1; r++) {
@@ -370,12 +371,34 @@ module.exports.advancedAlgorithm = async (req, res) => {
                                     const targetedQuality = checkQuality(float);
 
                                     const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
-                                    //
+                                    const inputPrice = Math.round((4 * price + 6 * cooperativePrice) * 100) / 100;
+                                    if (inputPrice < targetedPrice) {
+                                       const chance = Math.round(1 / targetedSkinsNumber * 100);
+                                       const avgLossPrice = (total - targetedPrice) / (targetedSkinsArr - 1);
+                                       const profitability = Math.round(((inputPrice - targetedPrice) * chance / 100 - (inputPrice - avgLossPrice) * (100 - chance) / 100) * 100) / 100;
+
+                                       const pom = {
+                                          skin,
+                                          cooperativeSkin,
+                                          targetedSkin,
+                                          quality,
+                                          cooperativeQuality,
+                                          targetedQuality,
+                                          price,
+                                          cooperativePrice,
+                                          inputPrice,
+                                          targetedPrice,
+                                          rarity: rarities[r],
+                                          targetedSkinsArr,
+                                          chance,
+                                          total,
+                                          profitability,
+                                       }
+                                       trades.push(pom);
+                                    }
 
                                     counter += 1;
                                  }
-
-
 
                                  counter += 1;
                               }
@@ -389,6 +412,6 @@ module.exports.advancedAlgorithm = async (req, res) => {
       }
    }
 
-   console.log(counter)
-   return 0;
+   console.log(counter, trades.length)
+   res.render('trades/mixed-4-6', { trades })
 }

@@ -11,8 +11,8 @@ router.route('/')
 
 router.route('/trades')
    .get(catchAsync(skin.prepareTrades));
-router.route('/advanced-algorithm')
-   .get(catchAsync(skin.advancedAlgorithm));
+router.route('/mixed-algorithm-4-6')
+   .get(catchAsync(skin.mixedAlgorithm));
 
 
 
