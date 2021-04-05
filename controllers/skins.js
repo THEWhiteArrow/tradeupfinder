@@ -43,11 +43,6 @@ module.exports.updatePrices = async (req, res, next) => {
    for (let item of skins) {
 
 
-      for (let collection of collectionsToUpdate) {
-         item.case === collection ? isToBeUpdated = true : null;
-      }
-
-
 
 
       count += 1;
