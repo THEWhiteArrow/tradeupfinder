@@ -1502,15 +1502,15 @@ module.exports = {
          max_float: 1
       },
       {
-         name: 'MAC-10',
-         skin: 'Malachite',
+         name: 'Sawed-Off',
+         skin: 'Serenity',
          rarity: 'purple',
          min_float: 0,
          max_float: 0.5
       },
       {
-         name: 'Sawed-Off',
-         skin: 'Serenity',
+         name: 'MAC-10',
+         skin: 'Malachite',
          rarity: 'purple',
          min_float: 0,
          max_float: 0.5
@@ -1644,11 +1644,11 @@ module.exports = {
          max_float: 0.8
       },
       {
-         name: 'Sawed-Off',
-         skin: 'Origami',
+         name: 'Negev',
+         skin: "Man-o'-war",
          rarity: 'blue',
-         min_float: 0,
-         max_float: 0.55
+         min_float: 0.1,
+         max_float: 0.2
       },
       {
          name: 'MP7',
@@ -1658,14 +1658,14 @@ module.exports = {
          max_float: 0.5
       },
       {
-         name: 'Negev',
-         skin: "Man-o'-war",
+         name: 'Sawed-Off',
+         skin: 'Origami',
          rarity: 'blue',
-         min_float: 0.1,
-         max_float: 0.2
+         min_float: 0,
+         max_float: 0.55
       },
    ],
-   Chrome3Case: [
+   Chroma3Case: [
       {
          name: 'M4A1-S',
          skin: "Chantico's Fire",
@@ -2256,18 +2256,18 @@ module.exports = {
          max_float: 0.5
       },
       {
-         name: 'Five-SeveN',
-         skin: 'Scumbria',
-         rarity: 'blue',
-         min_float: 0,
-         max_float: 1
-      },
-      {
          name: 'G3SG1',
          skin: 'Ventilator',
          rarity: 'blue',
          min_float: 0,
          max_float: 0.45
+      },
+      {
+         name: 'Five-SeveN',
+         skin: 'Scumbria',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 1
       },
    ],
    HorizonCase: [
@@ -2414,18 +2414,18 @@ module.exports = {
          max_float: 0.87
       },
       {
-         name: 'G3SG1',
-         skin: 'Flux',
-         rarity: 'pink',
-         min_float: 0,
-         max_float: 0.9
-      },
-      {
          name: 'SSG 08',
          skin: 'Big Iron',
          rarity: 'pink',
          min_float: 0,
          max_float: 0.64
+      },
+      {
+         name: 'G3SG1',
+         skin: 'Flux',
+         rarity: 'pink',
+         min_float: 0,
+         max_float: 0.9
       },
       {
          name: 'Galil AR',
@@ -2712,18 +2712,18 @@ module.exports = {
          max_float: 0.65
       },
       {
-         name: 'MP5-SD',
-         skin: 'Acid Wash',
-         rarity: 'blue',
-         min_float: 0,
-         max_float: 0.68
-      },
-      {
          name: 'Nova',
          skin: 'Plume',
          rarity: 'blue',
          min_float: 0,
          max_float: 0.8
+      },
+      {
+         name: 'MP5-SD',
+         skin: 'Acid Wash',
+         rarity: 'blue',
+         min_float: 0,
+         max_float: 0.68
       },
       {
          name: 'SCAR-20',
@@ -2742,18 +2742,18 @@ module.exports = {
    ],
    CS20Case: [
       {
-         name: 'AWP',
-         skin: 'Wildfire',
-         rarity: 'red',
-         min_float: 0.01,
-         max_float: 0.7
-      },
-      {
          name: 'FAMAS',
          skin: 'Commemoration',
          rarity: 'red',
          min_float: 0,
          max_float: 0.5
+      },
+      {
+         name: 'AWP',
+         skin: 'Wildfire',
+         rarity: 'red',
+         min_float: 0.01,
+         max_float: 0.7
       },
       {
          name: 'MP9',
