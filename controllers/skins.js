@@ -93,10 +93,10 @@ module.exports.useServers = async (req, res) => {
    console.log(server2)
    console.log(server3)
    // console.log(req.body)
-   const server1Url = `https://steam-market-server1.herokuapp.com/skins/update?updateStart=${server1.start}&updateEnd=${server1.end}&useServers=true`;
-   const server2Url = `https://steam-market-server2.herokuapp.com/skins/update?updateStart=${server2.start}&updateEnd=${server2.end}&useServers=true`;
-   const server3Url = `https://steam-market-server3.herokuapp.com/skins/update?updateStart=${server3.start}&updateEnd=${server3.end}&useServers=true`;
-   const server4Url = `https://steam-market-server4.herokuapp.com/skins/update?updateStart=${server4.start}&updateEnd=${server4.end}&useServers=true`;
+   const server1Url = `https://steam-market-server1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}`;
+   const server2Url = `https://steam-market-server2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}`;
+   const server3Url = `https://steam-market-server3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}`;
+   const server4Url = `https://steam-market-server4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}`;
 
    // const response2 = await fetch(server2Url, { method: 'GET' });
    // const response3 = await fetch(server3Url, { method: 'GET' });
