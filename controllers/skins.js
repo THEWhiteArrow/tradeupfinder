@@ -102,7 +102,7 @@ module.exports.useServers = async (req, res) => {
    // const response3 = await fetch(server3Url, { method: 'GET' });
    const response2 = fetch(server2Url, { method: 'GET' });
    const response3 = fetch(server3Url, { method: 'GET' });
-   const response4 = fetch(server3Url, { method: 'GET' });
+   const response4 = fetch(server4Url, { method: 'GET' });
    res.redirect(server1Url)
 };
 
