@@ -22,6 +22,8 @@ module.exports.showIndex = async (req, res) => {
    // res.cookie('testtoken', '12345');
    // res.clearCookie("key");
    // console.log(req.cookies)
+   req.flash('info', 'Dla Twojej wygody wyświetlone zostało 100 możliwych kontraktów');
+   console.log(req.session)
    res.render('index', { collections, qualities, rarities });
 };
 
@@ -303,6 +305,7 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 
 module.exports.mixedAlgorithm = async (req, res) => {
+
    let counter = 0;
    let profits = [];
 

@@ -7,6 +7,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const skinRoutes = require('./routes/skins');
 const session = require('express-session');
+const flash = require('connect-flash');
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
 // const mongoStore = require('connect-mongo')(new session);
 const cookieParser = require('cookie-parser');
@@ -59,7 +60,16 @@ const sessionConfig = {
    }
 }
 app.use(session(sessionConfig));
+app.use(flash());
 app.use(cookieParser(secret));
+
+app.use((req, res, next) => {
+   res.locals.url = req.originalUrl;
+   res.locals.info = req.flash('info');
+
+   next();
+})
+
 
 
 // CODE

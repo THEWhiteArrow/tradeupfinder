@@ -46,6 +46,10 @@
          border-bottom: 2px solid rgb(0, 155, 13);
       }
 
+      .border {
+         border: 1px solid black;
+      }
+
       .profitability {
          /* border: 2px solid rgb(255, 145, 0); */
          padding: 3px 5px;
@@ -61,6 +65,10 @@
       svg.down {
          color: red;
          transform: translate3d(-6px, 4px, 0) rotate(180deg);
+      }
+
+      .skin {
+         border-bottom: 1px solid black;
       }
 
       .text-underline.red {
@@ -85,24 +93,29 @@
          <h4 class="my-3">Brawo! Rozpatrzyłeś <%= counterOpt %> przypadków w konfiguracji 4/6</h4>
          <h4 class="my-3">Liczba pozytywnych przypadków - <%= positiveResults %>
          </h4>
-         <p class="lead alert alert-warning alert-dismissible fade show" role="alert">
-            <span>Dla Twojej wygody wyświetlone zostało 100 możliwych kontraktów</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-         </p>
+         <% if(info && info.length){ %>
+            <p class="lead alert alert-warning alert-dismissible fade show" role="alert">
+               <span>
+                  <%= info %>
+               </span>
+               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </p>
+            <% } %>
 
-         <a class="btn btn-primary mt-2" href="/skins">Wróć do strony skinów</a>
-         <a class="btn btn-success mt-2" href="/skins/mixed-algorithm-4-6">Szukaj ponownie algorytmem "Mixed 4/6"</a>
+               <a class="btn btn-primary mt-2" href="/skins">Wróć do strony skinów</a>
+               <a class="btn btn-success mt-2" href="/skins/mixed-algorithm-4-6">Szukaj ponownie algorytmem "Mixed
+                  4/6"</a>
       </div>
 
-      <% if(locals.profits){ %>
+      <% if(profits){ %>
          <ul>
             <% let number=1; %>
                <% const maxShownSkins=100; %>
                   <% for(let profit of profits){ %>
                      <% if(number <=maxShownSkins){ %>
-                        <li class="my-2 trade rounded">
+                        <li class="my-3 trade rounded border ">
                            <% for(let trade of profit.trades ){ %>
-                              <div class="my-3 px-3">
+                              <div class="my-4 px-3">
 
                                  <div>
 
@@ -119,13 +132,13 @@
                                                       =>
                                                       <%= [trade.targetedSkin.case]%>
                                        </div>
-                                       <span>
+                                       <span class="skin">
                                           4x [<%= trade.quality %>]
                                              <%= trade.skin.name %>
                                                 <%= trade.skin.skin %>
                                        </span>
                                        +
-                                       <span>
+                                       <span class="skin">
                                           6x [<%= trade.cooperativeQuality %>]
                                              <%= trade.cooperativeSkin.name %>
                                                 <%= trade.cooperativeSkin.skin %>
@@ -136,7 +149,7 @@
                                     </span>
                                     =>
                                     <span>
-                                       <span>
+                                       <span class="skin">
                                           [<%= trade.targetedQuality %>]
                                              <%= trade.targetedSkin.name %>
                                                 <%= trade.targetedSkin.skin %>
@@ -189,16 +202,17 @@
    <script src="/javascripts/bootstrap.min.js"></script>
    <script>
       let trades = document.querySelectorAll('li.trade');
-      let rarities = document.querySelectorAll('span.rarity');
+      // let rarities = document.querySelectorAll('span.rarity');
 
       for (let i = 0; i < trades.length; i++) {
-         let bg = rarities[i].innerText.trim();
+         let bg = trades[i].children[0].children[0].children[0].children[0].children[0].innerText.trim()
+
 
          bg === 'grey' ? bg = "rgb(159, 159, 159)" : null;
          bg === 'light_blue' ? bg = "rgba(154, 193, 251,0.8)" : null;
          bg === 'blue' ? bg = "rgb(127, 186, 253)" : null;
          bg === 'purple' ? bg = "rgb(180, 123, 255)" : null;
-         bg === 'pink' ? bg = "pink" : null;
+         bg === 'pink' ? bg = "#ffcfedaa" : null;
 
          trades[i].style.backgroundColor = bg;
       }
