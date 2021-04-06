@@ -65,9 +65,10 @@
                <li class="d-flex flex-row justify-content-space-between my-2">
                   <div class="d-flex col-12 col-md-8">
                      <span>
-                        <%= trade.skin.rarity %>
-                           [<%= shortcuts[trade.quality] %>] <%= trade.skin.name %> | <%= trade.skin.skin %> (<%=
-                                       trade.price %> ) =>
+                        <%= trade.skin.case %>
+                           <%= trade.skin.rarity %>
+                              [<%= shortcuts[trade.quality] %>] <%= trade.skin.name %> | <%= trade.skin.skin %> (<%=
+                                          trade.price %> ) =>
                      </span>
                      <span>
                         [<%= shortcuts[trade.targetedQuality] %>] <%= trade.targetedSkin.name %> | <%=

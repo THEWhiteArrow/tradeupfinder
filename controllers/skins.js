@@ -304,7 +304,7 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 module.exports.mixedAlgorithm = async (req, res) => {
    let counter = 0;
-   let trades = [];
+   let profits = [];
 
    const collections = await Case.find({})
       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
@@ -330,77 +330,124 @@ module.exports.mixedAlgorithm = async (req, res) => {
    for (let r = 0; r < rarities.length - 1; r++) {
       for (let collection of collections) {
          for (let skin of collection.skins[rarities[r]]) {
-            const skinId = skin._id;
-            for (let quality of qualities) {
-               if (skin.prices[quality] !== -1) {
-                  for (let cooperativeCollection of collections) {
-                     for (let cooperativeSkin of cooperativeCollection.skins[rarities[r]]) {
-                        if (cooperativeSkin._id !== skinId) {
-                           for (let cooperativeQuality of qualities) {
-                              if (cooperativeSkin.prices[cooperativeQuality] !== -1) {
+            if (collection.skins[rarities[r + 1]].length !== 0) {
 
-                                 let skinAvgFloat = avg_floats[quality];
-                                 let cooperativeSkinAvgFloat = avg_floats[cooperativeQuality];
+               const skinId = skin._id;
+               for (let quality of qualities) {
+                  if (skin.prices[quality] !== -1) {
+                     for (let cooperativeCollection of collections) {
+                        for (let cooperativeSkin of cooperativeCollection.skins[rarities[r]]) {
+                           if (cooperativeSkin._id !== skinId && cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
+                              for (let cooperativeQuality of qualities) {
+                                 if (cooperativeSkin.prices[cooperativeQuality] !== -1) {
 
-                                 if (skinAvgFloat > skin.max_float) skinAvgFloat = skin.max_float;
-                                 if (skinAvgFloat < skin.min_float) skinAvgFloat = skin.min_float;
-                                 if (cooperativeSkinAvgFloat > cooperativeSkin.max_float) cooperativeSkinAvgFloat = cooperativeSkin.max_float;
-                                 if (cooperativeSkinAvgFloat < cooperativeSkin.min_float) cooperativeSkinAvgFloat = cooperativeSkin.min_float;
-                                 const avg = Math.round(((4 * skinAvgFloat + 6 * cooperativeSkinAvgFloat) / 10) * 1000) / 1000;
-                                 const price = skin.prices[quality];
-                                 const cooperativePrice = cooperativeSkin.prices[cooperativeQuality];
+                                    let skinAvgFloat = avg_floats[quality];
+                                    let cooperativeSkinAvgFloat = avg_floats[cooperativeQuality];
+                                    if (skinAvgFloat > skin.max_float) skinAvgFloat = skin.max_float;
+                                    if (skinAvgFloat < skin.min_float) skinAvgFloat = skin.min_float;
+                                    if (cooperativeSkinAvgFloat > cooperativeSkin.max_float) cooperativeSkinAvgFloat = cooperativeSkin.max_float;
+                                    if (cooperativeSkinAvgFloat < cooperativeSkin.min_float) cooperativeSkinAvgFloat = cooperativeSkin.min_float;
+                                    const avg = Math.round(((4 * skinAvgFloat + 6 * cooperativeSkinAvgFloat) / 10) * 1000) / 1000;
+                                    const price = skin.prices[quality];
+                                    const cooperativePrice = cooperativeSkin.prices[cooperativeQuality];
 
-                                 let targetedSkinsArr = [];
 
-                                 for (let targetedCollection of collections) {
-                                    if (targetedCollection.name === skin.case || targetedCollection === cooperativeSkin.case) {
-                                       for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
-                                          targetedSkinsArr.push(targetedSkin);
-                                          counter += 1;
+                                    let targetedSkinsArr = [];
+                                    let targetedSkinsNumber = 0;
+                                    let total = 0;
+                                    let targetedSkinsQuality = []
+
+                                    let collName = skin.case;
+                                    let coopCollName = cooperativeSkin.case;
+
+
+                                    for (let targetedCollection of collections) {
+                                       if (targetedCollection.name == collName || targetedCollection.name == coopCollName) {
+                                          for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
+
+                                             const { min_float, max_float } = targetedSkin;
+                                             const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
+                                             const targetedQuality = checkQuality(float);
+
+                                             const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
+                                             targetedSkin.price = targetedPrice;
+
+                                             total += targetedPrice;
+                                             targetedSkinsNumber += 1;
+
+                                             targetedSkinsQuality.push(targetedQuality);
+                                             targetedSkinsArr.push(targetedSkin);
+                                             counter += 1;
+                                          }
                                        }
                                     }
-                                 }
 
 
-                                 let targetedSkinsNumber = 0;
-                                 let total = 0;
-                                 for (let targetedSkin of targetedSkinsArr) {
-                                    targetedSkinsNumber += 1;
-                                    const { min_float, max_float, prices, rarity } = targetedSkin;
-                                    const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
-                                    const targetedQuality = checkQuality(float);
 
-                                    const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
-                                    const inputPrice = Math.round((4 * price + 6 * cooperativePrice) * 100) / 100;
-                                    if (inputPrice < targetedPrice) {
-                                       const chance = Math.round(1 / targetedSkinsNumber * 100);
-                                       const avgLossPrice = (total - targetedPrice) / (targetedSkinsArr - 1);
-                                       const profitability = Math.round(((inputPrice - targetedPrice) * chance / 100 - (inputPrice - avgLossPrice) * (100 - chance) / 100) * 100) / 100;
 
-                                       const pom = {
-                                          skin,
-                                          cooperativeSkin,
-                                          targetedSkin,
-                                          quality,
-                                          cooperativeQuality,
-                                          targetedQuality,
-                                          price,
-                                          cooperativePrice,
-                                          inputPrice,
-                                          targetedPrice,
-                                          rarity: rarities[r],
-                                          targetedSkinsArr,
-                                          chance,
+
+                                    let trades = [];
+                                    let addToArr = false;
+
+                                    for (let targetedSkin of targetedSkinsArr) {
+
+                                       const inputPrice = Math.round((4 * price + 6 * cooperativePrice) * 100) / 100;
+                                       if (inputPrice < targetedSkin.price) {
+                                          const chance = Math.round(1 / targetedSkinsNumber * 100);
+                                          const { min_float, max_float } = targetedSkin;
+                                          const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
+                                          const targetedQuality = checkQuality(float);
+                                          // const avgLossPrice = (total - targetedPrice) / (targetedSkinsArr - 1);
+                                          // const profitability = Math.round(((inputPrice - targetedPrice) * chance / 100 - (inputPrice - avgLossPrice) * (100 - chance) / 100) * 100) / 100;
+                                          // const profitability = Math.round((inputPrice - (total / targetedSkinsNumber)) * 100) / 100;
+                                          const profitability = Math.round((total / targetedSkinsNumber - inputPrice) * 100) / 100;
+                                          if (profitability > 0) {
+                                             addToArr = true;
+
+                                             const pom = {
+                                                skin,
+                                                cooperativeSkin,
+                                                targetedSkin,
+                                                quality,
+                                                cooperativeQuality,
+                                                targetedQuality,
+                                                price,
+                                                cooperativePrice,
+                                                inputPrice,
+                                                targetedPrice: targetedSkin.price,
+                                                rarity: rarities[r],
+                                                targetedSkinsArr,
+                                                targetedSkinsQuality,
+                                                chance,
+                                                profitability,
+                                             }
+                                             trades.push(pom);
+                                          }
+                                       }
+                                       counter += 1;
+                                    }
+
+
+                                    if (addToArr) {
+                                       const pom2 = {
+                                          trades,
+                                          avg,
                                           total,
-                                          profitability,
+                                          positiveCases: trades.length,
+                                          targetedSkinsNumber
                                        }
-                                       trades.push(pom);
+
+                                       if (profits.length === 0) {
+                                          profits.push(pom2);
+                                       } else if (pom2.trades[0].profitability > profits[0].trades[0].profitability) {
+                                          profits.unshift(pom2);
+                                       } else {
+                                          profits.push(pom2);
+                                       }
                                     }
 
-                                    counter += 1;
+                                    // counter += 1;
                                  }
-
-                                 counter += 1;
                               }
                            }
                         }
@@ -412,6 +459,9 @@ module.exports.mixedAlgorithm = async (req, res) => {
       }
    }
 
-   console.log(counter, trades.length)
-   res.render('trades/mixed-4-6', { trades })
+   let counterOpt = counter.toLocaleString()
+   let positiveResults = profits.length;
+
+   console.log(counter, positiveResults)
+   res.render('trades/mixed-4-6', { profits, counterOpt, positiveResults })
 }
