@@ -41,6 +41,7 @@ module.exports.updatePrices = async (req, res, next) => {
       length += c.nOfSkins;
    }
 
+   let fails = '';
 
    const { start = 0, end = length } = req.query;
    for (let item of skins) {
@@ -56,6 +57,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
          const updatedPrices = {};
          const { name, skin, prices, _id } = item;
+         let noUpdate = false;
 
          const keys = Object.keys(prices);
 
@@ -63,29 +65,37 @@ module.exports.updatePrices = async (req, res, next) => {
          for (let q of keys) {
             if (q !== '$init' && q !== 'floated' && item.prices[q] !== -1) {
 
-               const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
-               const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
-               const data = await getData(url, 3300);
-               // console.log(data)
-               if (data === null) {
-                  next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
-               }
+               try {
 
-               const price = data.median_price || data.lowest_price || -1;
-               updatedPrices[q] = convert(price) || -1;
+                  const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+                  const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
+                  const data = await getData(url, 3300);
+                  // console.log(data)
+                  if (data === null) {
+                     next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
+                  }
+
+                  const price = data.median_price || data.lowest_price || -1;
+                  updatedPrices[q] = convert(price) || -1;
+               } catch {
+                  fails += `${item.name} | ${item.skin}  ***`;
+                  noUpdate = true;
+               }
             } else if (item.prices[q] === -1) {
                updatedPrices[q] = -1;
             }
          }
 
 
-
-         const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
+         if (!noUpdate) {
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
+         }
 
       }
 
 
    }
+   console.log(fails)
    console.log('updating finished!')
    res.redirect('/skins');
 };
@@ -308,8 +318,12 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 module.exports.mixedAlgorithm = async (req, res) => {
    const { ratio = '4-6' } = req.query;
-   const amount1 = Number(ratio[0]);
-   const amount2 = Number(ratio[2]);
+   let amount1 = Number(ratio[0]);
+   let amount2 = Number(ratio[2]);
+   if (amount1 < 1 || amount1 > 9 || amount2 < 1 || amount2 > 9) {
+      amount1 = 4;
+      amount2 = 6;
+   }
 
    let counter = 0;
    let profits = [];
@@ -458,7 +472,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
                                        if (profits.length === 0) {
                                           profits.push(pom2);
-                                       } else if (pom2.trades[0].returnPercentage > profits[0].trades[0].ratio) {
+                                       } else if (pom2.trades[0].returnPercentage > profits[0].trades[0].returnPercentage) {
                                           profits.unshift(pom2);
                                        } else {
                                           profits.push(pom2);
