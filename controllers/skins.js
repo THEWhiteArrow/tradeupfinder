@@ -41,7 +41,7 @@ module.exports.updatePrices = async (req, res, next) => {
       length += c.nOfSkins;
    }
 
-   let fails = '';
+
 
    const { start = 0, end = length } = req.query;
    for (let item of skins) {
@@ -57,7 +57,6 @@ module.exports.updatePrices = async (req, res, next) => {
 
          const updatedPrices = {};
          const { name, skin, prices, _id } = item;
-         let noUpdate = false;
 
          const keys = Object.keys(prices);
 
@@ -65,31 +64,35 @@ module.exports.updatePrices = async (req, res, next) => {
          for (let q of keys) {
             if (q !== '$init' && q !== 'floated' && item.prices[q] !== -1) {
 
-               try {
 
-                  const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
-                  const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
-                  const data = await getData(url, 3300);
-                  // console.log(data)
-                  if (data === null) {
-                     next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
-                  }
-
-                  const price = data.median_price || data.lowest_price || -1;
-                  updatedPrices[q] = convert(price) || -1;
-               } catch {
-                  fails += `${item.name} | ${item.skin}  ***`;
-                  noUpdate = true;
+               const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+               const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
+               const data = await getData(url, 3300);
+               // console.log(data)
+               if (data === null) {
+                  next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                }
+
+               let price;
+               if (data.median_price) {
+                  price = data.median_price;
+                  updatedPrices[q] = convert(price);
+               } else if (data.lowest_price) {
+                  price = data.lowest_price;
+                  updatedPrices[q] = convert(price);
+               } else {
+                  updatedPrices[q] = -1;
+               }
+
             } else if (item.prices[q] === -1) {
                updatedPrices[q] = -1;
             }
          }
 
 
-         if (!noUpdate) {
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
-         }
+
+         const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
+
 
       }
 
