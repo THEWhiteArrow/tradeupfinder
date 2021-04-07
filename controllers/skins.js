@@ -22,6 +22,7 @@ module.exports.showIndex = async (req, res) => {
    // res.cookie('testtoken', '12345');
    // res.clearCookie("key");
    // console.log(req.cookies)
+
    req.flash('info', 'Dla Twojej wygody wyświetlone zostało 100 możliwych kontraktów');
    console.log(req.session)
    res.render('index', { collections, qualities, rarities });
@@ -67,10 +68,10 @@ module.exports.updatePrices = async (req, res, next) => {
                const data = await getData(url, 3300);
                // console.log(data)
                if (data === null) {
-                  return next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
+                  next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
                }
 
-               const price = data.median_price || data.lowest_price;
+               const price = data.median_price || data.lowest_price || -1;
                updatedPrices[q] = convert(price) || -1;
             } else if (item.prices[q] === -1) {
                updatedPrices[q] = -1;
@@ -108,6 +109,7 @@ module.exports.useServers = async (req, res) => {
    res.redirect(server1Url)
 };
 
+//TO BE DELETED
 module.exports.updateTargetedPrices = async (req, res) => {
    const { fn, mw, ft, ww, bs, resetFloats } = req.query;
    if (fn && mw && ft && ww && bs) {
@@ -404,6 +406,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
                                           // const profitability = Math.round(((inputPrice - targetedPrice) * chance / 100 - (inputPrice - avgLossPrice) * (100 - chance) / 100) * 100) / 100;
                                           // const profitability = Math.round((inputPrice - (total / targetedSkinsNumber)) * 100) / 100;
                                           const profitability = Math.round((total / targetedSkinsNumber - inputPrice) * 100) / 100;
+                                          const ratio = Math.round(((total / targetedSkinsNumber) / inputPrice * 100) * 100) / 100;
                                           if (profitability > 0) {
                                              addToArr = true;
 
@@ -423,6 +426,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
                                                 targetedSkinsQuality,
                                                 chance,
                                                 profitability,
+                                                ratio,
                                              }
                                              trades.push(pom);
                                           }
@@ -442,7 +446,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
                                        if (profits.length === 0) {
                                           profits.push(pom2);
-                                       } else if (pom2.trades[0].profitability > profits[0].trades[0].profitability) {
+                                       } else if (pom2.trades[0].ratio > profits[0].trades[0].ratio) {
                                           profits.unshift(pom2);
                                        } else {
                                           profits.push(pom2);
