@@ -39,32 +39,33 @@
       <h1 class="mt-4">Skiny</h1>
       <a class="btn btn-primary mt-2" href="/skins/update">Odśwież ceny</a>
       <a class="btn btn-success mt-2" href="/skins/trades">Szukaj trade'u !</a>
-      <a class="btn btn-danger mt-2" href="/skins/mixed-algorithm-4-6">Mieszany algorytm szukania 4/6 !</a>
+      <a class="btn btn-danger mt-2" href="/skins/mixed-algorithm?ratio=4-6">Mieszany algorytm szukania 4/6 !</a>
 
       <a href="/skins/map-collection" class="btn btn-info text-white mt-2">Zmapuj kolekcje ze skinStash!</a>
 
       <div class="row">
 
          <div class=" d-flex mt-2 col-12 col-md-3">
+
             <form class="d-fle col-12 flex-columnx" action="/skins/update-thru-servers" method="POST">
-               <span>Serwer 1</span>
-               <input class="form-control my-1" type="number" name="server1[start]" placeholder="starting point"
-                  aria-label=".form-control example" step="1">
+               <label for="server1">Serwer 1</label>
+               <input id="server1" class="form-control my-1" type="number" name="server1[start]"
+                  placeholder="starting point" aria-label=".form-control example" step="1">
                <input class="form-control my-1" type="number" name="server1[end]" placeholder="end point"
                   aria-label=".form-control example" step="1">
-               <span>Serwer 2</span>
-               <input class="form-control my-1" type="number" name="server2[start]" placeholder="starting point"
-                  aria-label=".form-control example" step="1">
+               <label for="server2">Serwer 2</label>
+               <input id="server1" class="form-control my-1" type="number" name="server2[start]"
+                  placeholder="starting point" aria-label=".form-control example" step="1">
                <input class="form-control my-1" type="number" name="server2[end]" placeholder="end point"
                   aria-label=".form-control example" step="1">
-               <span>Serwer 3</span>
-               <input class="form-control my-1" type="number" name="server3[start]" placeholder="starting point"
-                  aria-label=".form-control example" step="1">
+               <label for="server3">Serwer 3</label>
+               <input id="server1" class="form-control my-1" type="number" name="server3[start]"
+                  placeholder="starting point" aria-label=".form-control example" step="1">
                <input class="form-control my-1" type="number" name="server3[end]" placeholder="end point"
                   aria-label=".form-control example" step="1">
-               <span>Serwer 4</span>
-               <input class="form-control my-1" type="number" name="server4[start]" placeholder="starting point"
-                  aria-label=".form-control example" step="1">
+               <label for="server4">Serwer 4</label>
+               <input id="server1" class="form-control my-1" type="number" name="server4[start]"
+                  placeholder="starting point" aria-label=".form-control example" step="1">
                <input class="form-control my-1" type="number" name="server4[end]" placeholder="end point"
                   aria-label=".form-control example" step="1">
                <div class="d-flex">

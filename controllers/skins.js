@@ -307,6 +307,9 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 
 module.exports.mixedAlgorithm = async (req, res) => {
+   const { ratio = '4-6' } = req.query;
+   const amount1 = Number(ratio[0]);
+   const amount2 = Number(ratio[2]);
 
    let counter = 0;
    let profits = [];
@@ -331,7 +334,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
    //    }
    // }
 
-   // PRZESZUKIWANIE W STOSUNKU 4 DO 6 (SKINS COOPERATIVESKIN)
+   // PRZESZUKIWANIE W STOSUNKU RATIO (SKINS COOPERATIVESKIN)
    for (let r = 0; r < rarities.length - 1; r++) {
       for (let collection of collections) {
          for (let skin of collection.skins[rarities[r]]) {
@@ -352,17 +355,19 @@ module.exports.mixedAlgorithm = async (req, res) => {
                                     if (skinAvgFloat < skin.min_float) skinAvgFloat = skin.min_float;
                                     if (cooperativeSkinAvgFloat > cooperativeSkin.max_float) cooperativeSkinAvgFloat = cooperativeSkin.max_float;
                                     if (cooperativeSkinAvgFloat < cooperativeSkin.min_float) cooperativeSkinAvgFloat = cooperativeSkin.min_float;
-                                    const avg = Math.round(((4 * skinAvgFloat + 6 * cooperativeSkinAvgFloat) / 10) * 1000) / 1000;
+                                    const avg = Math.round(((amount1 * skinAvgFloat + amount2 * cooperativeSkinAvgFloat) / 10) * 1000) / 1000;
                                     const price = skin.prices[quality];
                                     const cooperativePrice = cooperativeSkin.prices[cooperativeQuality];
-
 
                                     let targetedSkinsArr = [];
                                     let targetedSkinsNumber = 0;
                                     let total = 0;
                                     let targetedSkinsQuality = []
 
+                                    // SKIN Z ILOSCIĄ RÓWNĄ AMOUNT1
                                     let collName = skin.case;
+
+                                    // COOPERATYWNY SKIN (DOPEŁNIENIOWY) Z ILOSCIĄ RÓWNĄ AMOUNT2
                                     let coopCollName = cooperativeSkin.case;
 
 
@@ -377,8 +382,14 @@ module.exports.mixedAlgorithm = async (req, res) => {
                                              const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
                                              targetedSkin.price = targetedPrice;
 
-                                             total += targetedPrice;
-                                             targetedSkinsNumber += 1;
+                                             if (targetedCollection.name == collName) {
+
+                                                total += targetedPrice * amount1;
+                                                targetedSkinsNumber += 1 * amount1;
+                                             } else if (targetedCollection.name == coopCollName) {
+                                                total += targetedPrice * amount2;
+                                                targetedSkinsNumber += 1 * amount2;
+                                             }
 
                                              targetedSkinsQuality.push(targetedQuality);
                                              targetedSkinsArr.push(targetedSkin);
@@ -396,17 +407,18 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
                                     for (let targetedSkin of targetedSkinsArr) {
 
-                                       const inputPrice = Math.round((4 * price + 6 * cooperativePrice) * 100) / 100;
+                                       const inputPrice = Math.round((amount1 * price + amount2 * cooperativePrice) * 100) / 100;
                                        if (inputPrice < targetedSkin.price) {
-                                          const chance = Math.round(1 / targetedSkinsNumber * 100);
+                                          // const chance = Math.round(1 / targetedSkinsNumber * 100);
                                           const { min_float, max_float } = targetedSkin;
                                           const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
                                           const targetedQuality = checkQuality(float);
                                           // const avgLossPrice = (total - targetedPrice) / (targetedSkinsArr - 1);
                                           // const profitability = Math.round(((inputPrice - targetedPrice) * chance / 100 - (inputPrice - avgLossPrice) * (100 - chance) / 100) * 100) / 100;
                                           // const profitability = Math.round((inputPrice - (total / targetedSkinsNumber)) * 100) / 100;
-                                          const profitability = Math.round((total / targetedSkinsNumber - inputPrice) * 100) / 100;
-                                          const ratio = Math.round(((total / targetedSkinsNumber) / inputPrice * 100) * 100) / 100;
+                                          const avgPrice = total / targetedSkinsNumber;
+                                          const profitability = Math.round((avgPrice - inputPrice) * 100) / 100;
+                                          const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
                                           if (profitability > 0) {
                                              addToArr = true;
 
@@ -424,9 +436,9 @@ module.exports.mixedAlgorithm = async (req, res) => {
                                                 rarity: rarities[r],
                                                 targetedSkinsArr,
                                                 targetedSkinsQuality,
-                                                chance,
+                                                // chance,
                                                 profitability,
-                                                ratio,
+                                                returnPercentage,
                                              }
                                              trades.push(pom);
                                           }
@@ -446,7 +458,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
                                        if (profits.length === 0) {
                                           profits.push(pom2);
-                                       } else if (pom2.trades[0].ratio > profits[0].trades[0].ratio) {
+                                       } else if (pom2.trades[0].returnPercentage > profits[0].trades[0].ratio) {
                                           profits.unshift(pom2);
                                        } else {
                                           profits.push(pom2);
@@ -467,8 +479,8 @@ module.exports.mixedAlgorithm = async (req, res) => {
    }
 
    let counterOpt = counter.toLocaleString()
-   let positiveResults = profits.length;
+   let positiveResults = profits.length.toLocaleString();
 
    console.log(counter, positiveResults)
-   res.render('trades/mixed-4-6', { profits, counterOpt, positiveResults })
+   res.render('trades/mixed', { profits, counterOpt, positiveResults, amount: { amount1, amount2 } })
 }
