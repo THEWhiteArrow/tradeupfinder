@@ -43,7 +43,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
 
-   const { start = 0, end = length } = req.query;
+   const { start = 0, end = length, variant = 'steam' } = req.query;
    for (let item of skins) {
 
 
@@ -64,36 +64,42 @@ module.exports.updatePrices = async (req, res, next) => {
          for (let q of keys) {
             if (q !== '$init' && q !== 'floated' && item.prices[q] !== -1) {
 
-
-               const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+               let baseUrl;
+               variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&id=';
                // const baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&id=';
                const url = `${baseUrl}${name} | ${skin} (${q})`;
                const encodedUrl = encodeURI(url);
                // const data = await getData(encodedUrl, 300);
-               const data = await getData(encodedUrl, 3200);
+               let data;
+               variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                if (data.success == true) {
 
                   // console.log(data, url)
 
                   let price;
-                  if (data.median_price) {
-                     price = data.median_price;
-                     updatedPrices[q] = convert(price);
-                  } else if (data.lowest_price) {
-                     price = data.lowest_price;
-                     updatedPrices[q] = convert(price);
+                  if (variant == 'steam') {
+
+                     if (data.median_price) {
+                        price = data.median_price;
+                        updatedPrices[q] = convert(price);
+                     } else if (data.lowest_price) {
+                        price = data.lowest_price;
+                        updatedPrices[q] = convert(price);
+                     } else {
+                        updatedPrices[q] = 0;
+                     }
                   } else {
-                     updatedPrices[q] = 0;
+
+                     if (data.average_price) {
+                        price = data.average_price;
+                        updatedPrices[q] = Number(price);
+                     } else if (data.median_price) {
+                        price = data.median_price;
+                        updatedPrices[q] = Number(price);
+                     } else {
+                        updatedPrices[q] = 0;
+                     }
                   }
-                  // if (data.average_price) {
-                  //    price = data.average_price;
-                  //    updatedPrices[q] = Number(price);
-                  // } else if (data.median_price) {
-                  //    price = data.median_price;
-                  //    updatedPrices[q] = Number(price);
-                  // } else {
-                  //    updatedPrices[q] = 0;
-                  // }
                } else if (data.success == false || data == null) {
                   console.log(data, encodedUrl)
 
