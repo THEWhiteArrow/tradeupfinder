@@ -70,7 +70,7 @@ module.exports.updatePrices = async (req, res, next) => {
                const url = `${baseUrl}${name} | ${skin} (${q})`;
                const encodedUrl = encodeURI(url);
                // const data = await getData(encodedUrl, 300);
-               const data = await getData(url, 3200);
+               const data = await getData(encodedUrl, 3200);
                if (data.success == true) {
 
                   // console.log(data, url)
