@@ -65,37 +65,37 @@ module.exports.updatePrices = async (req, res, next) => {
             if (q !== '$init' && q !== 'floated' && item.prices[q] !== -1) {
 
 
-               // const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
-               const baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&id=';
-               const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
+               const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+               // const baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&id=';
+               const url = `${baseUrl}${name} | ${skin} (${q})`;
                const encodedUrl = encodeURI(url);
-               const data = await getData(encodedUrl, 300);
-               // const data = await getData(url, 3100);
+               // const data = await getData(encodedUrl, 300);
+               const data = await getData(url, 3200);
                if (data.success == true) {
 
                   // console.log(data, url)
 
                   let price;
-                  // if (data.median_price) {
-                  //    price = data.median_price;
-                  //    updatedPrices[q] = convert(price);
-                  // } else if (data.lowest_price) {
-                  //    price = data.lowest_price;
-                  //    updatedPrices[q] = convert(price);
-                  // } else {
-                  //    updatedPrices[q] = -1;
-                  // }
-                  if (data.average_price) {
-                     price = data.average_price;
-                     updatedPrices[q] = Number(price);
-                  } else if (data.median_price) {
+                  if (data.median_price) {
                      price = data.median_price;
-                     updatedPrices[q] = Number(price);
+                     updatedPrices[q] = convert(price);
+                  } else if (data.lowest_price) {
+                     price = data.lowest_price;
+                     updatedPrices[q] = convert(price);
                   } else {
                      updatedPrices[q] = 0;
                   }
-               } else if (data.success == false) {
-                  console.log(data)
+                  // if (data.average_price) {
+                  //    price = data.average_price;
+                  //    updatedPrices[q] = Number(price);
+                  // } else if (data.median_price) {
+                  //    price = data.median_price;
+                  //    updatedPrices[q] = Number(price);
+                  // } else {
+                  //    updatedPrices[q] = 0;
+                  // }
+               } else if (data.success == false || data == null) {
+                  console.log(data, encodedUrl)
 
                   console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
                   return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429, `Updated ${count} / ${length}`));
@@ -115,7 +115,6 @@ module.exports.updatePrices = async (req, res, next) => {
 
    }
 
-   console.log(fails)
    console.log('updating finished!')
    res.redirect('/skins');
 };
@@ -175,21 +174,41 @@ module.exports.updatePricesInOneReq = async (req, res, next) => {
 }
 
 module.exports.useServers = async (req, res) => {
-   const { server1, server2, server3, server4 } = req.body;
+   const { server1, server2, server3, server4, server5, server6, server7, server8, server9, server10 } = req.body;
    console.log(server1)
    console.log(server2)
    console.log(server3)
+   console.log(server4)
+   console.log(server5)
+   console.log(server6)
+   console.log(server7)
+   console.log(server8)
+   console.log(server9)
+   console.log(server10)
    // console.log(req.body)
-   const server1Url = `https://steam-market-server1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}`;
-   const server2Url = `https://steam-market-server2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}`;
-   const server3Url = `https://steam-market-server3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}`;
-   const server4Url = `https://steam-market-server4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}`;
+   const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}`;
+   const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}`;
+   const server3Url = `https://steam-market3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}`;
+   const server4Url = `https://steam-market4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}`;
+   const server5Url = `https://steam-market5.herokuapp.com/skins/update?start=${server5.start}&end=${server5.end}`;
+   const server6Url = `https://steam-market6.herokuapp.com/skins/update?start=${server6.start}&end=${server6.end}`;
+   const server7Url = `https://steam-market7.herokuapp.com/skins/update?start=${server7.start}&end=${server7.end}`;
+   const server8Url = `https://steam-market8.herokuapp.com/skins/update?start=${server8.start}&end=${server8.end}`;
+   const server9Url = `https://steam-market9.herokuapp.com/skins/update?start=${server9.start}&end=${server9.end}`;
+   const server10Url = `https://steam-market10.herokuapp.com/skins/update?start=${server10.start}&end=${server10.end}`;
 
    // const response2 = await fetch(server2Url, { method: 'GET' });
    // const response3 = await fetch(server3Url, { method: 'GET' });
    const response2 = fetch(server2Url, { method: 'GET' });
    const response3 = fetch(server3Url, { method: 'GET' });
    const response4 = fetch(server4Url, { method: 'GET' });
+   const response5 = fetch(server5Url, { method: 'GET' });
+   const response6 = fetch(server6Url, { method: 'GET' });
+   const response7 = fetch(server7Url, { method: 'GET' });
+   const response8 = fetch(server8Url, { method: 'GET' });
+   const response9 = fetch(server9Url, { method: 'GET' });
+   const response10 = fetch(server10Url, { method: 'GET' });
+
    res.redirect(server1Url)
 };
 
@@ -398,6 +417,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
       amount1 = 4;
       amount2 = 6;
    }
+   // let x;
 
    let counter = 0;
    let profits = [];
@@ -507,6 +527,28 @@ module.exports.mixedAlgorithm = async (req, res) => {
                                           const avgPrice = total / targetedSkinsNumber;
                                           const profitability = Math.round((avgPrice - inputPrice) * 100) / 100;
                                           const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
+
+                                          // if (skin.skin == 'Buddy' && cooperativeSkin.skin == 'Apocalypto' && quality == 'Factory New' && cooperativeQuality == 'Minimal Wear') {
+                                          //    x = {
+                                          //       skin,
+                                          //       cooperativeSkin,
+                                          //       targetedSkin,
+                                          //       quality,
+                                          //       cooperativeQuality,
+                                          //       targetedQuality,
+                                          //       price,
+                                          //       cooperativePrice,
+                                          //       inputPrice,
+                                          //       targetedPrice: targetedSkin.price,
+                                          //       rarity: rarities[r],
+                                          //       targetedSkinsArr,
+                                          //       targetedSkinsQuality,
+                                          //       // chance,
+                                          //       profitability,
+                                          //       returnPercentage,
+                                          //    }
+                                          // }
+
                                           if (profitability > 0) {
                                              addToArr = true;
 
@@ -544,17 +586,36 @@ module.exports.mixedAlgorithm = async (req, res) => {
                                           targetedSkinsNumber
                                        }
 
-                                       if (profits.length === 0) {
+                                       if (profits.length <= 2) {
                                           profits.push(pom2);
-                                       } else if (pom2.trades[0].returnPercentage > profits[0].trades[0].returnPercentage) {
-                                          profits.unshift(pom2);
                                        } else {
-                                          profits.push(pom2);
-                                       }
-                                    }
+                                          let correctPosition = false;
+                                          let i = 0;
 
-                                    // counter += 1;
+                                          while (!correctPosition && i <= profits.length - 1) {
+
+                                             if (pom2.trades[0].returnPercentage > profits[i].trades[0].returnPercentage) {
+                                                let firstHalf = profits.slice(0, i);
+                                                let secondHalf = profits.slice(i);
+                                                profits = [...firstHalf, pom2, ...secondHalf];
+                                                correctPosition = true;
+                                             }
+                                             i += 1;
+
+                                          }
+
+                                          if (!correctPosition) {
+                                             profits.push(pom2);
+                                             correctPosition = true;
+                                          }
+
+
+                                       }
+
+                                    }
                                  }
+
+                                 // counter += 1;
                               }
                            }
                         }
@@ -566,6 +627,10 @@ module.exports.mixedAlgorithm = async (req, res) => {
       }
    }
 
+   // for (let profit of profits) {
+   //    console.log(profit.trades[0].returnPercentage)
+   // }
+   // console.log(x)
    let counterOpt = counter.toLocaleString()
    let positiveResults = profits.length.toLocaleString();
 
