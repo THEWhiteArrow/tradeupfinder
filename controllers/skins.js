@@ -453,7 +453,8 @@ module.exports.mixedAlgorithm = async (req, res) => {
                   if (skin.prices[quality] !== -1) {
                      for (let cooperativeCollection of collections) {
                         for (let cooperativeSkin of cooperativeCollection.skins[rarities[r]]) {
-                           if (cooperativeSkin._id !== skinId && cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
+                           // if (cooperativeSkin._id !== skinId && cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
+                           if (cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
                               for (let cooperativeQuality of qualities) {
                                  if (cooperativeSkin.prices[cooperativeQuality] !== -1) {
 
