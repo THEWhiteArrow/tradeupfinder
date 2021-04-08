@@ -19,6 +19,9 @@ router.route('/mixed-algorithm')
 router.route('/update')
    .get(catchAsync(skin.updatePrices));
 
+router.route('/updateAtOnce')
+   .get(catchAsync(skin.updatePricesInOneReq));
+
 router.route('/map-collection')
    .get(catchAsync(skin.showMappingPage))
    .post(catchAsync(skin.mapCollection));

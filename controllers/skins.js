@@ -1,5 +1,5 @@
 const { mayReplaceSpace, getData, getPageData, convertToPrice, convert, convertToPriceFloated, floatedPrices } = require('../utils/functions');
-const { checkQuality } = require('../utils/functions');
+const { checkQuality, combainToName } = require('../utils/functions');
 const { qualities, rarities, avg_floats, shortcuts } = require('../utils/variables');
 const ExpressError = require('../utils/ExpressError');
 const fetch = require('node-fetch');
@@ -24,7 +24,7 @@ module.exports.showIndex = async (req, res) => {
    // console.log(req.cookies)
 
    req.flash('info', 'Dla Twojej wygody wyświetlone zostało 100 możliwych kontraktów');
-   console.log(req.session)
+   // console.log(req.session)
    res.render('index', { collections, qualities, rarities });
 };
 
@@ -65,23 +65,40 @@ module.exports.updatePrices = async (req, res, next) => {
             if (q !== '$init' && q !== 'floated' && item.prices[q] !== -1) {
 
 
-               const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+               // const baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=';
+               const baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&id=';
                const url = `${baseUrl}${mayReplaceSpace(name)}%20|%20${mayReplaceSpace(skin)}%20(${mayReplaceSpace(q)})`;
-               const data = await getData(url, 3300);
-               // console.log(data)
-               if (data === null) {
-                  next(new ExpressError(`You requested too many times recently!`, 429, `Updated ${count} / ${length}`));
-               }
+               const encodedUrl = encodeURI(url);
+               const data = await getData(encodedUrl, 300);
+               // const data = await getData(url, 3100);
+               if (data.success == true) {
 
-               let price;
-               if (data.median_price) {
-                  price = data.median_price;
-                  updatedPrices[q] = convert(price);
-               } else if (data.lowest_price) {
-                  price = data.lowest_price;
-                  updatedPrices[q] = convert(price);
-               } else {
-                  updatedPrices[q] = -1;
+                  // console.log(data, url)
+
+                  let price;
+                  // if (data.median_price) {
+                  //    price = data.median_price;
+                  //    updatedPrices[q] = convert(price);
+                  // } else if (data.lowest_price) {
+                  //    price = data.lowest_price;
+                  //    updatedPrices[q] = convert(price);
+                  // } else {
+                  //    updatedPrices[q] = -1;
+                  // }
+                  if (data.average_price) {
+                     price = data.average_price;
+                     updatedPrices[q] = Number(price);
+                  } else if (data.median_price) {
+                     price = data.median_price;
+                     updatedPrices[q] = Number(price);
+                  } else {
+                     updatedPrices[q] = 0;
+                  }
+               } else if (data.success == false) {
+                  console.log(data)
+
+                  console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
+                  return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429, `Updated ${count} / ${length}`));
                }
 
             } else if (item.prices[q] === -1) {
@@ -89,8 +106,7 @@ module.exports.updatePrices = async (req, res, next) => {
             }
          }
 
-
-
+         // console.log(updatedPrices);
          const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
 
 
@@ -98,10 +114,65 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
    }
+
    console.log(fails)
    console.log('updating finished!')
    res.redirect('/skins');
 };
+
+module.exports.updatePricesInOneReq = async (req, res, next) => {
+   const rawData = await fetch('http://csgobackpack.net/api/GetItemsList/v2/?currency=PLN', { method: "GET" });
+   const data = await rawData.json()
+   console.log(data.success)
+   if (data.success) {
+      const collections = await Case.find({})
+         .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+         .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+         .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+         .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+         .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+         .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+
+      for (let collection of collections) {
+         const keys = Object.keys(collection.skins);
+         keys.shift()
+
+         for (let rarity of keys) {
+            if (rarity.length > 0) {
+               for (let updatedSkin of collection.skins[rarity]) {
+                  const qualities = Object.keys(updatedSkin.prices);
+                  qualities.shift();
+                  const { name, skin, _id } = updatedSkin;
+
+
+                  const updatedPrices = {}
+                  for (let quality of qualities) {
+                     if (updatedSkin.prices[quality] === -1) {
+                        updatedPrices[quality] === -1;
+                     } else {
+                        const indicator = combainToName(name, skin, quality);
+                        console.log(indicator)
+                        updatedPrices[quality] = data.items_list[`${indicator}`].price['7_days'].average || -1;
+                     }
+                  }
+                  console.log(updatedPrices)
+                  const updatedSkinDB = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
+
+               }
+
+            }
+
+         }
+
+      }
+      // console.log(data.items_list['Desert Eagle | Hand Cannon (Factory New)'].price['7_days'].average)
+
+
+   }
+
+   console.log('updating finished!')
+   res.redirect('/skins');
+}
 
 module.exports.useServers = async (req, res) => {
    const { server1, server2, server3, server4 } = req.body;

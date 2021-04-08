@@ -88,7 +88,9 @@ module.exports.convert = (s) => {
 
 
 
-
+module.exports.combainToName = (name, skin, q) => {
+   return `${name} | ${skin} (${q})`.replace("'", "&#39");
+}
 
 module.exports.mayReplaceSpace = (n) => {
    if (n.indexOf(' ') !== -1) n = n.replace(' ', '%20');
@@ -96,12 +98,28 @@ module.exports.mayReplaceSpace = (n) => {
 
 }
 
+async function safeParseJSON(response) {
+   const body = await response.text();
+   try {
+      return JSON.parse(body);
+   } catch (err) {
+      console.error("Error:", err);
+      console.error("Response body:", body);
+      // throw err;
+      return ReE(response, err.message, 500)
+   }
+}
+
 module.exports.getData = (url, delay) => {
    return new Promise((resolve, reject) => {
       setTimeout(async () => {
-         const res = await fetch(url);
-         const data = await res.json();
+         const res = await fetch(url, { method: "GET", headers: { 'Content-type': 'application/json' } });
+         // console.log(res.body)
+         let data = await res.json();
 
+
+
+         // resolve(res);
          resolve(data);
       }, delay);
    });
