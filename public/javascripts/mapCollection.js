@@ -61,6 +61,9 @@ const mapPage = async () => {
    if (links.length === 0) {
       links = document.querySelectorAll('div.price p.nomargin a.price-souv');
       rarity = document.querySelectorAll('div.quality p.nomargin');
+      if (links.length < 2) {
+         links = document.querySelectorAll('div.price p.nomargin a');
+      }
 
       console.log('souvenirs')
 
