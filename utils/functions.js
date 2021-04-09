@@ -2,7 +2,31 @@ const fetch = require('node-fetch');
 
 const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
 
+module.exports.findCheapestSkin = (collection, rarity, quality) => {
+   let min = 100000;
+   let minSkin = {};
+   let foundSkin = false;
+   for (let skin of collection.skins[rarity]) {
+      if (skin.prices[quality] < min && skin.prices[quality] !== -1) {
+         min = skin.prices[quality];
+         minSkin = {
+            _id: skin._id,
+            name: skin.name,
+            skin: skin.skin,
+            min_float: skin.min_float,
+            max_float: skin.max_float,
+            case: skin.case,
+            prices: skin.prices,
+         };
+         foundSkin = true;
+      }
+   }
 
+   foundSkin === false ? minSkin = null : null;
+
+   return minSkin;
+
+}
 
 module.exports.checkQuality = (float) => {
 

@@ -131,7 +131,8 @@
                   <% for(let profit of profits){ %>
                      <% if(number <=maxShownSkins){ %>
                         <li class="my-3 trade rounded border ">
-                           <% for(let trade of profit.trades ){ %>
+
+                           <% let trade=profit.trades[0] %>
                               <div class="my-4 px-3">
 
                                  <div>
@@ -202,7 +203,11 @@
                                  </div>
 
                               </div>
-                              <% } %>
+
+
+
+
+
                         </li>
                         <% number+=1; %>
                            <% } %>
