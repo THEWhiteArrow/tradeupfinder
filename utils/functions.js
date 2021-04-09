@@ -7,7 +7,7 @@ module.exports.findCheapestSkin = (collection, rarity, quality) => {
    let minSkin = {};
    let foundSkin = false;
    for (let skin of collection.skins[rarity]) {
-      if (skin.prices[quality] < min && skin.prices[quality] !== -1) {
+      if (skin.prices[quality] < min && skin.prices[quality] > 0) {
          min = skin.prices[quality];
          minSkin = {
             _id: skin._id,
