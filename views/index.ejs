@@ -40,7 +40,7 @@
       <a class="btn btn-primary mt-2" href="/skins/update">Odśwież ceny</a>
       <a class="btn btn-primary mt-2" href="/skins/updateAtOnce">Odśwież przez BACKPACK API</a>
       <a class="btn btn-success mt-2" href="/skins/trades">Szukaj trade'u !</a>
-      <a class="btn btn-danger mt-2" href="/skins/mixed-algorithm?ratio=4-6">Mieszany algorytm szukania 4/6 !</a>
+      <a class="btn btn-danger mt-2" href="/skins/mixed-algorithm?ratio=4-4-2">Mieszany algorytm szukania 4/4/2 !</a>
 
       <a href="/skins/map-collection" class="btn btn-info text-white mt-2">Zmapuj kolekcje ze skinStash!</a>
 
@@ -120,8 +120,9 @@
 
          <div class=" d-flex mt-2 col-12 col-md-3">
             <form id="findFloat" class="d-fle col-12 flex-columnx">
-               <input class="form-control my-1" type="number" placeholder="min_float" aria-label=".form-control example"
-                  step="0.01">
+               <label for="min_float">Sprawdż float 10/0</label>
+               <input class="form-control my-1" id="min_float" type="number" placeholder="min_float"
+                  aria-label=".form-control example" step="0.01">
                <input class="form-control my-1" type="number" placeholder="max_float" aria-label=".form-control example"
                   step="0.01">
                <input class="form-control my-1" type="number" placeholder="avg_float" aria-label=".form-control example"
@@ -133,29 +134,6 @@
             </form>
          </div>
 
-         <div class=" d-flex mt-2 col-12 col-md-3">
-            <form class="d-flex col-12 flex-column" action="/skins/update-targeted-prices" method="GET">
-               <input class="form-control my-1" type="number" name="fn" placeholder="factory new  0-0.07"
-                  aria-label=".form-control example" step="0.001">
-               <input class="form-control my-1" type="number" name="mw" placeholder="minimal wear  0.07-0.15"
-                  aria-label=".form-control example" step="0.001">
-               <input class="form-control my-1" type="number" name="ft" placeholder="field-tested  0.15-0.38"
-                  aria-label=".form-control example" step="0.001">
-               <input class="form-control my-1" type="number" name="ww" placeholder="well-worn  0.38-0.45"
-                  aria-label=".form-control example" step="0.001">
-               <input class="form-control my-1" type="number" name="bs" placeholder="battle-scarred  0.45-1"
-                  aria-label=".form-control example" step="0.001">
-               <div class="d-flex">
-                  <button class="btn btn-danger btn-sm col-12">Zmień średnie floaty</button>
-               </div>
-            </form>
-         </div>
-
-         <div class=" mt-2 col-12 col-md-3">
-            <a href="/skins/update-targeted-prices?resetFloats=true"
-               class="mt-1 btn btn-warning text-white btn-sm col-12">Zesetuj średnie floaty</a>
-         </div>
-         </form>
       </div>
 
 

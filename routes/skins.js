@@ -11,6 +11,7 @@ router.route('/')
 
 router.route('/trades')
    .get(catchAsync(skin.prepareTrades));
+
 router.route('/mixed-algorithm')
    .get(catchAsync(skin.mixedAlgorithm));
 
@@ -30,9 +31,6 @@ router.route('/map-collection/floats')
    .get(catchAsync(skin.mapFloatsGet))
    .post(catchAsync(skin.mapFloatsPost));
 
-
-router.route('/update-targeted-prices')
-   .get(catchAsync(skin.updateTargetedPrices));
 
 router.route('/update-thru-servers')
    .post(catchAsync(skin.useServers));
