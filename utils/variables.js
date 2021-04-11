@@ -2,11 +2,12 @@ module.exports.qualities = ['Factory New', 'Minimal Wear', 'Field-Tested', 'Well
 module.exports.rarities = ['grey', 'light_blue', 'blue', 'purple', 'pink', 'red'];
 module.exports.avg_floats = {
    // 'Factory New': 0.035,
-   'Factory New': 0.035,
+   'Factory New': 0.045,
    'Minimal Wear': 0.11,
    'Field-Tested': 0.265,
-   'Well-Worn': 0.415,
-   'Battle-Scarred': 0.725
+   'Well-Worn': 0.405,
+   // 'Battle-Scarred': 0.725
+   'Battle-Scarred': 0.455
 };
 module.exports.shortcuts = {
    'Factory New': 'FN',
