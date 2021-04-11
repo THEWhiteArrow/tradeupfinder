@@ -426,8 +426,8 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
 const mixedTwoPairs = async (req) => {
    const { ratio = '4-6', sort = 'returnPercentage' } = req.query;
-   const amount1 = Number(ratio[0]);
-   const amount2 = Number(ratio[2]);
+   let amount1 = Number(ratio[0]);
+   let amount2 = Number(ratio[2]);
    if (amount1 == undefined || amount2 == undefined || amount1 + amount2 != 10) {
       amount1 = 4;
       amount2 = 6;
@@ -652,8 +652,8 @@ const mixedThreePairs = async (req) => {
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
-   // collections = collections.slice(sliceFrom, sliceTo);
-   collections = [...collections.slice(0, 7), ...collections.slice(46, 51)]
+   collections = collections.slice(sliceFrom, sliceTo);
+   // collections = [...collections.slice(0, 7), ...collections.slice(46, 51)]
 
    for (let r = 0; r < rarities.length - 1; r++) {
 
