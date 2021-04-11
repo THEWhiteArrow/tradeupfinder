@@ -36,89 +36,116 @@
 
 <body>
    <div class="container py-3">
-      <h1 class="mt-4">Skiny</h1>
-      <a class="btn btn-primary mt-2" href="/skins/update">Odśwież ceny</a>
-      <a class="btn btn-primary mt-2" href="/skins/updateAtOnce">Odśwież przez BACKPACK API</a>
-      <a class="btn btn-success mt-2" href="/skins/trades">Szukaj trade'u !</a>
-      <a class="btn btn-danger mt-2" href="/skins/mixed-algorithm?ratio=4-4-2">Mieszany algorytm szukania 4/4/2 !</a>
+      <h1 class="my-4 display-1">Skiny</h1>
+      <div class="d-flex justify-content-evenly flex-wrap">
 
-      <a href="/skins/map-collection" class="btn btn-info text-white mt-2">Zmapuj kolekcje ze skinStash!</a>
+         <a class="btn btn-primary mt-2 col-12 col-lg-5" href="/skins/update">Odśwież ceny</a>
+         <a class="btn btn-primary mt-2 col-12 col-lg-5" href="/skins/updateAtOnce">Odśwież przez BACKPACK API</a>
+         <a class="btn btn-success mt-2 col-12 col-lg-5" href="/skins/trades">Szukaj trade'u !</a>
+         <!-- <a class="btn btn-danger mt-2 col-12 col-lg-4" href="/skins/mixed-algorithm?ratio=4-6">Mieszany algorytm szukania
+            4/6!</a> -->
+         <a href="/skins/map-collection" class="btn btn-info text-white mt-2 col-12 col-lg-5">Zmapuj kolekcje ze
+            skinStash!</a>
+      </div>
 
-      <div class="row">
 
-         <div class=" d-flex mt-2 col-12 col-md-3">
+      <div class="row my-5">
 
-            <form class="d-fle col-12 flex-columnx" action="/skins/update-thru-servers" method="POST">
+         <form class="d-flex flex-column mt-2 col-12" action="/skins/update-thru-servers" method="POST">
+            <div class="col-12">
                <label for="server1">Steam or Backpack API</label>
                <input id="server1" class="form-control my-1" type="text" name="variant"
                   placeholder="variant - defauly steam - can leave empty" aria-label=".form-control example">
-               <label for="server1">Serwer 1</label>
-               <input id="server1" class="form-control my-1" type="number" name="server1[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server1[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
+            </div>
+            <div class="d-flex flex-row flex-wrap justify-content-between col-12">
 
-               <label for="server2">Serwer 2</label>
-               <input id="server1" class="form-control my-1" type="number" name="server2[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server2[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
 
-               <label for="server3">Serwer 3</label>
-               <input id="server1" class="form-control my-1" type="number" name="server3[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server3[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
+               <span>
+                  <label for="server1">Serwer 1</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server1[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server1[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
 
-               <label for="server4">Serwer 4</label>
-               <input id="server1" class="form-control my-1" type="number" name="server4[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server4[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
+               <span>
+                  <label for="server2">Serwer 2</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server2[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server2[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
 
-               <label for="server5">Serwer 5</label>
-               <input id="server1" class="form-control my-1" type="number" name="server5[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server5[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
+               <span>
+                  <label for="server3">Serwer 3</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server3[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server3[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
 
-               <label for="server6">Serwer 6</label>
-               <input id="server1" class="form-control my-1" type="number" name="server6[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server6[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
+               <span>
+                  <label for="server4">Serwer 4</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server4[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server4[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
 
-               <label for="server7">Serwer 7</label>
-               <input id="server1" class="form-control my-1" type="number" name="server7[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server7[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
+               <span>
+                  <label for="server5">Serwer 5</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server5[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server5[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
 
-               <label for="server8">Serwer 8</label>
-               <input id="server1" class="form-control my-1" type="number" name="server8[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server8[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
+               <span>
+                  <label for="server6">Serwer 6</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server6[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server6[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
 
-               <label for="server9">Serwer 9</label>
-               <input id="server1" class="form-control my-1" type="number" name="server9[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server9[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
+               <span>
+                  <label for="server7">Serwer 7</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server7[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server7[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
 
-               <label for="server10">Serwer 10</label>
-               <input id="server1" class="form-control my-1" type="number" name="server10[start]"
-                  placeholder="starting point" aria-label=".form-control example" step="1">
-               <input class="form-control my-1" type="number" name="server10[end]" placeholder="end point"
-                  aria-label=".form-control example" step="1">
+               <span>
+                  <label for="server8">Serwer 8</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server8[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server8[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
 
-               <div class="d-flex">
-                  <button class="btn btn-primary btn-sm col-12">Odśwież ceny używając serwerów</button>
-               </div>
-            </form>
-         </div>
+               <span>
+                  <label for="server9">Serwer 9</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server9[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server9[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
 
-         <div class=" d-flex mt-2 col-12 col-md-3">
+               <span>
+                  <label for="server10">Serwer 10</label>
+                  <input id="server1" class="form-control my-1" type="number" name="server10[start]"
+                     placeholder="starting point" aria-label=".form-control example" step="1">
+                  <input class="form-control my-1" type="number" name="server10[end]" placeholder="end point"
+                     aria-label=".form-control example" step="1">
+               </span>
+            </div>
+
+            <button class="btn btn-danger btn-sm col-12">Odśwież ceny używając serwerów</button>
+
+         </form>
+
+         <!-- <div class=" d-flex mt-2 col-12 col-md-3">
             <form id="findFloat" class="d-fle col-12 flex-columnx">
                <label for="min_float">Sprawdż float 10/0</label>
                <input class="form-control my-1" id="min_float" type="number" placeholder="min_float"
@@ -132,13 +159,134 @@
                   <span class="bg-white col-5" id="displayFloat" class="ms-2"></span>
                </div>
             </form>
-         </div>
-
+         </div> -->
+      </div>
+      <div class="row">
+         <form class="col-12 d-flex flex-column" action="/skins/mixed-algorithm" method="GET">
+            <h3>Algorytm Mieszany</h3>
+            <label for="pairs">Ilość różnych skinów</label>
+            <select name="pairs" id="pairs">
+               <option value="2">2</option>
+               <option value="3">3</option>
+            </select>
+            <label for="ratio">Ratio</label>
+            <!-- <input id="ratio" type="text" placeholder="format: 4-6 or 4-4-2" name="ratio" value="4-6"> -->
+            <select name="ratio" id="ratio">
+               <option value="4-6">4-6</option>
+               <option value="2-8">2-8</option>
+               <option value="4-4-2">4-4-2</option>
+               <option value="4-3-3">4-3-3</option>
+               <option value="4-5-1">4-5-1</option>
+            </select>
+            <label for="sliceStart">SliceStart</label>
+            <!-- <input id="sliceStart" type="number" placeholder="sliceStart" name="sliceStart"> -->
+            <select name="sliceStart" id="sliceStart">
+               <option value="0" selected>0</option>
+               <option value="1">1</option>
+               <option value="2">2</option>
+               <option value="3">3</option>
+               <option value="4">4</option>
+               <option value="5">5</option>
+               <option value="6">6</option>
+               <option value="7">7</option>
+               <option value="8">8</option>
+               <option value="9">9</option>
+               <option value="10">10</option>
+               <option value="11">11</option>
+               <option value="12">12</option>
+               <option value="13">13</option>
+               <option value="14">14</option>
+               <option value="15">15</option>
+               <option value="16">16</option>
+               <option value="17">17</option>
+               <option value="18">18</option>
+               <option value="19">19</option>
+               <option value="20">20</option>
+               <option value="21">21</option>
+               <option value="22">22</option>
+               <option value="23">23</option>
+               <option value="24">24</option>
+               <option value="25">25</option>
+               <option value="26">26</option>
+               <option value="27">27</option>
+               <option value="28">28</option>
+               <option value="29">29</option>
+               <option value="30">30</option>
+               <option value="31">31</option>
+               <option value="32">32</option>
+               <option value="33">33</option>
+               <option value="34">34</option>
+               <option value="35">35</option>
+               <option value="36">36</option>
+               <option value="37">37</option>
+               <option value="38">38</option>
+            </select>
+            <label for="sliceEnd">SliceEnd</label>
+            <!-- <input id="sliceEnd" type="number" placeholder="sliceEnd" name="sliceEnd"> -->
+            <select name="sliceEnd" id="sliceEnd">
+               <option value="54" selected>54</option>
+               <option value="53">53</option>
+               <option value="52">52</option>
+               <option value="51">51</option>
+               <option value="50">50</option>
+               <option value="49">49</option>
+               <option value="48">48</option>
+               <option value="47">47</option>
+               <option value="46">46</option>
+               <option value="45">45</option>
+               <option value="44">44</option>
+               <option value="43">43</option>
+               <option value="42">42</option>
+               <option value="41">41</option>
+               <option value="40">40</option>
+               <option value="39">39</option>
+               <option value="38">38</option>
+               <option value="37">37</option>
+               <option value="36">36</option>
+               <option value="35">35</option>
+               <option value="34">34</option>
+               <option value="33">33</option>
+               <option value="32">32</option>
+               <option value="31">31</option>
+               <option value="30">30</option>
+               <option value="29">29</option>
+               <option value="28">28</option>
+               <option value="27">27</option>
+               <option value="26">26</option>
+               <option value="25">25</option>
+               <option value="24">24</option>
+               <option value="23">23</option>
+               <option value="22">22</option>
+               <option value="21">21</option>
+               <option value="20">20</option>
+               <option value="19">19</option>
+               <option value="18">18</option>
+               <option value="17">17</option>
+               <option value="16">16</option>
+               <option value="15">15</option>
+               <option value="14">14</option>
+               <option value="13">13</option>
+               <option value="12">12</option>
+               <option value="11">11</option>
+               <option value="10">10</option>
+               <option value="9">9</option>
+               <option value="8">8</option>
+               <option value="7">7</option>
+               <option value="6">6</option>
+               <option value="5">5</option>
+               <option value="4">4</option>
+               <option value="3">3</option>
+               <option value="2">2</option>
+               <option value="1">1</option>
+               <option value="0">0</option>
+            </select>
+            <button class="btn btn-primary">Wyszukaj trade'upy!</button>
+         </form>
       </div>
 
 
 
-      <div class="row d-flex justify-content-between">
+      <div class="my-5 row d-flex justify-content-between">
          <%let i=0; %>
             <% for(let collection of collections){ %>
                <div class="col-12 col-sm-6 col-md-4 col-lg-3">

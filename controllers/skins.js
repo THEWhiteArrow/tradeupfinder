@@ -383,20 +383,55 @@ module.exports.mapFloatsGet = async (req, res) => {
 }
 
 
-
-
+module.exports.mixedAlgorithm = async (req, res) => {
+   const current = new Date();
+   const hour = current.getHours();
+   const minute = current.getMinutes();
+   const { pairs = 2 } = req.query;
+   console.log(req.query)
+   if (pairs == 2) {
+      const { profits, counterOpt, positiveResults, amount: { amount1, amount2 } } = await mixedTwoPairs(req);
+      const currentFinish = new Date();
+      const finishHour = currentFinish.getHours();
+      const finishMinute = currentFinish.getMinutes();
+      if (hour == finishHour) {
+         console.log(current);
+         console.log(currentFinish);
+         console.log(`time : ${finishMinute - minute}`);
+      }
+      if (hour != finishHour) {
+         console.log(current);
+         console.log(currentFinish);
+         console.log(`time : ${60 - finishMinute + minute}`);
+      }
+      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount: { amount1, amount2 } })
+   } else if (pairs == 3) {
+      const { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } } = await mixedThreePairs(req);
+      const currentFinish = new Date();
+      const finishHour = currentFinish.getHours();
+      const finishMinute = currentFinish.getMinutes();
+      if (hour == finishHour) {
+         console.log(`${current.getHours()}:${current.getMinutes()}`);
+         console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
+         console.log(`time : ${finishMinute - minute}`);
+      }
+      if (hour != finishHour) {
+         console.log(`${current.getHours()}:${current.getMinutes()}`);
+         console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
+         console.log(`time : ${60 - finishMinute + minute}`);
+      }
+      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } })
+   }
+}
 
 const mixedTwoPairs = async (req) => {
-   console.log('lol')
    const { ratio = '4-6' } = req.query;
-   let amount1 = Number(ratio[0]);
-   let amount2 = Number(ratio[2]);
-   if (amount1 < 1 || amount1 > 9 || amount2 < 1 || amount2 > 9) {
+   const amount1 = Number(ratio[0]);
+   const amount2 = Number(ratio[2]);
+   if (amount1 == undefined || amount2 == undefined || amount1 + amount2 != 10) {
       amount1 = 4;
       amount2 = 6;
    }
-   // let x;
-
    let counter = 0;
    let profits = [];
 
@@ -408,201 +443,136 @@ const mixedTwoPairs = async (req) => {
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
-
-   // collections = collections.slice(0, 10);
-   // const nOfSkins = {};
-   // for (let collection of collections) {
-   //    nOfSkins[collection.name] = {
-   //       grey: collection.skins.grey.length,
-   //       light_blue: collection.skins.light_blue.length,
-   //       blue: collection.skins.blue.length,
-   //       purple: collection.skins.purple.length,
-   //       pink: collection.skins.pink.length,
-   //       red: collection.skins.red.length,
-   //    }
-   // }
-
-   // PRZESZUKIWANIE W STOSUNKU RATIO (SKINS COOPERATIVESKIN)
    for (let r = 0; r < rarities.length - 1; r++) {
-      for (let collection of collections) {
 
-         // for (let skin of collection.skins[rarities[r]]) {
-         //    if (collection.skins[rarities[r + 1]].length !== 0) {
+      for (let firstCollection of collections) {
+         if (firstCollection.skins[rarities[r + 1]].length !== 0) {
 
-         if (collection.skins[rarities[r + 1]].length !== 0) {
-            for (let quality of qualities) {
-               const skin = findCheapestSkin(collection, rarities[r], quality);
-               // const skinId = skin._id;
-               // for (let skin of collection.skins[rarities[r]]) {
-               // const skinId = skin._id;
+            for (let secondCollection of collections) {
+               if (secondCollection.skins[rarities[r + 1]].length !== 0) {
 
+                  for (let firstQuality of qualities) {
+                     for (let secondQuality of qualities) {
 
-               if (skin !== null) {
-                  for (let cooperativeCollection of collections) {
-                     // for (let cooperativeSkin of cooperativeCollection.skins[rarities[r]]) {
-                     // if (cooperativeSkin._id !== skinId && cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
-                     if (cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
-                        for (let cooperativeQuality of qualities) {
-                           const cooperativeSkin = findCheapestSkin(cooperativeCollection, rarities[r], cooperativeQuality);
+                        const firstSkin = findCheapestSkin(firstCollection, rarities[r], firstQuality);
+                        const secondSkin = findCheapestSkin(secondCollection, rarities[r], secondQuality);
 
-                           if (cooperativeSkin !== null) {
+                        if (firstSkin != null && secondSkin != null) {
 
-                              let skinAvgFloat = avg_floats[quality];
-                              let cooperativeSkinAvgFloat = avg_floats[cooperativeQuality];
-                              if (skinAvgFloat > skin.max_float) skinAvgFloat = skin.max_float;
-                              if (skinAvgFloat < skin.min_float) skinAvgFloat = skin.min_float;
-                              if (cooperativeSkinAvgFloat > cooperativeSkin.max_float) cooperativeSkinAvgFloat = cooperativeSkin.max_float;
-                              if (cooperativeSkinAvgFloat < cooperativeSkin.min_float) cooperativeSkinAvgFloat = cooperativeSkin.min_float;
+                           let firstSkinAvgFloat = avg_floats[firstQuality];
+                           let secondSkinAvgFloat = avg_floats[secondQuality];
+                           if (firstSkinAvgFloat > firstSkin.max_float) firstSkinAvgFloat = firstSkin.max_float;
+                           if (firstSkinAvgFloat < firstSkin.min_float) firstSkinAvgFloat = firstSkin.min_float;
+                           if (secondSkinAvgFloat > secondSkin.max_float) secondSkinAvgFloat = secondSkin.max_float;
+                           if (secondSkinAvgFloat < secondSkin.min_float) secondSkinAvgFloat = secondSkin.min_float;
 
-                              const avg = Math.round(((amount1 * skinAvgFloat + amount2 * cooperativeSkinAvgFloat) / 10) * 1000) / 1000;
-                              const price = skin.prices[quality];
-                              const cooperativePrice = cooperativeSkin.prices[cooperativeQuality];
+                           const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 1000) / 1000;
+                           const firstPrice = firstSkin.prices[firstQuality];
+                           const secondPrice = secondSkin.prices[secondQuality];
 
-                              let targetedSkinsArr = [];
-                              let targetedSkinsNumber = 0;
-                              let total = 0;
-                              let targetedSkinsQuality = []
+                           let targetedSkinsArr = [];
+                           let targetedSkinsNumber = 0;
+                           let total = 0;
+                           let targetedSkinsQuality = []
 
-                              // SKIN Z ILOSCIĄ RÓWNĄ AMOUNT1
-                              let collName = skin.case;
-                              // COOPERATYWNY SKIN (DOPEŁNIENIOWY) Z ILOSCIĄ RÓWNĄ AMOUNT2
-                              let coopCollName = cooperativeSkin.case;
+                           let max = 0;
+                           let maxSkin = {};
 
 
-                              let max = 0;
-                              let maxSkin = {};
+                           for (let targetedCollection of collections) {
+                              if (targetedCollection.name == firstSkin.case || targetedCollection.name == secondSkin.case) {
 
-                              for (let targetedCollection of collections) {
-                                 if (targetedCollection.name == collName || targetedCollection.name == coopCollName) {
-                                    for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
+                                 for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
 
-                                       const { min_float, max_float } = targetedSkin;
-                                       const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
-                                       const targetedQuality = checkQuality(float);
+                                    const { min_float, max_float } = targetedSkin;
+                                    const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
+                                    const targetedQuality = checkQuality(float);
 
-                                       const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
-                                       targetedSkin.price = targetedPrice;
-                                       if (max < targetedPrice) {
-                                          max = targetedPrice;
-                                          maxSkin = {
-                                             _id: targetedSkin._id,
-                                             name: targetedSkin.name,
-                                             skin: targetedSkin.skin,
-                                             case: targetedSkin.case,
-                                             rarity: targetedSkin.rarity,
-                                             min_float: targetedSkin.min_float,
-                                             max_float: targetedSkin.max_float,
-                                             price: max,
-                                             targetedQuality
-                                          }
+                                    const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
+                                    targetedSkin.price = targetedPrice;
+                                    if (max < targetedPrice) {
+                                       max = targetedPrice;
+                                       maxSkin = {
+                                          _id: targetedSkin._id,
+                                          name: targetedSkin.name,
+                                          skin: targetedSkin.skin,
+                                          case: targetedSkin.case,
+                                          rarity: targetedSkin.rarity,
+                                          min_float: targetedSkin.min_float,
+                                          max_float: targetedSkin.max_float,
+                                          price: targetedPrice,
+                                          targetedQuality
                                        }
-
-                                       if (targetedCollection.name == coopCollName && targetedCollection.name == collName) {
-                                          total += targetedPrice * (amount1 + amount2);
-                                          targetedSkinsNumber += 1 * (amount1 + amount2);
-                                       } else if (targetedCollection.name == collName) {
-                                          total += targetedPrice * amount1;
-                                          targetedSkinsNumber += 1 * amount1;
-                                       } else if (targetedCollection.name == coopCollName) {
-                                          total += targetedPrice * amount2;
-                                          targetedSkinsNumber += 1 * amount2;
-                                       }
-
-                                       targetedSkinsQuality.push(targetedQuality);
-                                       targetedSkinsArr.push(targetedSkin);
-                                       counter += 1;
                                     }
+
+                                    if (targetedCollection.name == firstSkin.case && targetedCollection.name == secondSkin.case) {
+                                       total += (targetedPrice * (amount1 + amount2));
+                                       targetedSkinsNumber += (1 * (amount1 + amount2));
+                                    } else if (targetedCollection.name == firstSkin.case) {
+                                       total += (targetedPrice * amount1);
+                                       targetedSkinsNumber += (1 * amount1);
+                                    } else if (targetedCollection.name == secondSkin.case) {
+                                       total += (targetedPrice * amount2);
+                                       targetedSkinsNumber += (1 * amount2);
+                                    }
+
+                                    targetedSkinsQuality.push(targetedQuality);
+                                    targetedSkinsArr.push(targetedSkin);
+                                    counter += 1;
                                  }
+                              }
+                           }
+
+                           let trades = [];
+                           let addToArr = false;
+
+                           const inputPrice = amount1 * firstPrice + amount2 * secondPrice;
+
+
+                           const avgPrice = total / targetedSkinsNumber;
+                           const profitability = Math.round((avgPrice - inputPrice) * 1000) / 1000;
+                           const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 1000) / 1000;
+
+                           if (profitability > 0) {
+                              addToArr = true;
+
+                              const pom = {
+                                 skin: firstSkin,
+                                 cooperativeSkin: secondSkin,
+                                 targetedSkin: maxSkin,
+                                 quality: firstQuality,
+                                 cooperativeQuality: secondQuality,
+                                 targetedQuality: maxSkin.targetedQuality,
+                                 price: firstPrice,
+                                 cooperativePrice: secondPrice,
+                                 inputPrice,
+                                 targetedPrice: maxSkin.price,
+                                 rarity: rarities[r],
+                                 targetedSkinsArr,
+                                 targetedSkinsQuality,
+                                 // chance,
+                                 profitability,
+                                 returnPercentage,
+                              }
+
+                              let correctPosition = false;
+                              let i = 0;
+                              while (!correctPosition && i <= trades.length - 1) {
+                                 if (pom.targetedPrice > trades[i].targetedPrice) {
+                                    let firstHalf = trades.slice(0, i);
+                                    let secondHalf = trades.slice(i);
+                                    trades = [...firstHalf, pom, ...secondHalf];
+                                    correctPosition = true;
+                                 }
+                                 i += 1;
+                              }
+                              if (!correctPosition) {
+                                 trades.push(pom);
+                                 correctPosition = true;
                               }
 
 
 
-
-
-
-                              let trades = [];
-                              let addToArr = false;
-
-                              // for (let targetedSkin of targetedSkinsArr) {
-
-                              // const targetedSkin = maxSkin;
-                              const inputPrice = Math.round((amount1 * price + amount2 * cooperativePrice) * 100) / 100;
-                              if (inputPrice < maxSkin.price) {
-
-                                 // const chance = Math.round(1 / targetedSkinsNumber * 100);
-                                 const { min_float, max_float } = maxSkin;
-                                 const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
-                                 const targetedQuality = checkQuality(float);
-                                 // const avgLossPrice = (total - targetedPrice) / (targetedSkinsArr - 1);
-                                 // const profitability = Math.round(((inputPrice - targetedPrice) * chance / 100 - (inputPrice - avgLossPrice) * (100 - chance) / 100) * 100) / 100;
-                                 // const profitability = Math.round((inputPrice - (total / targetedSkinsNumber)) * 100) / 100;
-                                 const avgPrice = total / targetedSkinsNumber;
-                                 const profitability = Math.round((avgPrice - inputPrice) * 100) / 100;
-                                 const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
-
-                                 // if (skin.skin == 'Buddy' && cooperativeSkin.skin == 'Apocalypto' && quality == 'Factory New' && cooperativeQuality == 'Minimal Wear') {
-                                 //    x = {
-                                 //       skin,
-                                 //       cooperativeSkin,
-                                 //       targetedSkin,
-                                 //       quality,
-                                 //       cooperativeQuality,
-                                 //       targetedQuality,
-                                 //       price,
-                                 //       cooperativePrice,
-                                 //       inputPrice,
-                                 //       targetedPrice: targetedSkin.price,
-                                 //       rarity: rarities[r],
-                                 //       targetedSkinsArr,
-                                 //       targetedSkinsQuality,
-                                 //       // chance,
-                                 //       profitability,
-                                 //       returnPercentage,
-                                 //    }
-                                 // }
-
-                                 if (profitability > 0) {
-                                    addToArr = true;
-
-                                    const pom = {
-                                       skin,
-                                       cooperativeSkin,
-                                       targetedSkin: maxSkin,
-                                       quality,
-                                       cooperativeQuality,
-                                       targetedQuality,
-                                       price,
-                                       cooperativePrice,
-                                       inputPrice,
-                                       targetedPrice: maxSkin.price,
-                                       rarity: rarities[r],
-                                       targetedSkinsArr,
-                                       targetedSkinsQuality,
-                                       // chance,
-                                       profitability,
-                                       returnPercentage,
-                                    }
-
-                                    let correctPosition = false;
-                                    let i = 0;
-                                    while (!correctPosition && i <= trades.length - 1) {
-                                       if (pom.targetedPrice > trades[i].targetedPrice) {
-                                          let firstHalf = trades.slice(0, i);
-                                          let secondHalf = trades.slice(i);
-                                          trades = [...firstHalf, pom, ...secondHalf];
-                                          correctPosition = true;
-                                       }
-                                       i += 1;
-                                    }
-                                    if (!correctPosition) {
-                                       trades.push(pom);
-                                       correctPosition = true;
-                                    }
-
-
-                                 }
-                              }
-                              // }
 
 
                               if (addToArr) {
@@ -636,51 +606,43 @@ const mixedTwoPairs = async (req) => {
                                  }
 
                               }
-                              counter += 1;
                            }
 
-
-
+                           counter += 1;
                         }
                      }
                   }
                }
-
-               // counter += 1;
             }
-            // }       
          }
       }
-
+   }
+   for (let profit of profits) {
+      console.log(profit.trades[0].returnPercentage)
    }
 
-   // for (let profit of profits) {
-   //    console.log(profit.trades[0].returnPercentage)
-   // }
-   // console.log(x)
    let counterOpt = counter.toLocaleString()
    let positiveResults = profits.length.toLocaleString();
 
    console.log(counter, positiveResults)
    return { profits, counterOpt, positiveResults, amount: { amount1, amount2 } };
-
 }
 
 const mixedThreePairs = async (req) => {
-   const { ratio = '4-4-2', slice = 10 } = req.query;
+   const { ratio = '4-4-2', sliceStart = 0, sliceEnd = 10 } = req.query;
    let amount1 = Number(ratio[0]);
    let amount2 = Number(ratio[2]);
    let amount3 = Number(ratio[4]);
-   if (amount1 < 1 || amount1 > 9 || amount2 < 1 || amount2 > 9 || amount3 < 1 || amount3 > 9) {
+   if (amount1 == undefined || amount2 == undefined || amount3 == undefined || amount1 + amount2 + amount3 != 10) {
       amount1 = 4;
       amount2 = 4;
       amount3 = 2;
    }
-   // let x;
 
+   const sliceFrom = Number(sliceStart);
+   const sliceTo = Number(sliceEnd);
    let counter = 0;
    let profits = [];
-   let sliceTo = Number(slice);
 
    let collections = await Case.find({})
       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
@@ -690,283 +652,216 @@ const mixedThreePairs = async (req) => {
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
+   // collections = collections.slice(sliceFrom, sliceTo);
+   collections = [...collections.slice(0, 7), ...collections.slice(46, 51)]
 
-   collections = collections.slice(0, sliceTo);
-   // const nOfSkins = {};
-   // for (let collection of collections) {
-   //    nOfSkins[collection.name] = {
-   //       grey: collection.skins.grey.length,
-   //       light_blue: collection.skins.light_blue.length,
-   //       blue: collection.skins.blue.length,
-   //       purple: collection.skins.purple.length,
-   //       pink: collection.skins.pink.length,
-   //       red: collection.skins.red.length,
-   //    }
-   // }
-
-   // PRZESZUKIWANIE W STOSUNKU RATIO (SKINS COOPERATIVESKIN)
    for (let r = 0; r < rarities.length - 1; r++) {
-      for (let collection of collections) {
 
-         // for (let skin of collection.skins[rarities[r]]) {
-         //    if (collection.skins[rarities[r + 1]].length !== 0) {
+      for (let firstCollection of collections) {
+         if (firstCollection.skins[rarities[r + 1]].length !== 0) {
 
-         if (collection.skins[rarities[r + 1]].length !== 0) {
-            for (let quality of qualities) {
-               const skin = findCheapestSkin(collection, rarities[r], quality);
-               // const skinId = skin._id;
-               // for (let skin of collection.skins[rarities[r]]) {
-               // const skinId = skin._id;
+            for (let secondCollection of collections) {
+               if (secondCollection.skins[rarities[r + 1]].length !== 0) {
+                  for (let thirdCollection of collections) {
+                     if (thirdCollection.skins[rarities[r + 1]].length !== 0) {
 
-
-               if (skin !== null) {
-                  for (let cooperativeCollection of collections) {
-                     // for (let cooperativeSkin of cooperativeCollection.skins[rarities[r]]) {
-                     // if (cooperativeSkin._id !== skinId && cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
-                     if (cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
-                        for (let cooperativeQuality of qualities) {
-                           const cooperativeSkin = findCheapestSkin(cooperativeCollection, rarities[r], cooperativeQuality);
-
-                           if (cooperativeSkin !== null) {
-
-                              for (let thirdCollection of collections) {
-                                 if (thirdCollection.skins[rarities[r + 1]].length !== 0) {
-                                    for (let thirdQuality of qualities) {
-                                       const thirdSkin = findCheapestSkin(thirdCollection, rarities[r], thirdQuality)
-
-                                       if (thirdSkin !== null) {
-
-                                          let skinAvgFloat = avg_floats[quality];
-                                          let cooperativeSkinAvgFloat = avg_floats[cooperativeQuality];
-                                          let thirdSkinAvgFloat = avg_floats[thirdQuality];
-                                          if (skinAvgFloat > skin.max_float) skinAvgFloat = skin.max_float;
-                                          if (skinAvgFloat < skin.min_float) skinAvgFloat = skin.min_float;
-                                          if (cooperativeSkinAvgFloat > cooperativeSkin.max_float) cooperativeSkinAvgFloat = cooperativeSkin.max_float;
-                                          if (cooperativeSkinAvgFloat < cooperativeSkin.min_float) cooperativeSkinAvgFloat = cooperativeSkin.min_float;
-                                          if (thirdSkinAvgFloat > thirdSkin.max_float) thirdSkinAvgFloat = thirdSkin.max_float;
-                                          if (thirdSkinAvgFloat < thirdSkin.min_float) thirdSkinAvgFloat = thirdSkin.min_float;
-
-                                          const avg = Math.round(((amount1 * skinAvgFloat + amount2 * cooperativeSkinAvgFloat + amount3 * thirdSkinAvgFloat) / 10) * 1000) / 1000;
-                                          const price = skin.prices[quality];
-                                          const cooperativePrice = cooperativeSkin.prices[cooperativeQuality];
-                                          const thirdPrice = thirdSkin.prices[thirdQuality];
-
-                                          let targetedSkinsArr = [];
-                                          let targetedSkinsNumber = 0;
-                                          let total = 0;
-                                          let targetedSkinsQuality = []
-
-                                          // SKIN Z ILOSCIĄ RÓWNĄ AMOUNT1
-                                          let collName = skin.case;
-                                          // COOPERATYWNY SKIN (DOPEŁNIENIOWY) Z ILOSCIĄ RÓWNĄ AMOUNT2
-                                          let coopCollName = cooperativeSkin.case;
-                                          // COOPERATYWNY SKIN (DOPEŁNIENIOWY TRZECI) Z ILOSCIĄ RÓWNĄ AMOUNT3
-                                          let thirdCollName = thirdSkin.case;
-
-                                          let max = 0;
-                                          let maxSkin = {};
-
-                                          for (let targetedCollection of collections) {
-                                             if (targetedCollection.name == collName || targetedCollection.name == coopCollName || targetedCollection.name == thirdCollName) {
-                                                for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
-
-                                                   const { min_float, max_float } = targetedSkin;
-                                                   const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
-                                                   const targetedQuality = checkQuality(float);
-
-                                                   const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
-                                                   targetedSkin.price = targetedPrice;
-                                                   if (max < targetedPrice) {
-                                                      max = targetedPrice;
-                                                      maxSkin = {
-                                                         _id: targetedSkin._id,
-                                                         name: targetedSkin.name,
-                                                         skin: targetedSkin.skin,
-                                                         case: targetedSkin.case,
-                                                         rarity: targetedSkin.rarity,
-                                                         min_float: targetedSkin.min_float,
-                                                         max_float: targetedSkin.max_float,
-                                                         price: max,
-                                                         targetedQuality
-                                                      }
-                                                   }
-                                                   if (targetedCollection.name == collName && targetedCollection.name == thirdCollName) {
-                                                      total += targetedPrice * (amount1 + amount3);
-                                                      targetedSkinsNumber += 1 * (amount1 + amount3);
-                                                   } else if (targetedCollection.name == collName && targetedCollection.name == coopCollName) {
-                                                      total += targetedPrice * (amount1 + amount2);
-                                                      targetedSkinsNumber += 1 * (amount1 + amount2);
-                                                   } else if (targetedCollection.name == coopCollName && targetedCollection.name == thirdCollName) {
-                                                      total += targetedPrice * (amount1 + amount3);
-                                                      targetedSkinsNumber += 1 * (amount1 + amount3);
-                                                   } else if (targetedCollection.name == collName) {
-                                                      total += targetedPrice * amount1;
-                                                      targetedSkinsNumber += 1 * amount1;
-                                                   } else if (targetedCollection.name == coopCollName) {
-                                                      total += targetedPrice * amount2;
-                                                      targetedSkinsNumber += 1 * amount2;
-                                                   } else if (targetedCollection.name == thirdCollName) {
-                                                      total += targetedPrice * amount3;
-                                                      targetedSkinsNumber += 1 * amount3;
-                                                   }
-
-                                                   targetedSkinsQuality.push(targetedQuality);
-                                                   targetedSkinsArr.push(targetedSkin);
-                                                   counter += 1;
-                                                }
-                                             }
-                                          }
+                        for (let firstQuality of qualities) {
+                           for (let secondQuality of qualities) {
+                              for (let thirdQuality of qualities) {
 
 
 
+                                 const firstSkin = findCheapestSkin(firstCollection, rarities[r], firstQuality);
+                                 const secondSkin = findCheapestSkin(secondCollection, rarities[r], secondQuality);
+                                 const thirdSkin = findCheapestSkin(thirdCollection, rarities[r], thirdQuality);
+
+                                 if (firstSkin != null && secondSkin != null && thirdSkin != null) {
+
+                                    let firstSkinAvgFloat = avg_floats[firstQuality];
+                                    let secondSkinAvgFloat = avg_floats[secondQuality];
+                                    let thirdSkinAvgFloat = avg_floats[thirdQuality];
+                                    if (firstSkinAvgFloat > firstSkin.max_float) firstSkinAvgFloat = firstSkin.max_float;
+                                    if (firstSkinAvgFloat < firstSkin.min_float) firstSkinAvgFloat = firstSkin.min_float;
+                                    if (secondSkinAvgFloat > secondSkin.max_float) secondSkinAvgFloat = secondSkin.max_float;
+                                    if (secondSkinAvgFloat < secondSkin.min_float) secondSkinAvgFloat = secondSkin.min_float;
+                                    if (thirdSkinAvgFloat > thirdSkin.max_float) thirdSkinAvgFloat = thirdSkin.max_float;
+                                    if (thirdSkinAvgFloat < thirdSkin.min_float) thirdSkinAvgFloat = thirdSkin.min_float;
+
+                                    const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat + amount3 * thirdSkinAvgFloat) / 10) * 1000) / 1000;
+                                    const firstPrice = firstSkin.prices[firstQuality];
+                                    const secondPrice = secondSkin.prices[secondQuality];
+                                    const thirdPrice = thirdSkin.prices[thirdQuality];
+
+                                    let targetedSkinsArr = [];
+                                    let targetedSkinsNumber = 0;
+                                    let total = 0;
+                                    let targetedSkinsQuality = []
+
+                                    let max = 0;
+                                    let maxSkin = {};
 
 
+                                    for (let targetedCollection of collections) {
+                                       if (targetedCollection.name == firstSkin.case || targetedCollection.name == secondSkin.case || targetedCollection.name == thirdSkin.case) {
 
-                                          let trades = [];
-                                          let addToArr = false;
+                                          for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
 
-                                          // for (let targetedSkin of targetedSkinsArr) {
-
-                                          // const targetedSkin = maxSkin;
-                                          const inputPrice = Math.round((amount1 * price + amount2 * cooperativePrice + amount3 * thirdPrice) * 100) / 100;
-                                          if (inputPrice < maxSkin.price) {
-
-                                             // const chance = Math.round(1 / targetedSkinsNumber * 100);
-                                             const { min_float, max_float } = maxSkin;
+                                             const { min_float, max_float } = targetedSkin;
                                              const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
                                              const targetedQuality = checkQuality(float);
-                                             // const avgLossPrice = (total - targetedPrice) / (targetedSkinsArr - 1);
-                                             // const profitability = Math.round(((inputPrice - targetedPrice) * chance / 100 - (inputPrice - avgLossPrice) * (100 - chance) / 100) * 100) / 100;
-                                             // const profitability = Math.round((inputPrice - (total / targetedSkinsNumber)) * 100) / 100;
-                                             const avgPrice = total / targetedSkinsNumber;
-                                             const profitability = Math.round((avgPrice - inputPrice) * 100) / 100;
-                                             const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
 
-                                             // if (skin.skin == 'Buddy' && cooperativeSkin.skin == 'Apocalypto' && quality == 'Factory New' && cooperativeQuality == 'Minimal Wear') {
-                                             //    x = {
-                                             //       skin,
-                                             //       cooperativeSkin,
-                                             //       targetedSkin,
-                                             //       quality,
-                                             //       cooperativeQuality,
-                                             //       targetedQuality,
-                                             //       price,
-                                             //       cooperativePrice,
-                                             //       inputPrice,
-                                             //       targetedPrice: targetedSkin.price,
-                                             //       rarity: rarities[r],
-                                             //       targetedSkinsArr,
-                                             //       targetedSkinsQuality,
-                                             //       // chance,
-                                             //       profitability,
-                                             //       returnPercentage,
-                                             //    }
-                                             // }
-
-                                             if (profitability > 0) {
-                                                addToArr = true;
-
-                                                const pom = {
-                                                   skin,
-                                                   cooperativeSkin,
-                                                   thirdSkin,
-                                                   targetedSkin: maxSkin,
-                                                   quality,
-                                                   cooperativeQuality,
-                                                   thirdQuality,
-                                                   targetedQuality,
-                                                   price,
-                                                   cooperativePrice,
-                                                   thirdPrice,
-                                                   inputPrice,
-                                                   targetedPrice: maxSkin.price,
-                                                   rarity: rarities[r],
-                                                   targetedSkinsArr,
-                                                   targetedSkinsQuality,
-                                                   // chance,
-                                                   profitability,
-                                                   returnPercentage,
+                                             const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
+                                             targetedSkin.price = targetedPrice;
+                                             if (max < targetedPrice) {
+                                                max = targetedPrice;
+                                                maxSkin = {
+                                                   _id: targetedSkin._id,
+                                                   name: targetedSkin.name,
+                                                   skin: targetedSkin.skin,
+                                                   case: targetedSkin.case,
+                                                   rarity: targetedSkin.rarity,
+                                                   min_float: targetedSkin.min_float,
+                                                   max_float: targetedSkin.max_float,
+                                                   price: targetedPrice,
+                                                   targetedQuality
                                                 }
-
-                                                let correctPosition = false;
-                                                let i = 0;
-                                                while (!correctPosition && i <= trades.length - 1) {
-                                                   if (pom.targetedPrice > trades[i].targetedPrice) {
-                                                      let firstHalf = trades.slice(0, i);
-                                                      let secondHalf = trades.slice(i);
-                                                      trades = [...firstHalf, pom, ...secondHalf];
-                                                      correctPosition = true;
-                                                   }
-                                                   i += 1;
-                                                }
-                                                if (!correctPosition) {
-                                                   trades.push(pom);
-                                                   correctPosition = true;
-                                                }
-
-
                                              }
+
+                                             if (targetedCollection.name == firstSkin.ace && targetedCollection.name == secondSkin.case && targetedCollection.name == thirdSkin.case) {
+                                                total += (targetedPrice * (amount1 + amount2 + amount3));
+                                                targetedSkinsNumber += (1 * (amount1 + amount2 + amount3));
+                                             } else if (targetedCollection.name == secondSkin.case && targetedCollection.name == thirdSkin.case) {
+                                                total += (targetedPrice * (amount2 + amount3));
+                                                targetedSkinsNumber += (1 * (amount2 + amount3));
+                                             } else if (targetedCollection.name == firstSkin.case && targetedCollection.name == thirdSkin.case) {
+                                                total += (targetedPrice * (amount1 + amount3));
+                                                targetedSkinsNumber += (1 * (amount1 + amount3));
+                                             } else if (targetedCollection.name == firstSkin.case && targetedCollection.name == secondSkin.case) {
+                                                total += (targetedPrice * (amount1 + amount2));
+                                                targetedSkinsNumber += (1 * (amount1 + amount2));
+                                             } else if (targetedCollection.name == firstSkin.case) {
+                                                total += (targetedPrice * amount1);
+                                                targetedSkinsNumber += (1 * amount1);
+                                             } else if (targetedCollection.name == secondSkin.case) {
+                                                total += (targetedPrice * amount2);
+                                                targetedSkinsNumber += (1 * amount2);
+                                             } else if (targetedCollection.name == thirdSkin.case) {
+                                                total += (targetedPrice * amount3);
+                                                targetedSkinsNumber += (1 * amount3);
+                                             }
+
+                                             targetedSkinsQuality.push(targetedQuality);
+                                             targetedSkinsArr.push(targetedSkin);
+                                             counter += 1;
                                           }
-                                          // }
+                                       }
+                                    }
+
+                                    let trades = [];
+                                    let addToArr = false;
+
+                                    const inputPrice = amount1 * firstPrice + amount2 * secondPrice + amount3 * thirdPrice;
 
 
-                                          if (addToArr) {
-                                             const pom2 = {
-                                                trades,
-                                                avg,
-                                                total,
-                                                positiveCases: trades.length,
-                                                targetedSkinsNumber
-                                             }
+                                    const avgPrice = total / targetedSkinsNumber;
+                                    const profitability = Math.round((avgPrice - inputPrice) * 100) / 100;
+                                    const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
 
-                                             if (profits.length <= 2) {
-                                                profits.push(pom2);
-                                             } else {
-                                                let correctPosition = false;
-                                                let i = 0;
-                                                while (!correctPosition && i <= profits.length - 1) {
+                                    if (profitability > 0) {
+                                       addToArr = true;
 
-                                                   if (pom2.trades[0].returnPercentage > profits[i].trades[0].returnPercentage) {
-                                                      let firstHalf = profits.slice(0, i);
-                                                      let secondHalf = profits.slice(i);
-                                                      profits = [...firstHalf, pom2, ...secondHalf];
-                                                      correctPosition = true;
-                                                   }
-                                                   i += 1;
-                                                }
-                                                if (!correctPosition) {
-                                                   profits.push(pom2);
-                                                   correctPosition = true;
-                                                }
-                                             }
+                                       const pom = {
+                                          skin: firstSkin,
+                                          cooperativeSkin: secondSkin,
+                                          cooperativeSkin: secondSkin,
+                                          thirdSkin,
+                                          targetedSkin: maxSkin,
+                                          quality: firstQuality,
+                                          cooperativeQuality: secondQuality,
+                                          thirdQuality,
+                                          targetedQuality: maxSkin.targetedQuality,
+                                          price: firstPrice,
+                                          cooperativePrice: secondPrice,
+                                          thirdPrice,
+                                          inputPrice,
+                                          targetedPrice: maxSkin.price,
+                                          rarity: rarities[r],
+                                          targetedSkinsArr,
+                                          targetedSkinsQuality,
+                                          // chance,
+                                          profitability,
+                                          returnPercentage,
+                                       }
 
+                                       let correctPosition = false;
+                                       let i = 0;
+                                       while (!correctPosition && i <= trades.length - 1) {
+                                          if (pom.targetedPrice > trades[i].targetedPrice) {
+                                             let firstHalf = trades.slice(0, i);
+                                             let secondHalf = trades.slice(i);
+                                             trades = [...firstHalf, pom, ...secondHalf];
+                                             correctPosition = true;
                                           }
-                                          counter += 1;
+                                          i += 1;
+                                       }
+                                       if (!correctPosition) {
+                                          trades.push(pom);
+                                          correctPosition = true;
                                        }
 
 
 
+
+
+                                       if (addToArr) {
+                                          const pom2 = {
+                                             trades,
+                                             avg,
+                                             total,
+                                             positiveCases: trades.length,
+                                             targetedSkinsNumber
+                                          }
+
+                                          if (profits.length <= 2) {
+                                             profits.push(pom2);
+                                          } else {
+                                             let correctPosition = false;
+                                             let i = 0;
+                                             while (!correctPosition && i <= profits.length - 1) {
+
+                                                if (pom2.trades[0].returnPercentage > profits[i].trades[0].returnPercentage) {
+                                                   let firstHalf = profits.slice(0, i);
+                                                   let secondHalf = profits.slice(i);
+                                                   profits = [...firstHalf, pom2, ...secondHalf];
+                                                   correctPosition = true;
+                                                }
+                                                i += 1;
+                                             }
+                                             if (!correctPosition) {
+                                                profits.push(pom2);
+                                                correctPosition = true;
+                                             }
+                                          }
+
+                                       }
                                     }
+
+                                    counter += 1;
                                  }
                               }
                            }
-
-                           // counter += 1;
                         }
-                        // }
                      }
                   }
                }
             }
          }
       }
-
+   }
+   for (let profit of profits) {
+      console.log(profit.trades[0].returnPercentage)
    }
 
-   // for (let profit of profits) {
-   //    console.log(profit.trades[0].returnPercentage)
-   // }
-   // console.log(x)
    let counterOpt = counter.toLocaleString()
    let positiveResults = profits.length.toLocaleString();
 
@@ -974,14 +869,580 @@ const mixedThreePairs = async (req) => {
    return { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
 }
 
-module.exports.mixedAlgorithm = async (req, res) => {
-   const { pairs = 2 } = req.query;
-   console.log(req.query)
-   if (pairs == 2) {
-      const { profits, counterOpt, positiveResults, amount: { amount1, amount2 } } = await mixedTwoPairs(req);
-      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount: { amount1, amount2 } })
-   } else if (pairs == 3) {
-      const { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } } = await mixedThreePairs(req);
-      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } })
-   }
-}
+// const mixedTwoPairs = async (req) => {
+//    const { ratio = '4-6' } = req.query;
+//    const amount1 = Number(ratio[0]);
+//    const amount2 = Number(ratio[2]);
+//    if (amount1 == undefined || amount2 == undefined || amount1 + amount2 != 10) {
+//       amount1 = 4;
+//       amount2 = 6;
+//    }
+//    // let x;
+
+//    let counter = 0;
+//    let profits = [];
+
+//    let collections = await Case.find({})
+//       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+
+
+
+
+//    // PRZESZUKIWANIE W STOSUNKU RATIO (SKINS COOPERATIVESKIN)
+//    for (let r = 0; r < rarities.length - 1; r++) {
+//       for (let collection of collections) {
+
+//          // for (let skin of collection.skins[rarities[r]]) {
+//          //    if (collection.skins[rarities[r + 1]].length !== 0) {
+
+//          if (collection.skins[rarities[r + 1]].length !== 0) {
+//             for (let quality of qualities) {
+//                const skin = findCheapestSkin(collection, rarities[r], quality);
+//                // const skinId = skin._id;
+//                // for (let skin of collection.skins[rarities[r]]) {
+//                // const skinId = skin._id;
+
+
+//                if (skin !== null) {
+//                   for (let cooperativeCollection of collections) {
+//                      // for (let cooperativeSkin of cooperativeCollection.skins[rarities[r]]) {
+//                      // if (cooperativeSkin._id !== skinId && cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
+//                      if (cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
+//                         for (let cooperativeQuality of qualities) {
+//                            const cooperativeSkin = findCheapestSkin(cooperativeCollection, rarities[r], cooperativeQuality);
+
+//                            if (cooperativeSkin !== null) {
+
+//                               let skinAvgFloat = avg_floats[quality];
+//                               let cooperativeSkinAvgFloat = avg_floats[cooperativeQuality];
+//                               if (skinAvgFloat > skin.max_float) skinAvgFloat = skin.max_float;
+//                               if (skinAvgFloat < skin.min_float) skinAvgFloat = skin.min_float;
+//                               if (cooperativeSkinAvgFloat > cooperativeSkin.max_float) cooperativeSkinAvgFloat = cooperativeSkin.max_float;
+//                               if (cooperativeSkinAvgFloat < cooperativeSkin.min_float) cooperativeSkinAvgFloat = cooperativeSkin.min_float;
+
+//                               const avg = Math.round(((amount1 * skinAvgFloat + amount2 * cooperativeSkinAvgFloat) / 10) * 1000) / 1000;
+//                               const price = skin.prices[quality];
+//                               const cooperativePrice = cooperativeSkin.prices[cooperativeQuality];
+
+//                               let targetedSkinsArr = [];
+//                               let targetedSkinsNumber = 0;
+//                               let total = 0;
+//                               let targetedSkinsQuality = []
+
+//                               // SKIN Z ILOSCIĄ RÓWNĄ AMOUNT1
+//                               let collName = skin.case;
+//                               // COOPERATYWNY SKIN (DOPEŁNIENIOWY) Z ILOSCIĄ RÓWNĄ AMOUNT2
+//                               let coopCollName = cooperativeSkin.case;
+
+
+//                               let max = 0;
+//                               let maxSkin = {};
+
+//                               for (let targetedCollection of collections) {
+//                                  if (targetedCollection.name == collName || targetedCollection.name == coopCollName) {
+//                                     for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
+
+//                                        const { min_float, max_float } = targetedSkin;
+//                                        const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
+//                                        const targetedQuality = checkQuality(float);
+
+//                                        const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
+//                                        targetedSkin.price = targetedPrice;
+//                                        if (max < targetedPrice) {
+//                                           max = targetedPrice;
+//                                           maxSkin = {
+//                                              _id: targetedSkin._id,
+//                                              name: targetedSkin.name,
+//                                              skin: targetedSkin.skin,
+//                                              case: targetedSkin.case,
+//                                              rarity: targetedSkin.rarity,
+//                                              min_float: targetedSkin.min_float,
+//                                              max_float: targetedSkin.max_float,
+//                                              price: max,
+//                                              targetedQuality
+//                                           }
+//                                        }
+
+//                                        if (targetedCollection.name == coopCollName && targetedCollection.name == collName) {
+//                                           total += targetedPrice * (amount1 + amount2);
+//                                           targetedSkinsNumber += 1 * (amount1 + amount2);
+//                                        } else if (targetedCollection.name == collName) {
+//                                           total += targetedPrice * amount1;
+//                                           targetedSkinsNumber += 1 * amount1;
+//                                        } else if (targetedCollection.name == coopCollName) {
+//                                           total += targetedPrice * amount2;
+//                                           targetedSkinsNumber += 1 * amount2;
+//                                        }
+
+//                                        targetedSkinsQuality.push(targetedQuality);
+//                                        targetedSkinsArr.push(targetedSkin);
+//                                        counter += 1;
+//                                     }
+//                                  }
+//                               }
+
+
+
+
+
+
+//                               let trades = [];
+//                               let addToArr = false;
+
+//                               // for (let targetedSkin of targetedSkinsArr) {
+
+//                               // const targetedSkin = maxSkin;
+//                               const inputPrice = amount1 * price + amount2 * cooperativePrice;
+//                               if (inputPrice < maxSkin.price) {
+
+//                                  // const chance = Math.round(1 / targetedSkinsNumber * 100);
+//                                  const { min_float, max_float } = maxSkin;
+//                                  const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
+//                                  const targetedQuality = checkQuality(float);
+//                                  // const avgLossPrice = (total - targetedPrice) / (targetedSkinsArr - 1);
+//                                  // const profitability = Math.round(((inputPrice - targetedPrice) * chance / 100 - (inputPrice - avgLossPrice) * (100 - chance) / 100) * 100) / 100;
+//                                  // const profitability = Math.round((inputPrice - (total / targetedSkinsNumber)) * 100) / 100;
+//                                  const avgPrice = total / targetedSkinsNumber;
+//                                  const profitability = Math.round((avgPrice - inputPrice) * 1000) / 1000;
+//                                  const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 1000) / 1000;
+
+//                                  // if (skin.skin == 'Buddy' && cooperativeSkin.skin == 'Apocalypto' && quality == 'Factory New' && cooperativeQuality == 'Minimal Wear') {
+//                                  //    x = {
+//                                  //       skin,
+//                                  //       cooperativeSkin,
+//                                  //       targetedSkin,
+//                                  //       quality,
+//                                  //       cooperativeQuality,
+//                                  //       targetedQuality,
+//                                  //       price,
+//                                  //       cooperativePrice,
+//                                  //       inputPrice,
+//                                  //       targetedPrice: targetedSkin.price,
+//                                  //       rarity: rarities[r],
+//                                  //       targetedSkinsArr,
+//                                  //       targetedSkinsQuality,
+//                                  //       // chance,
+//                                  //       profitability,
+//                                  //       returnPercentage,
+//                                  //    }
+//                                  // }
+
+//                                  if (profitability > 0) {
+//                                     addToArr = true;
+
+//                                     const pom = {
+//                                        skin,
+//                                        cooperativeSkin,
+//                                        targetedSkin: maxSkin,
+//                                        quality,
+//                                        cooperativeQuality,
+//                                        targetedQuality,
+//                                        price,
+//                                        cooperativePrice,
+//                                        inputPrice,
+//                                        targetedPrice: maxSkin.price,
+//                                        rarity: rarities[r],
+//                                        targetedSkinsArr,
+//                                        targetedSkinsQuality,
+//                                        // chance,
+//                                        profitability,
+//                                        returnPercentage,
+//                                     }
+
+//                                     let correctPosition = false;
+//                                     let i = 0;
+//                                     while (!correctPosition && i <= trades.length - 1) {
+//                                        if (pom.targetedPrice > trades[i].targetedPrice) {
+//                                           let firstHalf = trades.slice(0, i);
+//                                           let secondHalf = trades.slice(i);
+//                                           trades = [...firstHalf, pom, ...secondHalf];
+//                                           correctPosition = true;
+//                                        }
+//                                        i += 1;
+//                                     }
+//                                     if (!correctPosition) {
+//                                        trades.push(pom);
+//                                        correctPosition = true;
+//                                     }
+
+
+//                                  }
+//                               }
+//                               // }
+
+
+//                               if (addToArr) {
+//                                  const pom2 = {
+//                                     trades,
+//                                     avg,
+//                                     total,
+//                                     positiveCases: trades.length,
+//                                     targetedSkinsNumber
+//                                  }
+
+//                                  if (profits.length <= 2) {
+//                                     profits.push(pom2);
+//                                  } else {
+//                                     let correctPosition = false;
+//                                     let i = 0;
+//                                     while (!correctPosition && i <= profits.length - 1) {
+
+//                                        if (pom2.trades[0].returnPercentage > profits[i].trades[0].returnPercentage) {
+//                                           let firstHalf = profits.slice(0, i);
+//                                           let secondHalf = profits.slice(i);
+//                                           profits = [...firstHalf, pom2, ...secondHalf];
+//                                           correctPosition = true;
+//                                        }
+//                                        i += 1;
+//                                     }
+//                                     if (!correctPosition) {
+//                                        profits.push(pom2);
+//                                        correctPosition = true;
+//                                     }
+//                                  }
+
+//                               }
+//                               counter += 1;
+//                            }
+
+
+
+//                         }
+//                      }
+//                   }
+//                }
+
+//                // counter += 1;
+//             }
+//             // }       
+//          }
+//       }
+
+//    }
+
+//    // for (let profit of profits) {
+//    //    console.log(profit.trades[0].returnPercentage)
+//    // }
+//    // console.log(x)
+//    let counterOpt = counter.toLocaleString()
+//    let positiveResults = profits.length.toLocaleString();
+
+//    console.log(counter, positiveResults)
+//    return { profits, counterOpt, positiveResults, amount: { amount1, amount2 } };
+
+// }
+
+const a = 1;
+
+// const mixedThreePairs = async (req) => {
+//    const { ratio = '4-4-2', sliceStart = 0, sliceEnd = 10 } = req.query;
+//    let amount1 = Number(ratio[0]);
+//    let amount2 = Number(ratio[2]);
+//    let amount3 = Number(ratio[4]);
+//    if (amount1 == undefined || amount2 == undefined || amount3 == undefined || amount1 + amount2 + amount3 != 10) {
+//       amount1 = 4;
+//       amount2 = 4;
+//       amount3 = 2;
+//    }
+//    let x = [];
+
+//    let counter = 0;
+//    let profits = [];
+
+//    const sliceFrom = Number(sliceStart);
+//    const sliceTo = Number(sliceEnd);
+
+//    let collections = await Case.find({})
+//       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+
+
+//    // collections = collections.slice(sliceFrom, sliceTo);
+
+//    collections = [...collections.slice(0, 3), ...collections.slice(45, 50)]
+//    // const nOfSkins = {};
+//    // for (let collection of collections) {
+//    //    nOfSkins[collection.name] = {
+//    //       grey: collection.skins.grey.length,
+//    //       light_blue: collection.skins.light_blue.length,
+//    //       blue: collection.skins.blue.length,
+//    //       purple: collection.skins.purple.length,
+//    //       pink: collection.skins.pink.length,
+//    //       red: collection.skins.red.length,
+//    //    }
+//    // }
+
+//    // PRZESZUKIWANIE W STOSUNKU RATIO (SKINS COOPERATIVESKIN)
+//    for (let r = 0; r < rarities.length - 1; r++) {
+//       for (let collection of collections) {
+
+//          // for (let skin of collection.skins[rarities[r]]) {
+//          //    if (collection.skins[rarities[r + 1]].length !== 0) {
+
+//          if (collection.skins[rarities[r + 1]].length !== 0) {
+//             for (let quality of qualities) {
+//                const skin = findCheapestSkin(collection, rarities[r], quality);
+//                // const skinId = skin._id;
+//                // for (let skin of collection.skins[rarities[r]]) {
+//                // const skinId = skin._id;
+
+
+//                if (skin !== null) {
+//                   for (let cooperativeCollection of collections) {
+//                      // for (let cooperativeSkin of cooperativeCollection.skins[rarities[r]]) {
+//                      // if (cooperativeSkin._id !== skinId && cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
+//                      if (cooperativeCollection.skins[rarities[r + 1]].length !== 0) {
+//                         for (let cooperativeQuality of qualities) {
+//                            const cooperativeSkin = findCheapestSkin(cooperativeCollection, rarities[r], cooperativeQuality);
+
+//                            if (cooperativeSkin !== null) {
+
+//                               for (let thirdCollection of collections) {
+//                                  if (thirdCollection.skins[rarities[r + 1]].length !== 0) {
+//                                     for (let thirdQuality of qualities) {
+//                                        const thirdSkin = findCheapestSkin(thirdCollection, rarities[r], thirdQuality)
+
+//                                        if (thirdSkin !== null) {
+//                                           // if (skin.skin == cooperativeSkin.skin && skin.skin == thirdSkin.skin) console.log(skin.skin)
+//                                           let skinAvgFloat = avg_floats[quality];
+//                                           let cooperativeSkinAvgFloat = avg_floats[cooperativeQuality];
+//                                           let thirdSkinAvgFloat = avg_floats[thirdQuality];
+//                                           if (skinAvgFloat > skin.max_float) skinAvgFloat = skin.max_float;
+//                                           if (skinAvgFloat < skin.min_float) skinAvgFloat = skin.min_float;
+//                                           if (cooperativeSkinAvgFloat > cooperativeSkin.max_float) cooperativeSkinAvgFloat = cooperativeSkin.max_float;
+//                                           if (cooperativeSkinAvgFloat < cooperativeSkin.min_float) cooperativeSkinAvgFloat = cooperativeSkin.min_float;
+//                                           if (thirdSkinAvgFloat > thirdSkin.max_float) thirdSkinAvgFloat = thirdSkin.max_float;
+//                                           if (thirdSkinAvgFloat < thirdSkin.min_float) thirdSkinAvgFloat = thirdSkin.min_float;
+
+//                                           const avg = Math.round(((amount1 * skinAvgFloat + amount2 * cooperativeSkinAvgFloat + amount3 * thirdSkinAvgFloat) / 10) * 1000) / 1000;
+//                                           const price = skin.prices[quality];
+//                                           const cooperativePrice = cooperativeSkin.prices[cooperativeQuality];
+//                                           const thirdPrice = thirdSkin.prices[thirdQuality];
+
+//                                           let targetedSkinsArr = [];
+//                                           let targetedSkinsNumber = 0;
+//                                           let total = 0;
+//                                           let targetedSkinsQuality = []
+
+//                                           // SKIN Z ILOSCIĄ RÓWNĄ AMOUNT1
+//                                           let collName = skin.case;
+//                                           // COOPERATYWNY SKIN (DOPEŁNIENIOWY) Z ILOSCIĄ RÓWNĄ AMOUNT2
+//                                           let coopCollName = cooperativeSkin.case;
+//                                           // COOPERATYWNY SKIN (DOPEŁNIENIOWY TRZECI) Z ILOSCIĄ RÓWNĄ AMOUNT3
+//                                           let thirdCollName = thirdSkin.case;
+
+//                                           let max = 0;
+//                                           let maxSkin = {};
+
+//                                           for (let targetedCollection of collections) {
+//                                              if (targetedCollection.name == collName || targetedCollection.name == coopCollName || targetedCollection.name == thirdCollName) {
+//                                                 for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
+
+//                                                    const { min_float, max_float } = targetedSkin;
+//                                                    const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
+//                                                    const targetedQuality = checkQuality(float);
+
+//                                                    const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
+//                                                    targetedSkin.price = targetedPrice;
+//                                                    if (max < targetedPrice) {
+//                                                       max = targetedPrice;
+//                                                       maxSkin = {
+//                                                          _id: targetedSkin._id,
+//                                                          name: targetedSkin.name,
+//                                                          skin: targetedSkin.skin,
+//                                                          case: targetedSkin.case,
+//                                                          rarity: targetedSkin.rarity,
+//                                                          min_float: targetedSkin.min_float,
+//                                                          max_float: targetedSkin.max_float,
+//                                                          price: max,
+//                                                          targetedQuality
+//                                                       }
+//                                                    }
+//                                                    if (targetedCollection.name == collName && targetedCollection.name == coopCollName && targetedCollection.name == thirdCollName) {
+//                                                       total += targetedPrice * (amount1 + amount2 + amount3);
+//                                                       targetedSkinsNumber += 1 * (amount1 + amount2 + amount3);
+//                                                    } else if (targetedCollection.name == collName && targetedCollection.name == thirdCollName) {
+//                                                       total += targetedPrice * (amount1 + amount3);
+//                                                       targetedSkinsNumber += 1 * (amount1 + amount3);
+//                                                    } else if (targetedCollection.name == collName && targetedCollection.name == coopCollName) {
+//                                                       total += targetedPrice * (amount1 + amount2);
+//                                                       targetedSkinsNumber += 1 * (amount1 + amount2);
+//                                                    } else if (targetedCollection.name == coopCollName && targetedCollection.name == thirdCollName) {
+//                                                       total += targetedPrice * (amount1 + amount3);
+//                                                       targetedSkinsNumber += 1 * (amount1 + amount3);
+//                                                    } else if (targetedCollection.name == collName) {
+//                                                       // if (targetedCollection.name == collName) {
+//                                                       total += targetedPrice * amount1;
+//                                                       targetedSkinsNumber += 1 * amount1;
+//                                                    } else if (targetedCollection.name == coopCollName) {
+//                                                       total += targetedPrice * amount2;
+//                                                       targetedSkinsNumber += 1 * amount2;
+//                                                    } else if (targetedCollection.name == thirdCollName) {
+//                                                       total += targetedPrice * amount3;
+//                                                       targetedSkinsNumber += 1 * amount3;
+//                                                    }
+
+//                                                    targetedSkinsQuality.push(targetedQuality);
+//                                                    targetedSkinsArr.push(targetedSkin);
+//                                                    counter += 1;
+//                                                 }
+//                                              }
+//                                           }
+
+
+
+
+
+
+//                                           let trades = [];
+//                                           let addToArr = false;
+
+//                                           // for (let targetedSkin of targetedSkinsArr) {
+
+//                                           // const targetedSkin = maxSkin;
+//                                           const inputPrice = amount1 * price + amount2 * cooperativePrice + amount3 * thirdPrice;
+//                                           if (skin.skin == 'Condition Zero' && cooperativeSkin.skin == 'Prototype' && quality == 'Minimal Wear' && cooperativeQuality == 'Factory New') {
+//                                              const avgPrice = total / targetedSkinsNumber;
+//                                              const profitability = Math.round((avgPrice - inputPrice) * 1000) / 1000;
+//                                              const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 1000) / 1000;
+//                                              let xPom = {
+//                                                 total,
+//                                                 profitability,
+//                                                 returnPercentage,
+//                                              };
+//                                              x.push(xPom)
+//                                           }
+//                                           if (inputPrice < maxSkin.price) {
+
+//                                              // const chance = Math.round(1 / targetedSkinsNumber * 100);
+//                                              const { min_float, max_float } = maxSkin;
+//                                              const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
+//                                              const targetedQuality = checkQuality(float);
+//                                              // const avgLossPrice = (total - targetedPrice) / (targetedSkinsArr - 1);
+//                                              // const profitability = Math.round(((inputPrice - targetedPrice) * chance / 100 - (inputPrice - avgLossPrice) * (100 - chance) / 100) * 100) / 100;
+//                                              // const profitability = Math.round((inputPrice - (total / targetedSkinsNumber)) * 100) / 100;
+//                                              const avgPrice = total / targetedSkinsNumber;
+//                                              const profitability = Math.round((avgPrice - inputPrice) * 1000) / 1000;
+//                                              const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 1000) / 1000;
+
+
+
+//                                              if (profitability > 0) {
+//                                                 addToArr = true;
+
+//                                                 const pom = {
+//                                                    skin,
+//                                                    cooperativeSkin,
+//                                                    thirdSkin,
+//                                                    targetedSkin: maxSkin,
+//                                                    quality,
+//                                                    cooperativeQuality,
+//                                                    thirdQuality,
+//                                                    targetedQuality,
+//                                                    price,
+//                                                    cooperativePrice,
+//                                                    thirdPrice,
+//                                                    inputPrice,
+//                                                    targetedPrice: maxSkin.price,
+//                                                    rarity: rarities[r],
+//                                                    targetedSkinsArr,
+//                                                    targetedSkinsQuality,
+//                                                    // chance,
+//                                                    profitability,
+//                                                    returnPercentage,
+//                                                 }
+
+//                                                 let correctPosition = false;
+//                                                 let i = 0;
+//                                                 while (!correctPosition && i <= trades.length - 1) {
+//                                                    if (pom.targetedPrice > trades[i].targetedPrice) {
+//                                                       let firstHalf = trades.slice(0, i);
+//                                                       let secondHalf = trades.slice(i);
+//                                                       trades = [...firstHalf, pom, ...secondHalf];
+//                                                       correctPosition = true;
+//                                                    }
+//                                                    i += 1;
+//                                                 }
+//                                                 if (!correctPosition) {
+//                                                    trades.push(pom);
+//                                                    correctPosition = true;
+//                                                 }
+
+
+//                                              }
+//                                           }
+//                                           // }
+
+
+//                                           if (addToArr) {
+//                                              const pom2 = {
+//                                                 trades,
+//                                                 avg,
+//                                                 total,
+//                                                 positiveCases: trades.length,
+//                                                 targetedSkinsNumber
+//                                              }
+
+//                                              if (profits.length <= 2) {
+//                                                 profits.push(pom2);
+//                                              } else {
+//                                                 let correctPosition = false;
+//                                                 let i = 0;
+//                                                 while (!correctPosition && i <= profits.length - 1) {
+
+//                                                    if (pom2.trades[0].returnPercentage > profits[i].trades[0].returnPercentage) {
+//                                                       let firstHalf = profits.slice(0, i);
+//                                                       let secondHalf = profits.slice(i);
+//                                                       profits = [...firstHalf, pom2, ...secondHalf];
+//                                                       correctPosition = true;
+//                                                    }
+//                                                    i += 1;
+//                                                 }
+//                                                 if (!correctPosition) {
+//                                                    profits.push(pom2);
+//                                                    correctPosition = true;
+//                                                 }
+//                                              }
+
+//                                           }
+//                                           counter += 1;
+//                                        }
+
+
+
+//                                     }
+//                                  }
+//                               }
+//                            }
+
+//                            // counter += 1;
+//                         }
+//                         // }
+//                      }
+//                   }
+//                }
+//             }
+//          }
+//       }
+
+//    }
+
+//    for (let profit of profits) {
+//       console.log(profit.trades[0].returnPercentage)
+//    }
+//    console.log(x)
+//    let counterOpt = counter.toLocaleString()
+//    let positiveResults = profits.length.toLocaleString();
+
+//    console.log(counter, positiveResults)
+//    return { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
+// }
