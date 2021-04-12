@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 
 const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
+const Profit = require('../models/savedProfits');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
@@ -19,9 +20,11 @@ module.exports.showIndex = async (req, res) => {
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
-   // res.cookie('testtoken', '12345');
-   // res.clearCookie("key");
-   // console.log(req.cookies)
+   // res.cookie('testtoken', 'lol');
+   // res.cookie('testtoken', { amount1: 4, amount2: 6 });
+   // console.log(JSON.parse(req.cookies.testtoken))
+   // res.clearCookie("testtoken");
+   // console.log(req.cookies.testtoken)
 
    req.flash('info', 'Dla Twojej wygody wyświetlone zostało 100 możliwych kontraktów');
    // console.log(req.session)
@@ -384,48 +387,47 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 
 module.exports.mixedAlgorithm = async (req, res) => {
-   const current = new Date();
-   const hour = current.getHours();
-   const minute = current.getMinutes();
-   const { pairs = 2 } = req.query;
-   console.log(req.query)
-   if (pairs == 2) {
-      const { profits, counterOpt, positiveResults, amount: { amount1, amount2 } } = await mixedTwoPairs(req);
-      const currentFinish = new Date();
-      const finishHour = currentFinish.getHours();
-      const finishMinute = currentFinish.getMinutes();
-      if (hour == finishHour) {
-         console.log(current);
-         console.log(currentFinish);
-         console.log(`time : ${finishMinute - minute}`);
-      }
-      if (hour != finishHour) {
-         console.log(current);
-         console.log(currentFinish);
-         console.log(`time : ${60 - finishMinute + minute}`);
-      }
-      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount: { amount1, amount2 } })
-   } else if (pairs == 3) {
-      const { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } } = await mixedThreePairs(req);
-      const currentFinish = new Date();
-      const finishHour = currentFinish.getHours();
-      const finishMinute = currentFinish.getMinutes();
-      if (hour == finishHour) {
-         console.log(`${current.getHours()}:${current.getMinutes()}`);
-         console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
-         console.log(`time : ${finishMinute - minute}`);
-      }
-      if (hour != finishHour) {
-         console.log(`${current.getHours()}:${current.getMinutes()}`);
-         console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
-         console.log(`time : ${60 - finishMinute + minute}`);
-      }
-      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } })
+   let { cookie = 'nothing', pairs = 2 } = req.query;
+
+   if (cookie != 'nothing' && cookie != 'save' && cookie != 'readLast') {
+      cookie = 'nothing';
    }
+
+
+   if (cookie == 'readLast') {
+      const savedProfit = await Profit.findOne({})
+      // .populate({ path: 'trades', populate: { path: 'targetedSkinsArr', model: 'Skin' } })
+      const { profits, counterOpt, positiveResults, amount } = savedProfit;
+      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount });
+
+   } else {
+      const current = new Date();
+      const hour = current.getHours();
+      const minute = current.getMinutes();
+      console.log(req.query)
+      if (pairs == 2) {
+         const { profits, counterOpt, positiveResults, amount } = await mixedTwoPairs(req);
+
+         checkTime(current, hour, minute);
+         cookie == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount) : null;
+
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount })
+
+      } else if (pairs == 3) {
+         const { profits, counterOpt, positiveResults, amount } = await mixedThreePairs(req);
+
+         checkTime(current, hour, minute);
+         cookie == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount) : null;
+
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount })
+      }
+   }
+
+
 }
 
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', sort = 'returnPercentage' } = req.query;
+   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage' } = req.query;
    let amount1 = Number(ratio[0]);
    let amount2 = Number(ratio[2]);
    if (amount1 == undefined || amount2 == undefined || amount1 + amount2 != 10) {
@@ -435,6 +437,10 @@ const mixedTwoPairs = async (req) => {
    let counter = 0;
    let profits = [];
 
+
+   const sliceFrom = Number(sliceStart);
+   const sliceTo = Number(sliceEnd);
+
    let collections = await Case.find({})
       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
@@ -442,6 +448,8 @@ const mixedTwoPairs = async (req) => {
       .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+
+   collections = collections.slice(sliceFrom, sliceTo);
 
    for (let r = 0; r < rarities.length - 1; r++) {
 
@@ -516,8 +524,19 @@ const mixedTwoPairs = async (req) => {
                                        targetedSkinsNumber += (1 * amount2);
                                     }
 
+                                    const targetedSkinPom = {
+                                       _id: targetedSkin._id,
+                                       name: targetedSkin.name,
+                                       skin: targetedSkin.skin,
+                                       prices: targetedSkin.prices,
+                                       min_float: targetedSkin.min_float,
+                                       max_float: targetedSkin.max_float,
+                                       rarity: targetedSkin.rarity,
+                                       price: targetedPrice
+
+                                    }
                                     targetedSkinsQuality.push(targetedQuality);
-                                    targetedSkinsArr.push(targetedSkin);
+                                    targetedSkinsArr.push(targetedSkinPom);
                                     counter += 1;
                                  }
                               }
@@ -617,9 +636,9 @@ const mixedTwoPairs = async (req) => {
          }
       }
    }
-   for (let profit of profits) {
-      console.log(profit.trades[0].returnPercentage)
-   }
+   // for (let profit of profits) {
+   //    console.log(profit.trades[0].returnPercentage)
+   // }
 
    let counterOpt = counter.toLocaleString()
    let positiveResults = profits.length.toLocaleString();
@@ -750,8 +769,19 @@ const mixedThreePairs = async (req) => {
                                                 targetedSkinsNumber += (1 * amount3);
                                              }
 
+                                             const targetedSkinPom = {
+                                                _id: targetedSkin._id,
+                                                name: targetedSkin.name,
+                                                skin: targetedSkin.skin,
+                                                prices: targetedSkin.prices,
+                                                min_float: targetedSkin.min_float,
+                                                max_float: targetedSkin.max_float,
+                                                rarity: targetedSkin.rarity,
+                                                price: targetedPrice
+
+                                             }
                                              targetedSkinsQuality.push(targetedQuality);
-                                             targetedSkinsArr.push(targetedSkin);
+                                             targetedSkinsArr.push(targetedSkinPom);
                                              counter += 1;
                                           }
                                        }
@@ -858,13 +888,45 @@ const mixedThreePairs = async (req) => {
          }
       }
    }
-   for (let profit of profits) {
-      console.log(profit.trades[0].returnPercentage)
-   }
+   // for (let profit of profits) {
+   //    console.log(profit.trades[0].returnPercentage)
+   // }
 
    let counterOpt = counter.toLocaleString()
    let positiveResults = profits.length.toLocaleString();
 
    console.log(counter, positiveResults)
    return { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
+}
+
+const checkTime = (current, hour, minute) => {
+   const currentFinish = new Date();
+   const finishHour = currentFinish.getHours();
+   const finishMinute = currentFinish.getMinutes();
+   if (hour == finishHour) {
+      console.log(`${current.getHours()}:${current.getMinutes()}`);
+      console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
+      console.log(`time : ${finishMinute - minute}`);
+   }
+   if (hour != finishHour) {
+      console.log(`${current.getHours()}:${current.getMinutes()}`);
+      console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
+      console.log(`time : ${finishHour - hour} : ${finishMinute - minute}`);
+   }
+}
+
+const saveProfits = async (Profit, profits, counterOpt, positiveResults, amount) => {
+   await Profit.deleteMany({});
+   const newProfit = new Profit({ profits, counterOpt, positiveResults, amount });
+   await newProfit.save();
+   console.log('Profits saved!!!')
+
+}
+
+const sendCookies = (res, profits, counterOpt, positiveResults, amount) => {
+   let profit = profits.slice(0, 2)
+   res.cookie('profits', profit)
+   res.cookie('counterOpt', counterOpt)
+   res.cookie('positiveResults', positiveResults)
+   res.cookie('amount', amount)
 }
