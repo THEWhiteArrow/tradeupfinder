@@ -26,7 +26,7 @@ module.exports.showIndex = async (req, res) => {
    // res.clearCookie("testtoken");
    // console.log(req.cookies.testtoken)
 
-   req.flash('info', 'Dla Twojej wygody wyświetlone zostało 100 możliwych kontraktów');
+   req.flash('info', 'Dla Twojej wygody wyświetlone zostało niewięcej niż 300 możliwych kontraktów');
    // console.log(req.session)
    res.render('index', { collections, qualities, rarities });
 };
@@ -387,7 +387,7 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 
 module.exports.mixedAlgorithm = async (req, res) => {
-   let { cookie = 'nothing', pairs = 2 } = req.query;
+   let { cookie = 'nothing', profitsName = '', pairs = 2 } = req.query;
 
    if (cookie != 'nothing' && cookie != 'save' && cookie != 'readLast') {
       cookie = 'nothing';
@@ -395,7 +395,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
 
    if (cookie == 'readLast') {
-      const savedProfit = await Profit.findOne({})
+      const savedProfit = await Profit.findOne({ name: profitsName })
       // .populate({ path: 'trades', populate: { path: 'targetedSkinsArr', model: 'Skin' } })
       const { profits, counterOpt, positiveResults, amount } = savedProfit;
       res.render('trades/mixed', { profits, counterOpt, positiveResults, amount });
@@ -409,7 +409,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
          const { profits, counterOpt, positiveResults, amount } = await mixedTwoPairs(req);
 
          checkTime(current, hour, minute);
-         cookie == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount) : null;
+         cookie == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName) : null;
 
          res.render('trades/mixed', { profits, counterOpt, positiveResults, amount })
 
@@ -417,7 +417,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
          const { profits, counterOpt, positiveResults, amount } = await mixedThreePairs(req);
 
          checkTime(current, hour, minute);
-         cookie == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount) : null;
+         cookie == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName) : null;
 
          res.render('trades/mixed', { profits, counterOpt, positiveResults, amount })
       }
@@ -848,7 +848,7 @@ const mixedThreePairs = async (req) => {
                                              trades,
                                              avg,
                                              total,
-                                             positiveCases: trades.length,
+                                             // positiveCases: trades.length,
                                              targetedSkinsNumber
                                           }
 
@@ -915,11 +915,11 @@ const checkTime = (current, hour, minute) => {
    }
 }
 
-const saveProfits = async (Profit, profits, counterOpt, positiveResults, amount) => {
-   await Profit.deleteMany({});
-   const newProfit = new Profit({ profits, counterOpt, positiveResults, amount });
+const saveProfits = async (Profit, profits, counterOpt, positiveResults, amount, profitsName) => {
+   // await Profit.deleteMany({});
+   const newProfit = new Profit({ profits, counterOpt, positiveResults, amount, name: profitsName });
    await newProfit.save();
-   console.log('Profits saved!!!')
+   console.log(`Profits of "${profitsName}" saved!!!`)
 
 }
 

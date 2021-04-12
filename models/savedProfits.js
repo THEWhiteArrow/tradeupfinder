@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const profitSchema = new Schema({
+   name: {
+      type: String
+   },
    profits: {
       type: Array
    },
@@ -9,7 +12,7 @@ const profitSchema = new Schema({
       type: String
    },
    positiveResults: {
-      type: Number,
+      type: String,
    },
    amount: {
       type: Object

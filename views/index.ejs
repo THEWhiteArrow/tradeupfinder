@@ -164,21 +164,23 @@
       <div class="row">
          <form class="col-12 d-flex flex-column" action="/skins/mixed-algorithm" method="GET">
             <h3>Algorytm Mieszany</h3>
-            <label for="pairs">Ilość różnych skinów</label>
+            <label class="mt-2" for="pairs">Ilość różnych skinów</label>
             <select name="pairs" id="pairs">
                <option value="2">2</option>
                <option value="3">3</option>
             </select>
-            <label for="ratio">Ratio</label>
+            <label class="mt-2" for="ratio">Ratio</label>
             <!-- <input id="ratio" type="text" placeholder="format: 4-6 or 4-4-2" name="ratio" value="4-6"> -->
             <select name="ratio" id="ratio">
                <option value="4-6">4-6</option>
+               <option value="4-6">3-7</option>
                <option value="2-8">2-8</option>
-               <option value="4-4-2">4-4-2</option>
+               <option value="2-8">1-9</option>
                <option value="4-3-3">4-3-3</option>
+               <option value="4-4-2">4-4-2</option>
                <option value="4-5-1">4-5-1</option>
             </select>
-            <label for="sliceStart">SliceStart</label>
+            <label class="mt-2" for="sliceStart">SliceStart</label>
             <!-- <input id="sliceStart" type="number" placeholder="sliceStart" name="sliceStart"> -->
             <select name="sliceStart" id="sliceStart">
                <option value="0" selected>0</option>
@@ -221,7 +223,7 @@
                <option value="37">37</option>
                <option value="38">38</option>
             </select>
-            <label for="sliceEnd">SliceEnd</label>
+            <label class="mt-2" for="sliceEnd">SliceEnd</label>
             <!-- <input id="sliceEnd" type="number" placeholder="sliceEnd" name="sliceEnd"> -->
             <select name="sliceEnd" id="sliceEnd">
                <option value="54" selected>54</option>
@@ -280,18 +282,23 @@
                <option value="1">1</option>
                <option value="0">0</option>
             </select>
-            <label for="sort">Sort By</label>
+            <label class="mt-2" for="sort">Sort By</label>
             <!-- <input id="sliceEnd" type="number" placeholder="sliceEnd" name="sliceEnd"> -->
             <select name="sort" id="sort">
                <option value="returnPercentage" selected>Return Percentage</option>
                <option value="profitPerTradeUp">Profit Per TradeUp</option>
             </select>
-            <label for="cookie">What to do with data/cookie ?</label>
+            <label class="mt-2" for="cookie">What to do with data/cookie ?</label>
             <select name="cookie" id="cookie">
                <option value="nothing" selected>Nothing</option>
                <option value="save">Save</option>
-               <option value="readLast">readLast</option>
+               <option value="readLast">
+                  <span>readLast</span>
+               </option>
             </select>
+            <label class="mt-2" for="profitsName">Datas' name</label>
+            <input id="profitsName" name="profitsName" type="text">
+
             <button class="btn btn-primary">Wyszukaj trade'upy!</button>
          </form>
       </div>
