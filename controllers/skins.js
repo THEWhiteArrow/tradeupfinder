@@ -387,9 +387,8 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 
 module.exports.mixedAlgorithm = async (req, res) => {
-
-
    let { cookie = 'nothing', profitsName = '', pairs = 2 } = req.query;
+
 
    if (cookie != 'nothing' && cookie != 'save' && cookie != 'readLast') {
       cookie = 'nothing';
@@ -439,6 +438,7 @@ const mixedTwoPairs = async (req) => {
    }
    let counter = 0;
    let profits = [];
+   const steamUrl = 'https://steamcommunity.com/market/listings/730/';
 
 
    const sliceFrom = Number(sliceStart);
@@ -566,6 +566,9 @@ const mixedTwoPairs = async (req) => {
                                  skin: firstSkin,
                                  cooperativeSkin: secondSkin,
                                  targetedSkin: maxSkin,
+                                 firstSkinUrl: encodeURI(`${steamUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`),
+                                 secondSkinUrl: encodeURI(`${steamUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`),
+                                 targetedSkinUrl: encodeURI(`${steamUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`),
                                  quality: firstQuality,
                                  cooperativeQuality: secondQuality,
                                  targetedQuality: maxSkin.targetedQuality,

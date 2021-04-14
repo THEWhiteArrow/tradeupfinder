@@ -38,6 +38,19 @@
                   font-weight: 400;
                }
 
+               a.skin {
+                  font-weight: 400;
+                  font-size: 20px;
+                  cursor: pointer;
+                  text-decoration: none;
+
+                  transition: transform 0.1s ease-in-out;
+               }
+
+               a.skin:hover {
+                  transform: scale(1.03);
+               }
+
                ul {
                   padding: 0;
                }
@@ -164,42 +177,51 @@
                                           (<%= trade.inputPrice %>)
                                        </h5>
 
-                                       <div class="row">
 
-                                          <h5 class="d-flex col-12 justify-content-center skin first">
+                                       <div class="row">
+                                          <a class="link-dark mb-1 d-flex col-12 justify-content-center skin first"
+                                             data-bs-toggle="tooltip" data-bs-placement="right" title="See on market"
+                                             href="<%= trade.firstSkinUrl %>" target="_blank">
                                              <%= amount.amount1 %>x
                                                 [<%= trade.quality %>]
                                                    [<%=trade.skin.prices[trade.quality] %>]
                                                       <%= trade.skin.name %>
                                                          <%= trade.skin.skin %>
-                                          </h5>
-                                          <h5 class="d-flex col-12 justify-content-center skin second">
+                                          </a>
+                                          <a class="link-dark d-flex col-12 justify-content-center skin second"
+                                             data-bs-toggle="tooltip" data-bs-placement="right" title="See on market"
+                                             href="<%= trade.secondSkinUrl %>" target="_blank">
                                              <%= amount.amount2 %>x
                                                 [<%= trade.cooperativeQuality %>]
                                                    [<%=trade.cooperativeSkin.prices[trade.cooperativeQuality] %>]
                                                       <%= trade.cooperativeSkin.name %>
                                                          <%= trade.cooperativeSkin.skin %>
-                                          </h5>
+                                          </a>
 
 
                                           <% if(amount.amount3){ %>
-                                             <h5 class="d-flex col-12 skin third">
+                                             <a class="link-dark d-flex col-12 skin third" data-bs-toggle="tooltip"
+                                                data-bs-placement="right" title="See on market"
+                                                href="<%= trade.firstSkinUrl %>" target="_blank">
                                                 <%= amount.amount3 %>x
                                                    [<%= trade.thirdQuality %>]
                                                       [<%=trade.thirdSkin.prices[trade.thirdQuality] %>]
                                                          <%= trade.thirdSkin.name %>
                                                             <%= trade.thirdSkin.skin %>
-                                             </h5>
+                                             </a>
                                              <% } %>
 
                                                 <div class="arrow mx-auto my-3"></div>
 
-                                                <h5 class="d-flex col-12 justify-content-center  skin output">
+                                                <a class="link-dark d-flex col-12 justify-content-center  skin output"
+                                                   data-bs-toggle="tooltip" data-bs-placement="right"
+                                                   title="See on market" href="<%= trade.targetedSkinUrl %>"
+                                                   target="_blank">
                                                    [<%= trade.targetedQuality %>]
                                                       <%= trade.targetedSkin.name %>
                                                          <%= trade.targetedSkin.skin %>
                                                             (<%= Math.round(trade.targetedPrice*100)/100 %>)
-                                                </h5>
+                                                </a>
 
                                        </div>
                                     </div>
@@ -263,6 +285,12 @@
    <script src="./javascripts/bootstrap.min.js"></script> -->
 
    <!-- <script src="./javascripts/index.js"></script> -->
+   <script>
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+         return new bootstrap.Tooltip(tooltipTriggerEl)
+      })
+   </script>
 
    <script src="/javascripts/popper.min.js"></script>
    <script src="/javascripts/bootstrap.min.js"></script>
