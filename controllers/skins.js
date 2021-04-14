@@ -10,6 +10,8 @@ const Profit = require('../models/savedProfits');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
+const maxShownSkins = 69;
+const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 module.exports.showIndex = async (req, res) => {
    const collections = await Case.find({})
@@ -26,7 +28,7 @@ module.exports.showIndex = async (req, res) => {
    // res.clearCookie("testtoken");
    // console.log(req.cookies.testtoken)
 
-   req.flash('info', 'Dla Twojej wygody wyświetlone zostało niewięcej niż 300 możliwych kontraktów');
+   req.flash('info', `Dla Twojej wygody wyświetlone zostało niewięcej niż ${maxShownSkins} możliwych kontraktów`);
    // console.log(req.session)
    res.render('index', { collections, qualities, rarities });
 };
@@ -387,41 +389,38 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 
 module.exports.mixedAlgorithm = async (req, res) => {
-   let { cookie = 'nothing', profitsName = '', pairs = 2 } = req.query;
-
-
-   if (cookie != 'nothing' && cookie != 'save' && cookie != 'readLast') {
-      cookie = 'nothing';
+   let { action = 'nothing', profitsName = '', pairs = 2 } = req.query;
+   if (action != 'nothing' && action != 'save' && action != 'display') {
+      action = 'nothing';
    }
+   console.log(req.query)
 
 
-   if (cookie == 'readLast') {
+   if (action == 'display') {
       const savedProfit = await Profit.findOne({ name: profitsName })
-      // .populate({ path: 'trades', populate: { path: 'targetedSkinsArr', model: 'Skin' } })
       const { profits, counterOpt, positiveResults, amount } = savedProfit;
-      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount });
+      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl });
 
    } else {
 
       const current = new Date();
       const hour = current.getHours();
       const minute = current.getMinutes();
-      console.log(req.query)
       if (pairs == 2) {
          const { profits, counterOpt, positiveResults, amount } = await mixedTwoPairs(req);
 
          checkTime(current, hour, minute);
-         cookie == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName) : null;
+         action == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName) : null;
 
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount })
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl })
 
       } else if (pairs == 3) {
          const { profits, counterOpt, positiveResults, amount } = await mixedThreePairs(req);
 
          checkTime(current, hour, minute);
-         cookie == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName) : null;
+         action == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName) : null;
 
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount })
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl })
       }
    }
 
@@ -438,7 +437,7 @@ const mixedTwoPairs = async (req) => {
    }
    let counter = 0;
    let profits = [];
-   const steamUrl = 'https://steamcommunity.com/market/listings/730/';
+
 
 
    const sliceFrom = Number(sliceStart);
@@ -480,7 +479,7 @@ const mixedTwoPairs = async (req) => {
                            const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 1000) / 1000;
                            const firstPrice = firstSkin.prices[firstQuality];
                            const secondPrice = secondSkin.prices[secondQuality];
-                           const inputPrice = amount1 * firstPrice + amount2 * secondPrice;
+                           const inputPrice = Math.round((amount1 * firstPrice + amount2 * secondPrice) * 100) / 100;
 
                            let wantedOutputChance = 0;
 
@@ -566,9 +565,9 @@ const mixedTwoPairs = async (req) => {
                                  skin: firstSkin,
                                  cooperativeSkin: secondSkin,
                                  targetedSkin: maxSkin,
-                                 firstSkinUrl: encodeURI(`${steamUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`),
-                                 secondSkinUrl: encodeURI(`${steamUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`),
-                                 targetedSkinUrl: encodeURI(`${steamUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`),
+                                 firstSkinUrl: encodeURI(`${steamBaseUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`),
+                                 secondSkinUrl: encodeURI(`${steamBaseUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`),
+                                 targetedSkinUrl: encodeURI(`${steamBaseUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`),
                                  quality: firstQuality,
                                  cooperativeQuality: secondQuality,
                                  targetedQuality: maxSkin.targetedQuality,
@@ -676,7 +675,7 @@ const mixedThreePairs = async (req) => {
                                     const firstPrice = firstSkin.prices[firstQuality];
                                     const secondPrice = secondSkin.prices[secondQuality];
                                     const thirdPrice = thirdSkin.prices[thirdQuality];
-                                    const inputPrice = amount1 * firstPrice + amount2 * secondPrice + amount3 * thirdPrice;
+                                    const inputPrice = Math.round((amount1 * firstPrice + amount2 * secondPrice + amount3 * thirdPrice) * 100) / 100;
 
                                     let wantedOutputChance = 0;
 

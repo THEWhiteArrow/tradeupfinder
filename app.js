@@ -65,7 +65,7 @@ app.use(flash());
 app.use(cookieParser(secret));
 
 app.use((req, res, next) => {
-   req.server = server;
+   res.locals.server = server;
    res.locals.url = req.originalUrl;
    res.locals.info = req.flash('info');
    next();
