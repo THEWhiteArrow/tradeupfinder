@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
+const { isCorrectServer } = require('../middleware');
 
 const skin = require('../controllers/skins');
 
@@ -13,7 +14,7 @@ router.route('/trades')
    .get(catchAsync(skin.prepareTrades));
 
 router.route('/mixed-algorithm')
-   .get(catchAsync(skin.mixedAlgorithm));
+   .get(isCorrectServer, catchAsync(skin.mixedAlgorithm));
 
 
 

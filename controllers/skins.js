@@ -387,6 +387,8 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 
 module.exports.mixedAlgorithm = async (req, res) => {
+
+
    let { cookie = 'nothing', profitsName = '', pairs = 2 } = req.query;
 
    if (cookie != 'nothing' && cookie != 'save' && cookie != 'readLast') {
@@ -401,6 +403,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
       res.render('trades/mixed', { profits, counterOpt, positiveResults, amount });
 
    } else {
+
       const current = new Date();
       const hour = current.getHours();
       const minute = current.getMinutes();
@@ -477,6 +480,9 @@ const mixedTwoPairs = async (req) => {
                            const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 1000) / 1000;
                            const firstPrice = firstSkin.prices[firstQuality];
                            const secondPrice = secondSkin.prices[secondQuality];
+                           const inputPrice = amount1 * firstPrice + amount2 * secondPrice;
+
+                           let wantedOutputChance = 0;
 
                            let targetedSkinsArr = [];
                            let targetedSkinsNumber = 0;
@@ -497,6 +503,7 @@ const mixedTwoPairs = async (req) => {
                                     const targetedQuality = checkQuality(float);
 
                                     const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
+
                                     targetedSkin.price = targetedPrice;
                                     if (max < targetedPrice) {
                                        max = targetedPrice;
@@ -508,20 +515,26 @@ const mixedTwoPairs = async (req) => {
                                           rarity: targetedSkin.rarity,
                                           min_float: targetedSkin.min_float,
                                           max_float: targetedSkin.max_float,
+                                          float,
                                           price: targetedPrice,
-                                          targetedQuality
+                                          targetedQuality,
                                        }
                                     }
 
                                     if (targetedCollection.name == firstSkin.case && targetedCollection.name == secondSkin.case) {
                                        total += (targetedPrice * (amount1 + amount2));
                                        targetedSkinsNumber += (1 * (amount1 + amount2));
+                                       targetedPrice > inputPrice ? wantedOutputChance += (amount1 + amount2) : null;
+
                                     } else if (targetedCollection.name == firstSkin.case) {
                                        total += (targetedPrice * amount1);
                                        targetedSkinsNumber += (1 * amount1);
+                                       targetedPrice > inputPrice ? wantedOutputChance += (amount2) : null;
+
                                     } else if (targetedCollection.name == secondSkin.case) {
                                        total += (targetedPrice * amount2);
                                        targetedSkinsNumber += (1 * amount2);
+                                       targetedPrice > inputPrice ? wantedOutputChance += (amount1) : null;
                                     }
 
                                     const targetedSkinPom = {
@@ -532,7 +545,8 @@ const mixedTwoPairs = async (req) => {
                                        min_float: targetedSkin.min_float,
                                        max_float: targetedSkin.max_float,
                                        rarity: targetedSkin.rarity,
-                                       price: targetedPrice
+                                       price: targetedPrice,
+                                       float
 
                                     }
                                     targetedSkinsQuality.push(targetedQuality);
@@ -542,20 +556,13 @@ const mixedTwoPairs = async (req) => {
                               }
                            }
 
-                           let trades = [];
-                           let addToArr = false;
-
-                           const inputPrice = amount1 * firstPrice + amount2 * secondPrice;
-
 
                            const avgPrice = total / targetedSkinsNumber;
                            const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 1000) / 1000;
                            const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 1000) / 1000;
 
                            if (profitPerTradeUp > 0) {
-                              addToArr = true;
-
-                              const pom = {
+                              const trade = {
                                  skin: firstSkin,
                                  cooperativeSkin: secondSkin,
                                  targetedSkin: maxSkin,
@@ -573,58 +580,14 @@ const mixedTwoPairs = async (req) => {
                                  profitPerTradeUp,
                                  returnPercentage,
                               }
-
-                              let correctPosition = false;
-                              let i = 0;
-                              while (!correctPosition && i <= trades.length - 1) {
-                                 if (pom.targetedPrice > trades[i].targetedPrice) {
-                                    let firstHalf = trades.slice(0, i);
-                                    let secondHalf = trades.slice(i);
-                                    trades = [...firstHalf, pom, ...secondHalf];
-                                    correctPosition = true;
-                                 }
-                                 i += 1;
+                              const pom2 = {
+                                 trade,
+                                 avg,
+                                 total,
+                                 targetedSkinsNumber,
+                                 wantedOutputChance
                               }
-                              if (!correctPosition) {
-                                 trades.push(pom);
-                                 correctPosition = true;
-                              }
-
-
-
-
-
-                              if (addToArr) {
-                                 const pom2 = {
-                                    trades,
-                                    avg,
-                                    total,
-                                    positiveCases: trades.length,
-                                    targetedSkinsNumber
-                                 }
-
-                                 if (profits.length <= 2) {
-                                    profits.push(pom2);
-                                 } else {
-                                    let correctPosition = false;
-                                    let i = 0;
-                                    while (!correctPosition && i <= profits.length - 1) {
-
-                                       if (pom2.trades[0][sort] > profits[i].trades[0][sort]) {
-                                          let firstHalf = profits.slice(0, i);
-                                          let secondHalf = profits.slice(i);
-                                          profits = [...firstHalf, pom2, ...secondHalf];
-                                          correctPosition = true;
-                                       }
-                                       i += 1;
-                                    }
-                                    if (!correctPosition) {
-                                       profits.push(pom2);
-                                       correctPosition = true;
-                                    }
-                                 }
-
-                              }
+                              profits = placeInCorrectOrder(profits, pom2, sort);
                            }
 
                            counter += 1;
@@ -710,6 +673,9 @@ const mixedThreePairs = async (req) => {
                                     const firstPrice = firstSkin.prices[firstQuality];
                                     const secondPrice = secondSkin.prices[secondQuality];
                                     const thirdPrice = thirdSkin.prices[thirdQuality];
+                                    const inputPrice = amount1 * firstPrice + amount2 * secondPrice + amount3 * thirdPrice;
+
+                                    let wantedOutputChance = 0;
 
                                     let targetedSkinsArr = [];
                                     let targetedSkinsNumber = 0;
@@ -749,24 +715,37 @@ const mixedThreePairs = async (req) => {
                                              if (targetedCollection.name == firstSkin.ace && targetedCollection.name == secondSkin.case && targetedCollection.name == thirdSkin.case) {
                                                 total += (targetedPrice * (amount1 + amount2 + amount3));
                                                 targetedSkinsNumber += (1 * (amount1 + amount2 + amount3));
+                                                targetedPrice > inputPrice ? wantedOutputChance += (amount1 + amount2 + amount3) : null;
+
                                              } else if (targetedCollection.name == secondSkin.case && targetedCollection.name == thirdSkin.case) {
                                                 total += (targetedPrice * (amount2 + amount3));
                                                 targetedSkinsNumber += (1 * (amount2 + amount3));
+                                                targetedPrice > inputPrice ? wantedOutputChance += (amount2 + amount3) : null;
+
                                              } else if (targetedCollection.name == firstSkin.case && targetedCollection.name == thirdSkin.case) {
                                                 total += (targetedPrice * (amount1 + amount3));
                                                 targetedSkinsNumber += (1 * (amount1 + amount3));
+                                                targetedPrice > inputPrice ? wantedOutputChance += (amount1 + amount3) : null;
+
                                              } else if (targetedCollection.name == firstSkin.case && targetedCollection.name == secondSkin.case) {
                                                 total += (targetedPrice * (amount1 + amount2));
                                                 targetedSkinsNumber += (1 * (amount1 + amount2));
+                                                targetedPrice > inputPrice ? wantedOutputChance += (amount1 + amount2) : null;
+
                                              } else if (targetedCollection.name == firstSkin.case) {
                                                 total += (targetedPrice * amount1);
                                                 targetedSkinsNumber += (1 * amount1);
+                                                targetedPrice > inputPrice ? wantedOutputChance += (amount1) : null;
+
                                              } else if (targetedCollection.name == secondSkin.case) {
                                                 total += (targetedPrice * amount2);
                                                 targetedSkinsNumber += (1 * amount2);
+                                                targetedPrice > inputPrice ? wantedOutputChance += (amount2) : null;
+
                                              } else if (targetedCollection.name == thirdSkin.case) {
                                                 total += (targetedPrice * amount3);
                                                 targetedSkinsNumber += (1 * amount3);
+                                                targetedPrice > inputPrice ? wantedOutputChance += (amount3) : null;
                                              }
 
                                              const targetedSkinPom = {
@@ -777,7 +756,8 @@ const mixedThreePairs = async (req) => {
                                                 min_float: targetedSkin.min_float,
                                                 max_float: targetedSkin.max_float,
                                                 rarity: targetedSkin.rarity,
-                                                price: targetedPrice
+                                                price: targetedPrice,
+                                                float
 
                                              }
                                              targetedSkinsQuality.push(targetedQuality);
@@ -787,10 +767,9 @@ const mixedThreePairs = async (req) => {
                                        }
                                     }
 
-                                    let trades = [];
-                                    let addToArr = false;
 
-                                    const inputPrice = amount1 * firstPrice + amount2 * secondPrice + amount3 * thirdPrice;
+
+
 
 
                                     const avgPrice = total / targetedSkinsNumber;
@@ -798,9 +777,8 @@ const mixedThreePairs = async (req) => {
                                     const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
 
                                     if (profitPerTradeUp > 0) {
-                                       addToArr = true;
 
-                                       const pom = {
+                                       const trade = {
                                           skin: firstSkin,
                                           cooperativeSkin: secondSkin,
                                           cooperativeSkin: secondSkin,
@@ -823,57 +801,14 @@ const mixedThreePairs = async (req) => {
                                           returnPercentage,
                                        }
 
-                                       let correctPosition = false;
-                                       let i = 0;
-                                       while (!correctPosition && i <= trades.length - 1) {
-                                          if (pom.targetedPrice > trades[i].targetedPrice) {
-                                             let firstHalf = trades.slice(0, i);
-                                             let secondHalf = trades.slice(i);
-                                             trades = [...firstHalf, pom, ...secondHalf];
-                                             correctPosition = true;
-                                          }
-                                          i += 1;
-                                       }
-                                       if (!correctPosition) {
-                                          trades.push(pom);
-                                          correctPosition = true;
+                                       const pom2 = {
+                                          trade,
+                                          avg,
+                                          total,
+                                          targetedSkinsNumber
                                        }
 
-
-
-
-
-                                       if (addToArr) {
-                                          const pom2 = {
-                                             trades,
-                                             avg,
-                                             total,
-                                             // positiveCases: trades.length,
-                                             targetedSkinsNumber
-                                          }
-
-                                          if (profits.length <= 2) {
-                                             profits.push(pom2);
-                                          } else {
-                                             let correctPosition = false;
-                                             let i = 0;
-                                             while (!correctPosition && i <= profits.length - 1) {
-
-                                                if (pom2.trades[0][sort] > profits[i].trades[0][sort]) {
-                                                   let firstHalf = profits.slice(0, i);
-                                                   let secondHalf = profits.slice(i);
-                                                   profits = [...firstHalf, pom2, ...secondHalf];
-                                                   correctPosition = true;
-                                                }
-                                                i += 1;
-                                             }
-                                             if (!correctPosition) {
-                                                profits.push(pom2);
-                                                correctPosition = true;
-                                             }
-                                          }
-
-                                       }
+                                       profits = placeInCorrectOrder(profits, pom2, sort);
                                     }
 
                                     counter += 1;
@@ -899,6 +834,7 @@ const mixedThreePairs = async (req) => {
    return { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
 }
 
+
 const checkTime = (current, hour, minute) => {
    const currentFinish = new Date();
    const finishHour = currentFinish.getHours();
@@ -923,10 +859,26 @@ const saveProfits = async (Profit, profits, counterOpt, positiveResults, amount,
 
 }
 
-const sendCookies = (res, profits, counterOpt, positiveResults, amount) => {
-   let profit = profits.slice(0, 2)
-   res.cookie('profits', profit)
-   res.cookie('counterOpt', counterOpt)
-   res.cookie('positiveResults', positiveResults)
-   res.cookie('amount', amount)
+const placeInCorrectOrder = (profits, pom2, sort) => {
+   if (profits.length <= 2) {
+      profits.push(pom2);
+   } else {
+      let correctPosition = false;
+      let i = 0;
+      while (!correctPosition && i <= profits.length - 1) {
+
+         if (pom2.trade[sort] > profits[i].trade[sort]) {
+            let firstHalf = profits.slice(0, i);
+            let secondHalf = profits.slice(i);
+            profits = [...firstHalf, pom2, ...secondHalf];
+            correctPosition = true;
+         }
+         i += 1;
+      }
+      if (!correctPosition) {
+         profits.push(pom2);
+         correctPosition = true;
+      }
+   }
+   return profits;
 }

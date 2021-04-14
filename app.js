@@ -9,6 +9,7 @@ const skinRoutes = require('./routes/skins');
 const session = require('express-session');
 const flash = require('connect-flash');
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
+const server = process.env.SERVER || 'local';
 // const mongoStore = require('connect-mongo')(new session);
 const cookieParser = require('cookie-parser');
 
@@ -64,9 +65,9 @@ app.use(flash());
 app.use(cookieParser(secret));
 
 app.use((req, res, next) => {
+   req.server = server;
    res.locals.url = req.originalUrl;
    res.locals.info = req.flash('info');
-
    next();
 })
 

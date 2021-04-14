@@ -3,19 +3,19 @@ const { Schema } = mongoose;
 
 const profitSchema = new Schema({
    name: {
-      type: String
+      type: String,
    },
    profits: {
-      type: Array
+      type: Array,
    },
    counterOpt: {
-      type: String
+      type: String,
    },
    positiveResults: {
       type: String,
    },
    amount: {
-      type: Object
+      type: Object,
    }
 });
 
