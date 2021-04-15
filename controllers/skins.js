@@ -398,8 +398,8 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
    if (action == 'display') {
       const savedProfit = await Profit.findOne({ name: profitsName })
-      const { profits, counterOpt, positiveResults, amount } = savedProfit;
-      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl });
+      const { profits, counterOpt, positiveResults, amount, avg_floats } = savedProfit;
+      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats });
 
    } else {
 
@@ -410,17 +410,17 @@ module.exports.mixedAlgorithm = async (req, res) => {
          const { profits, counterOpt, positiveResults, amount } = await mixedTwoPairs(req);
 
          checkTime(current, hour, minute);
-         action == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName) : null;
+         action == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName, avg_floats) : null;
 
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl })
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats })
 
       } else if (pairs == 3) {
          const { profits, counterOpt, positiveResults, amount } = await mixedThreePairs(req);
 
          checkTime(current, hour, minute);
-         action == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName) : null;
+         action == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName, avg_floats) : null;
 
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl })
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats })
       }
    }
 

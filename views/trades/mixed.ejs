@@ -191,9 +191,10 @@
                                              title="See on the market" href="<%= trade.firstSkinUrl %>" target="_blank">
                                              <%= amount.amount1 %>x
                                                 [<%= trade.quality %>]
-                                                   [<%=trade.skin.prices[trade.quality] %>]
-                                                      <%= trade.skin.name %>
-                                                         <%= trade.skin.skin %>
+                                                   [<%= avg_floats[trade.quality] %>]
+                                                      (<%=trade.skin.prices[trade.quality] %>)
+                                                         <%= trade.skin.name %>
+                                                            <%= trade.skin.skin %>
                                           </a>
                                           <a class="link-dark d-flex col-12 justify-content-center skin second"
                                              data-bs-toggle="tooltip" data-bs-placement="right"
@@ -201,9 +202,10 @@
                                              target="_blank">
                                              <%= amount.amount2 %>x
                                                 [<%= trade.cooperativeQuality %>]
-                                                   [<%=trade.cooperativeSkin.prices[trade.cooperativeQuality] %>]
-                                                      <%= trade.cooperativeSkin.name %>
-                                                         <%= trade.cooperativeSkin.skin %>
+                                                   [<%= avg_floats[trade.cooperativeQuality] %>]
+                                                      (<%=trade.cooperativeSkin.prices[trade.cooperativeQuality] %>)
+                                                         <%= trade.cooperativeSkin.name %>
+                                                            <%= trade.cooperativeSkin.skin %>
                                           </a>
 
 
@@ -213,7 +215,7 @@
                                                 href="<%= trade.firstSkinUrl %>" target="_blank">
                                                 <%= amount.amount3 %>x
                                                    [<%= trade.thirdQuality %>]
-                                                      [<%=trade.thirdSkin.prices[trade.thirdQuality] %>]
+                                                      (<%=trade.thirdSkin.prices[trade.thirdQuality] %>)
                                                          <%= trade.thirdSkin.name %>
                                                             <%= trade.thirdSkin.skin %>
                                              </a>
@@ -226,9 +228,11 @@
                                                    title="See on the market" href="<%= trade.targetedSkinUrl %>"
                                                    target="_blank">
                                                    [<%= trade.targetedQuality %>]
-                                                      <%= trade.targetedSkin.name %>
-                                                         <%= trade.targetedSkin.skin %>
-                                                            (<%= Math.round(trade.targetedPrice*100)/100 %>)
+                                                      [<%= avg_floats[trade.targetedQuality] %>]
+
+                                                         <%= trade.targetedSkin.name %>
+                                                            <%= trade.targetedSkin.skin %>
+                                                               (<%= Math.round(trade.targetedPrice*100)/100 %>)
                                                 </a>
 
                                        </div>
