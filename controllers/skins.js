@@ -9,7 +9,7 @@ const Case = require('../models/caseModel');
 const Research = require('../models/researchModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
-const steamTax = 0.87;
+const steamTax = 0.85;
 const maxShownSkins = 420;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
