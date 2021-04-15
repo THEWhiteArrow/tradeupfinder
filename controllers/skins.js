@@ -840,7 +840,7 @@ const mixedThreePairs = async (req) => {
    let positiveResults = profits.length.toLocaleString();
 
    console.log(counter, positiveResults)
-   return { profits: profits.slice(0, 750), counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
+   return { profits: profits.slice(0, 4250), counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
 }
 
 
