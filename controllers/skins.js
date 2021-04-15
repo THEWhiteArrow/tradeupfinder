@@ -6,11 +6,11 @@ const fetch = require('node-fetch');
 
 const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
-const Profit = require('../models/savedProfits');
+const Research = require('../models/researchModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
-const maxShownSkins = 69;
+const maxShownSkins = 420;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 module.exports.showIndex = async (req, res) => {
@@ -22,6 +22,8 @@ module.exports.showIndex = async (req, res) => {
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
+
+   const researches = await Research.find({});
    // res.cookie('testtoken', 'lol');
    // res.cookie('testtoken', { amount1: 4, amount2: 6 });
    // console.log(JSON.parse(req.cookies.testtoken))
@@ -30,7 +32,7 @@ module.exports.showIndex = async (req, res) => {
 
    req.flash('info', `Dla Twojej wygody wyświetlone zostało niewięcej niż ${maxShownSkins} możliwych kontraktów`);
    // console.log(req.session)
-   res.render('index', { collections, qualities, rarities });
+   res.render('index', { collections, qualities, rarities, researches });
 };
 
 module.exports.updatePrices = async (req, res, next) => {
@@ -389,7 +391,7 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 
 module.exports.mixedAlgorithm = async (req, res) => {
-   let { action = 'nothing', profitsName = '', pairs = 2 } = req.query;
+   let { action = 'nothing', researchName = '', pairs = 2 } = req.query;
    if (action != 'nothing' && action != 'save' && action != 'display') {
       action = 'nothing';
    }
@@ -397,8 +399,8 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
 
    if (action == 'display') {
-      const savedProfit = await Profit.findOne({ name: profitsName })
-      const { profits, counterOpt, positiveResults, amount, avg_floats } = savedProfit;
+      const savedResearch = await Research.findOne({ name: researchName })
+      const { profits, counterOpt, positiveResults, amount, avg_floats } = savedResearch;
       res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats });
 
    } else {
@@ -410,7 +412,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
          const { profits, counterOpt, positiveResults, amount } = await mixedTwoPairs(req);
 
          checkTime(current, hour, minute);
-         action == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName, avg_floats) : null;
+         action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, researchName, avg_floats) : null;
 
          res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats })
 
@@ -418,7 +420,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
          const { profits, counterOpt, positiveResults, amount } = await mixedThreePairs(req);
 
          checkTime(current, hour, minute);
-         action == 'save' ? saveProfits(Profit, profits, counterOpt, positiveResults, amount, profitsName, avg_floats) : null;
+         action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, researchName, avg_floats) : null;
 
          res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats })
       }
@@ -838,8 +840,9 @@ const mixedThreePairs = async (req) => {
    let positiveResults = profits.length.toLocaleString();
 
    console.log(counter, positiveResults)
-   return { profits, counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
+   return { profits: profits.slice(0, 750), counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
 }
+
 
 
 const checkTime = (current, hour, minute) => {
@@ -857,15 +860,12 @@ const checkTime = (current, hour, minute) => {
       console.log(`time : ${finishHour - hour} : ${finishMinute - minute}`);
    }
 }
-
-const saveProfits = async (Profit, profits, counterOpt, positiveResults, amount, profitsName, avg_floats) => {
-   // await Profit.deleteMany({});
-   const newProfit = new Profit({ profits, counterOpt, positiveResults, amount, name: profitsName, avg_floats });
-   await newProfit.save();
-   console.log(`Profits of "${profitsName}" saved!!!`)
+const saveResearch = async (Research, profits, counterOpt, positiveResults, amount, researchName, avg_floats) => {
+   const newResearch = new Research({ profits, counterOpt, positiveResults, amount, name: researchName, avg_floats });
+   await newResearch.save();
+   console.log(`Research of "${researchName}" saved!!!`)
 
 }
-
 const placeInCorrectOrder = (profits, pom2, sort) => {
    if (profits.length <= 2) {
       profits.push(pom2);

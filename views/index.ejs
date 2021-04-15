@@ -339,15 +339,22 @@
                <option value="profitPerTradeUp">Profit Per TradeUp</option>
             </select>
 
-            <label class="mt-2" for="action">What to do with data?</label>
+            <label class="mt-2" for="action">What to do?</label>
             <select name="action" id="action">
-               <option value="nothing" selected>Nothing</option>
+               <option value="nothing" <% if(server=='local' ){ %> selected <% } %> >Nothing</option>
                <option value="save">Save</option>
-               <option value="display">Display</option>
+               <option value="display" <% if(server!='local' ){ %> selected <% } %> >Display</option>
             </select>
 
-            <label class="mt-2" for="profitsName">Datas' name</label>
-            <input id="profitsName" name="profitsName" type="text">
+            <label class="mt-2" for="researchName">Researches' name</label>
+            <!-- <input id="profitsName" name="profitsName" type="text"> -->
+            <select name="researchName" id="researchName">
+               <% for(let research of researches){ %>
+                  <option value="<%= research.name %>">
+                     <%= research.name %>
+                  </option>
+                  <% } %>
+            </select>
 
             <button class="btn btn-primary mt-3">Wyszukaj trade'upy!</button>
          </form>

@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-const { avg_floats } = require('../utils/variables');
 const { Schema } = mongoose;
 
-const profitSchema = new Schema({
+const researchSchema = new Schema({
    name: {
       type: String,
    },
@@ -24,5 +23,5 @@ const profitSchema = new Schema({
 
 });
 
-const Profit = mongoose.model('Profit', profitSchema);
-module.exports = Profit;
+const Research = mongoose.model('Research', researchSchema);
+module.exports = Research;
