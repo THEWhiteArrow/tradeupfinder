@@ -790,6 +790,10 @@ const mixedThreePairs = async (req) => {
                                           cooperativeQuality: secondQuality,
                                           thirdQuality,
                                           targetedQuality: maxSkin.targetedQuality,
+                                          firstSkinUrl: encodeURI(`${steamBaseUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`),
+                                          secondSkinUrl: encodeURI(`${steamBaseUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`),
+                                          thirdSkinUrl: encodeURI(`${steamBaseUrl}${thirdSkin.name} | ${thirdSkin.skin} (${thirdQuality})`),
+                                          targetedSkinUrl: encodeURI(`${steamBaseUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`),
                                           price: firstPrice,
                                           cooperativePrice: secondPrice,
                                           thirdPrice,
@@ -807,7 +811,8 @@ const mixedThreePairs = async (req) => {
                                           trade,
                                           avg,
                                           total,
-                                          targetedSkinsNumber
+                                          targetedSkinsNumber,
+                                          wantedOutputChance
                                        }
 
                                        profits = placeInCorrectOrder(profits, pom2, sort);

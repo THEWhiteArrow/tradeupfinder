@@ -210,14 +210,16 @@
 
 
                                           <% if(amount.amount3){ %>
-                                             <a class="link-dark d-flex col-12 skin third" data-bs-toggle="tooltip"
-                                                data-bs-placement="right" title="See on the market"
-                                                href="<%= trade.firstSkinUrl %>" target="_blank">
+                                             <a class="link-dark d-flex col-12 justify-content-center skin third"
+                                                data-bs-toggle="tooltip" data-bs-placement="right"
+                                                title="See on the market" href="<%= trade.thirdSkinUrl %>"
+                                                target="_blank" target="_blank">
                                                 <%= amount.amount3 %>x
                                                    [<%= trade.thirdQuality %>]
-                                                      (<%=trade.thirdSkin.prices[trade.thirdQuality] %>)
-                                                         <%= trade.thirdSkin.name %>
-                                                            <%= trade.thirdSkin.skin %>
+                                                      [<%= avg_floats[trade.thirdQuality] %>]
+                                                         (<%=trade.thirdSkin.prices[trade.thirdQuality] %>)
+                                                            <%= trade.thirdSkin.name %>
+                                                               <%= trade.thirdSkin.skin %>
                                              </a>
                                              <% } %>
 
@@ -257,8 +259,9 @@
                                           </div>
                                           <div
                                              class="d-flex  py-2 w-100 justify-content-center align-items-center bg-danger">
-                                             <%= Math.round(profit.wantedOutputChance/profit.targetedSkinsNumber*100*100)/100
-                                                %>%
+                                             <%=
+                                                Math.round(profit.wantedOutputChance/profit.targetedSkinsNumber*100*100)/100%>
+                                                %
                                           </div>
                                        </div>
                                     </div>
