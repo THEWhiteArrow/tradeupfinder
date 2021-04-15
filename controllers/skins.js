@@ -853,9 +853,9 @@ const checkTime = (current, hour, minute) => {
    }
 }
 
-const saveProfits = async (Profit, profits, counterOpt, positiveResults, amount, profitsName) => {
+const saveProfits = async (Profit, profits, counterOpt, positiveResults, amount, profitsName, avg_floats) => {
    // await Profit.deleteMany({});
-   const newProfit = new Profit({ profits, counterOpt, positiveResults, amount, name: profitsName });
+   const newProfit = new Profit({ profits, counterOpt, positiveResults, amount, name: profitsName, avg_floats });
    await newProfit.save();
    console.log(`Profits of "${profitsName}" saved!!!`)
 
