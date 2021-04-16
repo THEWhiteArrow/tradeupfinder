@@ -32,11 +32,11 @@ router.route('/map-collection/floats')
    .get(catchAsync(skin.mapFloatsGet))
    .post(catchAsync(skin.mapFloatsPost));
 
-
 router.route('/update-thru-servers')
    .post(catchAsync(skin.useServers));
 
-
+router.route('/delete-researches')
+   .get(catchAsync(skin.deleteSavedResearches));
 
 
 

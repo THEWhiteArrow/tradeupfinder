@@ -19,6 +19,9 @@ const researchSchema = new Schema({
    },
    avg_floats: {
       type: Object,
+   },
+   priceCorrection: {
+      type: Number
    }
 
 });

@@ -3,27 +3,33 @@ const form = document.querySelector('form#findFloat');
 const formCollection = document.querySelector('form#formCollection');
 const floatSpan = document.querySelector('#displayFloat');
 
+const action = document.querySelector('#action');
+const newResearch = document.querySelector('.new-research');
+const displayResearch = document.querySelector('.display-research');
+const priceCorrectionDiv = document.querySelector('.price-correction');
+
+const manageResearchDisplayingInputs = () => {
+   const state = action.value;
+   if (state == 'nothing') {
+      priceCorrectionDiv.classList.remove('hide')
+      newResearch.classList.add('hide')
+      displayResearch.classList.add('hide')
+   } else if (state == 'save') {
+      priceCorrectionDiv.classList.remove('hide')
+      newResearch.classList.remove('hide')
+      displayResearch.classList.add('hide')
+   } else if (state == 'display') {
+      priceCorrectionDiv.classList.add('hide')
+      newResearch.classList.add('hide')
+      displayResearch.classList.remove('hide')
+   }
+}
+
 for (let button of buttons) {
    let bg = button.innerText;
    if (bg === 'light_blue' && bg !== "Znajdź float'a") bg = 'light blue';
    button.style.backgroundColor = bg;
 }
 
-// form.addEventListener('submit', (e) => {
-//    e.preventDefault();
-
-//    if (form[0].value !== '' && form[1].value !== '' && form[2].value !== '') {
-
-//       const min = Number(form[0].value);
-//       const max = Number(form[1].value);
-//       const avg = Number(form[2].value);
-
-//       form[0].value = '';
-//       form[1].value = '';
-//       form[2].value = '';
-
-//       console.log(min, max, avg)
-//       const float = ((max - min) * avg + min);
-//       floatSpan.innerText = float;
-//    }
-// })
+manageResearchDisplayingInputs();
+action.addEventListener('click', manageResearchDisplayingInputs)

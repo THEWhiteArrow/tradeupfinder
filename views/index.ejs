@@ -28,6 +28,10 @@
 
       }
 
+      .hide {
+         display: none !important;
+      }
+
       .bg-white {
          background-color: white !important;
       }
@@ -346,17 +350,31 @@
                <option value="display" <% if(server!='local' ){ %> selected <% } %> >Display</option>
             </select>
 
-            <label class="mt-2" for="researchName">Researches' name</label>
-            <!-- <input id="profitsName" name="profitsName" type="text"> -->
-            <select name="researchName" id="researchName">
-               <% for(let research of researches){ %>
-                  <option value="<%= research.name %>">
-                     <%= research.name %>
-                  </option>
-                  <% } %>
-            </select>
+            <div class="price-correction col-12 d-flex flex-column mt-1">
+               <label for="priceCorrection">Price Correction</label>
+               <input type="number" name="priceCorrection" placeholder="priceCorrection e.q. 0.05" step="0.01">
+            </div>
+
+            <div class="new-research col-12 d-flex flex-column mt-1">
+               <label for="newResearchName">New Research's Name</label>
+               <input id="newResearchName" name="newResearchName" type="text">
+            </div>
+
+            <div class="display-research col-12 d-flex flex-column">
+               <label class="mt-2" for="researchName">Researches' name</label>
+               <select name="researchName" id="researchName">
+                  <% for(let research of researches){ %>
+                     <option value="<%= research.name %>">
+                        <%= research.name %>
+                     </option>
+                     <% } %>
+               </select>
+            </div>
 
             <button class="btn btn-primary mt-3">Wyszukaj trade'upy!</button>
+            <% if(server=='local' ){ %>
+               <a class="btn btn-danger align-self-end" href="/skins/delete-researches">Delete Saved Researches</a>
+               <% } %>
          </form>
       </div>
 
