@@ -404,60 +404,62 @@
 
       <hr role=tournament6 class="my-5 ">
 
-      <div class="row d-flex justify-content-between">
-         <%let i=0; %>
-            <% for(let collection of collections){ %>
-               <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <% if(server=="local" ){ %>
+         <div class="row d-flex justify-content-between">
+            <%let i=0; %>
+               <% for(let collection of collections){ %>
+                  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
 
 
-                  <h2 class="mt-4 p-1 overflow-auto">
-                     <%=collection.name%>
-                  </h2>
+                     <h2 class="mt-4 p-1 overflow-auto">
+                        <%=collection.name%>
+                     </h2>
 
 
-                  <% for(let rarity of rarities){ %>
-                     <div class="d-flex flex-column">
-                        <button class="btn btn-info text-white" type="button" data-bs-toggle="collapse"
-                           data-bs-target="#collapseExample<%=i%>" aria-expanded="false"
-                           aria-controls="collapseExample<%=i%>">
+                     <% for(let rarity of rarities){ %>
+                        <div class="d-flex flex-column">
+                           <button class="btn btn-info text-white" type="button" data-bs-toggle="collapse"
+                              data-bs-target="#collapseExample<%=i%>" aria-expanded="false"
+                              aria-controls="collapseExample<%=i%>">
 
-                           <%= rarity %>
-                        </button>
-                        <div class="collapse " id="collapseExample<%=i%>">
-                           <% i+=1; %>
-                              <% for(let skin of collection.skins[rarity]) {%>
-                                 <% if(skin){ %>
-                                    <div class="card card-body px-2">
+                              <%= rarity %>
+                           </button>
+                           <div class="collapse " id="collapseExample<%=i%>">
+                              <% i+=1; %>
+                                 <% for(let skin of collection.skins[rarity]) {%>
+                                    <% if(skin){ %>
+                                       <div class="card card-body px-2">
 
-                                       <!-- console.log(skin) -->
-                                       <h6>
-                                          <%=skin.name %> - <%=skin.skin %>
-                                       </h6>
-                                       <form action="/skins/update/<%= skin._id %>" method="POST">
-                                          <ul>
-                                             <% for(let key of qualities) {%>
-                                                <li class="form-group">
-                                                   <label for="<%= `${skin.name}${skin.skin}${key}` %>">
-                                                      <%= key %>
-                                                   </label>
-                                                   <input id="<%= `${skin.name}${skin.skin}${key}` %>"
-                                                      class="form-control" type="number" name="prices[<%= key %>]"
-                                                      step="0.01" value="<%= skin.prices[key] %>">
+                                          <!-- console.log(skin) -->
+                                          <h6>
+                                             <%=skin.name %> - <%=skin.skin %>
+                                          </h6>
+                                          <form action="/skins/update/<%= skin._id %>" method="POST">
+                                             <ul>
+                                                <% for(let key of qualities) {%>
+                                                   <li class="form-group">
+                                                      <label for="<%= `${skin.name}${skin.skin}${key}` %>">
+                                                         <%= key %>
+                                                      </label>
+                                                      <input id="<%= `${skin.name}${skin.skin}${key}` %>"
+                                                         class="form-control" type="number" name="prices[<%= key %>]"
+                                                         step="0.01" value="<%= skin.prices[key] %>">
 
-                                                </li>
-                                                <% }%>
-                                          </ul>
-                                          <button class="btn btn-primary">ZATWIERDŹ</button>
-                                       </form>
-                                    </div>
-                                    <% } %>
+                                                   </li>
+                                                   <% }%>
+                                             </ul>
+                                             <button class="btn btn-primary">ZATWIERDŹ</button>
+                                          </form>
+                                       </div>
                                        <% } %>
+                                          <% } %>
+                           </div>
                         </div>
-                     </div>
-                     <% } %>
-               </div>
-               <% } %>
-      </div>
+                        <% } %>
+                  </div>
+                  <% } %>
+         </div>
+         <% } %>
    </main>
 
 
