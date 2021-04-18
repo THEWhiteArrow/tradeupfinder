@@ -161,178 +161,171 @@
    <main class="container">
       <% if(profits){ %>
          <% let number=1; %>
-            <% let tradeColumns='col-lg-6' ; %>
-               <% amount.amount3?tradeColumns='col-lg-4' :null; %>
-                  <ul>
+            <% amount.amount3?tradeColumns='col-lg-4' :null; %>
+               <ul>
 
-                     <% for(let profit of profits){ %>
-                        <% if(number <=maxShownSkins){ %>
-                           <% let trade=profit.trade %>
-                              <li
-                                 class="my-4 p-3 trade rounded border container bg-<%= trade.rarity.replace('_','') %>">
-                                 <div class="row">
+                  <% for(let profit of profits){ %>
+                     <% if(number <=maxShownSkins){ %>
+                        <% let trade=profit.trade %>
+                           <li class="my-4 p-3 trade rounded border container bg-<%= trade.rarity.replace('_','') %>">
+                              <div class="row">
 
-                                    <!-- COLLECTIONS DATA -->
-                                    <div class="">
-                                       <%= profit.avg %>
-                                          <%= trade.rarity %>
-                                             [<%= trade.skin.case %> + <%= trade.cooperativeSkin.case %>
-                                                   <% if(amount.amount3){ %>
-                                                      + <%=trade.thirdSkin.case %>
-                                                         <% } %>
-                                                            ]
-                                                            =>
-                                                            [<%= trade.targetedSkin.case%>]
-                                    </div>
+                                 <!-- COLLECTIONS DATA -->
+                                 <div class="">
+                                    <%= profit.avg %>
+                                       <%= trade.rarity %>
+                                          [<%= trade.firstSkin.case %> + <%= trade.secondSkin.case %>
+                                                <% if(amount.amount3){ %>
+                                                   + <%=trade.thirdSkin.case %>
+                                                      <% } %>
+                                                         ]
+                                                         =>
+                                                         [<%= trade.targetedSkin.case%>]
+                                 </div>
 
 
-                                    <!-- TRADE -->
-                                    <div class="mt-4 mb-2  d-flex flex-column">
+                                 <!-- TRADE -->
+                                 <div class="mt-4 mb-2  d-flex flex-column">
 
-                                       <!-- INPUT PRICE -->
-                                       <h5 class="col-12 d-flex justify-content-center inputPrice">
-                                          (<%= trade.inputPrice %>zł)
-                                       </h5>
+                                    <!-- INPUT PRICE -->
+                                    <h5 class="col-12 d-flex justify-content-center inputPrice">
+                                       (<%= trade.inputPrice %>zł)
+                                    </h5>
 
-                                       <div class="row">
-                                          <a class="link-dark mb-1 d-flex col-12 justify-content-center skin first"
+                                    <div class="row">
+                                       <a class="link-dark mb-1 d-flex col-12 justify-content-center skin first"
+                                          data-bs-toggle="tooltip" data-bs-placement="right" title="See on the market"
+                                          href="<%= trade.firstSkinUrl %>" target="_blank">
+                                          <%= amount.amount1 %>x
+                                             [<%= trade.firstQuality %>]
+                                                [<%= trade.firstSkinAvgFloat %>]
+                                                   (<%=Math.round((trade.firstPrice)*100) /100 %>zł)
+                                                      <%= trade.firstSkin.name %>
+                                                         <%= trade.firstSkin.skin %>
+                                       </a>
+                                       <a class="link-dark d-flex col-12 justify-content-center skin second"
+                                          data-bs-toggle="tooltip" data-bs-placement="right" title="See on the market"
+                                          href="<%= trade.secondSkinUrl %>" target="_blank">
+                                          <%= amount.amount2 %>x
+                                             [<%= trade.secondQuality %>]
+                                                [<%= trade.secondSkinAvgFloat %>]
+                                                   (<%=Math.round( (trade.secondPrice)*100)/100 %>zł)
+                                                      <%= trade.secondSkin.name %>
+                                                         <%= trade.secondSkin.skin %>
+                                       </a>
+
+
+                                       <% if(amount.amount3){ %>
+                                          <a class="link-dark d-flex col-12 justify-content-center skin third"
                                              data-bs-toggle="tooltip" data-bs-placement="right"
-                                             title="See on the market" href="<%= trade.firstSkinUrl %>" target="_blank">
-                                             <%= amount.amount1 %>x
-                                                [<%= trade.quality %>]
-                                                   [<%= avg_floats[trade.quality] %>]
-                                                      (<%=Math.round((trade.skin.prices[trade.quality]+priceCorrection)
-                                                         *100)/100 %>zł)
-                                                         <%= trade.skin.name %>
-                                                            <%= trade.skin.skin %>
-                                          </a>
-                                          <a class="link-dark d-flex col-12 justify-content-center skin second"
-                                             data-bs-toggle="tooltip" data-bs-placement="right"
-                                             title="See on the market" href="<%= trade.secondSkinUrl %>"
+                                             title="See on the market" href="<%= trade.thirdSkinUrl %>" target="_blank"
                                              target="_blank">
-                                             <%= amount.amount2 %>x
-                                                [<%= trade.cooperativeQuality %>]
-                                                   [<%= avg_floats[trade.cooperativeQuality] %>]
-                                                      (<%=Math.round(
-                                                         (trade.cooperativeSkin.prices[trade.cooperativeQuality]+priceCorrection)*100)/100
-                                                         %>zł)
-                                                         <%= trade.cooperativeSkin.name %>
-                                                            <%= trade.cooperativeSkin.skin %>
+                                             <%= amount.amount3 %>x
+                                                [<%= trade.thirdQuality %>]
+                                                   [<%= trade.thirdSkinAvgFloat %>]
+                                                      (
+                                                      <%=Math.round((trade.thirdPrice)*100) /100 %>)
+                                                         <%= trade.thirdSkin.name %>
+                                                            <%= trade.thirdSkin.skin %>
                                           </a>
+                                          <% } %>
 
+                                             <div class="arrow mx-auto my-3"></div>
 
-                                          <% if(amount.amount3){ %>
-                                             <a class="link-dark d-flex col-12 justify-content-center skin third"
+                                             <a class="link-dark d-flex col-12 justify-content-center  skin output"
                                                 data-bs-toggle="tooltip" data-bs-placement="right"
-                                                title="See on the market" href="<%= trade.thirdSkinUrl %>"
-                                                target="_blank" target="_blank">
-                                                <%= amount.amount3 %>x
-                                                   [<%= trade.thirdQuality %>]
-                                                      [<%= avg_floats[trade.thirdQuality] %>]
-                                                         (
-                                                         <%=Math.round((trade.thirdSkin.prices[trade.thirdQuality]+priceCorrection)*100)
-                                                            /100 %>)
-                                                            <%= trade.thirdSkin.name %>
-                                                               <%= trade.thirdSkin.skin %>
+                                                title="See on the market" href="<%= trade.targetedSkinUrl %>"
+                                                target="_blank">
+                                                [<%= trade.targetedQuality %>]
+                                                   [<%= trade.targetedSkinFloat %>]
+
+                                                      <%= trade.targetedSkin.name %>
+                                                         <%= trade.targetedSkin.skin %>
+                                                            (<%= Math.round(trade.targetedPrice*100)/100 %>)
                                              </a>
-                                             <% } %>
 
-                                                <div class="arrow mx-auto my-3"></div>
+                                    </div>
+                                 </div>
 
-                                                <a class="link-dark d-flex col-12 justify-content-center  skin output"
-                                                   data-bs-toggle="tooltip" data-bs-placement="right"
-                                                   title="See on the market" href="<%= trade.targetedSkinUrl %>"
-                                                   target="_blank">
-                                                   [<%= trade.targetedQuality %>]
-                                                      [<%= avg_floats[trade.targetedQuality] %>]
+                                 <!-- STATS -->
+                                 <div class="stats col-12 col-lg-6 offset-lg-3 d-flex flex-column ">
 
-                                                         <%= trade.targetedSkin.name %>
-                                                            <%= trade.targetedSkin.skin %>
-                                                               (<%= Math.round(trade.targetedPrice*100)/100 %>)
+
+
+                                    <div class="d-flex flex-row col-12 mt-auto data text-white">
+                                       <div
+                                          class="d-flex  py-2 w-100 justify-content-center align-items-center bg-primary">
+                                          <%= Math.round(trade.profitPerTradeUp*100)/100 %>zł
+                                       </div>
+                                       <div
+                                          class="d-flex  py-2 w-100 justify-content-center align-items-center bg-success">
+                                          <%= Math.round(trade.returnPercentage*100)/100 %>%
+                                       </div>
+                                       <div
+                                          class="d-flex  py-2 w-100 justify-content-center align-items-center bg-danger">
+                                          <%=
+                                             Math.round(profit.wantedOutputChance/profit.targetedSkinsNumber*100*100)/100%>
+                                             %
+                                       </div>
+                                    </div>
+                                 </div>
+
+                                 <!-- HELP SKINS -->
+                                 <div class="d-flex col-12 mt-3 mb-2">
+
+                                    <!-- ALTERNATE INPUTS -->
+                                    <div class="col-12 col-lg-5 offset-lg-1">
+                                       <h6 class="d-flex my-2">ALTERNATE INPUTS:</h6>
+                                       <ul class="list-unstyled">
+                                          <% for(let alternateSkin of trade.alternateInputSkins){ %>
+                                             <li class="d-flex mb-1">
+                                                <a class="link-dark" target="_blank" title="See on the market"
+                                                   href="<%= alternateSkin.url  %> ">
+                                                   <%=`${alternateSkin.collectionName} - [${alternateSkin.quality}] -
+                                                      ${alternateSkin.name} ${alternateSkin.skin} -
+                                                      (${alternateSkin.price})`%>
                                                 </a>
-
-                                       </div>
+                                             </li>
+                                             <% } %>
+                                       </ul>
                                     </div>
 
-                                    <!-- STATS -->
-                                    <div class="stats col-12 col-lg-6 offset-lg-3 d-flex flex-column ">
+                                    <!-- OUTPUTS -->
+                                    <div class="outputs col-12 col-lg-6 ">
+                                       <h6 class="d-flex my-2">OUTPUTS:</h6>
+                                       <ul class="list-unstyled">
+                                          <% for(let t=0;t<trade.targetedSkinsArr.length;t++){ %>
+                                             <li class="d-flex mb-1">
+                                                <a class="link-dark" target="_blank" title="See on the market"
+                                                   href="<%= encodeURI(`${steamBaseUrl}${trade.targetedSkinsArr[t].name} | ${trade.targetedSkinsArr[t].skin} (${trade.targetedSkinsQuality[t]})`)  %> ">
 
-
-
-                                       <div class="d-flex flex-row col-12 mt-auto data text-white">
-                                          <div
-                                             class="d-flex  py-2 w-100 justify-content-center align-items-center bg-primary">
-                                             <%= Math.round(trade.profitPerTradeUp*100)/100 %>zł
-                                          </div>
-                                          <div
-                                             class="d-flex  py-2 w-100 justify-content-center align-items-center bg-success">
-                                             <%= Math.round(trade.returnPercentage*100)/100 %>%
-                                          </div>
-                                          <div
-                                             class="d-flex  py-2 w-100 justify-content-center align-items-center bg-danger">
-                                             <%=
-                                                Math.round(profit.wantedOutputChance/profit.targetedSkinsNumber*100*100)/100%>
-                                                %
-                                          </div>
-                                       </div>
-                                    </div>
-
-                                    <!-- HELP SKINS -->
-                                    <div class="d-flex col-12 mt-3 mb-2">
-
-                                       <!-- ALTERNATE INPUTS -->
-                                       <div class="col-12 col-lg-5 offset-lg-1">
-                                          <h6 class="d-flex my-2">ALTERNATE INPUTS:</h6>
-                                          <ul class="list-unstyled">
-                                             <% for(let alternateSkin of trade.alternateInputSkins){ %>
-                                                <li class="d-flex mb-1">
-                                                   <a class="link-dark" target="_blank" title="See on the market"
-                                                      href="<%= alternateSkin.url  %> ">
-                                                      <%=`${alternateSkin.collectionName} - [${alternateSkin.quality}] -
-                                                         ${alternateSkin.name} ${alternateSkin.skin} -
-                                                         (${alternateSkin.price})`%>
-                                                   </a>
-                                                </li>
-                                                <% } %>
-                                          </ul>
-                                       </div>
-
-                                       <!-- OUTPUTS -->
-                                       <div class="outputs col-12 col-lg-6 ">
-                                          <h6 class="d-flex my-2">OUTPUTS:</h6>
-                                          <ul class="list-unstyled">
-                                             <% for(let t=0;t<trade.targetedSkinsArr.length;t++){ %>
-                                                <li class="d-flex mb-1">
-                                                   <a class="link-dark" target="_blank" title="See on the market"
-                                                      href="<%= encodeURI(`${steamBaseUrl}${trade.targetedSkinsArr[t].name} | ${trade.targetedSkinsArr[t].skin} (${trade.targetedSkinsQuality[t]})`)  %> ">
-
-                                                      [<%=trade.targetedSkinsQuality[t] %>] -
-                                                         [<%=trade.targetedSkinsArr[t].float %>] -
-                                                            <%= trade.targetedSkinsArr[t].name %>
-                                                               <%= trade.targetedSkinsArr[t].skin %> -
-                                                                  <%=trade.targetedSkinsArr[t].prices[trade.targetedSkinsQuality[t]]%>
-                                                                     (
-                                                                     <%=Math.round((trade.targetedSkinsArr[t].prices[trade.targetedSkinsQuality[t]])*0.87*100)
-                                                                        /100%>)
-                                                   </a>
-                                                </li>
-                                                <% } %>
-                                          </ul>
-                                       </div>
-
+                                                   [<%=trade.targetedSkinsQuality[t] %>] -
+                                                      [<%=trade.targetedSkinsArr[t].float %>] -
+                                                         <%= trade.targetedSkinsArr[t].name %>
+                                                            <%= trade.targetedSkinsArr[t].skin %> -
+                                                               <%=trade.targetedSkinsArr[t].prices[trade.targetedSkinsQuality[t]]%>
+                                                                  (
+                                                                  <%=Math.round((trade.targetedSkinsArr[t].prices[trade.targetedSkinsQuality[t]])*0.87*100)
+                                                                     /100%>)
+                                                </a>
+                                             </li>
+                                             <% } %>
+                                       </ul>
                                     </div>
 
                                  </div>
 
-                              </li>
-                              <% number+=1; %>
+                              </div>
+
+                           </li>
+                           <% number+=1; %>
+                              <% } %>
                                  <% } %>
-                                    <% } %>
 
 
 
-                  </ul>
-                  <% } %>
+               </ul>
+               <% } %>
 
    </main>
 

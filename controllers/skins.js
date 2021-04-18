@@ -1,4 +1,4 @@
-const { mayReplaceSpace, getData, getPageData, convertToPrice, convert, convertToPriceFloated, floatedPrices } = require('../utils/functions');
+const { getData, getPageData, convert } = require('../utils/functions');
 const { checkQuality, combainToName, findCheapestSkin } = require('../utils/functions');
 const { qualities, rarities, avg_floats, shortcuts } = require('../utils/variables');
 const ExpressError = require('../utils/ExpressError');
@@ -7,13 +7,12 @@ const fetch = require('node-fetch');
 const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
 const Research = require('../models/researchModel');
+const Name = require('../models/nameModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
 const maxShownSkins = 420;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
-const alternateUrl = 'https://steamcommunity.com/market/search?appid=730&q=';
-const priceCorrection = 0;
 
 module.exports.showIndex = async (req, res) => {
    const collections = await Case.find({})
@@ -25,7 +24,7 @@ module.exports.showIndex = async (req, res) => {
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
 
-   const researches = await Research.find({});
+   const researchesName = await Name.find({});
    // res.cookie('testtoken', 'lol');
    // res.cookie('testtoken', { amount1: 4, amount2: 6 });
    // console.log(JSON.parse(req.cookies.testtoken))
@@ -34,7 +33,7 @@ module.exports.showIndex = async (req, res) => {
 
    req.flash('info', `Dla Twojej wygody wyświetlone zostało niewięcej niż ${maxShownSkins} możliwych kontraktów`);
    // console.log(req.session)
-   res.render('index', { collections, qualities, rarities, researches });
+   res.render('index', { collections, qualities, rarities, researchesName });
 };
 
 module.exports.updatePrices = async (req, res, next) => {
@@ -330,7 +329,11 @@ module.exports.prepareTrades = async (req, res) => {
    res.render('trades/trades', { profit, shortcuts });
 }
 
+module.exports.deleteSavedResearches = async (req, res) => {
+   await Research.deleteMany({});
 
+   res.redirect('/skins');
+}
 
 //MAPPING COLLECTIONS
 let pages = [];
@@ -393,7 +396,7 @@ module.exports.mapFloatsGet = async (req, res) => {
 
 
 module.exports.mixedAlgorithm = async (req, res) => {
-   let { action = 'nothing', researchName = '', newResearchName = 'test', pairs = 2 } = req.query;
+   let { action = 'nothing', researchName = '', newResearchName = 'test', pairs = 2, checkStats = 'no' } = req.query;
    if (action != 'nothing' && action != 'save' && action != 'display') {
       action = 'nothing';
    }
@@ -402,8 +405,14 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
    if (action == 'display') {
       const savedResearch = await Research.findOne({ name: researchName })
-      const { profits, counterOpt, positiveResults, amount, avg_floats, priceCorrection } = savedResearch;
-      res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
+      if (checkStats == 'yes') {
+         const { profits, counterOpt, positiveResults, amount, priceCorrection } = await recheckResearchStats(savedResearch);
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
+      } else {
+         const { profits, counterOpt, positiveResults, amount, priceCorrection } = savedResearch;
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
+      }
+
 
    } else {
 
@@ -414,32 +423,26 @@ module.exports.mixedAlgorithm = async (req, res) => {
          const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedTwoPairs(req);
 
          checkTime(current, hour, minute);
-         action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, avg_floats, priceCorrection) : null;
+         action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
 
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection })
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, priceCorrection })
 
       } else if (pairs == 3) {
          const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedThreePairs(req);
 
          checkTime(current, hour, minute);
-         action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, avg_floats, priceCorrection) : null;
+         action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
 
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection })
+         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, priceCorrection })
       }
    }
-
-
 }
 
-module.exports.deleteSavedResearches = async (req, res) => {
-   await Research.deleteMany({});
 
-   res.redirect('/skins');
-}
 
 const mixedTwoPairs = async (req) => {
    const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage' } = req.query;
-   let { priceCorrection } = req.query;
+   let { priceCorrection = 0 } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'));
    console.log(priceCorrection)
 
@@ -489,6 +492,14 @@ const mixedTwoPairs = async (req) => {
                            if (firstSkinAvgFloat < firstSkin.min_float) firstSkinAvgFloat = firstSkin.min_float;
                            if (secondSkinAvgFloat > secondSkin.max_float) secondSkinAvgFloat = secondSkin.max_float;
                            if (secondSkinAvgFloat < secondSkin.min_float) secondSkinAvgFloat = secondSkin.min_float;
+
+                           // MANUAL FLOATS CORRECTION
+                           if (firstSkin.skin == 'Bone Forged' && firstQuality == 'Factory New') firstSkinAvgFloat = 0.053;
+                           if (secondSkin.skin == 'Bone Forged' && secondQuality == 'Factory New') secondSkinAvgFloat = 0.053;
+                           if (firstSkin.skin == "Ol' Rusty" && firstQuality == "Factory New") firstSkinAvgFloat = 0.053;
+                           if (secondSkin.skin == "Ol' Rusty" && secondQuality == "Factory New") secondSkinAvgFloat = 0.053;
+                           if (firstSkin.skin == "Prototype" && firstQuality == "Factory New") firstSkinAvgFloat = 0.053;
+                           if (secondSkin.skin == "Prototype" && secondQuality == "Factory New") secondSkinAvgFloat = 0.053;
 
                            const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 1000) / 1000;
                            const firstPrice = firstSkin.prices[firstQuality] + priceCorrection;
@@ -560,7 +571,9 @@ const mixedTwoPairs = async (req) => {
                                        max_float: targetedSkin.max_float,
                                        rarity: targetedSkin.rarity,
                                        price: targetedPrice,
-                                       float
+                                       float,
+                                       case: targetedSkin.case,
+                                       quality: targetedQuality
 
                                     }
                                     targetedSkinsQuality.push(targetedQuality);
@@ -598,20 +611,30 @@ const mixedTwoPairs = async (req) => {
 
                            if (profitPerTradeUp > 0) {
                               const trade = {
-                                 skin: firstSkin,
-                                 cooperativeSkin: secondSkin,
+                                 firstSkin,
+                                 secondSkin,
                                  targetedSkin: maxSkin,
+
                                  firstSkinUrl: encodeURI(`${steamBaseUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`),
                                  secondSkinUrl: encodeURI(`${steamBaseUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`),
                                  targetedSkinUrl: encodeURI(`${steamBaseUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`),
-                                 quality: firstQuality,
-                                 cooperativeQuality: secondQuality,
+
+                                 firstQuality,
+                                 secondQuality,
                                  targetedQuality: maxSkin.targetedQuality,
-                                 price: firstPrice,
-                                 cooperativePrice: secondPrice,
+
+                                 firstPrice,
+                                 secondPrice,
                                  inputPrice,
                                  targetedPrice: maxSkin.price,
+
+                                 firstSkinAvgFloat,
+                                 secondSkinAvgFloat,
+                                 targetedSkinFloat: maxSkin.float,
+
                                  rarity: rarities[r],
+                                 targetedRarity: rarities[r + 1],
+
                                  targetedSkinsArr,
                                  targetedSkinsQuality,
                                  alternateInputSkins,
@@ -878,7 +901,132 @@ const mixedThreePairs = async (req) => {
    return { profits: profits.slice(0, 4250), counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
 }
 
+const recheckResearchStats = async (research) => {
+   const collections = await Case.find({})
+      .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
+   const { counterOpt, positiveResults, amount, priceCorrection } = research;
+   let { profits } = research;
+   const { amount1, amount2, amount3 = -1 } = amount;
+
+   for (let profit of profits) {
+      // DEFINING OUTPUT HELPERS
+      let firstPrice = 0, secondPrice = 0;
+      let wantedOutputChance = 0;
+      let total = 0;
+
+      // DESTRUCTING VARIABLES
+      const { targetedSkinsNumber } = profit;
+      const { firstSkin, secondSkin, firstQuality, secondQuality, rarity, targetedRarity } = profit.trade;
+      let { targetedSkinsArr, targetedSkinsQuality } = profit.trade;
+      let checkedFirstSkin = false, checkedSecondSkin = false, checkedTargetedSkin = false;
+
+      // MERGING NEW PRICES
+      for (let collection of collections) {
+         if (collection.name == firstSkin.case || collection.name == secondSkin.case) {
+
+            // UPDATING INPUT SKINS
+            for (let skin of collection.skins[rarity]) {
+               if (firstSkin.name == skin.name && firstSkin.skin == skin.skin && collection.name == firstSkin.case && !checkedFirstSkin) {
+                  firstPrice = skin.prices[firstQuality] + priceCorrection;
+                  checkedFirstSkin = true;
+               }
+               if (secondSkin.name == skin.name && secondSkin.skin == skin.skin && collection.name == secondSkin.case && !checkedSecondSkin) {
+                  secondPrice = skin.prices[secondQuality] + priceCorrection;
+                  checkedSecondSkin = true;
+               }
+            }
+
+            // UPDATING TARGETED SKINS
+            for (let skin of collection.skins[targetedRarity]) {
+               for (let i = 0; i < targetedSkinsArr.length; i++) {
+
+                  if (skin.name == targetedSkinsArr[i].name && skin.skin == targetedSkinsArr[i].skin && targetedSkinsArr[i].checked == undefined) {
+                     targetedSkinsArr[i].price = skin.prices[targetedSkinsQuality[i]];
+                     targetedSkinsArr[i].checked = true;
+                  }
+               }
+
+               // if (targetedSkin.name == skin.name && targetedSkin.skin == skin.skin && !checkedTargetedSkin) {
+               //    targetedPrice = skin.prices[targetedQuality];
+               //    checkedTargetedSkin = true;
+               // }
+
+            }
+
+         }
+      }
+
+      const inputPrice = Math.round((amount1 * firstPrice + amount2 * secondPrice) * 100) / 100;
+      let maxSkin = {};
+      let max = 0;
+
+      for (let output of targetedSkinsArr) {
+         let outputPrice = Math.round(output.price * steamTax * 100) / 100;
+
+         if (max < outputPrice) {
+            max = outputPrice;
+            maxSkin = {
+               _id: output._id,
+               name: output.name,
+               skin: output.skin,
+               case: output.case,
+               rarity: output.rarity,
+               min_float: output.min_float,
+               max_float: output.max_float,
+               float: output.float,
+               price: outputPrice,
+               targetedQuality: output.quality,
+            }
+         }
+
+         if (output.case == firstSkin.case && output.case == secondSkin.case) {
+            total += ((amount1 + amount2) * outputPrice);
+            outputPrice > inputPrice ? wantedOutputChance += (amount1 + amount2) : null;
+
+         } else if (output.case == firstSkin.case) {
+            total += (amount1 * outputPrice);
+            outputPrice > inputPrice ? wantedOutputChance += (amount1) : null;
+
+         } else if (output.case == secondSkin.case) {
+            total += (amount2 * outputPrice);
+            outputPrice > inputPrice ? wantedOutputChance += (amount2) : null;
+         }
+      }
+
+      const avgPrice = total / targetedSkinsNumber;
+      const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 1000) / 1000;
+      const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 1000) / 1000;
+
+
+
+      profit.wantedOutputChance = wantedOutputChance;
+      profit.total = total;
+
+      profit.trade.targetedSkin = maxSkin;
+      profit.trade.targetedSkinUrl = encodeURI(`${steamBaseUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`);
+      profit.trade.targetedSkinFloat = maxSkin.float;
+      profit.trade.targetedQuality = maxSkin.targetedQuality;
+
+      profit.trade.firstPrice = firstPrice;
+      profit.trade.secondPrice = secondPrice;
+      profit.trade.targetedPrice = maxSkin.price;
+      profit.trade.inputPrice = inputPrice;
+
+      profit.trade.targetedSkinsArr = targetedSkinsArr;
+
+      profit.trade.profitPerTradeUp = profitPerTradeUp;
+      profit.trade.returnPercentage = returnPercentage;
+
+   }
+
+   return { profits, counterOpt, positiveResults, amount, priceCorrection }
+}
 
 const checkTime = (current, hour, minute) => {
    const currentFinish = new Date();
@@ -895,11 +1043,14 @@ const checkTime = (current, hour, minute) => {
       console.log(`time : ${finishHour - hour} : ${finishMinute - minute}`);
    }
 }
-const saveResearch = async (Research, profits, counterOpt, positiveResults, amount, newResearchName, avg_floats, priceCorrection) => {
-   const newResearch = new Research({ profits, counterOpt, positiveResults, amount, name: newResearchName, avg_floats, priceCorrection });
+const saveResearch = async (Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) => {
+   const newResearch = new Research({ profits, counterOpt, positiveResults, amount, name: newResearchName, priceCorrection });
    await newResearch.save();
-   console.log(`Research of "${newResearchName}" saved!!!`)
 
+   const newName = new Name({ name: newResearchName })
+   await newName.save();
+
+   console.log(`Research of "${newResearchName}" saved!!!`)
 }
 const placeInCorrectOrder = (profits, pom2, sort) => {
    if (profits.length <= 2) {

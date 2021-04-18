@@ -17,9 +17,6 @@ const researchSchema = new Schema({
    amount: {
       type: Object,
    },
-   avg_floats: {
-      type: Object,
-   },
    priceCorrection: {
       type: Number
    }

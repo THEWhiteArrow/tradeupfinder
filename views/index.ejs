@@ -213,7 +213,7 @@
                <option value="4-6" selected>4-6</option>
                <option value="3-7">3-7</option>
                <option value="2-8">2-8</option>
-               <option value="2-8">1-9</option>
+               <option value="1-9">1-9</option>
                <option value="4-3-3">4-3-3</option>
                <option value="4-4-2">4-4-2</option>
                <option value="4-5-1">4-5-1</option>
@@ -363,13 +363,22 @@
             <div class="display-research col-12 d-flex flex-column">
                <label class="mt-2" for="researchName">Researches' name</label>
                <select name="researchName" id="researchName">
-                  <% for(let research of researches){ %>
+                  <% for(let research of researchesName){ %>
                      <option value="<%= research.name %>">
                         <%= research.name %>
                      </option>
                      <% } %>
                </select>
             </div>
+
+            <div class="display-checkStats col-12 d-flex flex-column">
+               <label class="mt-2" for="checkStats">Check stats with current prices?</label>
+               <select name="checkStats" id="checkStats">
+                  <option value="no" selected>No</option>
+                  <option value="yes">Yes</option>
+               </select>
+            </div>
+
 
             <button class="btn btn-primary mt-3">Wyszukaj trade'upy!</button>
             <% if(server=='local' ){ %>
