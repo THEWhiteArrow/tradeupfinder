@@ -133,57 +133,13 @@ module.exports.updatePrices = async (req, res, next) => {
    res.redirect('/skins');
 };
 
-module.exports.updatePricesInOneReq = async (req, res, next) => {
-   const rawData = await fetch('http://csgobackpack.net/api/GetItemsList/v2/?currency=PLN', { method: "GET" });
-   const data = await rawData.json()
-   console.log(data.success)
-   if (data.success) {
-      const collections = await Case.find({})
-         .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
-         .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
-         .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
-         .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
-         .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
-         .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+module.exports.updateSkinPrice = async (req, res) => {
+   const { id } = req.params;
+   const { prices } = req.body;
 
-      for (let collection of collections) {
-         const keys = Object.keys(collection.skins);
-         keys.shift()
+   const updatedSkin = await Skin.findByIdAndUpdate(id, { prices }, { new: true });
 
-         for (let rarity of keys) {
-            if (rarity.length > 0) {
-               for (let updatedSkin of collection.skins[rarity]) {
-                  const qualities = Object.keys(updatedSkin.prices);
-                  qualities.shift();
-                  const { name, skin, _id } = updatedSkin;
-
-
-                  const updatedPrices = {}
-                  for (let quality of qualities) {
-                     if (updatedSkin.prices[quality] === -1) {
-                        updatedPrices[quality] === -1;
-                     } else {
-                        const indicator = combainToName(name, skin, quality);
-                        console.log(indicator)
-                        updatedPrices[quality] = data.items_list[`${indicator}`].price['7_days'].average || -1;
-                     }
-                  }
-                  console.log(updatedPrices)
-                  const updatedSkinDB = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
-
-               }
-
-            }
-
-         }
-
-      }
-      // console.log(data.items_list['Desert Eagle | Hand Cannon (Factory New)'].price['7_days'].average)
-
-
-   }
-
-   console.log('updating finished!')
+   req.flash('info', `${updatedSkin.name} ${updatedSkin.skin}'s prices successfully updated`);
    res.redirect('/skins');
 }
 
@@ -354,7 +310,6 @@ module.exports.showMappingPage = async (req, res) => {
       res.render('mapping/map');
    }
 }
-
 module.exports.mapCollection = async (req, res) => {
    const { url, collectionName, floats = [] } = req.body;
 
@@ -374,8 +329,6 @@ module.exports.mapCollection = async (req, res) => {
    }
 
 }
-
-
 module.exports.mapFloatsPost = async (req, res) => {
    const { collectionName, skins, hrefs } = req.body;
    collectionNameServer = collectionName;

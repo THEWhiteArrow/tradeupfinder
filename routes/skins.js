@@ -21,8 +21,10 @@ router.route('/mixed-algorithm')
 router.route('/update')
    .get(catchAsync(skin.updatePrices));
 
-router.route('/updateAtOnce')
-   .get(catchAsync(skin.updatePricesInOneReq));
+router.route('/update/:id')
+   .post(catchAsync(skin.updateSkinPrice))
+
+
 
 router.route('/map-collection')
    .get(catchAsync(skin.showMappingPage))
@@ -36,7 +38,7 @@ router.route('/update-thru-servers')
    .post(catchAsync(skin.useServers));
 
 router.route('/delete-researches')
-   .get(catchAsync(skin.deleteSavedResearches));
+   .delete(catchAsync(skin.deleteSavedResearches));
 
 
 

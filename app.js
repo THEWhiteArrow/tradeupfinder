@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const skinRoutes = require('./routes/skins');
 const session = require('express-session');
 const flash = require('connect-flash');
+const methodOverride = require('method-override');
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
 const server = process.env.SERVER || 'local';
 // const mongoStore = require('connect-mongo')(new session);
@@ -31,6 +32,7 @@ db.once("open", () => {
 const app = express();
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 
 app.set('view engine', 'ejs');
