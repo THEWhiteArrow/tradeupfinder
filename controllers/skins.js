@@ -331,6 +331,7 @@ module.exports.prepareTrades = async (req, res) => {
 
 module.exports.deleteSavedResearches = async (req, res) => {
    await Research.deleteMany({});
+   await Name.deleteMany({});
 
    res.redirect('/skins');
 }
