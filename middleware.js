@@ -8,20 +8,20 @@ const isLoggedIn = (req, res, next) => {
 };
 
 const isAdmin = async (req, res, next) => {
-   const permissionRank = { admin: true, moderator: false, guest: false };
-   res.locals.permissionRank = permissionRank;
+   const permissionrole = { admin: true, moderator: false, guest: false };
+   res.locals.permissionrole = permissionrole;
    next();
 };
 
 const isModeratorAlso = async (req, res, next) => {
-   const permissionRank = { admin: true, moderator: true, guest: false };
-   res.locals.permissionRank = permissionRank;
+   const permissionrole = { admin: true, moderator: true, guest: false };
+   res.locals.permissionrole = permissionrole;
    next();
 };
 
 const isPermitted = async (req, res, next) => {
-   const { rank } = req.user;
-   if (!res.locals.permissionRank[rank]) {
+   const { role } = req.user;
+   if (!res.locals.permissionrole[role]) {
       req.flash('error', 'You do not have a permission to do that!')
       return res.redirect(`/skins`);
    }
@@ -44,8 +44,8 @@ const isResearchAllowed = async (req, res, next) => {
          req.flash('error', 'You do not have a permission to do that');
          return res.redirect('/skins')
       } else {
-         const { rank } = req.user;
-         if (rank !== 'admin') {
+         const { role } = req.user;
+         if (role !== 'admin') {
             req.flash('error', 'You do not have a permission to do that!')
             return res.redirect(`/skins`);
          } else {

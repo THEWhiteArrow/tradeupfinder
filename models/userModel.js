@@ -8,7 +8,7 @@ const UserSchema = new Schema({
       required: true,
       unique: true
    },
-   rank: {
+   role: {
       type: String,
       enum: ['guest', 'moderator', 'admin'],
       required: true

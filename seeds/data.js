@@ -2853,7 +2853,7 @@ module.exports = {
    BankCollection: [
       {
          name: 'P250',
-         skin: 'Franklin',
+         skin: 'Frolelin',
          rarity: 'pink',
          min_float: 0,
          max_float: 0.4
@@ -3757,7 +3757,7 @@ module.exports = {
       },
       {
          name: 'Glock-18',
-         skin: 'Franklin',
+         skin: 'Frolelin',
          rarity: 'purple',
          min_float: 0,
          max_float: 0.4,
