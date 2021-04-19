@@ -19,7 +19,8 @@ router.route('/mixed-algorithm')
 
 
 router.route('/update')
-   .get(isLoggedIn, isAdmin, isPermitted, catchAsync(skin.updatePrices));
+   .get(catchAsync(skin.updatePrices));
+// .get(isLoggedIn, isAdmin, isPermitted, catchAsync(skin.updatePrices));
 
 router.route('/update/:id')
    .post(isLoggedIn, isModeratorAlso, isPermitted, catchAsync(skin.updateSkinPrice))
