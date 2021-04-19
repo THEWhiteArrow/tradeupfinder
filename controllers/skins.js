@@ -1,6 +1,6 @@
-const { getData, getPageData, convert } = require('../utils/functions');
-const { checkQuality, combainToName, findCheapestSkin } = require('../utils/functions');
-const { qualities, rarities, avg_floats, shortcuts } = require('../utils/variables');
+const { getData, convert } = require('../utils/functions');
+const { checkQuality, findCheapestSkin } = require('../utils/functions');
+const { qualities, rarities, avg_floats } = require('../utils/variables');
 const ExpressError = require('../utils/ExpressError');
 const fetch = require('node-fetch');
 
@@ -112,7 +112,7 @@ module.exports.updatePrices = async (req, res, next) => {
                   console.log(data, encodedUrl)
 
                   console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
-                  return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429, `Updated ${count} / ${length}`));
+                  return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429));
                }
 
             } else if (item.prices[q] === -1) {
@@ -156,36 +156,41 @@ module.exports.useServers = async (req, res) => {
    console.log(server8)
    console.log(server9)
    console.log(server10)
-   // console.log(req.body)
-   const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}`;
-   const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}`;
-   const server3Url = `https://steam-market3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}&variant=${variant}`;
-   const server4Url = `https://steam-market4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}&variant=${variant}`;
-   const server5Url = `https://steam-market5.herokuapp.com/skins/update?start=${server5.start}&end=${server5.end}&variant=${variant}`;
-   const server6Url = `https://steam-market6.herokuapp.com/skins/update?start=${server6.start}&end=${server6.end}&variant=${variant}`;
-   const server7Url = `https://steam-market7.herokuapp.com/skins/update?start=${server7.start}&end=${server7.end}&variant=${variant}`;
-   const server8Url = `https://steam-market8.herokuapp.com/skins/update?start=${server8.start}&end=${server8.end}&variant=${variant}`;
-   const server9Url = `https://steam-market9.herokuapp.com/skins/update?start=${server9.start}&end=${server9.end}&variant=${variant}`;
-   const server10Url = `https://steam-market10.herokuapp.com/skins/update?start=${server10.start}&end=${server10.end}&variant=${variant}`;
 
-   // const response2 = await fetch(server2Url, { method: 'GET' });
-   // const response3 = await fetch(server3Url, { method: 'GET' });
-   const response2 = fetch(server2Url, { method: 'GET' });
-   const response3 = fetch(server3Url, { method: 'GET' });
-   const response4 = fetch(server4Url, { method: 'GET' });
-   const response5 = fetch(server5Url, { method: 'GET' });
-   const response6 = fetch(server6Url, { method: 'GET' });
-   const response7 = fetch(server7Url, { method: 'GET' });
-   const response8 = fetch(server8Url, { method: 'GET' });
-   const response9 = fetch(server9Url, { method: 'GET' });
-   const response10 = fetch(server10Url, { method: 'GET' });
+   // const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}`;
+   // const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}`;
+   // const server3Url = `https://steam-market3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}&variant=${variant}`;
+   // const server4Url = `https://steam-market4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}&variant=${variant}`;
+   // const server5Url = `https://steam-market5.herokuapp.com/skins/update?start=${server5.start}&end=${server5.end}&variant=${variant}`;
+   // const server6Url = `https://steam-market6.herokuapp.com/skins/update?start=${server6.start}&end=${server6.end}&variant=${variant}`;
+   // const server7Url = `https://steam-market7.herokuapp.com/skins/update?start=${server7.start}&end=${server7.end}&variant=${variant}`;
+   // const server8Url = `https://steam-market8.herokuapp.com/skins/update?start=${server8.start}&end=${server8.end}&variant=${variant}`;
+   // const server9Url = `https://steam-market9.herokuapp.com/skins/update?start=${server9.start}&end=${server9.end}&variant=${variant}`;
+   // const server10Url = `https://steam-market10.herokuapp.com/skins/update?start=${server10.start}&end=${server10.end}&variant=${variant}`;
 
-   res.redirect(server1Url)
+   // const response2 = fetch(server2Url, { method: 'GET' });
+   // const response3 = fetch(server3Url, { method: 'GET' });
+   // const response4 = fetch(server4Url, { method: 'GET' });
+   // const response5 = fetch(server5Url, { method: 'GET' });
+   // const response6 = fetch(server6Url, { method: 'GET' });
+   // const response7 = fetch(server7Url, { method: 'GET' });
+   // const response8 = fetch(server8Url, { method: 'GET' });
+   // const response9 = fetch(server9Url, { method: 'GET' });
+   // const response10 = fetch(server10Url, { method: 'GET' });
+
+   res.redirect('/skins/update?start=1&end=2&variant=backpack')
 };
 
 
 
-// NEWEST
+module.exports.deleteSavedResearches = async (req, res) => {
+   await Research.deleteMany({});
+   await Name.deleteMany({});
+
+   res.redirect('/skins');
+}
+
+// NOT CURRENTLY USED
 module.exports.prepareTrades = async (req, res) => {
    let counter = 0;
    const collections = await Case.find({})
@@ -284,70 +289,6 @@ module.exports.prepareTrades = async (req, res) => {
    console.log(counter)
    res.render('trades/trades', { profit, shortcuts });
 }
-
-module.exports.deleteSavedResearches = async (req, res) => {
-   await Research.deleteMany({});
-   await Name.deleteMany({});
-
-   res.redirect('/skins');
-}
-
-//MAPPING COLLECTIONS
-let pages = [];
-let collectionNameServer = '';
-let skinsServer = [];
-let showCollection = false;
-
-
-module.exports.showMappingPage = async (req, res) => {
-   if (showCollection) {
-      showCollection = false;
-      res.render('mapping/map', { collectionNameServer, skinsServer });
-      collectionNameServer = '';
-      skinsServer = [];
-      pages = [];
-   } else {
-      res.render('mapping/map');
-   }
-}
-module.exports.mapCollection = async (req, res) => {
-   const { url, collectionName, floats = [] } = req.body;
-
-   if (floats.length === 0) {
-      const data = await getPageData(url, 100);
-      res.render('mapping/mappingCollection', { data, collectionName })
-   } else {
-      for (let i = 0; i < skinsServer.length; i++) {
-         skinsServer[i].min_float = floats[i].min_float;
-         skinsServer[i].max_float = floats[i].max_float;
-      }
-      showCollection = true;
-      console.log('kolekcja przygotowana!')
-      res.send('kolekcja został przygotowana')
-
-
-   }
-
-}
-module.exports.mapFloatsPost = async (req, res) => {
-   const { collectionName, skins, hrefs } = req.body;
-   collectionNameServer = collectionName;
-   skinsServer = skins;
-
-
-   for (let href of hrefs) {
-      const data = await getPageData(href, 100);
-      pages.push(data)
-   }
-   console.log('finished downloading pages data')
-
-   const feedback = { success: true };
-   res.json(feedback);
-}
-module.exports.mapFloatsGet = async (req, res) => {
-   res.render('mapping/mappingFloats', { pages })
-}
-
 
 module.exports.mixedAlgorithm = async (req, res) => {
    let { action = 'nothing', researchName = '', newResearchName = 'test', pairs = 2, checkStats = 'no' } = req.query;

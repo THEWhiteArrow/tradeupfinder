@@ -122,7 +122,7 @@ const mapPage = async () => {
    //    },
    //    body: JSON.stringify({ collectionName, skins: collection, hrefs }),
    // });
-   res = await axios.post('http://localhost:3000/skins/map-collection/floats', {
+   res = await axios.post('/map/map-collection/floats', {
       collectionName,
       skins: collection,
       hrefs
@@ -133,7 +133,7 @@ const mapPage = async () => {
    console.log(data)
    if (data.success) {
       let index = document.body.innerHTML.indexOf('</a>');
-      let content = document.body.innerHTML.slice(0, index + 4) + '<a class="btn btn-success mt-2 mx-3" href="/skins/map-collection/floats">Zmapuj floaty</a>' + document.body.innerHTML.slice(index + 4);
+      let content = document.body.innerHTML.slice(0, index + 4) + '<a class="btn btn-success mt-2 mx-3" href="/map/map-collection/floats">Zmapuj floaty</a>' + document.body.innerHTML.slice(index + 4);
       document.body.innerHTML = content;
    }
 

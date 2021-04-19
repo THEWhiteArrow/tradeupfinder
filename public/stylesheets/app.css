@@ -1,0 +1,156 @@
+* {
+   box-sizing: border-box !important;
+}
+
+html {
+   min-height: 100vh;
+   height: 100%;
+   width: 100%;
+}
+
+body {
+
+   background-image: url('/assets/Circuit Board.svg');
+   background-size: cover;
+}
+
+h1 {
+   display: flex;
+   width: fit-content;
+}
+
+h5 {
+   font-weight: 400;
+}
+
+h6 {
+   font-weight: 700;
+}
+
+
+#displayFloat {
+   display: flex;
+   flex: 1;
+   justify-content: center;
+   align-items: center;
+
+}
+
+.hide {
+   display: none !important;
+}
+
+.bg-white {
+   background-color: white !important;
+}
+
+.csgo-logo {
+   background-image: url('/assets/csgo_logo.png');
+   background-size: contain;
+   background-repeat: no-repeat;
+   /* height: 144px;
+   width: 600px; */
+   flex: 1;
+}
+
+hr[role="tournament6"] {
+   border: 0px solid;
+   height: 1px;
+   background-color: rgb(122, 179, 212);
+   /* background-image: linear-gradient(to right, rgb(157, 60, 49), var(--sweet-brown), rgb(157, 60, 49)); */
+   margin: 32px 0px;
+   display: block;
+}
+
+hr[role="tournament6"]::before {
+   position: absolute;
+   background-color: #f7ece2e0;
+   border: 1px solid;
+   border-color: var(--sweet-brown);
+   padding: 10px;
+   transform: rotate(45deg);
+   left: 50%;
+   margin: -10px 0px 0px -22px;
+   content: "";
+}
+
+li {
+   list-style-type: none;
+}
+
+a.skin {
+   font-weight: 400;
+   font-size: 20px;
+   cursor: pointer;
+   text-decoration: none;
+
+   transition: transform 0.1s ease-in-out;
+}
+
+a.skin:hover {
+   transform: scale(1.03);
+}
+
+ul {
+   padding: 0;
+}
+
+li.trade {
+   padding: 10px;
+   list-style: none;
+}
+
+
+.border {
+   border: 1px solid black;
+}
+
+.stats {
+   font-weight: 300;
+
+}
+
+.stats .data {
+   font-size: 30px;
+
+}
+
+.inputPrice {
+   font-weight: 500;
+}
+
+.bg-grey {
+   background-color: rgb(159, 159, 159);
+}
+
+.bg-lightblue {
+   background-color: rgba(154, 193, 251, 0.8);
+}
+
+.bg-blue {
+   background-color: rgb(127, 186, 253);
+}
+
+.bg-purple {
+   background-color: rgb(180, 123, 255);
+}
+
+.bg-pink {
+   background-color: rgba(255, 207, 237, 0.667);
+}
+
+.arrow {
+   width: 40px !important;
+   height: 40px !important;
+   background-image: url('/assets/arrow.svg');
+   background-repeat: no-repeat;
+   background-size: cover;
+}
+
+.height-100 {
+   height: 100%;
+}
+
+.link-dark {
+   text-decoration: none;
+}

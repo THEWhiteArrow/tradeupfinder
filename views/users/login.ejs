@@ -1,0 +1,40 @@
+<% layout('layouts/boilerplate')%>
+
+   <div class="container d-flex justify-content-center align-items-center mt-5">
+      <div class="row col-10 col-md-6 col-xl-4">
+         <h1 class="display-3 py-4">Sign In</h1>
+         <div class="card shadow">
+            <div class="card-body ">
+
+               <h5 class="title">Login</h5>
+               <form action="/user/login" class="validated-form" novalidate method="POST">
+                  <div class="mb-3">
+                     <label class="form-label" for="username">Username</label>
+                     <input class="form-control" type="text" id="username" name="username" autofocus required>
+                     <div class="valid-feedback">
+                        Looks good!
+                     </div>
+                  </div>
+
+                  <div class="mb-3">
+                     <label class="form-label" for="password">Password</label>
+                     <input class="form-control" type="password" id="password" name="password" required>
+                     <div class="valid-feedback">
+                        Looks good!
+                     </div>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                     <button class="btn btn-success order-2">Login</button>
+                     <a href="/skins" class="btn btn-danger order-1">Go back</a>
+                  </div>
+               </form>
+
+            </div>
+         </div>
+      </div>
+   </div>
+
+
+
+   <script src="/javascripts/bs-custom-file-input.min.js"></script>
+   <script src="/javascripts/validateForms.js"></script>

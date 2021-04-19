@@ -1,74 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<% layout('layouts/boilerplate')%>
 
-<head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Kontrakciarze CS:GO</title>
-   <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
-   <style type="text/css">
-      html {
-         min-height: 100vh;
-         height: 100%;
-         width: 100%;
-      }
-
-      body {
-
-         background-image: url('/assets/Circuit Board.svg');
-         background-size: cover;
-      }
-
-      #displayFloat {
-         display: flex;
-         flex: 1;
-         justify-content: center;
-         align-items: center;
-
-      }
-
-      .hide {
-         display: none !important;
-      }
-
-      .bg-white {
-         background-color: white !important;
-      }
-
-      .csgo-logo {
-         background-image: url('/assets/csgo_logo.png');
-         background-size: contain;
-         background-repeat: no-repeat;
-         /* height: 144px;
-         width: 600px; */
-         flex: 1;
-      }
-
-      hr[role="tournament6"] {
-         border: 0px solid;
-         height: 1px;
-         background-color: rgb(122, 179, 212);
-         /* background-image: linear-gradient(to right, rgb(157, 60, 49), var(--sweet-brown), rgb(157, 60, 49)); */
-         margin: 32px 0px;
-         display: block;
-      }
-
-      hr[role="tournament6"]::before {
-         position: absolute;
-         background-color: #f7ece2e0;
-         border: 1px solid;
-         border-color: var(--sweet-brown);
-         padding: 10px;
-         transform: rotate(45deg);
-         left: 50%;
-         margin: -10px 0px 0px -22px;
-         content: "";
-      }
-   </style>
-</head>
-
-<body>
    <header class="container pt-3 pb-1">
       <div class="d-flex justify-content-between">
          <h1 class="d-flex my-4 display-1">Kontrakciarze</h1>
@@ -76,137 +7,164 @@
       </div>
       <div class="d-flex justify-content-evenly flex-wrap">
 
-         <a class="btn btn-primary mt-2 col-12 col-lg-4" href="/skins/update">Odśwież ceny</a>
-         <a class="btn btn-success mt-2 col-12 col-lg-4" href="/skins/trades">Szukaj trade'u !</a>
-         <a href="/skins/map-collection" class="btn btn-info text-white mt-2 col-12 col-lg-4">Zmapuj kolekcje ze
-            skinStash!</a>
+         <% if(!currentUser){ %>
+
+            <a href="/user/login" class="btn btn-danger text-white mt-2 col-12 col-lg-3">Login</a>
+            <a href="/user/register" class="btn btn-success text-white mt-2 col-12 col-lg-3">Register</a>
+            <% }else{ %>
+               <a href="/user/logout" class="btn btn-success text-white mt-2 col-12 col-lg-3">Logout</a>
+               <% } %>
+                  <a href="/map/map-collection" class="btn btn-info text-white mt-2 col-12 col-lg-3">Zmapuj
+                     kolekcje</a>
       </div>
 
-      <% if(server!='local' ){ %>
-         <div class="lead alert alert-warning alert-dismissible fade show mt-5" role="alert">
-            <h4 class="alert-heading">Uprasza się o nie exploitowanie strony i zostawienie w spokoju tych śmiesznych
-               guziczków na górze i dole</h4>
+
+
+      <% if(success && success.length){ %>
+         <div class="lead alert alert-success alert-dismissible fade show my-3" role="alert">
+            <h4 class="alert-heading">Congratulations!</h4>
             <hr>
-            <p>Obecnie dostępne jest przegladanie zapisanych przeszukań:</p>
-            <p>1. Zjedź do Algorytmu Mieszanego</p>
-            <p>2. Wybierz "Display"</p>
-            <p>3. Wpisz nazwe zapisanego przeszukania</p>
-            <p>4. Kliknij "Wyszukaj trade'upy!"</p>
+            <p>
+               <%= success %>
+            </p>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
          </div>
          <% } %>
 
-            <% if(info && info.length){ %>
-               <div class="lead alert alert-success alert-dismissible fade show my-3" role="alert">
-                  <h4 class="alert-heading">Udało się!</h4>
+            <% if(error && error.length){ %>
+               <div class="lead alert alert-danger alert-dismissible fade show my-3" role="alert">
+                  <h4 class="alert-heading">Error!</h4>
                   <hr>
                   <p>
-                     <%= info %>
+                     <%= error %>
                   </p>
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                </div>
                <% } %>
 
-                  <div class="row my-4">
-                     <form class="d-flex flex-column mt-2 col-12" action="/skins/update-thru-servers" method="POST">
-                        <div class="col-12">
-                           <label for="server1">Steam or Backpack API</label>
-                           <input id="server1" class="form-control my-1" type="text" name="variant"
-                              placeholder="variant - defauly steam - can be left empty"
-                              aria-label=".form-control example">
-                        </div>
-                        <div class="d-flex flex-row flex-wrap justify-content-evenly col-12">
+                  <% if(server!='local' && currentUser && currentUser.rank==='moderator' ){ %>
+                     <div class="lead alert alert-warning alert-dismissible fade show mt-5" role="alert">
+                        <h4 class="alert-heading">Uprasza się o nie exploitowanie strony i zostawienie w spokoju tych
+                           śmiesznych
+                           guziczków na górze i dole</h4>
+                        <hr>
+                        <p>Obecnie dostępne jest przegladanie zapisanych przeszukań:</p>
+                        <p>1. Zjedź do Algorytmu Mieszanego</p>
+                        <p>2. Wybierz "Display"</p>
+                        <p>3. Wpisz nazwe zapisanego przeszukania</p>
+                        <p>4. Kliknij "Wyszukaj trade'upy!"</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                     </div>
+                     <% } %>
+
+                        <% if(currentUser && (currentUser.rank==='moderator' ||currentUser.rank==='admin' )){ %>
+                           <div class="row my-4">
+                              <form class="d-flex flex-column mt-2 col-12" action="/skins/update-thru-servers"
+                                 method="POST">
+                                 <div class="col-12">
+                                    <label for="server1">Steam or Backpack API</label>
+                                    <input id="server1" class="form-control my-1" type="text" name="variant"
+                                       placeholder="variant - defauly steam - can be left empty"
+                                       aria-label=".form-control example">
+                                 </div>
+                                 <div class="d-flex flex-row flex-wrap justify-content-evenly col-12">
 
 
-                           <span class="">
-                              <label for="server1">Serwer 1</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server1[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server1[end]" placeholder="end point"
-                                 aria-label=".form-control example" step="1">
-                           </span>
+                                    <span class="">
+                                       <label for="server1">Serwer 1</label>
+                                       <input id="server1" class="form-control my-1" type="number" name="server1[start]"
+                                          placeholder="starting point" aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server1[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
 
-                           <span class="">
-                              <label for="server2">Serwer 2</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server2[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server2[end]" placeholder="end point"
-                                 aria-label=".form-control example" step="1">
-                           </span>
+                                    <span class="">
+                                       <label for="server2">Serwer 2</label>
+                                       <input id="server1" class="form-control my-1" type="number" name="server2[start]"
+                                          placeholder="starting point" aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server2[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
 
-                           <span class="">
-                              <label for="server3">Serwer 3</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server3[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server3[end]" placeholder="end point"
-                                 aria-label=".form-control example" step="1">
-                           </span>
+                                    <span class="">
+                                       <label for="server3">Serwer 3</label>
+                                       <input id="server1" class="form-control my-1" type="number" name="server3[start]"
+                                          placeholder="starting point" aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server3[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
 
-                           <span class="">
-                              <label for="server4">Serwer 4</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server4[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server4[end]" placeholder="end point"
-                                 aria-label=".form-control example" step="1">
-                           </span>
+                                    <span class="">
+                                       <label for="server4">Serwer 4</label>
+                                       <input id="server1" class="form-control my-1" type="number" name="server4[start]"
+                                          placeholder="starting point" aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server4[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
 
-                           <span class="">
-                              <label for="server5">Serwer 5</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server5[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server5[end]" placeholder="end point"
-                                 aria-label=".form-control example" step="1">
-                           </span>
+                                    <span class="">
+                                       <label for="server5">Serwer 5</label>
+                                       <input id="server1" class="form-control my-1" type="number" name="server5[start]"
+                                          placeholder="starting point" aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server5[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
 
-                           <span class="">
-                              <label for="server6">Serwer 6</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server6[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server6[end]" placeholder="end point"
-                                 aria-label=".form-control example" step="1">
-                           </span>
+                                    <span class="">
+                                       <label for="server6">Serwer 6</label>
+                                       <input id="server1" class="form-control my-1" type="number" name="server6[start]"
+                                          placeholder="starting point" aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server6[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
 
-                           <span class="">
-                              <label for="server7">Serwer 7</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server7[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server7[end]" placeholder="end point"
-                                 aria-label=".form-control example" step="1">
-                           </span>
+                                    <span class="">
+                                       <label for="server7">Serwer 7</label>
+                                       <input id="server1" class="form-control my-1" type="number" name="server7[start]"
+                                          placeholder="starting point" aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server7[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
 
-                           <span class="">
-                              <label for="server8">Serwer 8</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server8[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server8[end]" placeholder="end point"
-                                 aria-label=".form-control example" step="1">
-                           </span>
+                                    <span class="">
+                                       <label for="server8">Serwer 8</label>
+                                       <input id="server1" class="form-control my-1" type="number" name="server8[start]"
+                                          placeholder="starting point" aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server8[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
 
-                           <span class="">
-                              <label for="server9">Serwer 9</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server9[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server9[end]" placeholder="end point"
-                                 aria-label=".form-control example" step="1">
-                           </span>
+                                    <span class="">
+                                       <label for="server9">Serwer 9</label>
+                                       <input id="server1" class="form-control my-1" type="number" name="server9[start]"
+                                          placeholder="starting point" aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server9[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
 
-                           <span class="">
-                              <label for="server10">Serwer 10</label>
-                              <input id="server1" class="form-control my-1" type="number" name="server10[start]"
-                                 placeholder="starting point" aria-label=".form-control example" step="1">
-                              <input class="form-control my-1" type="number" name="server10[end]"
-                                 placeholder="end point" aria-label=".form-control example" step="1">
-                           </span>
-                        </div>
+                                    <span class="">
+                                       <label for="server10">Serwer 10</label>
+                                       <input id="server1" class="form-control my-1" type="number"
+                                          name="server10[start]" placeholder="starting point"
+                                          aria-label=".form-control example" step="1">
+                                       <input class="form-control my-1" type="number" name="server10[end]"
+                                          placeholder="end point" aria-label=".form-control example" step="1">
+                                    </span>
+                                 </div>
 
-                        <button class="btn btn-danger btn-sm col-12 mt-3">Odśwież ceny używając serwerów</button>
+                                 <button class="btn btn-danger btn-sm col-12 mt-3">Odśwież ceny używając
+                                    serwerów</button>
 
-                     </form>
-                  </div>
+                              </form>
+                           </div>
+
+                           <% } %>
+
+
    </header>
 
-
    <main class="container pb-5">
+
       <hr role=tournament6>
 
       <div class="row pt-3 pb-5">
@@ -394,79 +352,91 @@
 
             <button class="btn btn-primary mt-3">Wyszukaj trade'upy!</button>
          </form>
-         <% if(server=='local' ){ %>
+         <% if(currentUser && currentUser.rank==='admin' ){ %>
             <form class="d-flex flex-row justify-content-end" action="/skins/delete-researches?_method=DELETE"
                method="POST">
-               <button class="btn btn-danger ">Delete Saved Researches</button>
+               <button class="btn btn-danger">Delete Saved Researches</button>
             </form>
             <% } %>
       </div>
 
       <hr role=tournament6 class="my-5 ">
 
-      <% if(server=="local" ){ %>
-         <div class="row d-flex justify-content-between">
-            <%let i=0; %>
-               <% for(let collection of collections){ %>
-                  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="row d-flex justify-content-between">
+         <%let i=0; %>
+            <% for(let collection of collections){ %>
+               <div class="col-12 col-sm-6 col-md-4 col-lg-3">
 
 
-                     <h2 class="mt-4 p-1 overflow-auto">
-                        <%=collection.name%>
-                     </h2>
+                  <h2 class="mt-4 p-1 overflow-auto">
+                     <%=collection.name%>
+                  </h2>
 
 
-                     <% for(let rarity of rarities){ %>
-                        <div class="d-flex flex-column">
-                           <button class="btn btn-info text-white" type="button" data-bs-toggle="collapse"
-                              data-bs-target="#collapseExample<%=i%>" aria-expanded="false"
-                              aria-controls="collapseExample<%=i%>">
+                  <% for(let rarity of rarities){ %>
+                     <div class="d-flex flex-column">
+                        <button class="btn btn-info text-white" type="button" data-bs-toggle="collapse"
+                           data-bs-target="#collapseExample<%=i%>" aria-expanded="false"
+                           aria-controls="collapseExample<%=i%>">
 
-                              <%= rarity %>
-                           </button>
-                           <div class="collapse " id="collapseExample<%=i%>">
-                              <% i+=1; %>
-                                 <% for(let skin of collection.skins[rarity]) {%>
-                                    <% if(skin){ %>
-                                       <div class="card card-body px-2">
+                           <%= rarity %>
+                        </button>
+                        <div class="collapse " id="collapseExample<%=i%>">
+                           <% i+=1; %>
+                              <% for(let skin of collection.skins[rarity]) {%>
+                                 <% if(skin){ %>
+                                    <div class="card card-body px-2">
 
-                                          <!-- console.log(skin) -->
-                                          <h6>
-                                             <%=skin.name %> - <%=skin.skin %>
-                                          </h6>
-                                          <form action="/skins/update/<%= skin._id %>" method="POST">
-                                             <ul>
+                                       <!-- console.log(skin) -->
+                                       <h6>
+                                          <%=skin.name %> - <%=skin.skin %>
+                                       </h6>
+                                       <% if(currentUser&&(currentUser.rank=='moderator' ||currentUser.rank=='admin'
+                                          )){%>
+                                          <form action="/skins/update/<%= skin._id %>" method="POST"
+                                             class="d-flex flex-column">
+                                             <ul class="mb-0">
                                                 <% for(let key of qualities) {%>
                                                    <li class="form-group">
                                                       <label for="<%= `${skin.name}${skin.skin}${key}` %>">
-                                                         <%= key %>
+                                                         <p class="mb-0">
+                                                            <%= key %>
+                                                         </p>
                                                       </label>
                                                       <input id="<%= `${skin.name}${skin.skin}${key}` %>"
-                                                         class="form-control" type="number" name="prices[<%= key %>]"
-                                                         step="0.01" value="<%= skin.prices[key] %>">
+                                                         class="form-control mt-0 mb-3" type="number"
+                                                         name="prices[<%= key %>]" step="0.01"
+                                                         value="<%= skin.prices[key] %>">
 
                                                    </li>
                                                    <% }%>
                                              </ul>
-                                             <button class="btn btn-primary">ZATWIERDŹ</button>
+                                             <button class="btn btn-primary align-self-end">CONFIRM</button>
                                           </form>
-                                       </div>
+                                          <% }else{ %>
+                                             <ul class="mb-1">
+                                                <% for(let key of qualities) {%>
+                                                   <li>
+                                                      <p class="mb-0 mt-1">
+                                                         <%= key %> - <%= skin.prices[key] %>
+                                                      </p>
+
+                                                   </li>
+                                                   <% }%>
+                                             </ul>
+                                             <% }%>
+
+                                    </div>
+                                    <% } %>
                                        <% } %>
-                                          <% } %>
-                           </div>
                         </div>
-                        <% } %>
-                  </div>
-                  <% } %>
-         </div>
-         <% } %>
+                     </div>
+                     <% } %>
+               </div>
+               <% } %>
+      </div>
+
    </main>
 
 
-   <script src="/javascripts/popper.min.js"></script>
-   <script src="/javascripts/bootstrap.min.js"></script>
-
    <script src="/javascripts/index.js"></script>
-</body>
-
-</html>

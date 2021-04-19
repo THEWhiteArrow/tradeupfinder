@@ -21,11 +21,9 @@ const manageFloats = async () => {
       floats.push(pom);
    }
    console.log('floaty zmapowane')
-   axios.post('http://localhost:3000/skins/map-collection', {
-      floats
-   })
+   axios.post('/map/map-collection', { floats })
 
-   document.body.innerHTML = `<div class="container"><h1 class="display-5 mt-5">Brawo! Twoja kolekcja jest już gotowa i czeka na Ciebie!</h1><a class="btn btn-success mt-3" href="/skins/map-collection">Kliknij by odebrać</a></div>`
+   document.body.innerHTML = `<div class="container"><h1 class="display-5 mt-5">Brawo! Twoja kolekcja jest już gotowa i czeka na Ciebie!</h1><a class="btn btn-success mt-3" href="/map/map-collection">Kliknij by odebrać</a></div>`
 }
 
 function getCookie(c_name) {
