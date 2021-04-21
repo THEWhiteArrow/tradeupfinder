@@ -335,10 +335,7 @@
                      <option value="display" <% if(server!='local' ){ %> selected <% } %> >Display</option>
                   </select>
 
-                  <div class="price-correction col-12 d-flex flex-column mt-1">
-                     <label for="priceCorrection">Price Correction</label>
-                     <input type="number" name="priceCorrection" placeholder="priceCorrection e.q. 0.05" step="0.01">
-                  </div>
+
 
                   <div class="new-research col-12 d-flex flex-column mt-1">
                      <label for="newResearchName">New Research's Name</label>
@@ -354,6 +351,11 @@
                            </option>
                            <% } %>
                      </select>
+                  </div>
+
+                  <div class="price-correction col-12 d-flex flex-column mt-1">
+                     <label for="priceCorrection">Price Correction</label>
+                     <input type="number" name="priceCorrection" placeholder="priceCorrection e.q. 0.05" step="0.01">
                   </div>
 
                   <div class="display-checkStats col-12 d-flex flex-column">

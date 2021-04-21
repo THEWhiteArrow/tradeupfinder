@@ -380,7 +380,7 @@ const sortingTrades = (trades) => {
 }
 
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', researchName = 'unknown', action = 'nothing' } = req.query;
+   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', newResearchName = 'unknown', action = 'nothing' } = req.query;
    let { priceCorrection = 0 } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'));
    console.log(priceCorrection)
@@ -592,7 +592,7 @@ const mixedTwoPairs = async (req) => {
                               const newTrade = new Trade({
                                  amount: { amount1, amount2 },
                                  priceCorrection,
-                                 name: researchName,
+                                 name: newResearchName,
                                  instance: pom2
                               })
                               if (action === 'save') {
