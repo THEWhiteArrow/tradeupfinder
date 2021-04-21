@@ -10,7 +10,7 @@ const skin = require('../controllers/skins');
 router.route('/')
    .get(catchAsync(skin.showIndex));
 
-router.route('/show')
+router.route('/show-database')
    .get(catchAsync(skin.showSkinsDb));
 
 // router.route('/trades')

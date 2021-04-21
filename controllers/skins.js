@@ -146,7 +146,7 @@ module.exports.updateSkinPrice = async (req, res) => {
    const updatedSkin = await Skin.findByIdAndUpdate(id, { prices }, { new: true });
 
    req.flash('info', `${updatedSkin.name} ${updatedSkin.skin}'s prices successfully updated`);
-   res.redirect('/skins');
+   res.redirect('/skins/show-database');
 }
 
 module.exports.useServers = async (req, res) => {
@@ -317,8 +317,9 @@ module.exports.mixedAlgorithm = async (req, res) => {
       //    res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
       // }
 
-      const profits = await Trade.find({});
-      res.render('trades/mixed', { profits, maxShownSkins, steamBaseUrl })
+      const trades = await Trade.find({});
+      const sortedTrades = sortingTrades(trades);
+      res.render('trades/mixed', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
    } else {
 
@@ -327,15 +328,19 @@ module.exports.mixedAlgorithm = async (req, res) => {
       const minute = current.getMinutes();
       if (pairs == 2) {
          // const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedTwoPairs(req);
-         await mixedTwoPairs(req);
 
-         const profits = await Trade.find({});
+
+         const trades = await mixedTwoPairs(req);
+         // const trades = await Trade.find({});
+
+         const sortedTrades = sortingTrades(trades);
+
 
 
          checkTime(current, hour, minute);
          // action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
 
-         res.render('trades/mixed', { profits, maxShownSkins, steamBaseUrl })
+         res.render('trades/mixed', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
       } else if (pairs == 3) {
          // const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedThreePairs(req);
@@ -354,13 +359,28 @@ module.exports.displayFavouriteTrades = async (req, res) => {
    const foundUser = await User.findById(user._id).populate('favourites')
    const { favourites } = foundUser;
 
-   res.render('trades/favourites', { favourites, maxShownSkins, steamBaseUrl })
+   const sortedFavourites = sortingTrades(favourites);
+
+   res.render('trades/favourites', { favourites: sortedFavourites, maxShownSkins, steamBaseUrl })
 }
 
+const sortingTrades = (trades) => {
 
+   for (let i = 0; i < trades.length; i++) {
+      for (let j = 0; j < trades.length; j++) {
+         if (trades[i].instance.trade.returnPercentage > trades[j].instance.trade.returnPercentage) {
+            let temp = trades[i];
+            trades[i] = trades[j];
+            trades[j] = temp;
+         }
+      }
+   }
+
+   return trades;
+}
 
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', researchName = 'unknown' } = req.query;
+   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', researchName = 'unknown', action = 'nothing' } = req.query;
    let { priceCorrection = 0 } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'));
    console.log(priceCorrection)
@@ -568,14 +588,17 @@ const mixedTwoPairs = async (req) => {
                                  targetedSkinsNumber,
                                  wantedOutputChance
                               }
+
                               const newTrade = new Trade({
                                  amount: { amount1, amount2 },
                                  priceCorrection,
                                  name: researchName,
                                  instance: pom2
                               })
-
-                              await newTrade.save();
+                              if (action === 'save') {
+                                 await newTrade.save();
+                              }
+                              profits.push(newTrade);
 
                               // profits = placeInCorrectOrder(profits, pom2, sort);
                            }
@@ -597,7 +620,7 @@ const mixedTwoPairs = async (req) => {
    let positiveResults = profits.length.toLocaleString();
 
    console.log(counter, positiveResults)
-   // return { profits, counterOpt, positiveResults, amount: { amount1, amount2 }, priceCorrection };
+   return profits;
 }
 
 const mixedThreePairs = async (req) => {

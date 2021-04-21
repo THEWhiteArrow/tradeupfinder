@@ -2,7 +2,7 @@
 
    <header class="container my-5 ">
 
-      <h1 class="display-6 my-2 py-2">Trade'y Algorytmu Mixed</h1>
+      <h1 class="display-6 my-2 py-2">Ulubione Trade'y Algorytmu Mixed</h1>
 
       <% if(info && info.length){ %>
          <div class="lead alert alert-success alert-dismissible fade show" role="alert">
@@ -27,7 +27,7 @@
    <main class="container">
       <% if(favourites){ %>
          <% let number=1; %>
-            <ul>
+            <ul class="d-flex flex-column">
 
                <% for(let favourite of favourites){ %>
                   <% if(number <=maxShownSkins){ %>
