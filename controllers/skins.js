@@ -14,7 +14,7 @@ const User = require('../models/userModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
-const maxShownSkins = 69;
+const maxShownSkins = 20;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 module.exports.showIndex = async (req, res) => {
@@ -320,7 +320,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
       // }
 
       const trades = await Trade.find({});
-      const filteredTradesByName = trades.filter(el => el.name == researchName)
+      const filteredTradesByName = trades.filter(el => el.name == researchName).slice(0, maxShownSkins)
 
       const sortedTrades = sortingTrades(filteredTradesByName);
       res.render('trades/mixed', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
