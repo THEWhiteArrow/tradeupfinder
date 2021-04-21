@@ -3,14 +3,15 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const map = require('../controllers/mapping');
 
+const { isLoggedIn, isAdmin, isModeratorAlso, isPermitted, favouriteTradeAuthorized } = require('../middleware');
 
 
 router.route('/map-collection')
-   .get(catchAsync(map.showMappingPage))
+   .get(isLoggedIn, isAdmin, isPermitted, catchAsync(map.showMappingPage))
    .post(catchAsync(map.mapCollection));
 
 router.route('/map-collection/floats')
-   .get(catchAsync(map.mapFloatsGet))
+   .get(isLoggedIn, isAdmin, isPermitted, catchAsync(map.mapFloatsGet))
    .post(catchAsync(map.mapFloatsPost));
 
 

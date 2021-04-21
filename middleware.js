@@ -28,6 +28,26 @@ const isPermitted = async (req, res, next) => {
    next();
 };
 
+const isFavouriteTradeAuthorized = async (req, res, next) => {
+   const { tradeId } = req.params;
+   const { user } = req;
+   const { action } = req.query
+
+   if (action === 'add') return next();
+   if (action === 'delete' || action === undefined) {
+
+      for (let favourite of user.favourites) {
+         if (favourite._id == tradeId) return next()
+      }
+
+   }
+
+   if (action === undefined) res.json({ success: false })
+
+   req.flash('error', 'You do not own that trade up!')
+   return res.redirect(`/skins`);
+}
+
 const isResearchAllowed = async (req, res, next) => {
    const { action } = req.query;
 
@@ -57,4 +77,4 @@ const isResearchAllowed = async (req, res, next) => {
 
 }
 
-module.exports = { isLoggedIn, isAdmin, isModeratorAlso, isPermitted, isResearchAllowed };
+module.exports = { isLoggedIn, isAdmin, isModeratorAlso, isPermitted, isResearchAllowed, isFavouriteTradeAuthorized };

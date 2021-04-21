@@ -9,6 +9,7 @@ const Case = require('../models/caseModel');
 const Research = require('../models/researchModel');
 const Name = require('../models/nameModel');
 const Trade = require('../models/tradeModel');
+const Favourite = require('../models/favouriteModel');
 const User = require('../models/userModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
@@ -17,7 +18,7 @@ const maxShownSkins = 69;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 module.exports.showIndex = async (req, res) => {
-
+   // console.log(req.user)
    const researchesName = await Name.find({});
    // res.cookie('testtoken', 'lol');
    // res.cookie('testtoken', { amount1: 4, amount2: 6 });
@@ -189,11 +190,12 @@ module.exports.useServers = async (req, res) => {
 
 
 
-module.exports.deleteSavedResearches = async (req, res) => {
+module.exports.deleteSavedTrades = async (req, res) => {
    // await Research.deleteMany({});
    // await Name.deleteMany({});
 
    await Trade.deleteMany({})
+   req.flash('success', 'Successfully deleted all trades');
    res.redirect('/skins');
 }
 
@@ -364,23 +366,56 @@ module.exports.displayFavouriteTrades = async (req, res) => {
    res.render('trades/favourites', { favourites: sortedFavourites, maxShownSkins, steamBaseUrl })
 }
 
-const sortingTrades = (trades) => {
+module.exports.recheckFavouriteStats = async (req, res) => {
+   // console.log('checking')
+   const { firstPrice, secondPrice } = req.body;
+   const { tradeId } = req.params;
+   try {
 
-   for (let i = 0; i < trades.length; i++) {
-      for (let j = 0; j < trades.length; j++) {
-         if (trades[i].instance.trade.returnPercentage > trades[j].instance.trade.returnPercentage) {
-            let temp = trades[i];
-            trades[i] = trades[j];
-            trades[j] = temp;
+      const favouriteTrade = await Favourite.findById(tradeId);
+
+      const { amount } = favouriteTrade;
+      const { total, targetedSkinsNumber, trade } = favouriteTrade.instance;
+
+      let wantedOutputChance = 0;
+      const inputPrice = Math.round((amount.amount1 * firstPrice + amount.amount2 * secondPrice) * 100) / 100;
+
+      for (let outputSkin of trade.targetedSkinsArr) {
+         if (inputPrice <= outputSkin.price) {
+            wantedOutputChance += outputSkin.amount;
          }
+         // console.log(outputSkin.price, outputSkin.amount)
       }
-   }
 
-   return trades;
+      const avgPrice = total / targetedSkinsNumber;
+      const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
+      const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
+      // ALSO WE HAVE wantedOutputChance
+      // console.log('-------checked')
+      const feedback = {
+         success: true,
+         inputPrice,
+         profitPerTradeUp,
+         returnPercentage,
+         wantedOutputChance,
+         targetedSkinsNumber,
+         firstPrice,
+         secondPrice
+      };
+      res.json(feedback);
+   } catch (e) {
+      // console.log('-------failed')
+      console.log(e)
+
+      const feedback = { success: false };
+      res.json(feedback);
+   }
 }
 
+
+
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', newResearchName = 'unknown', action = 'nothing' } = req.query;
+   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', newResearchName = 'noname', action = 'nothing' } = req.query;
    let { priceCorrection = 0 } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'));
    console.log(priceCorrection)
@@ -485,22 +520,6 @@ const mixedTwoPairs = async (req) => {
                                        }
                                     }
 
-                                    if (targetedCollection.name == firstSkin.case && targetedCollection.name == secondSkin.case) {
-                                       total += (targetedPrice * (amount1 + amount2));
-                                       targetedSkinsNumber += (1 * (amount1 + amount2));
-                                       targetedPrice > inputPrice ? wantedOutputChance += (amount1 + amount2) : null;
-
-                                    } else if (targetedCollection.name == firstSkin.case) {
-                                       total += (targetedPrice * amount1);
-                                       targetedSkinsNumber += (1 * amount1);
-                                       targetedPrice > inputPrice ? wantedOutputChance += (amount2) : null;
-
-                                    } else if (targetedCollection.name == secondSkin.case) {
-                                       total += (targetedPrice * amount2);
-                                       targetedSkinsNumber += (1 * amount2);
-                                       targetedPrice > inputPrice ? wantedOutputChance += (amount1) : null;
-                                    }
-
                                     const targetedSkinPom = {
                                        _id: targetedSkin._id,
                                        name: targetedSkin.name,
@@ -512,9 +531,29 @@ const mixedTwoPairs = async (req) => {
                                        price: targetedPrice,
                                        float,
                                        case: targetedSkin.case,
-                                       quality: targetedQuality
-
+                                       quality: targetedQuality,
                                     }
+
+                                    if (targetedCollection.name == firstSkin.case && targetedCollection.name == secondSkin.case) {
+                                       total += (targetedPrice * (amount1 + amount2));
+                                       targetedSkinsNumber += (1 * (amount1 + amount2));
+                                       inputPrice <= targetedPrice ? wantedOutputChance += (amount1 + amount2) : null;
+                                       targetedSkinPom.amount = amount1 + amount2;
+
+                                    } else if (targetedCollection.name == firstSkin.case) {
+                                       total += (targetedPrice * amount1);
+                                       targetedSkinsNumber += (1 * amount1);
+                                       inputPrice <= targetedPrice ? wantedOutputChance += (amount1) : null;
+                                       targetedSkinPom.amount = amount1;
+
+                                    } else if (targetedCollection.name == secondSkin.case) {
+                                       total += (targetedPrice * amount2);
+                                       targetedSkinsNumber += (1 * amount2);
+                                       inputPrice <= targetedPrice ? wantedOutputChance += (amount2) : null;
+                                       targetedSkinPom.amount = amount2;
+                                    }
+
+
                                     targetedSkinsQuality.push(targetedQuality);
                                     targetedSkinsArr.push(targetedSkinPom);
                                     counter += 1;
@@ -545,8 +584,8 @@ const mixedTwoPairs = async (req) => {
 
 
                            const avgPrice = total / targetedSkinsNumber;
-                           const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 1000) / 1000;
-                           const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 1000) / 1000;
+                           const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
+                           const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
 
                            if (profitPerTradeUp > 0) {
                               const trade = {
@@ -622,6 +661,36 @@ const mixedTwoPairs = async (req) => {
    console.log(counter, positiveResults)
    return profits;
 }
+
+const checkTime = (current, hour, minute) => {
+   const currentFinish = new Date();
+   const finishHour = currentFinish.getHours();
+   const finishMinute = currentFinish.getMinutes();
+   if (hour == finishHour) {
+      console.log(`${current.getHours()}:${current.getMinutes()}`);
+      console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
+      console.log(`time : ${finishMinute - minute}`);
+   }
+   if (hour != finishHour) {
+      console.log(`${current.getHours()}:${current.getMinutes()}`);
+      console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
+      console.log(`time : ${finishHour - hour} : ${finishMinute - minute}`);
+   }
+}
+const sortingTrades = (trades) => {
+   for (let i = 0; i < trades.length; i++) {
+      for (let j = 0; j < trades.length; j++) {
+         if (trades[i].instance.trade.returnPercentage > trades[j].instance.trade.returnPercentage) {
+            let temp = trades[i];
+            trades[i] = trades[j];
+            trades[j] = temp;
+         }
+      }
+   }
+   return trades;
+}
+
+
 
 const mixedThreePairs = async (req) => {
    const { ratio = '4-4-2', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage' } = req.query;
@@ -851,7 +920,6 @@ const mixedThreePairs = async (req) => {
    console.log(counter, positiveResults)
    return { profits: profits.slice(0, 4250), counterOpt, positiveResults, amount: { amount1, amount2, amount3 } };
 }
-
 const recheckResearchStats = async (research) => {
    const collections = await Case.find({})
       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
@@ -977,22 +1045,6 @@ const recheckResearchStats = async (research) => {
    }
 
    return { profits, counterOpt, positiveResults, amount, priceCorrection }
-}
-
-const checkTime = (current, hour, minute) => {
-   const currentFinish = new Date();
-   const finishHour = currentFinish.getHours();
-   const finishMinute = currentFinish.getMinutes();
-   if (hour == finishHour) {
-      console.log(`${current.getHours()}:${current.getMinutes()}`);
-      console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
-      console.log(`time : ${finishMinute - minute}`);
-   }
-   if (hour != finishHour) {
-      console.log(`${current.getHours()}:${current.getMinutes()}`);
-      console.log(`${currentFinish.getHours()}:${currentFinish.getMinutes()}`);
-      console.log(`time : ${finishHour - hour} : ${finishMinute - minute}`);
-   }
 }
 const saveResearch = async (Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) => {
    const newResearch = new Research({ profits, counterOpt, positiveResults, amount, name: newResearchName, priceCorrection });

@@ -4,15 +4,59 @@ const setUpFavouriteBtn = async () => {
    for (let i = 0; i < stars.length; i++) {
       stars[i].addEventListener('click', async (e) => {
          e.preventDefault();
-         await manageFavourite(i, 'delete', stars[i]);
+         await manageFavourite('delete', stars[i]);
          stars[i].parentElement.parentElement.parentElement.remove()
 
       });
    }
 }
 
+const setUpRecheckingForms = async () => {
+   const forms = document.querySelectorAll('.recheck-form')
 
-const manageFavourite = async (tradeNumber, action, star) => {
+   for (let i = 0; i < forms.length; i++) {
+      forms[i].addEventListener('submit', async (e) => {
+         e.preventDefault();
+         const data = await recheckFavouriteStats(forms[i]);
+         console.log(data)
+         changeStats(forms[i], data)
+         // UPDATE ON PAGE STATS
+
+      });
+   }
+}
+
+const changeStats = (form, data) => {
+   const row = form.parentElement.parentElement;
+   const inputPriceEl = row.querySelector('.input-price')
+   const firstPriceEl = row.querySelector('.first-price')
+   const secondPriceEl = row.querySelector('.second-price')
+
+   const profitPerTradeUpEl = row.querySelector('.profit-per-tradeup')
+   const returnPercentageEl = row.querySelector('.return-percentage')
+   const positiveChanceEl = row.querySelector('.positive-chance')
+
+   inputPriceEl.innerText = `(${data.inputPrice}zł)`
+   firstPriceEl.innerText = `(${data.firstPrice}zł)`
+   secondPriceEl.innerText = `(${data.secondPrice}zł)`
+
+   profitPerTradeUpEl.innerText = `${data.profitPerTradeUp}zł`
+   returnPercentageEl.innerText = `${data.returnPercentage}%`
+   positiveChanceEl.innerText = `${Math.round(data.wantedOutputChance / data.targetedSkinsNumber * 100 * 100) / 100} %`
+
+}
+
+const recheckFavouriteStats = async (form) => {
+   const url = form.getAttribute('action')
+   const firstPrice = Number(form[0].value);
+   const secondPrice = Number(form[1].value);
+   console.log(url)
+   const res = await axios.post(url, { 'firstPrice': firstPrice, 'secondPrice': secondPrice });
+   const data = res.data;
+   return data;
+}
+
+const manageFavourite = async (action, star) => {
    // const paramss = new URLSearchParams(window.location.search)
    // const researchName = paramss.get('researchName')
    let url = star.getAttribute('href')
@@ -33,9 +77,9 @@ const manageFavourite = async (tradeNumber, action, star) => {
 }
 
 
-
 const init = () => {
    setUpFavouriteBtn()
+   setUpRecheckingForms();
 }
 
 init()

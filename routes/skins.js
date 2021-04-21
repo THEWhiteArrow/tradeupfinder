@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn, isAdmin, isModeratorAlso, isPermitted, isResearchAllowed } = require('../middleware');
+const { isLoggedIn, isAdmin, isModeratorAlso, isPermitted, isResearchAllowed, isFavouriteTradeAuthorized } = require('../middleware');
 
 const skin = require('../controllers/skins');
 
@@ -20,7 +20,10 @@ router.route('/mixed-algorithm')
    .get(isResearchAllowed, catchAsync(skin.mixedAlgorithm));
 
 router.route('/trades/favourites')
-   .get(catchAsync(skin.displayFavouriteTrades))
+   .get(isLoggedIn, catchAsync(skin.displayFavouriteTrades))
+
+router.route('/trades/favourites/:tradeId')
+   .post(isLoggedIn, isFavouriteTradeAuthorized, catchAsync(skin.recheckFavouriteStats))
 
 
 
@@ -36,8 +39,8 @@ router.route('/update/:id')
 router.route('/update-thru-servers')
    .post(isLoggedIn, isAdmin, isPermitted, catchAsync(skin.useServers));
 
-router.route('/delete-researches')
-   .delete(isLoggedIn, isAdmin, catchAsync(skin.deleteSavedResearches));
+router.route('/delete-trades')
+   .delete(isLoggedIn, isAdmin, catchAsync(skin.deleteSavedTrades));
 
 
 

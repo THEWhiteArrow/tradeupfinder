@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 const passport = require('passport');
 const catchAsync = require('../utils/catchAsync');
+const { isLoggedIn, isFavouriteTradeAuthorized } = require('../middleware');
 
 const users = require('../controllers/users');
 
@@ -16,7 +17,7 @@ router.route('/login')
    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/user/login' }), users.login)
 
 router.route('/favourite/:tradeId/trade')
-   .get(users.manageFavouriteTrade)
+   .get(isLoggedIn, isFavouriteTradeAuthorized, users.manageFavouriteTrade)
 
 
 router.get('/logout', users.logout)

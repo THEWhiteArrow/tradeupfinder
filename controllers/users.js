@@ -59,13 +59,14 @@ module.exports.manageFavouriteTrade = async (req, res) => {
 
    console.log(action)
    console.log(tradeId)
+
    try {
 
-      const reqUser = await User.findById(userId);
+
       if (action === 'add') {
 
          const unSavedTrade = await Trade.findById(tradeId);
-         const { favourites } = reqUser;
+         const { favourites } = user;
 
          const newFavouriteTrade = new Favourite({
             amount: unSavedTrade.amount,
@@ -84,8 +85,6 @@ module.exports.manageFavouriteTrade = async (req, res) => {
          const feedback = { success: true, action, newFavouriteId };
          res.json(feedback);
       } else {
-
-
          await User.findByIdAndUpdate(userId, { $pull: { favourites: tradeId } });
          await Favourite.findByIdAndDelete(tradeId);
 

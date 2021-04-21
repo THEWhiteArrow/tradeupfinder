@@ -39,9 +39,9 @@ h6 {
 .star {
    background-color: white;
    border-radius: 10px;
-   height:34px;
-   width: 34px;
    display: flex;
+   height:34px !important;
+   width: 34px !important;
    justify-content: center;
    align-items: center;
    position: relative;
@@ -118,6 +118,7 @@ li.trade {
    padding: 10px;
    list-style: none;
 }
+
 
 
 .border {

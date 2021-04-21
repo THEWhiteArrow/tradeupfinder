@@ -4,23 +4,22 @@
 
       <h1 class="display-6 my-2 py-2">Ulubione Trade'y Algorytmu Mixed</h1>
 
-      <% if(info && info.length){ %>
-         <div class="lead alert alert-success alert-dismissible fade show" role="alert">
-            <h4 class="alert-heading">Well done ;) !</h4>
-            <hr>
-            <p>
-               <%= info %>
-            </p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-         </div>
-         <% } %>
+      <div class="lead alert alert-success alert-dismissible fade show" role="alert">
+         <h4 class="alert-heading">Wszystko co ważne w jednym miejscu!</h4>
+         <hr>
+         <p>
+            Dodawaj trejdy do ulubionych i już nigdy nie przegap świetnej okazji
+         </p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
 
-            <span class="links">
-               <a class="btn btn-primary mt-2" href="/skins">Wróć do strony skinów</a>
-               <!-- <a class="btn btn-primary mt-2"
+
+      <span class="links">
+         <a class="btn btn-primary mt-2" href="/skins">Wróć do strony skinów</a>
+         <!-- <a class="btn btn-primary mt-2"
                href="<%= url.replace('action=save','action=nothing').replace('action=display','action=nothing') %>">
                Szukaj od nowa</a> -->
-            </span>
+      </span>
    </header>
 
 
@@ -37,23 +36,24 @@
 
                               <!-- COLLECTIONS DATA -->
                               <div class="d-flex justify-content-between">
-                                 <div>
-                                    <span>
+                                 <div class="col-11">
+                                    <div>
                                        <%= favourite.instance.avg %>
                                           <%= trade.rarity %>
-                                             [<%= trade.firstSkin.case %> + <%= trade.secondSkin.case %>]
-                                                   =>
-                                                   [<%= trade.targetedSkin.case%>]
-                                    </span>
-                                    <span class="ms-5">
+                                             [<%= trade.firstSkin.case %> + <%= trade.secondSkin.case %>] => [<%=
+                                                      trade.targetedSkin.case%>]
+                                    </div>
+                                    <div>
+                                       <!-- <span class="ms-5"> -->
                                        Podbicie Ceny : <%= favourite.priceCorrection %>zł
-                                    </span>
-                                    <span class="ms-2">
-                                       Nazwa przeszukania : <%= favourite.name %>
-                                    </span>
+                                          </span>
+                                          <span class="ms-2">
+                                             Nazwa przeszukania : <%= favourite.name %>
+                                          </span>
+                                    </div>
                                  </div>
 
-                                 <a class="star" href="/user/favourite/<%= favourite._id %>">
+                                 <a class="star col-1" href="/user/favourite/<%= favourite._id %>">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                        class="bi bi-star-fill" viewBox="0 0 16 16">
                                        <path
@@ -68,7 +68,7 @@
                               <div class="mt-4 mb-2  d-flex flex-column">
 
                                  <!-- INPUT PRICE -->
-                                 <h5 class="col-12 d-flex justify-content-center inputPrice">
+                                 <h5 class="col-12 d-flex justify-content-center input-price">
                                     (<%= trade.inputPrice %>zł)
                                  </h5>
 
@@ -79,21 +79,25 @@
                                        <%= favourite.amount.amount1 %>x
                                           [<%= trade.firstQuality %>]
                                              [<%= trade.firstSkinAvgFloat %>]
-                                                (<%=Math.round((trade.firstPrice)*100) /100 %>zł)
-                                                   <%= trade.firstSkin.name %>
-                                                      <%= trade.firstSkin.skin %>
+                                                <span class="first-price mx-1">
+                                                   (<%=trade.firstPrice%>zł)
+                                                </span>
+                                                <%= trade.firstSkin.name %>
+                                                   <%= trade.firstSkin.skin %>
                                     </a>
+
                                     <a class="link-dark d-flex col-12 justify-content-center skin second"
                                        data-bs-toggle="tooltip" data-bs-placement="right" title="See on the market"
                                        href="<%= trade.secondSkinUrl %>" target="_blank">
                                        <%= favourite.amount.amount2 %>x
                                           [<%= trade.secondQuality %>]
                                              [<%= trade.secondSkinAvgFloat %>]
-                                                (<%=Math.round( (trade.secondPrice)*100)/100 %>zł)
-                                                   <%= trade.secondSkin.name %>
-                                                      <%= trade.secondSkin.skin %>
+                                                <span class="second-price mx-1">
+                                                   (<%=trade.secondPrice %>zł)
+                                                </span>
+                                                <%= trade.secondSkin.name %>
+                                                   <%= trade.secondSkin.skin %>
                                     </a>
-
 
 
                                     <div class="arrow mx-auto my-3"></div>
@@ -106,7 +110,7 @@
 
                                              <%= trade.targetedSkin.name %>
                                                 <%= trade.targetedSkin.skin %>
-                                                   (<%= Math.round(trade.targetedPrice*100)/100 %>)
+                                                   (<%=trade.targetedPrice %>)
                                     </a>
 
                                  </div>
@@ -115,23 +119,51 @@
                               <!-- STATS -->
                               <div class="stats col-12 col-lg-6 offset-lg-3 d-flex flex-column ">
 
-
-
                                  <div class="d-flex flex-row col-12 mt-auto data text-white">
                                     <div
-                                       class="d-flex  py-2 w-100 justify-content-center align-items-center bg-primary">
-                                       <%= Math.round(trade.profitPerTradeUp*100)/100 %>zł
+                                       class="d-flex  py-2 w-100 justify-content-center align-items-center bg-primary profit-per-tradeup">
+                                       <%= trade.profitPerTradeUp %>zł
                                     </div>
                                     <div
-                                       class="d-flex  py-2 w-100 justify-content-center align-items-center bg-success">
-                                       <%= Math.round(trade.returnPercentage*100)/100 %>%
+                                       class="d-flex  py-2 w-100 justify-content-center align-items-center bg-success return-percentage">
+                                       <%= trade.returnPercentage %>%
                                     </div>
-                                    <div class="d-flex  py-2 w-100 justify-content-center align-items-center bg-danger">
+                                    <div
+                                       class="d-flex  py-2 w-100 justify-content-center align-items-center bg-danger positive-chance">
                                        <%=
                                           Math.round(favourite.instance.wantedOutputChance/favourite.instance.targetedSkinsNumber*100*100)/100%>
                                           %
                                     </div>
                                  </div>
+
+                              </div>
+
+                              <!-- UPDATE FORM -->
+                              <div class="col-12 d-flex justify-content-center my-3">
+                                 <form action="/skins/trades/favourites/<%= favourite._id %>" method="POST"
+                                    class="recheck-form d-flex flex-column align-items-center">
+                                    <div class="d-flex flex-row">
+
+                                       <div class="form-group">
+                                          <label for="firstPriceForm<%= favourite._id %>">
+                                             <%= trade.firstSkin.name %>'s' new price
+                                          </label>
+                                          <input id="firstPriceForm<%= favourite._id %>" type="number" name="firstPrice"
+                                             value="<%= trade.firstPrice  %>" class="form-control" step="0.01">
+                                       </div>
+
+                                       <div class="form-group">
+                                          <label for="secondPriceForm<%= favourite._id %>">
+                                             <%= trade.secondSkin.name %>'s' new price
+                                          </label>
+                                          <input id="secondPriceForm<%= favourite._id %>" type="number"
+                                             name="secondPrice" value="<%= trade.secondPrice %>" class="form-control"
+                                             step="0.01">
+                                       </div>
+                                    </div>
+
+                                    <button class="btn btn-success w-100">RECHECK</button>
+                                 </form>
                               </div>
 
                               <!-- HELP SKINS -->
