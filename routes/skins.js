@@ -17,7 +17,7 @@ router.route('/show-database')
 //    .get(catchAsync(skin.prepareTrades));
 
 router.route('/mixed-algorithm')
-   .get(isResearchAllowed, catchAsync(skin.mixedAlgorithm));
+   .get(catchAsync(isResearchAllowed), catchAsync(skin.mixedAlgorithm));
 
 router.route('/trades/favourites')
    .get(isLoggedIn, catchAsync(skin.displayFavouriteTrades))

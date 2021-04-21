@@ -300,7 +300,7 @@ module.exports.prepareTrades = async (req, res) => {
 }
 
 module.exports.mixedAlgorithm = async (req, res) => {
-   let { action = 'nothing', researchName = '', newResearchName = 'test', pairs = 2, checkStats = 'no' } = req.query;
+   let { action = 'nothing', researchName = 'noname', newResearchName = 'noname', pairs = 2, checkStats = 'no' } = req.query;
    if (action != 'nothing' && action != 'save' && action != 'display') {
       action = 'nothing';
    }
@@ -320,7 +320,9 @@ module.exports.mixedAlgorithm = async (req, res) => {
       // }
 
       const trades = await Trade.find({});
-      const sortedTrades = sortingTrades(trades);
+      const filteredTradesByName = trades.filter(el => el.name == researchName)
+
+      const sortedTrades = sortingTrades(filteredTradesByName);
       res.render('trades/mixed', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
    } else {
@@ -418,7 +420,7 @@ const mixedTwoPairs = async (req) => {
    const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', newResearchName = 'noname', action = 'nothing' } = req.query;
    let { priceCorrection = 0 } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'));
-   console.log(priceCorrection)
+   // console.log(priceCorrection)
 
 
    let amount1 = Number(ratio[0]);
@@ -654,6 +656,10 @@ const mixedTwoPairs = async (req) => {
    // for (let profit of profits) {
    //    console.log(profit.trades[0].returnPercentage)
    // }
+   if (action === 'save') {
+      const newName = new Name({ name: newResearchName })
+      await newName.save();
+   }
 
    let counterOpt = counter.toLocaleString()
    let positiveResults = profits.length.toLocaleString();

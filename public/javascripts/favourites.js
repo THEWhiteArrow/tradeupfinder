@@ -18,7 +18,7 @@ const setUpRecheckingForms = async () => {
       forms[i].addEventListener('submit', async (e) => {
          e.preventDefault();
          const data = await recheckFavouriteStats(forms[i]);
-         console.log(data)
+         // console.log(data)
          changeStats(forms[i], data)
          // UPDATE ON PAGE STATS
 

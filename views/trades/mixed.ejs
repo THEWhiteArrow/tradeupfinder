@@ -37,23 +37,27 @@
 
                               <!-- COLLECTIONS DATA -->
                               <div class="d-flex justify-content-between">
-                                 <div>
-                                    <span>
+
+                                 <div class="col-11">
+                                    <div>
                                        <%= profit.instance.avg %>
                                           <%= trade.rarity %>
-                                             [<%= trade.firstSkin.case %> + <%= trade.secondSkin.case %>]
-                                                   =>
-                                                   [<%= trade.targetedSkin.case%>]
-                                    </span>
-                                    <span class="ms-5">
-                                       Podbicie Ceny : <%= profit.priceCorrection %>zł
-                                    </span>
-                                    <span class="ms-2">
-                                       Nazwa przeszukania : <%= profit.name %>
-                                    </span>
+                                             [<%= trade.firstSkin.case %> + <%= trade.secondSkin.case %>] => [<%=
+                                                      trade.targetedSkin.case%>]
+                                    </div>
+                                    <div>
+                                       <div>
+                                          Nazwa przeszukania : <%= profit.name %>
+                                       </div>
+                                       <div>
+                                          Podbicie Ceny : <%= profit.priceCorrection %>zł
+                                       </div>
+                                    </div>
                                  </div>
-                                 <% if(action==='save' || action==='display' ){ %>
-                                    <a class="star" href="/user/favourite/<%= profit._id %>">
+
+
+                                 <% if( (action==='save' || action==='display' ) && currentUser ){ %>
+                                    <a class="star col-1" href="/user/favourite/<%= profit._id %>">
                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                           fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
                                           <path
@@ -61,6 +65,8 @@
                                        </svg>
                                     </a>
                                     <% } %>
+
+
                               </div>
 
 
