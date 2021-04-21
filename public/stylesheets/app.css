@@ -36,6 +36,25 @@ h6 {
 
 }
 
+.star {
+   background-color: white;
+   border-radius: 10px;
+   height:34px;
+   width: 34px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+   border: none;
+}
+
+.star svg{
+   position: absolute;
+   height: 20px;
+   width: 20px;
+   color: goldenrod;
+}
+
 .hide {
    display: none !important;
 }

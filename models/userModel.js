@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const passportLocalMongoose = require('passport-local-mongoose');
 
-const UserSchema = new Schema({
+const userSchema = new Schema({
    email: {
       type: String,
       required: true,
@@ -12,9 +12,15 @@ const UserSchema = new Schema({
       type: String,
       enum: ['guest', 'moderator', 'admin'],
       required: true
-   }
+   },
+   favourites: [
+      {
+         type: Schema.Types.ObjectId,
+         ref: 'Favourite'
+      }
+   ]
 
 });
 
-UserSchema.plugin(passportLocalMongoose);
-module.exports = mongoose.model('User', UserSchema);
+userSchema.plugin(passportLocalMongoose);
+module.exports = mongoose.model('User', userSchema);

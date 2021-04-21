@@ -10,11 +10,17 @@ const skin = require('../controllers/skins');
 router.route('/')
    .get(catchAsync(skin.showIndex));
 
+router.route('/show')
+   .get(catchAsync(skin.showSkinsDb));
+
 // router.route('/trades')
 //    .get(catchAsync(skin.prepareTrades));
 
 router.route('/mixed-algorithm')
    .get(isResearchAllowed, catchAsync(skin.mixedAlgorithm));
+
+router.route('/trades/favourites')
+   .get(catchAsync(skin.displayFavouriteTrades))
 
 
 

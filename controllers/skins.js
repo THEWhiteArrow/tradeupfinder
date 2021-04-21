@@ -8,21 +8,15 @@ const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
 const Research = require('../models/researchModel');
 const Name = require('../models/nameModel');
+const Trade = require('../models/tradeModel');
+const User = require('../models/userModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
-const maxShownSkins = 420;
+const maxShownSkins = 69;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 module.exports.showIndex = async (req, res) => {
-   const collections = await Case.find({})
-      .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
-
 
    const researchesName = await Name.find({});
    // res.cookie('testtoken', 'lol');
@@ -33,8 +27,20 @@ module.exports.showIndex = async (req, res) => {
 
    req.flash('info', `Dla Twojej wygody wyświetlone zostało niewięcej niż ${maxShownSkins} możliwych kontraktów`);
    // console.log(req.session)
-   res.render('index', { collections, qualities, rarities, researchesName });
+   res.render('index', { researchesName });
 };
+
+module.exports.showSkinsDb = async (req, res) => {
+   const collections = await Case.find({})
+      .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+
+   res.render('skins', { collections, qualities, rarities });
+}
 
 module.exports.updatePrices = async (req, res, next) => {
    // const collectionsToUpdate = ['FractureCase', 'PrismaCase', 'Dust2', 'Inferno', 'Inferno2018', 'Nuke2018', 'GloveCase', 'Havoc', 'Control'];
@@ -184,9 +190,10 @@ module.exports.useServers = async (req, res) => {
 
 
 module.exports.deleteSavedResearches = async (req, res) => {
-   await Research.deleteMany({});
-   await Name.deleteMany({});
+   // await Research.deleteMany({});
+   // await Name.deleteMany({});
 
+   await Trade.deleteMany({})
    res.redirect('/skins');
 }
 
@@ -298,16 +305,20 @@ module.exports.mixedAlgorithm = async (req, res) => {
    console.log(req.query)
 
 
-   if (action == 'display') {
-      const savedResearch = await Research.findOne({ name: researchName })
-      if (checkStats == 'yes') {
-         const { profits, counterOpt, positiveResults, amount, priceCorrection } = await recheckResearchStats(savedResearch);
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
-      } else {
-         const { profits, counterOpt, positiveResults, amount, priceCorrection } = savedResearch;
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
-      }
 
+
+   if (action == 'display') {
+      // const savedResearch = await Research.findOne({ name: researchName })
+      // if (checkStats == 'yes') {
+      //    const { profits, counterOpt, positiveResults, amount, priceCorrection } = await recheckResearchStats(savedResearch);
+      //    res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
+      // } else {
+      //    const { profits, counterOpt, positiveResults, amount, priceCorrection } = savedResearch;
+      //    res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
+      // }
+
+      const profits = await Trade.find({});
+      res.render('trades/mixed', { profits, maxShownSkins, steamBaseUrl })
 
    } else {
 
@@ -315,28 +326,41 @@ module.exports.mixedAlgorithm = async (req, res) => {
       const hour = current.getHours();
       const minute = current.getMinutes();
       if (pairs == 2) {
-         const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedTwoPairs(req);
+         // const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedTwoPairs(req);
+         await mixedTwoPairs(req);
+
+         const profits = await Trade.find({});
+
 
          checkTime(current, hour, minute);
-         action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
+         // action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
 
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, priceCorrection })
+         res.render('trades/mixed', { profits, maxShownSkins, steamBaseUrl })
 
       } else if (pairs == 3) {
-         const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedThreePairs(req);
+         // const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedThreePairs(req);
 
-         checkTime(current, hour, minute);
-         action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
+         // checkTime(current, hour, minute);
+         // action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
 
-         res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, priceCorrection })
+         // res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, priceCorrection })
+         res.redirect('/skins')
       }
    }
+}
+
+module.exports.displayFavouriteTrades = async (req, res) => {
+   const { user } = req;
+   const foundUser = await User.findById(user._id).populate('favourites')
+   const { favourites } = foundUser;
+
+   res.render('trades/favourites', { favourites, maxShownSkins, steamBaseUrl })
 }
 
 
 
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage' } = req.query;
+   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', researchName = 'unknown' } = req.query;
    let { priceCorrection = 0 } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'));
    console.log(priceCorrection)
@@ -351,7 +375,7 @@ const mixedTwoPairs = async (req) => {
    let counter = 0;
    let profits = [];
 
-
+   let savedTrades = 0;
    const sliceFrom = Number(sliceStart);
    const sliceTo = Number(sliceEnd);
 
@@ -544,7 +568,16 @@ const mixedTwoPairs = async (req) => {
                                  targetedSkinsNumber,
                                  wantedOutputChance
                               }
-                              profits = placeInCorrectOrder(profits, pom2, sort);
+                              const newTrade = new Trade({
+                                 amount: { amount1, amount2 },
+                                 priceCorrection,
+                                 name: researchName,
+                                 instance: pom2
+                              })
+
+                              await newTrade.save();
+
+                              // profits = placeInCorrectOrder(profits, pom2, sort);
                            }
 
                            counter += 1;
@@ -564,7 +597,7 @@ const mixedTwoPairs = async (req) => {
    let positiveResults = profits.length.toLocaleString();
 
    console.log(counter, positiveResults)
-   return { profits, counterOpt, positiveResults, amount: { amount1, amount2 }, priceCorrection };
+   // return { profits, counterOpt, positiveResults, amount: { amount1, amount2 }, priceCorrection };
 }
 
 const mixedThreePairs = async (req) => {
