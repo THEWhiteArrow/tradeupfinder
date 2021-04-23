@@ -13,6 +13,9 @@ const tradeSchema = new Schema({
    },
    instance: {
       type: Object
+   },
+   pricesType: {
+      type: String,
    }
 
 });

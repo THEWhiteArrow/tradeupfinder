@@ -58,7 +58,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
 
-   const { start = 0, end = length, variant = 'backpack', stattrak = '0' } = req.query;
+   const { start = 0, end = length, variant = 'backpack', stattrak = 'no' } = req.query;
    for (let item of skins) {
 
 
@@ -128,7 +128,7 @@ module.exports.updatePrices = async (req, res, next) => {
             }
          }
 
-         if (stattrak == true && item.isInStattrak) {
+         if (stattrak == 'yes' && item.isInStattrak) {
             const stattrakKeys = Object.keys(stattrakPrices);
 
             for (let s of stattrakKeys) {
@@ -204,16 +204,16 @@ module.exports.updatePrices = async (req, res, next) => {
 
 module.exports.updateSkinPrice = async (req, res) => {
    const { id } = req.params;
-   const { prices } = req.body;
+   const { prices, stattrakPrices } = req.body;
 
-   const updatedSkin = await Skin.findByIdAndUpdate(id, { prices }, { new: true });
+   const updatedSkin = await Skin.findByIdAndUpdate(id, { prices, stattrakPrices }, { new: true });
 
-   req.flash('info', `${updatedSkin.name} ${updatedSkin.skin}'s prices successfully updated`);
+   req.flash('success', `${updatedSkin.name} ${updatedSkin.skin}'s prices successfully updated`);
    res.redirect('/skins/show-database');
 }
 
 module.exports.useServers = async (req, res) => {
-   const { server1, server2, server3, server4, server5, server6, server7, server8, server9, server10, variant = 'backpack', stattrak = '0' } = req.body;
+   const { server1, server2, server3, server4, server5, server6, server7, server8, server9, server10, variant = 'backpack', stattrak = 'no' } = req.body;
    console.log(variant)
    console.log(server1)
    console.log(server2)
@@ -370,9 +370,6 @@ module.exports.mixedAlgorithm = async (req, res) => {
    }
    console.log(req.query)
 
-
-
-
    if (action == 'display') {
       // const savedResearch = await Research.findOne({ name: researchName })
       // if (checkStats == 'yes') {
@@ -481,22 +478,28 @@ module.exports.recheckFavouriteStats = async (req, res) => {
 
 
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', newResearchName = 'noname', action = 'nothing' } = req.query;
+   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', newResearchName = 'noname', action = 'nothing', stattrak = 'no' } = req.query;
+
+   // CONVERTS PRICE CORRECTION
    let { priceCorrection = 0 } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'));
-   // console.log(priceCorrection)
 
+   // SETS TYPE OF ALGORITHM - NORMAL AND STATTRAK
+   let pricesType;
+   stattrak == 'no' ? pricesType = 'prices' : null;
+   stattrak == 'yes' ? pricesType = 'stattrakPrices' : null;
 
+   // SETS SKINS RATIO
    let amount1 = Number(ratio[0]);
    let amount2 = Number(ratio[2]);
    if (amount1 == undefined || amount2 == undefined || amount1 + amount2 != 10) {
       amount1 = 4;
       amount2 = 6;
    }
+
    let counter = 0;
    let profits = [];
 
-   let savedTrades = 0;
    const sliceFrom = Number(sliceStart);
    const sliceTo = Number(sliceEnd);
 
@@ -507,7 +510,6 @@ const mixedTwoPairs = async (req) => {
       .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
-
    collections = collections.slice(sliceFrom, sliceTo);
 
    for (let r = 0; r < rarities.length - 1; r++) {
@@ -521,8 +523,8 @@ const mixedTwoPairs = async (req) => {
                   for (let firstQuality of qualities) {
                      for (let secondQuality of qualities) {
 
-                        const firstSkin = findCheapestSkin(firstCollection, rarities[r], firstQuality);
-                        const secondSkin = findCheapestSkin(secondCollection, rarities[r], secondQuality);
+                        const firstSkin = findCheapestSkin(firstCollection, rarities[r], firstQuality, pricesType);
+                        const secondSkin = findCheapestSkin(secondCollection, rarities[r], secondQuality, pricesType);
 
                         if (firstSkin != null && secondSkin != null) {
 
@@ -534,16 +536,18 @@ const mixedTwoPairs = async (req) => {
                            if (secondSkinAvgFloat < secondSkin.min_float) secondSkinAvgFloat = secondSkin.min_float;
 
                            // MANUAL FLOATS CORRECTION
+                           // ######################################################################################################
                            if (firstSkin.skin == 'Bone Forged' && firstQuality == 'Factory New') firstSkinAvgFloat = 0.053;
                            if (secondSkin.skin == 'Bone Forged' && secondQuality == 'Factory New') secondSkinAvgFloat = 0.053;
                            if (firstSkin.skin == "Ol' Rusty" && firstQuality == "Factory New") firstSkinAvgFloat = 0.053;
                            if (secondSkin.skin == "Ol' Rusty" && secondQuality == "Factory New") secondSkinAvgFloat = 0.053;
                            if (firstSkin.skin == "Prototype" && firstQuality == "Factory New") firstSkinAvgFloat = 0.053;
                            if (secondSkin.skin == "Prototype" && secondQuality == "Factory New") secondSkinAvgFloat = 0.053;
+                           // ######################################################################################################
 
                            const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 1000) / 1000;
-                           const firstPrice = firstSkin.prices[firstQuality] + priceCorrection;
-                           const secondPrice = secondSkin.prices[secondQuality] + priceCorrection;
+                           const firstPrice = firstSkin[pricesType][firstQuality] + priceCorrection;
+                           const secondPrice = secondSkin[pricesType][secondQuality] + priceCorrection;
                            const inputPrice = Math.round((amount1 * firstPrice + amount2 * secondPrice) * 100) / 100;
 
                            let wantedOutputChance = 0;
@@ -567,7 +571,7 @@ const mixedTwoPairs = async (req) => {
                                     const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
                                     const targetedQuality = checkQuality(float);
 
-                                    const targetedPrice = Math.round((targetedSkin.prices[targetedQuality] * steamTax) * 100) / 100;
+                                    const targetedPrice = Math.round((targetedSkin[pricesType][targetedQuality] * steamTax) * 100) / 100;
 
                                     targetedSkin.price = targetedPrice;
                                     if (max < targetedPrice) {
@@ -590,7 +594,7 @@ const mixedTwoPairs = async (req) => {
                                        _id: targetedSkin._id,
                                        name: targetedSkin.name,
                                        skin: targetedSkin.skin,
-                                       prices: targetedSkin.prices,
+                                       prices: targetedSkin[pricesType],
                                        min_float: targetedSkin.min_float,
                                        max_float: targetedSkin.max_float,
                                        rarity: targetedSkin.rarity,
@@ -599,6 +603,13 @@ const mixedTwoPairs = async (req) => {
                                        case: targetedSkin.case,
                                        quality: targetedQuality,
                                     }
+                                    if (pricesType == 'prices') {
+                                       targetedSkinPom.url = encodeURI(`${steamBaseUrl}${targetedSkinPom.name} | ${targetedSkinPom.skin} (${targetedSkinPom.quality})`);
+                                    } else if (pricesType == 'stattrakPrices') {
+                                       targetedSkinPom.url = encodeURI(`${steamBaseUrl}StatTrak™ ${targetedSkinPom.name} | ${targetedSkinPom.skin} (${targetedSkinPom.quality})`);
+                                    }
+
+
 
                                     if (targetedCollection.name == firstSkin.case && targetedCollection.name == secondSkin.case) {
                                        total += (targetedPrice * (amount1 + amount2));
@@ -638,7 +649,11 @@ const mixedTwoPairs = async (req) => {
                                        alternateSkin.case == firstSkin.case ? alternateQuality = firstQuality : alternateQuality = secondQuality;
                                        alternate.quality = alternateQuality;
                                        alternate.price = Math.round((alternateSkin.prices[alternateQuality] + priceCorrection) * 100) / 100;
-                                       alternate.url = encodeURI(`${steamBaseUrl}${alternate.name} | ${alternate.skin} (${alternateQuality})`);
+                                       if (pricesType == 'prices') {
+                                          alternate.url = encodeURI(`${steamBaseUrl}${alternate.name} | ${alternate.skin} (${alternateQuality})`);
+                                       } else {
+                                          alternate.url = encodeURI(`${steamBaseUrl}StatTrak™ ${alternate.name} | ${alternate.skin} (${alternateQuality})`);
+                                       }
 
                                        alternateInputSkins.push(alternate);
                                     }
@@ -698,7 +713,8 @@ const mixedTwoPairs = async (req) => {
                                  amount: { amount1, amount2 },
                                  priceCorrection,
                                  name: newResearchName,
-                                 instance: pom2
+                                 instance: pom2,
+                                 pricesType,
                               })
                               if (action === 'save') {
                                  await newTrade.save();
