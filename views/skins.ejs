@@ -83,14 +83,16 @@
                                                       </label>
                                                       <div class="input-group">
                                                          <input id="<%= `${skin.name}${skin.skin}${key}` %>"
-                                                            class="col-40 form-control mt-0 mb-3" type="number"
+                                                            class=" form-control mt-0 mb-3" type="number"
                                                             name="prices[<%= key %>]" step="0.01"
                                                             value="<%= skin.prices[key] %>">
 
-                                                         <input id="<%= `StatTrak™${skin.name}${skin.skin}${key}` %>"
-                                                            class="col-40 form-control mt-0 mb-3 stattrak" type="number"
-                                                            name="stattrakPrices[<%= key %>]" step="0.01"
-                                                            value="<%= skin.stattrakPrices[key] %>">
+                                                         <% if(skin.isInStattrak){%>
+                                                            <input id="<%= `StatTrak™${skin.name}${skin.skin}${key}` %>"
+                                                               class=" form-control mt-0 mb-3 stattrak" type="number"
+                                                               name="stattrakPrices[<%= key %>]" step="0.01"
+                                                               value="<%= skin.stattrakPrices[key] %>">
+                                                            <% } %>
                                                       </div>
 
                                                    </li>

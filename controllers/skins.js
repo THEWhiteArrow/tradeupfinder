@@ -206,7 +206,11 @@ module.exports.updateSkinPrice = async (req, res) => {
    const { id } = req.params;
    const { prices, stattrakPrices } = req.body;
 
-   const updatedSkin = await Skin.findByIdAndUpdate(id, { prices, stattrakPrices }, { new: true });
+   if (stattrakPrices != undefined) {
+      const updatedSkin = await Skin.findByIdAndUpdate(id, { prices, stattrakPrices }, { new: true });
+   } else {
+      const updatedSkin = await Skin.findByIdAndUpdate(id, { prices }, { new: true });
+   }
 
    req.flash('success', `${updatedSkin.name} ${updatedSkin.skin}'s prices successfully updated`);
    res.redirect('/skins/show-database');
@@ -226,7 +230,7 @@ module.exports.useServers = async (req, res) => {
    console.log(server9)
    console.log(server10)
    console.log(variant)
-   console.log(statrak)
+   console.log(stattrak)
 
    const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}&stattrak=${stattrak}`;
    const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}&stattrak=${stattrak}`;

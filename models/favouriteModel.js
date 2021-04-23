@@ -16,6 +16,9 @@ const favouriteSchema = new Schema({
    },
    originalTradeId: {
       type: String
+   },
+   pricesType: {
+      type: String,
    }
 
 });
