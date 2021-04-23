@@ -46,23 +46,18 @@ module.exports.showSkinsDb = async (req, res) => {
 module.exports.updatePrices = async (req, res, next) => {
    // const collectionsToUpdate = ['FractureCase', 'PrismaCase', 'Dust2', 'Inferno', 'Inferno2018', 'Nuke2018', 'GloveCase', 'Havoc', 'Control'];
    // const collectionsToUpdate = ['FractureCase'];
+   const { start = 0, end = length, variant = 'backpack', stattrak = 'no' } = req.query;
 
    const skins = await Skin.find({});
-   const collections = await Case.find({});
+   // const collections = await Case.find({});
 
    let count = 0, length = 0;
 
-   for (let c of collections) {
-      length += c.nOfSkins;
-   }
+   // for (let c of collections) {
+   //    length += c.nOfSkins;
+   // }
 
-
-
-   const { start = 0, end = length, variant = 'backpack', stattrak = 'no' } = req.query;
    for (let item of skins) {
-
-
-
 
       count += 1;
       if (count >= start && count <= end) {
@@ -116,11 +111,38 @@ module.exports.updatePrices = async (req, res, next) => {
                         updatedPrices[q] = 0;
                      }
                   }
-               } else if (data.success == false || data == null) {
+               } else if (data.success == 'false' || data == null) {
                   console.log(data, encodedUrl)
+                  const retryData = await getData(encodeURI(`http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=31&id=${name} | ${skin} (${s})`), 500);
+                  console.log(retryData)
 
-                  console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
-                  return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429));
+
+                  let price;
+                  if (variant == 'steam') {
+                     if (retryData.median_price) {
+                        price = retryData.median_price;
+                        updatedPrices[q] = convert(price);
+                     } else if (retryData.lowest_price) {
+                        price = retryData.lowest_price;
+                        updatedPrices[q] = convert(price);
+                     } else {
+                        updatedPrices[q] = 0;
+                     }
+                  } else {
+
+                     if (retryData.average_price) {
+                        price = retryData.average_price;
+                        updatedPrices[q] = Number(price);
+                     } else if (retryData.median_price) {
+                        price = retryData.median_price;
+                        updatedPrices[q] = Number(price);
+                     } else {
+                        updatedPrices[q] = 0;
+                     }
+                  }
+
+                  // console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
+                  // return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429));
                }
 
             } else if (item.prices[q] === -1) {
@@ -132,17 +154,19 @@ module.exports.updatePrices = async (req, res, next) => {
             const stattrakKeys = Object.keys(stattrakPrices);
 
             for (let s of stattrakKeys) {
-               if (q !== '$init' && item.stattrakPrices[s] !== -1) {
+
+               if (s !== '$init' && item.stattrakPrices[s] !== -1) {
 
                   let baseUrl;
                   variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=2&id=';
                   // const baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&id=';
                   // StatTrak™
-                  const url = `${baseUrl}StatTrak™ ${name} | ${skin} (${q})`;
+                  const url = `${baseUrl}StatTrak™ ${name} | ${skin} (${s})`;
                   const encodedUrl = encodeURI(url);
                   // const data = await getData(encodedUrl, 300);
                   let data;
                   variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
+                  // console.log(data)
                   if (data.success == true) {
 
                      // console.log(data, url)
@@ -173,23 +197,55 @@ module.exports.updatePrices = async (req, res, next) => {
                      }
 
 
-                  } else if (data.success == false || data == null) {
+                  } else if (data.success == 'false' || data == null) {
                      console.log(data, encodedUrl)
+                     const retryData = await getData(encodeURI(`http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=31&id=StatTrak™ ${name} | ${skin} (${s})`), 500);
+                     console.log(retryData)
 
-                     console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
-                     return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429));
+
+                     let price;
+                     if (variant == 'steam') {
+                        if (retryData.median_price) {
+                           price = retryData.median_price;
+                           updatedStattrakPrices[s] = convert(price);
+                        } else if (retryData.lowest_price) {
+                           price = retryData.lowest_price;
+                           updatedStattrakPrices[s] = convert(price);
+                        } else {
+                           updatedStattrakPrices[s] = 0;
+                        }
+                     } else {
+
+                        if (retryData.average_price) {
+                           price = retryData.average_price;
+                           updatedStattrakPrices[s] = Number(price);
+                        } else if (retryData.median_price) {
+                           price = retryData.median_price;
+                           updatedStattrakPrices[s] = Number(price);
+                        } else {
+                           updatedStattrakPrices[s] = 0;
+                        }
+                     }
+                     // console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
+                     // return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429));
                   }
 
                } else if (item.stattrakPrices[s] === -1) {
-                  stattrakPrices[s] = -1;
+                  updatedStattrakPrices[s] = -1;
                }
+
+               console.log(`-----------------StatTrak™ ${item.name} | ${item.skin} ${s} ${updatedStattrakPrices[s]}`);
             }
 
          }
 
 
          // console.log(updatedPrices);
-         const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices }, { new: true });
+         if (stattrak == 'yes') {
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices }, { new: true });
+         } else {
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
+         }
 
 
 
@@ -206,10 +262,11 @@ module.exports.updateSkinPrice = async (req, res) => {
    const { id } = req.params;
    const { prices, stattrakPrices } = req.body;
 
+   let updatedSkin;
    if (stattrakPrices != undefined) {
-      const updatedSkin = await Skin.findByIdAndUpdate(id, { prices, stattrakPrices }, { new: true });
+      updatedSkin = await Skin.findByIdAndUpdate(id, { prices, stattrakPrices }, { new: true });
    } else {
-      const updatedSkin = await Skin.findByIdAndUpdate(id, { prices }, { new: true });
+      updatedSkin = await Skin.findByIdAndUpdate(id, { prices }, { new: true });
    }
 
    req.flash('success', `${updatedSkin.name} ${updatedSkin.skin}'s prices successfully updated`);

@@ -52,6 +52,11 @@
                                        <div>
                                           Podbicie Ceny : <%= profit.priceCorrection %>zł
                                        </div>
+                                       <% if(profit.pricesType=='stattrakPrices' ){ %>
+                                          <div class="stattrak">
+                                             StatTrak™
+                                          </div>
+                                          <% } %>
                                     </div>
                                  </div>
 
