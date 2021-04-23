@@ -58,7 +58,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
 
-   const { start = 0, end = length, variant = 'steam' } = req.query;
+   const { start = 0, end = length, variant = 'backpack', stattrak = '0' } = req.query;
    for (let item of skins) {
 
 
@@ -71,17 +71,18 @@ module.exports.updatePrices = async (req, res, next) => {
          console.log(`${count} / ${end} - ${item.name} | ${item.skin}`);
 
          const updatedPrices = {};
-         const { name, skin, prices, _id } = item;
+         const updatedStattrakPrices = {};
+         const { name, skin, prices, stattrakPrices, _id } = item;
 
          const keys = Object.keys(prices);
 
-
          for (let q of keys) {
-            if (q !== '$init' && q !== 'floated' && item.prices[q] !== -1) {
+            if (q !== '$init' && item.prices[q] !== -1) {
 
                let baseUrl;
                variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=2&id=';
                // const baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&id=';
+               // StatTrak™
                const url = `${baseUrl}${name} | ${skin} (${q})`;
                const encodedUrl = encodeURI(url);
                // const data = await getData(encodedUrl, 300);
@@ -127,8 +128,69 @@ module.exports.updatePrices = async (req, res, next) => {
             }
          }
 
+         if (stattrak == true && item.isInStattrak) {
+            const stattrakKeys = Object.keys(stattrakPrices);
+
+            for (let s of stattrakKeys) {
+               if (q !== '$init' && item.stattrakPrices[s] !== -1) {
+
+                  let baseUrl;
+                  variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=2&id=';
+                  // const baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&id=';
+                  // StatTrak™
+                  const url = `${baseUrl}StatTrak™ ${name} | ${skin} (${q})`;
+                  const encodedUrl = encodeURI(url);
+                  // const data = await getData(encodedUrl, 300);
+                  let data;
+                  variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
+                  if (data.success == true) {
+
+                     // console.log(data, url)
+
+                     let price;
+                     if (variant == 'steam') {
+
+                        if (data.median_price) {
+                           price = data.median_price;
+                           updatedStattrakPrices[s] = convert(price);
+                        } else if (data.lowest_price) {
+                           price = data.lowest_price;
+                           updatedStattrakPrices[s] = convert(price);
+                        } else {
+                           updatedStattrakPrices[s] = 0;
+                        }
+                     } else {
+
+                        if (data.average_price) {
+                           price = data.average_price;
+                           updatedStattrakPrices[s] = Number(price);
+                        } else if (data.median_price) {
+                           price = data.median_price;
+                           updatedStattrakPrices[s] = Number(price);
+                        } else {
+                           updatedStattrakPrices[s] = 0;
+                        }
+                     }
+
+
+                  } else if (data.success == false || data == null) {
+                     console.log(data, encodedUrl)
+
+                     console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
+                     return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429));
+                  }
+
+               } else if (item.stattrakPrices[s] === -1) {
+                  stattrakPrices[s] = -1;
+               }
+            }
+
+         }
+
+
          // console.log(updatedPrices);
-         const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
+         const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices }, { new: true });
+
 
 
       }
@@ -151,7 +213,7 @@ module.exports.updateSkinPrice = async (req, res) => {
 }
 
 module.exports.useServers = async (req, res) => {
-   const { server1, server2, server3, server4, server5, server6, server7, server8, server9, server10, variant = 'steam' } = req.body;
+   const { server1, server2, server3, server4, server5, server6, server7, server8, server9, server10, variant = 'backpack', stattrak = '0' } = req.body;
    console.log(variant)
    console.log(server1)
    console.log(server2)
@@ -163,17 +225,19 @@ module.exports.useServers = async (req, res) => {
    console.log(server8)
    console.log(server9)
    console.log(server10)
+   console.log(variant)
+   console.log(statrak)
 
-   const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}`;
-   const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}`;
-   const server3Url = `https://steam-market3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}&variant=${variant}`;
-   const server4Url = `https://steam-market4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}&variant=${variant}`;
-   const server5Url = `https://steam-market5.herokuapp.com/skins/update?start=${server5.start}&end=${server5.end}&variant=${variant}`;
-   const server6Url = `https://steam-market6.herokuapp.com/skins/update?start=${server6.start}&end=${server6.end}&variant=${variant}`;
-   const server7Url = `https://steam-market7.herokuapp.com/skins/update?start=${server7.start}&end=${server7.end}&variant=${variant}`;
-   const server8Url = `https://steam-market8.herokuapp.com/skins/update?start=${server8.start}&end=${server8.end}&variant=${variant}`;
-   const server9Url = `https://steam-market9.herokuapp.com/skins/update?start=${server9.start}&end=${server9.end}&variant=${variant}`;
-   const server10Url = `https://steam-market10.herokuapp.com/skins/update?start=${server10.start}&end=${server10.end}&variant=${variant}`;
+   const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}&stattrak=${stattrak}`;
+   const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}&stattrak=${stattrak}`;
+   const server3Url = `https://steam-market3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}&variant=${variant}&stattrak=${stattrak}`;
+   const server4Url = `https://steam-market4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}&variant=${variant}&stattrak=${stattrak}`;
+   const server5Url = `https://steam-market5.herokuapp.com/skins/update?start=${server5.start}&end=${server5.end}&variant=${variant}&stattrak=${stattrak}`;
+   const server6Url = `https://steam-market6.herokuapp.com/skins/update?start=${server6.start}&end=${server6.end}&variant=${variant}&stattrak=${stattrak}`;
+   const server7Url = `https://steam-market7.herokuapp.com/skins/update?start=${server7.start}&end=${server7.end}&variant=${variant}&stattrak=${stattrak}`;
+   const server8Url = `https://steam-market8.herokuapp.com/skins/update?start=${server8.start}&end=${server8.end}&variant=${variant}&stattrak=${stattrak}`;
+   const server9Url = `https://steam-market9.herokuapp.com/skins/update?start=${server9.start}&end=${server9.end}&variant=${variant}&stattrak=${stattrak}`;
+   const server10Url = `https://steam-market10.herokuapp.com/skins/update?start=${server10.start}&end=${server10.end}&variant=${variant}&stattrak=${stattrak}`;
 
    const response2 = fetch(server2Url, { method: 'GET' });
    const response3 = fetch(server3Url, { method: 'GET' });
@@ -192,8 +256,8 @@ module.exports.useServers = async (req, res) => {
 
 module.exports.deleteSavedTrades = async (req, res) => {
    // await Research.deleteMany({});
-   // await Name.deleteMany({});
 
+   await Name.deleteMany({});
    await Trade.deleteMany({})
    req.flash('success', 'Successfully deleted all trades');
    res.redirect('/skins');

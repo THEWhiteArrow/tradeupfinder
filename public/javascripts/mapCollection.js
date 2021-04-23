@@ -66,7 +66,6 @@ const mapPage = async () => {
       }
 
       console.log('souvenirs')
-
       for (let i = 0; i < rarity.length; i++) {
          hrefs.push(links[i].getAttribute('href'));
          const { name, skin } = convertNames(titles[i]);
@@ -76,6 +75,7 @@ const mapPage = async () => {
             rarity: convertRarity(rarity[i]),
             min_float: '',
             max_float: '',
+            isInStattrak: false,
          }
 
          collection.push(instance);
@@ -92,6 +92,7 @@ const mapPage = async () => {
             rarity: convertRarity(rarity[i]),
             min_float: '',
             max_float: '',
+            isInStattrak: true,
          }
 
          collection.push(instance);
@@ -106,7 +107,7 @@ const mapPage = async () => {
    content += '<ul class="my-4">'
    content += `<div>${collectionName}:[</div>`
    for (let skin of collection) {
-      content += `<li>{<div>name:'${skin.name}',</div><div>skin:'${skin.skin}',</div><div>rarity:'${skin.rarity}',</div><div>min_float:'',</div><div>max_float:''</div>},</li>`;
+      content += `<li>{<div>name:'${skin.name}',</div><div>skin:'${skin.skin}',</div><div>rarity:'${skin.rarity}',</div><div>min_float:'',</div><div>max_float:'',</div><div>isInStattrak:${skin.isInStattrak}</div>},</li>`;
    }
    content += '] </ul></div>';
    body.innerHTML = content;

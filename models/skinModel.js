@@ -47,6 +47,26 @@ const skinSchema = new Schema({
       //    type: Object
       // }
    },
+   isInStattrak: {
+      type: Boolean
+   },
+   stattrakPrices: {
+      'Factory New': {
+         type: Number,
+      },
+      'Minimal Wear': {
+         type: Number,
+      },
+      'Field-Tested': {
+         type: Number,
+      },
+      'Well-Worn': {
+         type: Number,
+      },
+      'Battle-Scarred': {
+         type: Number,
+      },
+   }
    // floatedQualities: {
    //    type: Object,
    // }

@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const data = require('./data.js')
 const Case = require('../models/caseModel');
 const Skin = require('../models/skinModel');
-const { floatedPrices, floatedQualities } = require('../utils/functions.js');
 // MONGO DATABASE
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
 mongoose.connect(dbUrl, {
@@ -40,12 +39,12 @@ const seedDB = async () => {
             'pink': [],
             'red': [],
          }
-      })
+      });
 
       let nOfSkins = 0;
       for (let item of data[collectionName]) {
          nOfSkins += 1;
-         const { skin, name, rarity, min_float, max_float } = item;
+         const { skin, name, rarity, min_float, max_float, isInStattrak } = item;
 
          // console.log(skin, name, rarity, min_float, max_float)
          const newSkin = new Skin({
@@ -63,18 +62,26 @@ const seedDB = async () => {
                'Battle-Scarred': 0,
                // floated: {},
             },
+            isInStattrak,
+            stattrakPrices: {
+               'Factory New': 0,
+               'Minimal Wear': 0,
+               'Field-Tested': 0,
+               'Well-Worn': 0,
+               'Battle-Scarred': 0,
+            }
             // floatedQualities: {}
          })
 
-         if (min_float > 0.07) newSkin.prices['Factory New'] = -1;
-         if (min_float > 0.15) newSkin.prices['Minimal Wear'] = -1;
-         if (min_float > 0.38) newSkin.prices['Field-Tested'] = -1;
-         if (min_float > 0.45) newSkin.prices['Well-Worn'] = -1;
+         if (min_float > 0.07) { newSkin.prices['Factory New'] = -1; newSkin.stattrakPrices['Factory New'] = -1; }
+         if (min_float > 0.15) { newSkin.prices['Minimal Wear'] = -1; newSkin.stattrakPrices['Minimal Wear'] = -1; }
+         if (min_float > 0.38) { newSkin.prices['Field-Tested'] = -1; newSkin.stattrakPrices['Field-Tested'] = -1; }
+         if (min_float > 0.45) { newSkin.prices['Well-Worn'] = -1; newSkin.stattrakPrices['Well-Worn'] = -1; }
 
-         if (max_float <= 0.07) newSkin.prices['Minimal Wear'] = -1;
-         if (max_float <= 0.15) newSkin.prices['Field-Tested'] = -1;
-         if (max_float <= 0.38) newSkin.prices['Well-Worn'] = -1;
-         if (max_float <= 0.45) newSkin.prices['Battle-Scarred'] = -1;
+         if (max_float <= 0.07) { newSkin.prices['Minimal Wear'] = -1; newSkin.stattrakPrices['Minimal Wear'] = -1; }
+         if (max_float <= 0.15) { newSkin.prices['Field-Tested'] = -1; newSkin.stattrakPrices['Field-Tested'] = -1; }
+         if (max_float <= 0.38) { newSkin.prices['Well-Worn'] = -1; newSkin.stattrakPrices['Well-Worn'] = -1; }
+         if (max_float <= 0.45) { newSkin.prices['Battle-Scarred'] = -1; newSkin.stattrakPrices['Battle-Scarred'] = -1; }
 
 
          // newSkin.prices.floated = floatedPrices(newSkin);
