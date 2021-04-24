@@ -46,11 +46,16 @@ module.exports.showSkinsDb = async (req, res) => {
 module.exports.checkEmptyPrices = async (req, res) => {
    const emptySkins = [];
 
-   const skins = await Skin.find({ $or: [{ "prices.Factory New": 0 }, { "prices.Minimal Wear": 0 }, { "prices.Field-Tested": 0 }, { "prices.Well-Worn": 0 }, { "prices.Battle-Scarred": 0 }, { "stattrakPrices.Factory New": 0 }, { "stattrakPrices.Minimal Wear": 0 }, { "stattrakPrices.Field-Tested": 0 }, { "stattrakPrices.Well-Worn": 0 }, { "stattrakPrices.Battle-Scarred": 0 }] })
+   const skins = await Skin.find({ $or: [{ "prices.Factory New": 0 }, { "prices.Minimal Wear": 0 }, { "prices.Field-Tested": 0 }, { "prices.Well-Worn": 0 }, { "prices.Battle-Scarred": 0 }] })
+   const stattrakSkins = await Skin.find({ isInStattrak: true, $or: [{ "stattrakPrices.Factory New": 0 }, { "stattrakPrices.Minimal Wear": 0 }, { "stattrakPrices.Field-Tested": 0 }, { "stattrakPrices.Well-Worn": 0 }, { "stattrakPrices.Battle-Scarred": 0 }] })
 
    for (let skin of skins) {
       emptySkins.push({ name: skin.name, skin: skin.skin, case: skin.case })
    }
+   for (let skin of stattrakSkins) {
+      emptySkins.push({ name: skin.name, skin: skin.skin, case: skin.case })
+   }
+
    res.locals.emptySkins = emptySkins;
    const err = {
       message: 'Some of skins have invalid prices',

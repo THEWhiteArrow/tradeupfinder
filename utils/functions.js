@@ -14,6 +14,8 @@ module.exports.getPriceFromUpdatedData = async (data, variant, url, convert, get
       } else {
          if (data.average_price) { return Number(data.average_price); }
          else if (data.median_price) { return Number(data.median_price); }
+         else if (data.lowest_price) { return Number(data.lowest_price); }
+         else if (data.highest_price) { return Number(data.highest_price); }
          else { return 0; }
       }
 
@@ -28,17 +30,20 @@ module.exports.getPriceFromUpdatedData = async (data, variant, url, convert, get
 
       if (newData.success === true) {
          if (variant == 'steam') {
-            if (data.median_price) { return convert(data.median_price); }
-            else if (data.lowest_price) { return convert(data.lowest_price); }
+            if (newData.median_price) { return convert(newData.median_price); }
+            else if (newData.lowest_price) { return convert(newData.lowest_price); }
             else { return 0; }
 
          } else {
-            if (data.average_price) { return Number(data.average_price); }
-            else if (data.median_price) { return Number(data.median_price); }
+            if (newData.average_price) { return Number(newData.average_price); }
+            else if (newData.median_price) { return Number(newData.median_price); }
+            else if (newData.lowest_price) { return Number(newData.lowest_price); }
+            else if (newData.highest_price) { return Number(newData.highest_price); }
             else { return 0; }
          }
 
       } else if (newData.success == 'false' && newData.reason == undefined) { return 0; }
+
       else if (newData.reason) {
          console.log(`You requested too many times recently!, Status: 429`);
          return new ExpressError(`You requested too many times recently. ${newData.reason}`, 429);
