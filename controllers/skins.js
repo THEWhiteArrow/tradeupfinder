@@ -11,6 +11,7 @@ const Name = require('../models/nameModel');
 const Trade = require('../models/tradeModel');
 const Favourite = require('../models/favouriteModel');
 const User = require('../models/userModel');
+const e = require('express');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
@@ -369,24 +370,46 @@ module.exports.displayFavouriteTrades = async (req, res) => {
    const foundUser = await User.findById(user._id).populate('favourites')
    const { favourites } = foundUser;
 
-   const sortedFavourites = sortingTrades(favourites);
+   const sortedFavourites = sortingTrades(favourites, 'returnPercentage', 'descending');
 
    res.render('trades/favourites', { favourites: sortedFavourites, maxShownSkins, steamBaseUrl })
 }
 
 module.exports.recheckFavouriteStats = async (req, res) => {
    // console.log('checking')
+   // console.log(req.body)
    const { firstPrice, secondPrice } = req.body;
    const { tradeId } = req.params;
    try {
-
       const favouriteTrade = await Favourite.findById(tradeId);
-
       const { amount } = favouriteTrade;
-      const { total, targetedSkinsNumber, trade } = favouriteTrade.instance;
+      const { targetedSkinsNumber, trade } = favouriteTrade.instance;
+      // console.log(favouriteTrade.instance.total)
+      const { firstSkin, secondSkin, targetedSkin } = trade;
+      const firstCollection = firstSkin.case;
+      const secondCollection = secondSkin.case;
+
+      let total = 0;
+      let thirdPrice;
+
+      for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
+         let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] * steamTax * 100) / 100;
+         trade.targetedSkinsArr[i].price = newPrice;
+         trade.targetedSkinsArr[i]._id == targetedSkin._id ? thirdPrice = newPrice : null;
+
+         if (trade.targetedSkinsArr[i].case == firstCollection && trade.targetedSkinsArr[i].case == secondCollection) {
+            total += (newPrice * 10);
+         } else if (trade.targetedSkinsArr[i].case == firstCollection) {
+            total += (newPrice * Number(amount.amount1));
+         } else if (trade.targetedSkinsArr[i].case == secondCollection) {
+            total += (newPrice * Number(amount.amount2));
+         }
+
+      }
 
       let wantedOutputChance = 0;
       const inputPrice = Math.round((amount.amount1 * firstPrice + amount.amount2 * secondPrice) * 100) / 100;
+
 
       for (let outputSkin of trade.targetedSkinsArr) {
          if (inputPrice <= outputSkin.price) {
@@ -400,6 +423,22 @@ module.exports.recheckFavouriteStats = async (req, res) => {
       const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
       // ALSO WE HAVE wantedOutputChance
       // console.log('-------checked')
+
+      const updatedFavourite = await Favourite.findByIdAndUpdate(
+         tradeId,
+         {
+            'instance.total': total,
+            'instance.wantedOutputChance': wantedOutputChance,
+            'instance.trade.firstPrice': firstPrice,
+            'instance.trade.secondPrice': secondPrice,
+            'instance.trade.thirdPrice': thirdPrice,
+            'instance.trade.inputPrice': inputPrice,
+            'instance.trade.profitPerTradeUp': profitPerTradeUp,
+            'instance.trade.returnPercentage': returnPercentage,
+            'instance.trade.targetedSkinsArr': trade.targetedSkinsArr,
+         },
+         { new: true });
+
       const feedback = {
          success: true,
          inputPrice,

@@ -156,8 +156,9 @@
                               <div class="col-12 d-flex justify-content-center my-3">
                                  <form action="/skins/trades/favourites/<%= favourite._id %>" method="POST"
                                     class="recheck-form d-flex flex-column align-items-center">
-                                    <div class="d-flex flex-row">
 
+                                    <h5>Inputs:</h5>
+                                    <div class="d-flex flex-row">
                                        <div class="form-group">
                                           <label for="firstPriceForm<%= favourite._id %>">
                                              <%= trade.firstSkin.name %>'s' new price
@@ -174,6 +175,25 @@
                                              name="secondPrice" value="<%= trade.secondPrice %>" class="form-control"
                                              step="0.01">
                                        </div>
+                                    </div>
+                                    <h5 class="mt-3">Outputs:</h5>
+
+                                    <div class="d-flex flex-row flex-wrap justify-content-center">
+                                       <% for(let targetedSkin of trade.targetedSkinsArr){ %>
+                                          <div class="form-group">
+                                             <label for="<%= favourite._id %><%= targetedSkin._id %>">
+                                                <div>
+                                                   <%= targetedSkin.name %>
+                                                </div>
+                                                <div>
+                                                   <%= targetedSkin.skin %>
+                                                </div>
+                                             </label>
+                                             <input id="<%= favourite._id %><%= targetedSkin._id %>" type="number"
+                                                name="<%= targetedSkin._id %>" value="<%= targetedSkin.price %>"
+                                                class="form-control" step="0.01">
+                                          </div>
+                                          <% } %>
                                     </div>
 
                                     <button class="btn btn-success w-100">RECHECK</button>

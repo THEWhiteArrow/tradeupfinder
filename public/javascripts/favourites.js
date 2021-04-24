@@ -48,10 +48,22 @@ const changeStats = (form, data) => {
 
 const recheckFavouriteStats = async (form) => {
    const url = form.getAttribute('action')
-   const firstPrice = Number(form[0].value);
-   const secondPrice = Number(form[1].value);
+   // const firstPrice = Number(form[0].value);
+   // const secondPrice = Number(form[1].value);
+
+   const body = {};
+
+   for (let el of form) {
+      const name = el.getAttribute('name');
+      const value = el.value;
+
+      body[name] = Number(value);
+   }
+
+
+
    console.log(url)
-   const res = await axios.post(url, { 'firstPrice': firstPrice, 'secondPrice': secondPrice });
+   const res = await axios.post(url, body);
    const data = res.data;
    return data;
 }
