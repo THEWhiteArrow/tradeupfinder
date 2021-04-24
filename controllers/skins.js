@@ -14,7 +14,7 @@ const User = require('../models/userModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
-const maxShownSkins = 69;
+const maxShownSkins = 200;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 module.exports.showIndex = async (req, res, next) => {
