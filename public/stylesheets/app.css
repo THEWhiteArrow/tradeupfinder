@@ -36,9 +36,28 @@ h6 {
 
 }
 
-.stattrak,.stattrak:focus{
+input.stattrak,input.stattrak:focus{
    color:goldenrod;
 }
+
+div.stattrak{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: fit-content;
+   border-radius: 5px;
+   padding:7px;
+   background-color:goldenrod;
+   color:white;
+   cursor: pointer;
+
+   transition: 0.07s ease-in-out;
+}
+
+div.stattrak:hover{
+   background-color:rgb(173, 132, 27);
+}
+
 
 .star {
    background-color: white;

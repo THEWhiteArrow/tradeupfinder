@@ -73,6 +73,7 @@ module.exports.manageFavouriteTrade = async (req, res) => {
             priceCorrection: unSavedTrade.priceCorrection,
             name: unSavedTrade.name,
             instance: unSavedTrade.instance,
+            pricesType: unSavedTrade.pricesType,
             originalTradeId: tradeId
          })
 

@@ -53,7 +53,7 @@
                                           Podbicie Ceny : <%= profit.priceCorrection %>zł
                                        </div>
                                        <% if(profit.pricesType=='stattrakPrices' ){ %>
-                                          <div class="stattrak">
+                                          <div class="stattrak mt-3">
                                              StatTrak™
                                           </div>
                                           <% } %>
@@ -90,9 +90,12 @@
                                        <%= profit.amount.amount1 %>x
                                           [<%= trade.firstQuality %>]
                                              [<%= trade.firstSkinAvgFloat %>]
-                                                (<%=Math.round((trade.firstPrice)*100) /100 %>zł)
-                                                   <%= trade.firstSkin.name %>
-                                                      <%= trade.firstSkin.skin %>
+                                                (<%=Math.round((trade.firstPrice)*100) /100 %>zł) -
+                                                   <% if(profit.pricesType=='stattrakPrices' ){ %>
+                                                      StatTrak™
+                                                      <% } %>
+                                                         <%= trade.firstSkin.name %>
+                                                            <%= trade.firstSkin.skin %>
                                     </a>
                                     <a class="link-dark d-flex col-12 justify-content-center skin second"
                                        data-bs-toggle="tooltip" data-bs-placement="right" title="See on the market"
@@ -100,9 +103,12 @@
                                        <%= profit.amount.amount2 %>x
                                           [<%= trade.secondQuality %>]
                                              [<%= trade.secondSkinAvgFloat %>]
-                                                (<%=Math.round( (trade.secondPrice)*100)/100 %>zł)
-                                                   <%= trade.secondSkin.name %>
-                                                      <%= trade.secondSkin.skin %>
+                                                (<%=Math.round( (trade.secondPrice)*100)/100 %>zł) -
+                                                   <% if(profit.pricesType=='stattrakPrices' ){ %>
+                                                      StatTrak™
+                                                      <% } %>
+                                                         <%= trade.secondSkin.name %>
+                                                            <%= trade.secondSkin.skin %>
                                     </a>
 
 
@@ -113,11 +119,13 @@
                                        data-bs-toggle="tooltip" data-bs-placement="right" title="See on the market"
                                        href="<%= trade.targetedSkinUrl %>" target="_blank">
                                        [<%= trade.targetedQuality %>]
-                                          [<%= trade.targetedSkinFloat %>]
-
-                                             <%= trade.targetedSkin.name %>
-                                                <%= trade.targetedSkin.skin %>
-                                                   (<%= Math.round(trade.targetedPrice*100)/100 %>)
+                                          [<%= trade.targetedSkinFloat %>] -
+                                             <% if(profit.pricesType=='stattrakPrices' ){ %>
+                                                StatTrak™
+                                                <% } %>
+                                                   <%= trade.targetedSkin.name %>
+                                                      <%= trade.targetedSkin.skin %>
+                                                         (<%= Math.round(trade.targetedPrice*100)/100 %>)
                                     </a>
 
                                  </div>
@@ -145,7 +153,7 @@
                                  </div>
                               </div>
 
-                              <!-- HELP SKINS -->
+                              <!-- HELPER SKINS -->
                               <div class="d-flex flex-column flex-lg-row col-12 mt-3 mb-2">
 
                                  <!-- ALTERNATE INPUTS -->
@@ -155,10 +163,18 @@
                                        <% for(let alternateSkin of trade.alternateInputSkins){ %>
                                           <li class="d-flex mb-1">
                                              <a class="link-dark" target="_blank" title="See on the market"
-                                                href="<%= alternateSkin.url  %> ">
-                                                <%=`${alternateSkin.collectionName} - [${alternateSkin.quality}] -
-                                                   ${alternateSkin.name} ${alternateSkin.skin} -
-                                                   (${alternateSkin.price})`%>
+                                                href="<%= alternateSkin.url  %>">
+                                                <% if(profit.pricesType=='stattrakPrices' ){ %>
+
+                                                   <%=`${alternateSkin.collectionName} - [${alternateSkin.quality}] -
+                                                      StatTrak™ ${alternateSkin.name} ${alternateSkin.skin} -
+                                                      (${alternateSkin.price})`%>
+
+                                                      <% }else{ %>
+                                                         <%=`${alternateSkin.collectionName} -
+                                                            [${alternateSkin.quality}] - ${alternateSkin.name}
+                                                            ${alternateSkin.skin} - (${alternateSkin.price})`%>
+                                                            <% } %>
                                              </a>
                                           </li>
                                           <% } %>
@@ -172,16 +188,32 @@
                                        <% for(let t=0;t<trade.targetedSkinsArr.length;t++){ %>
                                           <li class="d-flex mb-1">
                                              <a class="link-dark" target="_blank" title="See on the market"
-                                                href="<%= encodeURI(`${steamBaseUrl}${trade.targetedSkinsArr[t].name} | ${trade.targetedSkinsArr[t].skin} (${trade.targetedSkinsQuality[t]})`)  %> ">
+                                                href="<%= trade.targetedSkinsArr[t].url%>">
 
-                                                [<%=trade.targetedSkinsQuality[t] %>] -
-                                                   [<%=trade.targetedSkinsArr[t].float %>] -
-                                                      <%= trade.targetedSkinsArr[t].name %>
-                                                         <%= trade.targetedSkinsArr[t].skin %> -
-                                                            <%=trade.targetedSkinsArr[t].prices[trade.targetedSkinsQuality[t]]%>
-                                                               (
-                                                               <%=Math.round((trade.targetedSkinsArr[t].prices[trade.targetedSkinsQuality[t]])*0.87*100)
-                                                                  /100%>)
+                                                <% if(profit.pricesType=='stattrakPrices' ){ %>
+
+                                                   [<%=trade.targetedSkinsQuality[t] %>] -
+                                                      [<%=trade.targetedSkinsArr[t].float %>] -
+                                                         StatTrak™
+                                                         <%= trade.targetedSkinsArr[t].name %>
+                                                            <%= trade.targetedSkinsArr[t].skin %> -
+                                                               <%=trade.targetedSkinsArr[t].price%>
+                                                                  (
+                                                                  <%=Math.round((trade.targetedSkinsArr[t].price)*0.87*100)
+                                                                     /100%>)
+
+                                                                     <% }else{ %>
+                                                                        [<%=trade.targetedSkinsQuality[t] %>] -
+                                                                           [<%=trade.targetedSkinsArr[t].float %>] -
+                                                                              <%= trade.targetedSkinsArr[t].name %>
+                                                                                 <%= trade.targetedSkinsArr[t].skin %> -
+                                                                                    <%=trade.targetedSkinsArr[t].price%>
+                                                                                       (
+                                                                                       <%=Math.round((trade.targetedSkinsArr[t].price)*0.87*100)
+                                                                                          /100%>)
+
+                                                                                          <% } %>
+
                                              </a>
                                           </li>
                                           <% } %>

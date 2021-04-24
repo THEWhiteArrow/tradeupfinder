@@ -90,7 +90,7 @@ module.exports.updatePrices = async (req, res, next) => {
             if (item.prices[quality] !== -1) {
 
                let baseUrl;
-               variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=2&id=';
+               variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=3&id=';
                const url = `${baseUrl}${name} | ${skin} (${quality})`;
                const encodedUrl = encodeURI(url);
 
@@ -310,7 +310,7 @@ module.exports.prepareTrades = async (req, res) => {
 }
 
 module.exports.mixedAlgorithm = async (req, res) => {
-   let { action = 'nothing', researchName = 'noname', newResearchName = 'noname', pairs = 2, checkStats = 'no' } = req.query;
+   let { action = 'nothing', researchName = 'noname', newResearchName = 'noname', pairs = 2, checkStats = 'no', sort = 'returnPercentage', order = 'descending' } = req.query;
    if (action != 'nothing' && action != 'save' && action != 'display') {
       action = 'nothing';
    }
@@ -326,10 +326,9 @@ module.exports.mixedAlgorithm = async (req, res) => {
       //    res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
       // }
 
-      const trades = await Trade.find({});
-      const filteredTradesByName = trades.filter(el => el.name == researchName).slice(0, maxShownSkins)
+      const trades = await Trade.find({ name: researchName });
 
-      const sortedTrades = sortingTrades(filteredTradesByName);
+      const sortedTrades = sortingTrades(trades, sort, order).slice(0, maxShownSkins);
       res.render('trades/mixed', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
    } else {
@@ -344,7 +343,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
          const trades = await mixedTwoPairs(req);
          // const trades = await Trade.find({});
 
-         const sortedTrades = sortingTrades(trades);
+         const sortedTrades = sortingTrades(trades, sort, order);
 
 
 
@@ -594,7 +593,7 @@ const mixedTwoPairs = async (req) => {
                                        }
                                        alternateSkin.case == firstSkin.case ? alternateQuality = firstQuality : alternateQuality = secondQuality;
                                        alternate.quality = alternateQuality;
-                                       alternate.price = Math.round((alternateSkin.prices[alternateQuality] + priceCorrection) * 100) / 100;
+                                       alternate.price = Math.round((alternateSkin[pricesType][alternateQuality] + priceCorrection) * 100) / 100;
                                        if (pricesType == 'prices') {
                                           alternate.url = encodeURI(`${steamBaseUrl}${alternate.name} | ${alternate.skin} (${alternateQuality})`);
                                        } else {
@@ -620,10 +619,6 @@ const mixedTwoPairs = async (req) => {
                                  secondSkin,
                                  targetedSkin: maxSkin,
 
-                                 firstSkinUrl: encodeURI(`${steamBaseUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`),
-                                 secondSkinUrl: encodeURI(`${steamBaseUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`),
-                                 targetedSkinUrl: encodeURI(`${steamBaseUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`),
-
                                  firstQuality,
                                  secondQuality,
                                  targetedQuality: maxSkin.targetedQuality,
@@ -647,6 +642,17 @@ const mixedTwoPairs = async (req) => {
                                  profitPerTradeUp,
                                  returnPercentage,
                               }
+
+                              if (pricesType === 'stattrakPrices') {
+                                 trade.firstSkinUrl = encodeURI(`${steamBaseUrl}StatTrak™ ${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`);
+                                 trade.secondSkinUrl = encodeURI(`${steamBaseUrl}StatTrak™ ${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`);
+                                 trade.targetedSkinUrl = encodeURI(`${steamBaseUrl}StatTrak™ ${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`);
+                              } else if (pricesType === 'prices') {
+                                 trade.firstSkinUrl = encodeURI(`${steamBaseUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`);
+                                 trade.secondSkinUrl = encodeURI(`${steamBaseUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`);
+                                 trade.targetedSkinUrl = encodeURI(`${steamBaseUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`);
+                              }
+
                               const pom2 = {
                                  trade,
                                  avg,
@@ -709,15 +715,30 @@ const checkTime = (current, hour, minute) => {
       console.log(`time : ${finishHour - hour} : ${finishMinute - minute}`);
    }
 }
-const sortingTrades = (trades) => {
-   for (let i = 0; i < trades.length; i++) {
-      for (let j = 0; j < trades.length; j++) {
-         if (trades[i].instance.trade.returnPercentage > trades[j].instance.trade.returnPercentage) {
-            let temp = trades[i];
-            trades[i] = trades[j];
-            trades[j] = temp;
+const sortingTrades = (trades, sort, order) => {
+
+   if (order === 'descending') {
+
+      for (let i = 0; i < trades.length; i++) {
+         for (let j = 0; j < trades.length; j++) {
+            if (trades[i].instance.trade[sort] > trades[j].instance.trade[sort]) {
+               let temp = trades[i];
+               trades[i] = trades[j];
+               trades[j] = temp;
+            }
          }
       }
+   } else if (order === 'ascending') {
+      for (let i = 0; i < trades.length; i++) {
+         for (let j = 0; j < trades.length; j++) {
+            if (trades[i].instance.trade[sort] < trades[j].instance.trade[sort]) {
+               let temp = trades[i];
+               trades[i] = trades[j];
+               trades[j] = temp;
+            }
+         }
+      }
+
    }
    return trades;
 }

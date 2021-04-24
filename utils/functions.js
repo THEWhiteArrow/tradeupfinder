@@ -22,7 +22,7 @@ module.exports.getPriceFromUpdatedData = async (data, variant, url, convert, get
 
 
    } else if (data.success == 'false' && data.reason == undefined) {
-      const newUrl = url.replace('time=2', 'time=30')
+      const newUrl = url.replace('time=3', 'time=30')
       const encodedUrl = encodeURI(newUrl);
 
       let newData;

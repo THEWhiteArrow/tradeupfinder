@@ -33,7 +33,6 @@ const isFavouriteTradeAuthorized = async (req, res, next) => {
    const { user } = req;
    const { action } = req.query;
 
-   console.log(action)
    if (action === 'add') return next();
    if (action === 'delete' || action === undefined) {
 
