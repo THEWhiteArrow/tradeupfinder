@@ -1,5 +1,5 @@
 const { getData, convert } = require('../utils/functions');
-const { checkQuality, findCheapestSkin } = require('../utils/functions');
+const { checkQuality, findCheapestSkin, getPriceFromUpdatedData } = require('../utils/functions');
 const { qualities, rarities, avg_floats } = require('../utils/variables');
 const ExpressError = require('../utils/ExpressError');
 const fetch = require('node-fetch');
@@ -17,7 +17,7 @@ const steamTax = 0.87;
 const maxShownSkins = 69;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
-module.exports.showIndex = async (req, res) => {
+module.exports.showIndex = async (req, res, next) => {
    // console.log(req.user)
    const researchesName = await Name.find({});
    // res.cookie('testtoken', 'lol');
@@ -43,6 +43,24 @@ module.exports.showSkinsDb = async (req, res) => {
    res.render('skins', { collections, qualities, rarities });
 }
 
+module.exports.checkEmptyPrices = async (req, res) => {
+   const emptySkins = [];
+
+   const skins = await Skin.find({ $or: [{ "prices.Factory New": 0 }, { "prices.Minimal Wear": 0 }, { "prices.Field-Tested": 0 }, { "prices.Well-Worn": 0 }, { "prices.Battle-Scarred": 0 }, { "stattrakPrices.Factory New": 0 }, { "stattrakPrices.Minimal Wear": 0 }, { "stattrakPrices.Field-Tested": 0 }, { "stattrakPrices.Well-Worn": 0 }, { "stattrakPrices.Battle-Scarred": 0 }] })
+
+   for (let skin of skins) {
+      emptySkins.push({ name: skin.name, skin: skin.skin, case: skin.case })
+   }
+   res.locals.emptySkins = emptySkins;
+   const err = {
+      message: 'Some of skins have invalid prices',
+      statusCode: 500
+   }
+
+   res.render('error', { err, emptySkins })
+}
+
+
 module.exports.updatePrices = async (req, res, next) => {
 
    const { start = 0, end = length, variant = 'backpack', stattrak = '0' } = req.query;
@@ -55,157 +73,54 @@ module.exports.updatePrices = async (req, res, next) => {
       count += 1;
 
       if (count >= start && count <= end) {
-         console.log(`${count} / ${end} - ${item.name} | ${item.skin}`);
+         console.log(`${count} / ${end} - ${item.name} | ${item.skin} - ${reqNumber}`);
 
          const updatedPrices = {};
          const updatedStattrakPrices = {};
-         const { name, skin, prices, stattrakPrices, _id } = item;
+         const { name, skin, _id } = item;
 
-         const keys = Object.keys(prices);
 
-         for (let q of keys) {
-            if (q !== '$init' && item.prices[q] !== -1) {
+         for (let quality of qualities) {
+
+            if (item.prices[quality] !== -1) {
 
                let baseUrl;
                variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=2&id=';
-               const url = `${baseUrl}${name} | ${skin} (${q})`;
+               const url = `${baseUrl}${name} | ${skin} (${quality})`;
                const encodedUrl = encodeURI(url);
-               // StatTrak™
+
                let data;
                variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                reqNumber += 1;
 
-               if (data.success == true) {
-                  let price;
+               updatedPrices[quality] = await getPriceFromUpdatedData(data, variant, url, convert, getData);
+               if (updatedPrices[quality].statusCode && updatedPrices[quality].statusCode === 429) { return next(updatedPrices[quality]) }
+            } else {
+               updatedPrices[quality] = -1;
+            }
 
-                  if (variant == 'steam') {
-                     if (data.median_price) { price = data.median_price; updatedPrices[q] = convert(price); }
-                     else if (data.lowest_price) { price = data.lowest_price; updatedPrices[q] = convert(price); }
-                     else { updatedPrices[q] = 0; }
-
-                  } else {
-                     if (data.average_price) { price = data.average_price; updatedPrices[q] = Number(price); }
-                     else if (data.median_price) { price = data.median_price; updatedPrices[q] = Number(price); }
-                     else { updatedPrices[q] = 0; }
-                  }
-
-
-               } else if (data.success == 'false' || data == null) {
-                  console.log(data, encodedUrl)
-                  const retryData = await getData(encodeURI(`http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=30&id=${name} | ${skin} (${q})`), 500);
-                  reqNumber += 1;
-                  console.log(retryData, reqNumber)
-
-                  if (retryData.success == true) {
-
-                     let price;
-                     if (variant == 'steam') {
-                        if (retryData.median_price) { price = retryData.median_price; updatedPrices[q] = convert(price); }
-                        else if (retryData.lowest_price) { price = retryData.lowest_price; updatedPrices[q] = convert(price); }
-                        else {
-                           updatedPrices[q] = 0;
-                        }
-                     } else {
-
-                        if (retryData.average_price) { price = retryData.average_price; updatedPrices[q] = Number(price); }
-                        else if (retryData.median_price) { price = retryData.median_price; updatedPrices[q] = Number(price); }
-                        else { updatedPrices[q] = 0; }
-                     }
-
-                  } else {
-                     updatedPrices[q] = 0;
-                  }
-                  // console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
-                  // return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429));
-               }
-
-            } else if (item.prices[q] === -1) { updatedPrices[q] = -1; }
-         }
-
-
-
-
-
-
-
-
-
-
-
-
-         // if (stattrak == 'yes' && item.isInStattrak) {
-         if (stattrak && item.isInStattrak) {
-            const stattrakKeys = Object.keys(stattrakPrices);
-
-            for (let s of stattrakKeys) {
-
-               if (s !== '$init' && item.stattrakPrices[s] !== -1) {
+            if (stattrak && item.isInStattrak) {
+               if (item.stattrakPrices[quality] !== -1) {
 
                   let baseUrl;
-                  variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=2&id=';
-                  // const baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&id=';
-                  // StatTrak™
-                  const url = `${baseUrl}StatTrak™ ${name} | ${skin} (${s})`;
+                  variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=StatTrak™ ' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=2&id=StatTrak™ ';
+                  const url = `${baseUrl}${name} | ${skin} (${quality})`;
                   const encodedUrl = encodeURI(url);
-                  // const data = await getData(encodedUrl, 300);
+
                   let data;
                   variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                   reqNumber += 1;
-                  // console.log(data)
-                  if (data.success == true) {
 
-                     // console.log(data, url)
-
-                     let price;
-                     if (variant == 'steam') {
-
-                        if (data.median_price) { price = data.median_price; updatedStattrakPrices[s] = convert(price); }
-                        else if (data.lowest_price) { price = data.lowest_price; updatedStattrakPrices[s] = convert(price); }
-                        else { updatedStattrakPrices[s] = 0; }
-
-                     } else {
-
-                        if (data.average_price) { price = data.average_price; updatedStattrakPrices[s] = Number(price); }
-                        else if (data.median_price) { price = data.median_price; updatedStattrakPrices[s] = Number(price); }
-                        else { updatedStattrakPrices[s] = 0; }
-                     }
-                     console.log(`-----------------StatTrak™ ${item.name} | ${item.skin} ${s} ${updatedStattrakPrices[s]}`);
-
-
-                  } else if (data.success == 'false' || data == null) {
-                     console.log(data, encodedUrl, reqNumber)
-                     const retryData = await getData(encodeURI(`http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=30&id=StatTrak™ ${name} | ${skin} (${s})`), 500);
-                     reqNumber += 1;
-                     console.log(retryData)
-
-                     if (retryData.success == true) {
-
-                        let price;
-                        if (variant == 'steam') {
-                           if (retryData.median_price) { price = retryData.median_price; updatedStattrakPrices[s] = convert(price); }
-                           else if (retryData.lowest_price) { price = retryData.lowest_price; updatedStattrakPrices[s] = convert(price); }
-                           else { updatedStattrakPrices[s] = 0; }
-
-                        } else {
-
-                           if (retryData.average_price) { price = retryData.average_price; updatedStattrakPrices[s] = Number(price); }
-                           else if (retryData.median_price) { price = retryData.median_price; updatedStattrakPrices[s] = Number(price); }
-                           else { updatedStattrakPrices[s] = 0; }
-                        }
-                     } else {
-                        updatedStattrakPrices[s] = 0;
-                     }
-                     console.log(`-----------------StatTrak™ ${item.name} | ${item.skin} ${s} ${updatedStattrakPrices[s]}`);
-                     // console.log(`You requested too many times recently!, Status: 429, Updated ${count} / ${length}`);
-                     // return next(new ExpressError(`You requested too many times recently or there is some other problem (data.success != true)`, 429));
-                  }
-
-               } else if (item.stattrakPrices[s] === -1) { updatedStattrakPrices[s] = -1; console.log(`-----------------StatTrak™ ${item.name} | ${item.skin} ${s} ${updatedStattrakPrices[s]}`); }
-
-
+                  updatedStattrakPrices[quality] = await getPriceFromUpdatedData(data, variant, url, convert, getData);
+                  if (updatedStattrakPrices[quality].statusCode && updatedStattrakPrices[quality].statusCode === 429) { return next(updatedStattrakPrices[quality]) }
+                  console.log(`------------ StatTrak™ ${item.name} | ${item.skin} - ${quality}`);
+               } else {
+                  updatedStattrakPrices[quality] = -1;
+               }
             }
 
          }
+
 
 
          if (stattrak) {
@@ -213,8 +128,6 @@ module.exports.updatePrices = async (req, res, next) => {
          } else {
             const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
          }
-
-
 
       }
 

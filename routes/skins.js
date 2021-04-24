@@ -13,6 +13,10 @@ router.route('/')
 router.route('/show-database')
    .get(catchAsync(skin.showSkinsDb));
 
+router.route('/show-database/validate')
+   .get(isLoggedIn, isModeratorAlso, catchAsync(skin.checkEmptyPrices))
+
+
 // router.route('/trades')
 //    .get(catchAsync(skin.prepareTrades));
 

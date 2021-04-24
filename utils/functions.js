@@ -1,6 +1,63 @@
 const fetch = require('node-fetch');
-
+const ExpressError = require('../utils/ExpressError');
 const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
+
+module.exports.getPriceFromUpdatedData = async (data, variant, url, convert, getData) => {
+
+   if (data.success === true) {
+
+      if (variant == 'steam') {
+         if (data.median_price) { return convert(data.median_price); }
+         else if (data.lowest_price) { return convert(data.lowest_price); }
+         else { return 0; }
+
+      } else {
+         if (data.average_price) { return Number(data.average_price); }
+         else if (data.median_price) { return Number(data.median_price); }
+         else { return 0; }
+      }
+
+
+
+   } else if (data.success == 'false' && data.reason == undefined) {
+      const newUrl = url.replace('time=2', 'time=30')
+      const encodedUrl = encodeURI(newUrl);
+
+      let newData;
+      variant == 'steam' ? newData = await getData(encodedUrl, 3200) : newData = await getData(encodedUrl, 700);
+
+      if (newData.success === true) {
+         if (variant == 'steam') {
+            if (data.median_price) { return convert(data.median_price); }
+            else if (data.lowest_price) { return convert(data.lowest_price); }
+            else { return 0; }
+
+         } else {
+            if (data.average_price) { return Number(data.average_price); }
+            else if (data.median_price) { return Number(data.median_price); }
+            else { return 0; }
+         }
+
+      } else if (newData.success == 'false' && newData.reason == undefined) { return 0; }
+      else if (newData.reason) {
+         console.log(`You requested too many times recently!, Status: 429`);
+         return new ExpressError(`You requested too many times recently. ${newData.reason}`, 429);
+      } else {
+         console.log(`You requested too many times recently!, Status: 429`);
+         return new ExpressError(`You requested too many times recently.`, 429);
+      }
+
+
+
+   } else if (data.reason) {
+      console.log(`You requested too many times recently!. ${data.reason}, Status: 429`);
+      return new ExpressError(`You requested too many times recently. ${data.reason}`, 429);
+
+   } else {
+      console.log(`You requested too many times recently!, Status: 429`);
+      return new ExpressError(`You requested too many times recently.`, 429);
+   }
+}
 
 module.exports.findCheapestSkin = (collection, rarity, quality, pricesType) => {
    let min = 100000;
@@ -114,10 +171,13 @@ module.exports.convert = (s) => {
    return Number(stringPrice);
 }
 
-
+// const convert = (s) => {
+//    const stringPrice = s.slice(0, s.length - 2).replace(',', '.');
+//    return Number(stringPrice);
+// }
 
 module.exports.combainToName = (name, skin, q) => {
-   return `${name} | ${skin} (${q})`.replace("'", "&#39");
+   return `${name} | ${skin}(${q})`.replace("'", "&#39");
 }
 
 module.exports.mayReplaceSpace = (n) => {
@@ -168,7 +228,7 @@ module.exports.toName = (name, status) => {
    if (name.indexOf(' ') !== -1) name = name.replace(' ', '%20%7C%20');
    if (name.indexOf(' ') !== -1) name = name.replace(' ', '%20');
    if (status.indexOf(' ') !== -1) status = status.replace(' ', '%20');
-   let output = `${name}%20%28${status}%29`;
+   let output = `${name} % 20 % 28${status} % 29`;
 
    return output;
 }
