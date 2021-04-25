@@ -190,7 +190,8 @@
                                                 </div>
                                              </label>
                                              <input id="<%= favourite._id %><%= targetedSkin._id %>" type="number"
-                                                name="<%= targetedSkin._id %>" value="<%= targetedSkin.price %>"
+                                                name="<%= targetedSkin._id %>"
+                                                value="<%= Math.round(targetedSkin.price/0.87*100)/100 %>"
                                                 class="form-control" step="0.01">
                                           </div>
                                           <% } %>
@@ -244,20 +245,21 @@
                                                          StatTrak™
                                                          <%= trade.targetedSkinsArr[t].name %>
                                                             <%= trade.targetedSkinsArr[t].skin %> -
-                                                               <%=trade.targetedSkinsArr[t].price%>
+                                                               <%=
+                                                                  Math.round(trade.targetedSkinsArr[t].price*100/0.87)/100%>
                                                                   (
-                                                                  <%=Math.round((trade.targetedSkinsArr[t].price)*0.87*100)
-                                                                     /100%>)
+                                                                  <%=trade.targetedSkinsArr[t].price%>)
 
                                                                      <% }else{ %>
                                                                         [<%=trade.targetedSkinsQuality[t] %>] -
                                                                            [<%=trade.targetedSkinsArr[t].float %>] -
                                                                               <%= trade.targetedSkinsArr[t].name %>
                                                                                  <%= trade.targetedSkinsArr[t].skin %> -
-                                                                                    <%=trade.targetedSkinsArr[t].price%>
+                                                                                    <%=
+                                                                                       Math.round(trade.targetedSkinsArr[t].price*100/0.87)/100%>
                                                                                        (
-                                                                                       <%=Math.round((trade.targetedSkinsArr[t].price)*0.87*100)
-                                                                                          /100%>)
+                                                                                       <%=trade.targetedSkinsArr[t].price%>
+                                                                                          )
 
                                                                                           <% } %>
                                              </a>

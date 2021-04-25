@@ -382,20 +382,20 @@ module.exports.recheckFavouriteStats = async (req, res) => {
    const { tradeId } = req.params;
    try {
       const favouriteTrade = await Favourite.findById(tradeId);
-      const { amount } = favouriteTrade;
-      const { targetedSkinsNumber, trade } = favouriteTrade.instance;
+      const { amount, instance } = favouriteTrade;
+      const { targetedSkinsNumber, trade } = instance;
       // console.log(favouriteTrade.instance.total)
       const { firstSkin, secondSkin, targetedSkin } = trade;
       const firstCollection = firstSkin.case;
       const secondCollection = secondSkin.case;
 
       let total = 0;
-      let thirdPrice;
+      let targetedPrice;
 
       for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
          let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] * steamTax * 100) / 100;
          trade.targetedSkinsArr[i].price = newPrice;
-         trade.targetedSkinsArr[i]._id == targetedSkin._id ? thirdPrice = newPrice : null;
+         trade.targetedSkinsArr[i]._id == targetedSkin._id ? targetedPrice = newPrice : null;
 
          if (trade.targetedSkinsArr[i].case == firstCollection && trade.targetedSkinsArr[i].case == secondCollection) {
             total += (newPrice * 10);
@@ -424,20 +424,17 @@ module.exports.recheckFavouriteStats = async (req, res) => {
       // ALSO WE HAVE wantedOutputChance
       // console.log('-------checked')
 
-      const updatedFavourite = await Favourite.findByIdAndUpdate(
-         tradeId,
-         {
-            'instance.total': total,
-            'instance.wantedOutputChance': wantedOutputChance,
-            'instance.trade.firstPrice': firstPrice,
-            'instance.trade.secondPrice': secondPrice,
-            'instance.trade.thirdPrice': thirdPrice,
-            'instance.trade.inputPrice': inputPrice,
-            'instance.trade.profitPerTradeUp': profitPerTradeUp,
-            'instance.trade.returnPercentage': returnPercentage,
-            'instance.trade.targetedSkinsArr': trade.targetedSkinsArr,
-         },
-         { new: true });
+      instance.total = total;
+      instance.wantedOutputChance = wantedOutputChance;
+      instance.trade.firstPrice = firstPrice;
+      instance.trade.secondPrice = secondPrice;
+      instance.trade.targetedPrice = targetedPrice;
+      instance.trade.inputPrice = inputPrice;
+      instance.trade.profitPerTradeUp = profitPerTradeUp;
+      instance.trade.returnPercentage = returnPercentage;
+      instance.trade.targetedSkinsArr = trade.targetedSkinsArr;
+
+      const updatedFavourite = await Favourite.findByIdAndUpdate(tradeId, { instance }, { new: true });
 
       const feedback = {
          success: true,
