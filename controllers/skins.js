@@ -91,7 +91,7 @@ module.exports.updatePrices = async (req, res, next) => {
             if (item.prices[quality] !== -1) {
 
                let baseUrl;
-               variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=3&id=';
+               variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=2&id=';
                const url = `${baseUrl}${name} | ${skin} (${quality})`;
                const encodedUrl = encodeURI(url);
 
