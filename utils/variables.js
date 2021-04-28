@@ -1,11 +1,11 @@
 module.exports.qualities = ['Factory New', 'Minimal Wear', 'Field-Tested', 'Well-Worn', 'Battle-Scarred'];
 module.exports.rarities = ['grey', 'light_blue', 'blue', 'purple', 'pink', 'red'];
 module.exports.avg_floats = {
-   'Factory New': 0.045,
-   'Minimal Wear': 0.12,
-   'Field-Tested': 0.31,
-   'Well-Worn': 0.41,
-   'Battle-Scarred': 0.65,
+   'Factory New': 0.04,
+   'Minimal Wear': 0.11,
+   'Field-Tested': 0.3,
+   'Well-Worn': 0.4,
+   'Battle-Scarred': 0.6,
 
    // 'Factory New': 0.035,
    // 'Minimal Wear': 0.11,

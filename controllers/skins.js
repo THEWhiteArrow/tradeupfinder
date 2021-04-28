@@ -367,8 +367,17 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
 module.exports.displayFavouriteTrades = async (req, res) => {
    const { user } = req;
+
    const foundUser = await User.findById(user._id).populate('favourites')
-   const { favourites } = foundUser;
+
+   let favourites;
+   // if (foundUser.role != 'admin') {
+   favourites = foundUser.favourites;
+   // } else {
+   //    const Allfavourites = await Favourite.find({})
+   //    favourites = Allfavourites;
+   // }
+
 
    const sortedFavourites = sortingTrades(favourites, 'returnPercentage', 'descending');
 
@@ -649,7 +658,7 @@ const mixedTwoPairs = async (req) => {
                            const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
                            const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
 
-                           if (profitPerTradeUp > 0) {
+                           if (profitPerTradeUp > 0 && inputPrice < 100) {
                               const trade = {
                                  firstSkin,
                                  secondSkin,
