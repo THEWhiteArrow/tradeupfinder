@@ -69,7 +69,7 @@ module.exports.checkEmptyPrices = async (req, res) => {
 
 
 module.exports.updatePrices = async (req, res, next) => {
-
+   //does not supprot steam's volumes
    const { start = 0, end = length, variant = 'backpack', stattrak = '0' } = req.query;
    const skins = await Skin.find({});
 

@@ -2,23 +2,21 @@ const fetch = require('node-fetch');
 const ExpressError = require('../utils/ExpressError');
 const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
 
-module.exports.getPriceAndVolume = async (data, variant, url, convert, getData, volume) => {
+module.exports.getPriceAndVolume = async (data, variant, url, convert, getData) => {
 
    if (data.success === true) {
 
       if (variant == 'steam') {
-         volume.push(Number(data.volume));
-         if (data.median_price) { return convert(data.median_price); }
-         else if (data.lowest_price) { return convert(data.lowest_price); }
-         else { return 0; }
+         if (data.median_price) { return { statusCode: 200, newPrice: convert(data.median_price), newVolume: data.volume } }
+         else if (data.lowest_price) { return { statusCode: 200, newPrice: convert(data.lowest_price), newVolume: data.volume } }
+         else { return { statusCode: 200, newPrice: 0, newVolume: 0 }; }
 
       } else {
-         volume.push(Number(data.amount_sold));
-         if (data.average_price) { return Number(data.average_price); }
-         else if (data.median_price) { return Number(data.median_price); }
-         else if (data.lowest_price) { return Number(data.lowest_price); }
-         else if (data.highest_price) { return Number(data.highest_price); }
-         else { return 0; }
+         if (data.average_price) { return { statusCode: 200, newPrice: Number(data.average_price), newVolume: Number(data.amount_sold) } }
+         else if (data.median_price) { return { statusCode: 200, newPrice: Number(data.median_price), newVolume: Number(data.amount_sold) } }
+         else if (data.lowest_price) { return { statusCode: 200, newPrice: Number(data.lowest_price), newVolume: Number(data.amount_sold) } }
+         else if (data.highest_price) { return { statusCode: 200, newPrice: Number(data.highest_price), newVolume: Number(data.amount_sold) } }
+         else { return { statusCode: 200, newPrice: 0, newVolume: 0 }; }
       }
 
 
@@ -32,21 +30,21 @@ module.exports.getPriceAndVolume = async (data, variant, url, convert, getData, 
 
       if (newData.success === true) {
          if (variant == 'steam') {
-            volume.push(Number(data.volume));
-            if (newData.median_price) { return convert(newData.median_price); }
-            else if (newData.lowest_price) { return convert(newData.lowest_price); }
-            else { return 0; }
+            if (newData.median_price) { return { statusCode: 200, newPrice: convert(newData.median_price), newVolume: data.volume } }
+            else if (newData.lowest_price) { return { statusCode: 200, newPrice: convert(newData.lowest_price), newVolume: data.volume } }
+            else { return { statusCode: 200, newPrice: 0, newVolume: 0 }; }
 
          } else {
-            volume.push(Number(data.amount_sold));
-            if (newData.average_price) { return Number(newData.average_price); }
-            else if (newData.median_price) { return Number(newData.median_price); }
-            else if (newData.lowest_price) { return Number(newData.lowest_price); }
-            else if (newData.highest_price) { return Number(newData.highest_price); }
-            else { return 0; }
+            if (newData.average_price) { return { statusCode: 200, newPrice: Number(newData.average_price), newVolume: Number(data.amount_sold) } }
+            else if (newData.median_price) { return { statusCode: 200, newPrice: Number(newData.median_price), newVolume: Number(data.amount_sold) } }
+            else if (newData.lowest_price) { return { statusCode: 200, newPrice: Number(newData.lowest_price), newVolume: Number(data.amount_sold) } }
+            else if (newData.highest_price) { return { statusCode: 200, newPrice: Number(newData.highest_price), newVolume: Number(data.amount_sold) } }
+            else { return { statusCode: 200, newPrice: 0, newVolume: 0 }; }
          }
 
-      } else if (newData.success == 'false' && newData.reason == undefined) { return 0; }
+      } else if (newData.success == 'false' && newData.reason == undefined) {
+         return { newPrice: 0, newVolume: 0, statusCode: 200 }
+      }
 
       else if (newData.reason) {
          console.log(`You requested too many times recently!, Status: 429`);
