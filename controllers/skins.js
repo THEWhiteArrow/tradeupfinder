@@ -1,5 +1,5 @@
 const { getData, convert } = require('../utils/functions');
-const { checkQuality, findCheapestSkin, getPriceFromUpdatedData } = require('../utils/functions');
+const { checkQuality, findCheapestSkin, getPriceAndVolume } = require('../utils/functions');
 const { qualities, rarities, avg_floats } = require('../utils/variables');
 const ExpressError = require('../utils/ExpressError');
 const fetch = require('node-fetch');
@@ -17,6 +17,7 @@ const e = require('express');
 const steamTax = 0.87;
 const maxShownSkins = 200;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
+const updatingDaysSpan = 2;
 
 module.exports.showIndex = async (req, res, next) => {
    // console.log(req.user)
@@ -72,6 +73,7 @@ module.exports.updatePrices = async (req, res, next) => {
    const { start = 0, end = length, variant = 'backpack', stattrak = '0' } = req.query;
    const skins = await Skin.find({});
 
+
    let count = 0, length = 0;
    let reqNumber = 0;
 
@@ -84,14 +86,14 @@ module.exports.updatePrices = async (req, res, next) => {
          const updatedPrices = {};
          const updatedStattrakPrices = {};
          const { name, skin, _id } = item;
-
+         const volume = [updatingDaysSpan];
 
          for (let quality of qualities) {
 
             if (item.prices[quality] !== -1) {
 
                let baseUrl;
-               variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = 'http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=2&id=';
+               variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = `http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=${updatingDaysSpan}&id=`;
                const url = `${baseUrl}${name} | ${skin} (${quality})`;
                const encodedUrl = encodeURI(url);
 
@@ -99,7 +101,8 @@ module.exports.updatePrices = async (req, res, next) => {
                variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                reqNumber += 1;
 
-               updatedPrices[quality] = await getPriceFromUpdatedData(data, variant, url, convert, getData);
+               updatedPrices[quality] = await getPriceAndVolume(data, variant, url, convert, getData, volume);
+
                if (updatedPrices[quality].statusCode && updatedPrices[quality].statusCode === 429) { return next(updatedPrices[quality]) }
             } else {
                updatedPrices[quality] = -1;
@@ -117,7 +120,7 @@ module.exports.updatePrices = async (req, res, next) => {
                   variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                   reqNumber += 1;
 
-                  updatedStattrakPrices[quality] = await getPriceFromUpdatedData(data, variant, url, convert, getData);
+                  updatedStattrakPrices[quality] = await getPriceAndVolume(data, variant, url, convert, getData, volume);
                   if (updatedStattrakPrices[quality].statusCode && updatedStattrakPrices[quality].statusCode === 429) { return next(updatedStattrakPrices[quality]) }
                   console.log(`------------ StatTrak™ ${item.name} | ${item.skin} - ${quality}`);
                } else {
@@ -130,9 +133,9 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
          if (stattrak) {
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices }, { new: true });
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volume }, { new: true });
          } else {
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices }, { new: true });
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, volume }, { new: true });
          }
 
       }
@@ -401,10 +404,17 @@ module.exports.recheckFavouriteStats = async (req, res) => {
       let total = 0;
       let targetedPrice;
 
+
+
       for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
          let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] * steamTax * 100) / 100;
+         console.log(newPrice)
          trade.targetedSkinsArr[i].price = newPrice;
-         trade.targetedSkinsArr[i]._id == targetedSkin._id ? targetedPrice = newPrice : null;
+
+         if (targetedSkin.skin == trade.targetedSkinsArr[i].skin && targetedSkin.name == trade.targetedSkinsArr[i].name) {
+            targetedPrice = newPrice;
+         }
+
 
          if (trade.targetedSkinsArr[i].case == firstCollection && trade.targetedSkinsArr[i].case == secondCollection) {
             total += (newPrice * 10);
@@ -416,6 +426,7 @@ module.exports.recheckFavouriteStats = async (req, res) => {
 
       }
 
+      console.log(targetedPrice)
       let wantedOutputChance = 0;
       const inputPrice = Math.round((amount.amount1 * firstPrice + amount.amount2 * secondPrice) * 100) / 100;
 
@@ -453,7 +464,8 @@ module.exports.recheckFavouriteStats = async (req, res) => {
          wantedOutputChance,
          targetedSkinsNumber,
          firstPrice,
-         secondPrice
+         secondPrice,
+         targetedPrice
       };
       res.json(feedback);
    } catch (e) {
@@ -516,7 +528,7 @@ const mixedTwoPairs = async (req) => {
                         const firstSkin = findCheapestSkin(firstCollection, rarities[r], firstQuality, pricesType);
                         const secondSkin = findCheapestSkin(secondCollection, rarities[r], secondQuality, pricesType);
 
-                        if (firstSkin != null && secondSkin != null) {
+                        if (firstSkin != null && secondSkin != null && firstSkin.volume[1] / firstSkin.volume[0] > 100 && secondSkin.volume[1] / secondSkin.volume[0] > 150) {
 
                            let firstSkinAvgFloat = avg_floats[firstQuality];
                            let secondSkinAvgFloat = avg_floats[secondQuality];

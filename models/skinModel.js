@@ -66,6 +66,9 @@ const skinSchema = new Schema({
       'Battle-Scarred': {
          type: Number,
       },
+   },
+   volume: {
+      type: Array
    }
    // floatedQualities: {
    //    type: Object,

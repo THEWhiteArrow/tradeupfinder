@@ -69,7 +69,8 @@ const seedDB = async () => {
                'Field-Tested': 0,
                'Well-Worn': 0,
                'Battle-Scarred': 0,
-            }
+            },
+            volume: [],
             // floatedQualities: {}
          })
 

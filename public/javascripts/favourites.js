@@ -31,6 +31,7 @@ const changeStats = (form, data) => {
    const inputPriceEl = row.querySelector('.input-price')
    const firstPriceEl = row.querySelector('.first-price')
    const secondPriceEl = row.querySelector('.second-price')
+   const targetedPriceEl = row.querySelector('.targeted-price')
 
    const profitPerTradeUpEl = row.querySelector('.profit-per-tradeup')
    const returnPercentageEl = row.querySelector('.return-percentage')
@@ -39,6 +40,7 @@ const changeStats = (form, data) => {
    inputPriceEl.innerText = `(${data.inputPrice}zł)`
    firstPriceEl.innerText = `(${data.firstPrice}zł)`
    secondPriceEl.innerText = `(${data.secondPrice}zł)`
+   targetedPriceEl.innerText = `(${data.targetedPrice}zł)`
 
    profitPerTradeUpEl.innerText = `${data.profitPerTradeUp}zł`
    returnPercentageEl.innerText = `${data.returnPercentage}%`

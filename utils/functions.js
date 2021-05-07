@@ -2,16 +2,18 @@ const fetch = require('node-fetch');
 const ExpressError = require('../utils/ExpressError');
 const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
 
-module.exports.getPriceFromUpdatedData = async (data, variant, url, convert, getData) => {
+module.exports.getPriceAndVolume = async (data, variant, url, convert, getData, volume) => {
 
    if (data.success === true) {
 
       if (variant == 'steam') {
+         volume.push(Number(data.volume));
          if (data.median_price) { return convert(data.median_price); }
          else if (data.lowest_price) { return convert(data.lowest_price); }
          else { return 0; }
 
       } else {
+         volume.push(Number(data.amount_sold));
          if (data.average_price) { return Number(data.average_price); }
          else if (data.median_price) { return Number(data.median_price); }
          else if (data.lowest_price) { return Number(data.lowest_price); }
@@ -30,11 +32,13 @@ module.exports.getPriceFromUpdatedData = async (data, variant, url, convert, get
 
       if (newData.success === true) {
          if (variant == 'steam') {
+            volume.push(Number(data.volume));
             if (newData.median_price) { return convert(newData.median_price); }
             else if (newData.lowest_price) { return convert(newData.lowest_price); }
             else { return 0; }
 
          } else {
+            volume.push(Number(data.amount_sold));
             if (newData.average_price) { return Number(newData.average_price); }
             else if (newData.median_price) { return Number(newData.median_price); }
             else if (newData.lowest_price) { return Number(newData.lowest_price); }

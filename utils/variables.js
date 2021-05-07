@@ -3,9 +3,9 @@ module.exports.rarities = ['grey', 'light_blue', 'blue', 'purple', 'pink', 'red'
 module.exports.avg_floats = {
    'Factory New': 0.04,
    'Minimal Wear': 0.11,
-   'Field-Tested': 0.3,
+   'Field-Tested': 0.28,
    'Well-Worn': 0.4,
-   'Battle-Scarred': 0.6,
+   'Battle-Scarred': 0.55,
 
    // 'Factory New': 0.035,
    // 'Minimal Wear': 0.11,
