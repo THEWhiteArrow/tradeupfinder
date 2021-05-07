@@ -70,7 +70,8 @@ const seedDB = async () => {
                'Well-Worn': 0,
                'Battle-Scarred': 0,
             },
-            volume: [],
+            volumes: {},
+            stattrakVolumes: {},
             // floatedQualities: {}
          })
 

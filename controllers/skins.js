@@ -85,8 +85,13 @@ module.exports.updatePrices = async (req, res, next) => {
 
          const updatedPrices = {};
          const updatedStattrakPrices = {};
+
+         const updatedVolumes = {};
+         const updatedStattrakVolumes = {};
+
+
          const { name, skin, _id } = item;
-         const volume = [updatingDaysSpan];
+         // const volume = [updatingDaysSpan];
 
          for (let quality of qualities) {
 
@@ -101,7 +106,10 @@ module.exports.updatePrices = async (req, res, next) => {
                variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                reqNumber += 1;
 
-               updatedPrices[quality] = await getPriceAndVolume(data, variant, url, convert, getData, volume);
+               const { newPrice, newVolume } = await getPriceAndVolume(data, variant, url, convert, getData);
+
+               updatedPrices[quality] = newPrice;
+               updatedVolumes[quality] = Math.round(newVolume / updatingDaysSpan);
 
                if (updatedPrices[quality].statusCode && updatedPrices[quality].statusCode === 429) { return next(updatedPrices[quality]) }
             } else {
@@ -120,7 +128,12 @@ module.exports.updatePrices = async (req, res, next) => {
                   variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                   reqNumber += 1;
 
-                  updatedStattrakPrices[quality] = await getPriceAndVolume(data, variant, url, convert, getData, volume);
+                  const { newPrice, newVolume } = await getPriceAndVolume(data, variant, url, convert, getData);
+
+                  updatedStattrakPrices[quality] = newPrice;
+                  updatedStattrakVolumes[quality] = Math.round(newVolume / updatingDaysSpan);
+
+
                   if (updatedStattrakPrices[quality].statusCode && updatedStattrakPrices[quality].statusCode === 429) { return next(updatedStattrakPrices[quality]) }
                   console.log(`------------ StatTrak™ ${item.name} | ${item.skin} - ${quality}`);
                } else {
@@ -133,9 +146,9 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
          if (stattrak) {
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volume }, { new: true });
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes }, { new: true });
          } else {
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, volume }, { new: true });
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes }, { new: true });
          }
 
       }
@@ -480,16 +493,28 @@ module.exports.recheckFavouriteStats = async (req, res) => {
 
 
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', newResearchName = 'noname', action = 'nothing', stattrak = 'no' } = req.query;
+   const { ratio = '4-6', sliceStart = 0, sliceEnd = 10, sort = 'returnPercentage', newResearchName = 'noname', action = 'nothing', stattrak = 'no', minVolume = 100 } = req.query;
 
    // CONVERTS PRICE CORRECTION
    let { priceCorrection = 0 } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'));
 
    // SETS TYPE OF ALGORITHM - NORMAL AND STATTRAK
-   let pricesType;
-   stattrak == 'no' ? pricesType = 'prices' : null;
-   stattrak == 'yes' ? pricesType = 'stattrakPrices' : null;
+   let pricesType, volumesType;
+   switch (stattrak) {
+      case 'no':
+         pricesType = 'prices';
+         volumesType = 'volumes';
+         break;
+      case 'yes':
+         pricesType = 'stattrakPrices';
+         volumesType = 'stattrakVolumes';
+         break;
+      default:
+         pricesType = 'prices';
+         volumesType = 'volumes';
+         break;
+   }
 
    // SETS SKINS RATIO
    let amount1 = Number(ratio[0]);
@@ -528,7 +553,7 @@ const mixedTwoPairs = async (req) => {
                         const firstSkin = findCheapestSkin(firstCollection, rarities[r], firstQuality, pricesType);
                         const secondSkin = findCheapestSkin(secondCollection, rarities[r], secondQuality, pricesType);
 
-                        if (firstSkin != null && secondSkin != null && firstSkin.volume[1] / firstSkin.volume[0] > 100 && secondSkin.volume[1] / secondSkin.volume[0] > 150) {
+                        if (firstSkin != null && secondSkin != null && firstSkin[volumesType] > minVolume && secondSkin[volumesType] > minVolume) {
 
                            let firstSkinAvgFloat = avg_floats[firstQuality];
                            let secondSkinAvgFloat = avg_floats[secondQuality];
