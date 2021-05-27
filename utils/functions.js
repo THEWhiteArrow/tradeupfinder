@@ -66,7 +66,7 @@ module.exports.getPriceAndVolume = async (data, variant, url, convert, getData) 
    }
 }
 
-module.exports.findCheapestSkin = (collection, rarity, quality, pricesType) => {
+module.exports.findCheapestSkin = (collection, rarity, quality, pricesType, volumesType, minVolume) => {
    let min = 100000;
    let minSkin = {};
    let foundSkin = false;
@@ -74,7 +74,7 @@ module.exports.findCheapestSkin = (collection, rarity, quality, pricesType) => {
 
 
    for (let skin of collection.skins[rarity]) {
-      if (skin[pricesType][quality] < min && skin[pricesType][quality] > 0) {
+      if (skin[pricesType][quality] < min && skin[pricesType][quality] > 0 && skin[volumesType][quality] > minVolume) {
          min = skin[pricesType][quality];
          minSkin = {
             _id: skin._id,

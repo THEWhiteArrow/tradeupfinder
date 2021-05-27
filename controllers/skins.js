@@ -550,10 +550,10 @@ const mixedTwoPairs = async (req) => {
                   for (let firstQuality of qualities) {
                      for (let secondQuality of qualities) {
 
-                        const firstSkin = findCheapestSkin(firstCollection, rarities[r], firstQuality, pricesType);
-                        const secondSkin = findCheapestSkin(secondCollection, rarities[r], secondQuality, pricesType);
+                        const firstSkin = findCheapestSkin(firstCollection, rarities[r], firstQuality, pricesType, volumesType, minVolume);
+                        const secondSkin = findCheapestSkin(secondCollection, rarities[r], secondQuality, pricesType, volumesType, minVolume);
 
-                        if (firstSkin != null && secondSkin != null && firstSkin[volumesType] > minVolume && secondSkin[volumesType] > minVolume) {
+                        if (firstSkin != null && secondSkin != null) {
 
                            let firstSkinAvgFloat = avg_floats[firstQuality];
                            let secondSkinAvgFloat = avg_floats[secondQuality];
@@ -759,6 +759,7 @@ const mixedTwoPairs = async (req) => {
                            }
 
                            counter += 1;
+
                         }
                      }
                   }
