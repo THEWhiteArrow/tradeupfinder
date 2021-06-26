@@ -11,7 +11,7 @@ const Name = require('../models/nameModel');
 const Trade = require('../models/tradeModel');
 const Favourite = require('../models/favouriteModel');
 const User = require('../models/userModel');
-const e = require('express');
+const ServerSideInfo = require('../models/serverSideInfo');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
@@ -22,6 +22,8 @@ const updatingDaysSpan = 2;
 module.exports.showIndex = async (req, res, next) => {
    // console.log(req.user)
    const researchesName = await Name.find({});
+   const { skinsUpdateInfo } = await ServerSideInfo.findOne({});
+
    // res.cookie('testtoken', 'lol');
    // res.cookie('testtoken', { amount1: 4, amount2: 6 });
    // console.log(JSON.parse(req.cookies.testtoken))
@@ -30,7 +32,7 @@ module.exports.showIndex = async (req, res, next) => {
 
    req.flash('info', `Dla Twojej wygody wyświetlone zostało niewięcej niż ${maxShownSkins} możliwych kontraktów`);
    // console.log(req.session)
-   res.render('index', { researchesName });
+   res.render('index', { researchesName, skinsUpdateInfo });
 };
 
 module.exports.showSkinsDb = async (req, res) => {
@@ -177,6 +179,8 @@ module.exports.updateSkinPrice = async (req, res) => {
 
 module.exports.useServers = async (req, res) => {
    const { server1, server2, server3, server4, server5, server6, server7, server8, server9, server10, variant = 'backpack', stattrak = '0' } = req.body;
+
+
    console.log(variant)
    console.log(server1)
    console.log(server2)
@@ -190,6 +194,14 @@ module.exports.useServers = async (req, res) => {
    console.log(server10)
    console.log(variant)
    console.log(stattrak)
+
+   const date = new Date();
+   const skinsUpdateInfo = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}  -  ${date.getHours()} : ${date.getMinutes()}`;
+   // const newServerSideInfo = new ServerSideInfo({
+   //    skinsUpdateInfo
+   // });
+
+   await ServerSideInfo.findOneAndUpdate({}, { skinsUpdateInfo }, { new: true });
 
    const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}&stattrak=${stattrak}`;
    const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}&stattrak=${stattrak}`;
@@ -218,113 +230,112 @@ module.exports.useServers = async (req, res) => {
 
 
 module.exports.deleteSavedTrades = async (req, res) => {
-   // await Research.deleteMany({});
-
    await Name.deleteMany({});
-   await Trade.deleteMany({})
+   await Trade.deleteMany({});
+
    req.flash('success', 'Successfully deleted all trades');
    res.redirect('/skins');
 }
 
 // NOT CURRENTLY USED
-module.exports.prepareTrades = async (req, res) => {
-   let counter = 0;
-   const collections = await Case.find({})
-      .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+// module.exports.prepareTrades = async (req, res) => {
+//    let counter = 0;
+//    const collections = await Case.find({})
+//       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+//       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
-   const nOfSkins = {};
-   for (let collection of collections) {
-      nOfSkins[collection.name] = {
-         grey: collection.skins.grey.length,
-         light_blue: collection.skins.light_blue.length,
-         blue: collection.skins.blue.length,
-         purple: collection.skins.purple.length,
-         pink: collection.skins.pink.length,
-         red: collection.skins.red.length,
-      }
-   }
+//    const nOfSkins = {};
+//    for (let collection of collections) {
+//       nOfSkins[collection.name] = {
+//          grey: collection.skins.grey.length,
+//          light_blue: collection.skins.light_blue.length,
+//          blue: collection.skins.blue.length,
+//          purple: collection.skins.purple.length,
+//          pink: collection.skins.pink.length,
+//          red: collection.skins.red.length,
+//       }
+//    }
 
-   let profit = [];
-   for (let collection of collections) {
-
-
-
-      for (let r = 0; r < rarities.length - 1; r++) {
-         // SKINY Z OBECNEJ RZADKOŚCI
-         let skins = collection.skins[rarities[r]];
-         // SKINY Z KOLEJNEJ RZADKOŚCI
-         let targetedSkins = collection.skins[rarities[r + 1]];
-
-         for (let quality of qualities) {
-
-            for (let skin of skins) {
-               if (skin.prices[quality] !== -1) {
-                  let total = 0;
-                  let tradesArr = [];
-                  let trade = {};
-                  let isProfitable = false;
-
-                  for (let targetedSkin of targetedSkins) {
-                     // SPRAWDZA CZY ŚREDNIA NIE WYKRACZA POZA MIN I MAX FLOAT SKINA DO TRADÓW
-                     let avg = avg_floats[quality];
-                     avg < skin.min_float ? avg = skin.min_float : null;
-                     avg > skin.max_float ? avg = skin.max_float : null;
-
-                     const float = (targetedSkin.max_float - targetedSkin.min_float) * avg + targetedSkin.min_float;
-                     const targetedQuality = checkQuality(float);
-
-                     const rawPrice = skin.prices[quality];
-                     const price = Math.round(skin.prices[quality] * 10 * 100) / 100;
-                     const targetedPrice = Math.round(targetedSkin.prices[targetedQuality] * steamTax * 100) / 100;
-                     total += targetedPrice;
-                     counter += 1;
-
-                     if (price < targetedPrice) {
-                        isProfitable = true;
-                        trade = {
-                           skin,
-                           quality,
-                           targetedSkin,
-                           targetedQuality,
-                           rawPrice,
-                           price,
-                           targetedPrice,
-                        };
-                        tradesArr.push(trade);
-                     }
-
-                  }
-
-                  if (isProfitable) {
-                     let nOfTargetedSkins = nOfSkins[collection.name][rarities[r + 1]];
-                     let instance = {
-                        tradesArr,
-                        total: Math.round(total * 100) / 100,
-                        nOfTargetedSkins,
-                        chance: Math.round(100 / nOfTargetedSkins),
-                     }
-                     profit.push(instance);
-                  }
-
-               }
-            }
-
-         }
+//    let profit = [];
+//    for (let collection of collections) {
 
 
 
+//       for (let r = 0; r < rarities.length - 1; r++) {
+//          // SKINY Z OBECNEJ RZADKOŚCI
+//          let skins = collection.skins[rarities[r]];
+//          // SKINY Z KOLEJNEJ RZADKOŚCI
+//          let targetedSkins = collection.skins[rarities[r + 1]];
+
+//          for (let quality of qualities) {
+
+//             for (let skin of skins) {
+//                if (skin.prices[quality] !== -1) {
+//                   let total = 0;
+//                   let tradesArr = [];
+//                   let trade = {};
+//                   let isProfitable = false;
+
+//                   for (let targetedSkin of targetedSkins) {
+//                      // SPRAWDZA CZY ŚREDNIA NIE WYKRACZA POZA MIN I MAX FLOAT SKINA DO TRADÓW
+//                      let avg = avg_floats[quality];
+//                      avg < skin.min_float ? avg = skin.min_float : null;
+//                      avg > skin.max_float ? avg = skin.max_float : null;
+
+//                      const float = (targetedSkin.max_float - targetedSkin.min_float) * avg + targetedSkin.min_float;
+//                      const targetedQuality = checkQuality(float);
+
+//                      const rawPrice = skin.prices[quality];
+//                      const price = Math.round(skin.prices[quality] * 10 * 100) / 100;
+//                      const targetedPrice = Math.round(targetedSkin.prices[targetedQuality] * steamTax * 100) / 100;
+//                      total += targetedPrice;
+//                      counter += 1;
+
+//                      if (price < targetedPrice) {
+//                         isProfitable = true;
+//                         trade = {
+//                            skin,
+//                            quality,
+//                            targetedSkin,
+//                            targetedQuality,
+//                            rawPrice,
+//                            price,
+//                            targetedPrice,
+//                         };
+//                         tradesArr.push(trade);
+//                      }
+
+//                   }
+
+//                   if (isProfitable) {
+//                      let nOfTargetedSkins = nOfSkins[collection.name][rarities[r + 1]];
+//                      let instance = {
+//                         tradesArr,
+//                         total: Math.round(total * 100) / 100,
+//                         nOfTargetedSkins,
+//                         chance: Math.round(100 / nOfTargetedSkins),
+//                      }
+//                      profit.push(instance);
+//                   }
+
+//                }
+//             }
+
+//          }
 
 
-      }
-   }
-   console.log(counter)
-   res.render('trades/trades', { profit, shortcuts });
-}
+
+
+
+//       }
+//    }
+//    console.log(counter)
+//    res.render('trades/trades', { profit, shortcuts });
+// }
 
 module.exports.mixedAlgorithm = async (req, res) => {
    let { action = 'nothing', researchName = 'noname', newResearchName = 'noname', pairs = 2, checkStats = 'no', sort = 'returnPercentage', order = 'descending' } = req.query;
@@ -386,13 +397,7 @@ module.exports.displayFavouriteTrades = async (req, res) => {
 
    const foundUser = await User.findById(user._id).populate('favourites')
 
-   let favourites;
-   // if (foundUser.role != 'admin') {
-   favourites = foundUser.favourites;
-   // } else {
-   //    const Allfavourites = await Favourite.find({})
-   //    favourites = Allfavourites;
-   // }
+   let favourites = foundUser.favourites;
 
 
    const sortedFavourites = sortingTrades(favourites, 'returnPercentage', 'descending');
@@ -401,10 +406,10 @@ module.exports.displayFavouriteTrades = async (req, res) => {
 }
 
 module.exports.recheckFavouriteStats = async (req, res) => {
-   // console.log('checking')
-   // console.log(req.body)
+
    const { firstPrice, secondPrice } = req.body;
    const { tradeId } = req.params;
+
    try {
       const favouriteTrade = await Favourite.findById(tradeId);
       const { amount, instance } = favouriteTrade;
@@ -562,15 +567,17 @@ const mixedTwoPairs = async (req) => {
                            if (secondSkinAvgFloat > secondSkin.max_float) secondSkinAvgFloat = secondSkin.max_float;
                            if (secondSkinAvgFloat < secondSkin.min_float) secondSkinAvgFloat = secondSkin.min_float;
 
+
                            // MANUAL FLOATS CORRECTION
                            // ######################################################################################################
-                           if (firstSkin.skin == 'Bone Forged' && firstQuality == 'Factory New') firstSkinAvgFloat = 0.053;
-                           if (secondSkin.skin == 'Bone Forged' && secondQuality == 'Factory New') secondSkinAvgFloat = 0.053;
-                           if (firstSkin.skin == "Ol' Rusty" && firstQuality == "Factory New") firstSkinAvgFloat = 0.053;
-                           if (secondSkin.skin == "Ol' Rusty" && secondQuality == "Factory New") secondSkinAvgFloat = 0.053;
-                           if (firstSkin.skin == "Prototype" && firstQuality == "Factory New") firstSkinAvgFloat = 0.053;
-                           if (secondSkin.skin == "Prototype" && secondQuality == "Factory New") secondSkinAvgFloat = 0.053;
+                           // if (firstSkin.skin == 'Bone Forged' && firstQuality == 'Factory New') firstSkinAvgFloat = 0.053;
+                           // if (secondSkin.skin == 'Bone Forged' && secondQuality == 'Factory New') secondSkinAvgFloat = 0.053;
+                           // if (firstSkin.skin == "Ol' Rusty" && firstQuality == "Factory New") firstSkinAvgFloat = 0.053;
+                           // if (secondSkin.skin == "Ol' Rusty" && secondQuality == "Factory New") secondSkinAvgFloat = 0.053;
+                           // if (firstSkin.skin == "Prototype" && firstQuality == "Factory New") firstSkinAvgFloat = 0.053;
+                           // if (secondSkin.skin == "Prototype" && secondQuality == "Factory New") secondSkinAvgFloat = 0.053;
                            // ######################################################################################################
+
 
                            const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 1000) / 1000;
                            const firstPrice = firstSkin[pricesType][firstQuality] + priceCorrection;
