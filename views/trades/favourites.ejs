@@ -215,13 +215,13 @@
                                        <ul class="list-unstyled">
                                           <% for(let alternateSkin of trade.alternateInputSkins){ %>
 
-                                             <li class="d-flex mb-1 form-check">
+                                             <li class="d-flex form-check align-items-center">
 
                                                 <input class="form-check-input me-3" type="checkbox"
                                                    value="<%= alternateSkin.amount %>_<%= alternateSkin.float %>_<%= alternateSkin.botPrice%>_<%= alternateSkin.url %>"
                                                    name="<%= alternateSkin.url %>"
                                                    id="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}${alternateSkin.url}`%>">
-                                                <label class="form-check-label me-3 crosshair"
+                                                <label class="form-check-label me-3 py-1 crosshair"
                                                    for="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}${alternateSkin.url}`%>">
                                                    <%=alternateSkin.collectionName %>
                                                 </label>

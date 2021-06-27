@@ -387,20 +387,21 @@ module.exports.mixedAlgorithm = async (req, res) => {
          // action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
 
          // res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, priceCorrection })
+         req.flash('error', `Portójne wyszukiwanie obecnie niedostępne! Braki w zasobach ludzkich!`);
          res.redirect('/skins')
       }
    }
 }
 
 module.exports.displayFavouriteTrades = async (req, res) => {
-   const { user } = req;
+   const { user, sort = 'returnPercentage', order = 'descending' } = req;
 
    const foundUser = await User.findById(user._id).populate('favourites')
 
    let favourites = foundUser.favourites;
 
 
-   const sortedFavourites = sortingTrades(favourites, 'returnPercentage', 'descending');
+   const sortedFavourites = sortingTrades(favourites, sort, order);
 
    res.render('trades/favourites', { favourites: sortedFavourites, maxShownSkins, steamBaseUrl })
 }
