@@ -681,6 +681,9 @@ const mixedTwoPairs = async (req) => {
                                           collectionName: alternateSkin.case
                                        }
                                        alternateSkin.case == firstSkin.case ? alternateQuality = firstQuality : alternateQuality = secondQuality;
+                                       alternateSkin.case == firstSkin.case ? alternate.amount = amount1 : alternate.amount = amount2;
+                                       alternateSkin.case == firstSkin.case ? alternate.float = firstSkinAvgFloat : alternate.float = secondSkinAvgFloat;
+                                       alternateSkin.case == firstSkin.case ? alternate.botPrice = firstPrice : alternate.botPrice = secondPrice;
                                        alternate.quality = alternateQuality;
                                        alternate.price = Math.round((alternateSkin[pricesType][alternateQuality] + priceCorrection) * 100) / 100;
                                        if (pricesType == 'prices') {
@@ -805,6 +808,7 @@ const checkTime = (current, hour, minute) => {
       console.log(`time : ${finishHour - hour} : ${finishMinute - minute}`);
    }
 }
+
 const sortingTrades = (trades, sort, order) => {
 
    if (order === 'descending') {

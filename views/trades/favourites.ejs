@@ -35,7 +35,7 @@
                            <div class="row">
 
                               <!-- COLLECTIONS DATA -->
-                              <div class="d-flex justify-content-between">
+                              <section class="d-flex justify-content-between">
                                  <div class="col-11">
                                     <div>
                                        <%= favourite.instance.avg %>
@@ -67,12 +67,11 @@
                                     </svg>
                                  </a>
 
-                              </div>
+                              </section>
 
 
                               <!-- TRADE -->
-                              <div class="mt-4 mb-2  d-flex flex-column">
-
+                              <section class="mt-4 mb-2  d-flex flex-column">
                                  <!-- INPUT PRICE -->
                                  <h5 class="col-12 d-flex justify-content-center input-price">
                                     (<%= trade.inputPrice %>zł)
@@ -130,10 +129,10 @@
                                     </a>
 
                                  </div>
-                              </div>
+                              </section>
 
                               <!-- STATS -->
-                              <div class="stats col-12 col-lg-6 offset-lg-3 d-flex flex-column ">
+                              <section class="stats col-12 col-lg-6 offset-lg-3 d-flex flex-column ">
 
                                  <div class="d-flex flex-row col-12 mt-auto data text-white">
                                     <div
@@ -152,10 +151,10 @@
                                     </div>
                                  </div>
 
-                              </div>
+                              </section>
 
                               <!-- UPDATE FORM -->
-                              <div class="col-12 d-flex justify-content-center my-3">
+                              <section class="col-12 d-flex justify-content-center my-3">
                                  <form action="/skins/trades/favourites/<%= favourite._id %>" method="POST"
                                     class="recheck-form d-flex flex-column align-items-center">
 
@@ -201,38 +200,53 @@
 
                                     <button class="btn btn-success w-100">RECHECK</button>
                                  </form>
-                              </div>
+                              </section>
 
                               <!-- HELP SKINS -->
-                              <div class="d-flex flex-column flex-lg-row col-12 mt-3 mb-2">
+                              <section class="d-flex flex-column flex-lg-row col-12 mt-3 mb-2">
 
                                  <!-- ALTERNATE INPUTS -->
-                                 <div class="col-12 col-lg-6">
+                                 <section class="col-12 col-lg-6">
                                     <h6 class="d-flex my-2">ALTERNATE INPUTS:</h6>
-                                    <ul class="list-unstyled">
-                                       <% for(let alternateSkin of trade.alternateInputSkins){ %>
-                                          <li class="d-flex mb-1">
-                                             <a class="link-dark" target="_blank" title="See on the market"
-                                                href="<%= alternateSkin.url  %> ">
-                                                <% if(favourite.pricesType=='stattrakPrices' ){ %>
 
-                                                   <%=`${alternateSkin.collectionName} - [${alternateSkin.quality}] -
-                                                      StatTrak™ ${alternateSkin.name} ${alternateSkin.skin} -
-                                                      (${alternateSkin.price})`%>
+                                    <form class="code-for-bot"
+                                       id="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}` %>">
 
-                                                      <% }else{ %>
-                                                         <%=`${alternateSkin.collectionName} -
-                                                            [${alternateSkin.quality}] - ${alternateSkin.name}
-                                                            ${alternateSkin.skin} - (${alternateSkin.price})`%>
-                                                            <% } %>
-                                             </a>
-                                          </li>
-                                          <% } %>
-                                    </ul>
-                                 </div>
+                                       <ul class="list-unstyled">
+                                          <% for(let alternateSkin of trade.alternateInputSkins){ %>
+
+                                             <li class="d-flex mb-1 form-check">
+
+                                                <input class="form-check-input me-3" type="checkbox"
+                                                   value="<%= alternateSkin.amount %>_<%= alternateSkin.float %>_<%= alternateSkin.botPrice%>_<%= alternateSkin.url %>"
+                                                   name="<%= alternateSkin.url %>"
+                                                   id="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}${alternateSkin.url}`%>">
+                                                <label class="form-check-label me-3 crosshair"
+                                                   for="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}${alternateSkin.url}`%>">
+                                                   <%=alternateSkin.collectionName %>
+                                                </label>
+                                                <a class="link-dark" target="_blank" title="See on the market"
+                                                   href="<%= alternateSkin.url  %>">
+                                                   <% if(favourite.pricesType=='stattrakPrices' ){ %>
+
+                                                      <%=`[${alternateSkin.quality}] - StatTrak™ ${alternateSkin.name}
+                                                         ${alternateSkin.skin} - (${alternateSkin.price})`%>
+
+                                                         <% }else{ %>
+                                                            <%=`[${alternateSkin.quality}] - ${alternateSkin.name}
+                                                               ${alternateSkin.skin} - (${alternateSkin.price})`%>
+                                                               <% } %>
+                                                </a>
+                                             </li>
+
+                                             <% } %>
+                                       </ul>
+                                       <button type="submit" class="btn btn-primary">Generate Bot's Code</button>
+                                    </form>
+                                 </section>
 
                                  <!-- OUTPUTS -->
-                                 <div class="outputs col-12 col-lg-6">
+                                 <section class="outputs col-12 col-lg-6">
                                     <h6 class="d-flex my-2">OUTPUTS:</h6>
                                     <ul class="list-unstyled">
                                        <% for(let t=0;t<trade.targetedSkinsArr.length;t++){ %>
@@ -268,9 +282,9 @@
                                           </li>
                                           <% } %>
                                     </ul>
-                                 </div>
+                                 </section>
 
-                              </div>
+                              </section>
 
                            </div>
 
@@ -288,3 +302,4 @@
 
    <script src="/javascripts/axios.min.js"></script>
    <script src="/javascripts/favourites.js"></script>
+   <script src="/javascripts/bot.js"></script>

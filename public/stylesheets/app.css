@@ -58,6 +58,9 @@ div.stattrak:hover{
    background-color:rgb(173, 132, 27);
 }
 
+.crosshair {
+	cursor: crosshair;
+}
 
 .star {
    background-color: white;
