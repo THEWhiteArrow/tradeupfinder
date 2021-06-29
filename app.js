@@ -22,6 +22,9 @@ const MongoStore = require('connect-mongo')(session);
 const skinRoutes = require('./routes/skins');
 const userRoutes = require('./routes/user');
 const mappingRoutes = require('./routes/mapping');
+const homeRoutes = require('./routes/home');
+const highlightRoutes = require('./routes/highlight');
+const favouriteRoutes = require('./routes/favourite');
 
 const User = require('./models/userModel');
 
@@ -105,10 +108,13 @@ app.use((req, res, next) => {
 app.use('/skins', skinRoutes)
 app.use('/user', userRoutes)
 app.use('/map', mappingRoutes)
+app.use('/highlight', highlightRoutes)
+app.use('/favourites', favouriteRoutes)
+app.use('/', homeRoutes)
 
-app.get('/', (req, res) => {
-   res.send('WELCOME TO CONTRACT BOT !')
-})
+// app.get('/', (req, res) => {
+//    res.send('WELCOME TO CONTRACT BOT !')
+// })
 
 app.all('*', (req, res, next) => {
    next(new ExpressError('Page Not Found', 404))

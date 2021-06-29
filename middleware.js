@@ -1,3 +1,6 @@
+const ExpressError = require('./utils/ExpressError');
+const Favourite = require('./models/favouriteModel');
+
 const isLoggedIn = (req, res, next) => {
    if (!req.isAuthenticated()) {
       req.session.returnTo = req.originalUrl;
@@ -28,23 +31,55 @@ const isPermitted = async (req, res, next) => {
    next();
 };
 
+
+const userOwnsFavouriteTradeUp = async (req, res, next) => {
+   const { favouriteId } = req.params;
+   const user = req.user;
+
+   console.log(user, favouriteId)
+
+   for (let id of user.favourites) {
+      if (id == favouriteId) {
+         return next();
+      }
+   }
+
+
+   res.json({ success: false });
+
+}
+
 const isFavouriteTradeAuthorized = async (req, res, next) => {
-   const { tradeId } = req.params;
+   const { tradeId, favouriteId } = req.params;
    const { user } = req;
    const { action } = req.query;
 
    if (action === 'add') return next();
+
+
+
+
    if (action === 'delete' || action === undefined) {
 
-      for (let favourite of user.favourites) {
-         if (favourite._id == tradeId) return next()
+      //any is faster than exists
+      const doesExist = await Favourite.any({ _id: favouriteId });
+      console.log('doesExist? : ', doesExist)
+      if (doesExist) {
+
+         for (let favourite of user.favourites) {
+            if (favourite._id == favouriteId) return next()
+         }
+      } else {
+         res.locals.doesExist = false;
+         return res.json({ success: true, action: 'delete' });
       }
 
    }
 
    if (action === undefined) res.json({ success: false })
 
-   req.flash('error', 'You do not own that trade up!')
+
+   req.flash('error', 'You do not own that trade-up OR trade-up that you have tried to delete does not exist!');
    return res.redirect(`/skins`);
 }
 
@@ -77,4 +112,4 @@ const isResearchAllowed = async (req, res, next) => {
 
 }
 
-module.exports = { isLoggedIn, isAdmin, isModeratorAlso, isPermitted, isResearchAllowed, isFavouriteTradeAuthorized };
+module.exports = { isLoggedIn, isAdmin, isModeratorAlso, isPermitted, isResearchAllowed, isFavouriteTradeAuthorized, userOwnsFavouriteTradeUp };

@@ -1,16 +1,12 @@
 const { getData, convert } = require('../utils/functions');
-const { checkQuality, findCheapestSkin, getPriceAndVolume } = require('../utils/functions');
+const { checkQuality, findCheapestSkin, getPriceAndVolume, sortingTrades } = require('../utils/functions');
 const { qualities, rarities, avg_floats } = require('../utils/variables');
-const ExpressError = require('../utils/ExpressError');
 const fetch = require('node-fetch');
 
 const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
-const Research = require('../models/researchModel');
 const Name = require('../models/nameModel');
 const Trade = require('../models/tradeModel');
-const Favourite = require('../models/favouriteModel');
-const User = require('../models/userModel');
 const ServerSideInfo = require('../models/serverSideInfo');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
@@ -19,7 +15,7 @@ const maxShownSkins = 200;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 const updatingDaysSpan = 2;
 
-module.exports.showIndex = async (req, res, next) => {
+module.exports.showMain = async (req, res, next) => {
    // console.log(req.user)
    const researchesName = await Name.find({});
    const { skinsUpdateInfo } = await ServerSideInfo.findOne({});
@@ -32,7 +28,7 @@ module.exports.showIndex = async (req, res, next) => {
 
    req.flash('info', `Dla Twojej wygody wyświetlone zostało niewięcej niż ${maxShownSkins} możliwych kontraktów`);
    // console.log(req.session)
-   res.render('index', { researchesName, skinsUpdateInfo });
+   res.render('main', { researchesName, skinsUpdateInfo });
 };
 
 module.exports.showSkinsDb = async (req, res) => {
@@ -44,7 +40,7 @@ module.exports.showSkinsDb = async (req, res) => {
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
 
-   res.render('skins', { collections, qualities, rarities });
+   res.render('database', { collections, qualities, rarities });
 }
 
 module.exports.checkEmptyPrices = async (req, res) => {
@@ -355,9 +351,12 @@ module.exports.mixedAlgorithm = async (req, res) => {
       // }
 
       const trades = await Trade.find({ name: researchName });
-
+      // console.log(res.locals.currentUser)
       const sortedTrades = sortingTrades(trades, sort, order).slice(0, maxShownSkins);
-      res.render('trades/mixed', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
+
+
+
+      res.render('trades/index', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
    } else {
 
@@ -378,7 +377,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
          checkTime(current, hour, minute);
          // action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
 
-         res.render('trades/mixed', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
+         res.render('trades/index', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
       } else if (pairs == 3) {
          // const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedThreePairs(req);
@@ -393,108 +392,9 @@ module.exports.mixedAlgorithm = async (req, res) => {
    }
 }
 
-module.exports.displayFavouriteTrades = async (req, res) => {
-   const { user, sort = 'returnPercentage', order = 'descending' } = req;
-
-   const foundUser = await User.findById(user._id).populate('favourites')
-
-   let favourites = foundUser.favourites;
-
-
-   const sortedFavourites = sortingTrades(favourites, sort, order);
-
-   res.render('trades/favourites', { favourites: sortedFavourites, maxShownSkins, steamBaseUrl })
-}
-
-module.exports.recheckFavouriteStats = async (req, res) => {
-
-   const { firstPrice, secondPrice } = req.body;
-   const { tradeId } = req.params;
-
-   try {
-      const favouriteTrade = await Favourite.findById(tradeId);
-      const { amount, instance } = favouriteTrade;
-      const { targetedSkinsNumber, trade } = instance;
-      // console.log(favouriteTrade.instance.total)
-      const { firstSkin, secondSkin, targetedSkin } = trade;
-      const firstCollection = firstSkin.case;
-      const secondCollection = secondSkin.case;
-
-      let total = 0;
-      let targetedPrice;
 
 
 
-      for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
-         let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] * steamTax * 100) / 100;
-         console.log(newPrice)
-         trade.targetedSkinsArr[i].price = newPrice;
-
-         if (targetedSkin.skin == trade.targetedSkinsArr[i].skin && targetedSkin.name == trade.targetedSkinsArr[i].name) {
-            targetedPrice = newPrice;
-         }
-
-
-         if (trade.targetedSkinsArr[i].case == firstCollection && trade.targetedSkinsArr[i].case == secondCollection) {
-            total += (newPrice * 10);
-         } else if (trade.targetedSkinsArr[i].case == firstCollection) {
-            total += (newPrice * Number(amount.amount1));
-         } else if (trade.targetedSkinsArr[i].case == secondCollection) {
-            total += (newPrice * Number(amount.amount2));
-         }
-
-      }
-
-      console.log(targetedPrice)
-      let wantedOutputChance = 0;
-      const inputPrice = Math.round((amount.amount1 * firstPrice + amount.amount2 * secondPrice) * 100) / 100;
-
-
-      for (let outputSkin of trade.targetedSkinsArr) {
-         if (inputPrice <= outputSkin.price) {
-            wantedOutputChance += outputSkin.amount;
-         }
-         // console.log(outputSkin.price, outputSkin.amount)
-      }
-
-      const avgPrice = total / targetedSkinsNumber;
-      const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
-      const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
-      // ALSO WE HAVE wantedOutputChance
-      // console.log('-------checked')
-
-      instance.total = total;
-      instance.wantedOutputChance = wantedOutputChance;
-      instance.trade.firstPrice = firstPrice;
-      instance.trade.secondPrice = secondPrice;
-      instance.trade.targetedPrice = targetedPrice;
-      instance.trade.inputPrice = inputPrice;
-      instance.trade.profitPerTradeUp = profitPerTradeUp;
-      instance.trade.returnPercentage = returnPercentage;
-      instance.trade.targetedSkinsArr = trade.targetedSkinsArr;
-
-      const updatedFavourite = await Favourite.findByIdAndUpdate(tradeId, { instance }, { new: true });
-
-      const feedback = {
-         success: true,
-         inputPrice,
-         profitPerTradeUp,
-         returnPercentage,
-         wantedOutputChance,
-         targetedSkinsNumber,
-         firstPrice,
-         secondPrice,
-         targetedPrice
-      };
-      res.json(feedback);
-   } catch (e) {
-      // console.log('-------failed')
-      console.log(e)
-
-      const feedback = { success: false };
-      res.json(feedback);
-   }
-}
 
 
 
@@ -760,6 +660,8 @@ const mixedTwoPairs = async (req) => {
                                  name: newResearchName,
                                  instance: pom2,
                                  pricesType,
+                                 isHighlighted: false,
+
                               })
                               if (action === 'save') {
                                  await newTrade.save();
@@ -810,33 +712,6 @@ const checkTime = (current, hour, minute) => {
    }
 }
 
-const sortingTrades = (trades, sort, order) => {
-
-   if (order === 'descending') {
-
-      for (let i = 0; i < trades.length; i++) {
-         for (let j = 0; j < trades.length; j++) {
-            if (trades[i].instance.trade[sort] > trades[j].instance.trade[sort]) {
-               let temp = trades[i];
-               trades[i] = trades[j];
-               trades[j] = temp;
-            }
-         }
-      }
-   } else if (order === 'ascending') {
-      for (let i = 0; i < trades.length; i++) {
-         for (let j = 0; j < trades.length; j++) {
-            if (trades[i].instance.trade[sort] < trades[j].instance.trade[sort]) {
-               let temp = trades[i];
-               trades[i] = trades[j];
-               trades[j] = temp;
-            }
-         }
-      }
-
-   }
-   return trades;
-}
 
 
 
@@ -1194,15 +1069,7 @@ const recheckResearchStats = async (research) => {
 
    return { profits, counterOpt, positiveResults, amount, priceCorrection }
 }
-const saveResearch = async (Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) => {
-   const newResearch = new Research({ profits, counterOpt, positiveResults, amount, name: newResearchName, priceCorrection });
-   await newResearch.save();
 
-   const newName = new Name({ name: newResearchName })
-   await newName.save();
-
-   console.log(`Research of "${newResearchName}" saved!!!`)
-}
 const placeInCorrectOrder = (profits, pom2, sort) => {
    if (profits.length <= 2) {
       profits.push(pom2);

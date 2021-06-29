@@ -1,7 +1,4 @@
-const ExpressError = require('../utils/ExpressError');
 const User = require('../models/userModel');
-const Trade = require('../models/tradeModel');
-const Favourite = require('../models/favouriteModel');
 
 module.exports.renderRegister = (req, res) => {
    res.render('users/register');
@@ -49,61 +46,3 @@ module.exports.logout = (req, res) => {
    req.flash('success', 'Goodbye!')
    res.redirect('/skins');
 };
-
-
-module.exports.manageFavouriteTrade = async (req, res) => {
-   const { user } = req;
-   const userId = user._id;
-   const { action } = req.query;
-   const { tradeId } = req.params;
-
-   console.log(action)
-   console.log(tradeId)
-
-   try {
-
-
-      if (action === 'add') {
-
-         const unSavedTrade = await Trade.findById(tradeId);
-         const { favourites } = user;
-
-         const newFavouriteTrade = new Favourite({
-            amount: unSavedTrade.amount,
-            priceCorrection: unSavedTrade.priceCorrection,
-            name: unSavedTrade.name,
-            instance: unSavedTrade.instance,
-            pricesType: unSavedTrade.pricesType,
-            originalTradeId: tradeId
-         })
-
-         favourites.push(newFavouriteTrade);
-         await newFavouriteTrade.save();
-         const updatedUser = await User.findByIdAndUpdate(userId, { favourites: favourites }, { new: true });
-
-         console.log('added')
-         const newFavouriteId = newFavouriteTrade._id;
-         const feedback = { success: true, action, newFavouriteId };
-         res.json(feedback);
-      } else {
-         await User.findByIdAndUpdate(userId, { $pull: { favourites: tradeId } });
-         await Favourite.findByIdAndDelete(tradeId);
-
-
-         console.log('deleted')
-         const feedback = { success: true, action };
-         res.json(feedback);
-      }
-
-
-
-
-
-
-   } catch (e) {
-      console.log(e)
-      const feedback = { success: false, action };
-      res.json(feedback);
-   }
-
-}

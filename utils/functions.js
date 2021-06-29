@@ -2,6 +2,36 @@ const fetch = require('node-fetch');
 const ExpressError = require('../utils/ExpressError');
 const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
 
+
+module.exports.sortingTrades = (trades, sort, order) => {
+
+   if (order === 'descending') {
+
+      for (let i = 0; i < trades.length; i++) {
+         for (let j = 0; j < trades.length; j++) {
+            if (trades[i].instance.trade[sort] > trades[j].instance.trade[sort]) {
+               let temp = trades[i];
+               trades[i] = trades[j];
+               trades[j] = temp;
+            }
+         }
+      }
+   } else if (order === 'ascending') {
+      for (let i = 0; i < trades.length; i++) {
+         for (let j = 0; j < trades.length; j++) {
+            if (trades[i].instance.trade[sort] < trades[j].instance.trade[sort]) {
+               let temp = trades[i];
+               trades[i] = trades[j];
+               trades[j] = temp;
+            }
+         }
+      }
+
+   }
+   return trades;
+}
+
+
 module.exports.getPriceAndVolume = async (data, variant, url, convert, getData) => {
 
    if (data.success === true) {

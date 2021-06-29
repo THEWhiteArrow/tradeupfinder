@@ -1,0 +1,143 @@
+<% layout('layouts/boilerplate')%>
+
+
+   <header class="container pt-3 pb-1">
+      <div class="d-flex justify-content-between">
+         <h1 class="d-flex my-4 display-1">Kontrakciarze</h1>
+         <div class="csgo-logo mb-3"></div>
+      </div>
+      <div class="d-flex justify-content-evenly flex-wrap">
+
+         <% if(!currentUser){ %>
+
+            <a href="/user/login" class="btn btn-danger text-white mt-2 col-12 col-lg-3">Login</a>
+            <a href="/user/register" class="btn btn-success text-white mt-2 col-12 col-lg-3">Register</a>
+            <% }else{ %>
+               <a href="/user/logout" class="btn btn-success text-white mt-2 col-12 col-lg-3">Logout</a>
+               <% } %>
+                  <a href="/map/map-collection" class="btn btn-info text-white mt-2 col-12 col-lg-3">Zmapuj
+                     kolekcje</a>
+                  <a href="/skins" class="btn btn-primary text-white mt-2 col-12 col-lg-3">Main Page</a>
+                  <a href="/skins/show-database/validate"
+                     class="btn btn-danger text-white mt-2 col-12 col-lg-3">Validate skins' prices</a>
+
+
+      </div>
+      <% if(success && success.length){ %>
+         <div class="lead alert alert-success alert-dismissible fade show my-3" role="alert">
+            <h4 class="alert-heading">Congratulations!</h4>
+            <hr>
+            <p>
+               <%= success %>
+            </p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>
+         <% } %>
+
+
+
+
+
+   </header>
+
+   <main class="container pb-5">
+
+
+      <div class="row d-flex justify-content-between">
+         <%let i=0; %>
+            <% for(let collection of collections){ %>
+               <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+
+
+                  <h2 class="mt-4 p-1 overflow-auto">
+                     <%=collection.name%>
+                  </h2>
+
+
+                  <% for(let rarity of rarities){ %>
+                     <div class="d-flex flex-column">
+                        <button class="btn btn-info text-white" type="button" data-bs-toggle="collapse"
+                           data-bs-target="#collapseExample<%=i%>" aria-expanded="false"
+                           aria-controls="collapseExample<%=i%>">
+
+                           <%= rarity %>
+                        </button>
+                        <div class="collapse " id="collapseExample<%=i%>">
+                           <% i+=1; %>
+                              <% for(let skin of collection.skins[rarity]) {%>
+                                 <% if(skin){ %>
+                                    <div class="card card-body px-2">
+
+                                       <!-- console.log(skin) -->
+                                       <h6>
+                                          <%=skin.name %> - <%=skin.skin %>
+                                       </h6>
+                                       <% if(currentUser&&(currentUser.role=='moderator' ||currentUser.role=='admin'
+                                          )){%>
+                                          <form action="/skins/update/<%= skin._id %>" method="POST"
+                                             class="d-flex flex-column">
+                                             <ul class="mb-0 ">
+                                                <% for(let key of qualities) {%>
+                                                   <li class="form-group d-flex flex-column">
+
+                                                      <label for="<%= `${skin.name}${skin.skin}${key}` %>"
+                                                         class="col-12">
+                                                         <%= key %>
+                                                      </label>
+                                                      <div class="input-group">
+                                                         <input id="<%= `${skin.name}${skin.skin}${key}` %>"
+                                                            class=" form-control mt-0 mb-3" type="number"
+                                                            name="prices[<%= key %>]" step="0.01"
+                                                            value="<%= skin.prices[key] %>">
+
+                                                         <% if(skin.isInStattrak){%>
+                                                            <input id="<%= `StatTrak™${skin.name}${skin.skin}${key}` %>"
+                                                               class=" form-control mt-0 mb-3 stattrak" type="number"
+                                                               name="stattrakPrices[<%= key %>]" step="0.01"
+                                                               value="<%= skin.stattrakPrices[key] %>">
+                                                            <% } %>
+                                                      </div>
+
+                                                   </li>
+                                                   <% }%>
+                                             </ul>
+                                             <button class="btn btn-primary align-self-end">CONFIRM</button>
+                                          </form>
+                                          <% }else{ %>
+                                             <ul class="mb-1">
+                                                <% for(let key of qualities) {%>
+                                                   <li>
+                                                      <p class="mb-0 mt-1">
+                                                         <span class="me-2">
+                                                            <%= key %>
+                                                         </span>
+                                                         <span>
+                                                            <%= skin.prices[key] %>
+                                                         </span>
+                                                         <span> / </span>
+                                                         <% if(skin.isInStattrak){%>
+                                                            <span class="stattrak">
+                                                               <%= skin.stattrakPrices[key] %>
+                                                            </span>
+                                                            <% } %>
+                                                      </p>
+
+                                                   </li>
+                                                   <% }%>
+                                             </ul>
+                                             <% }%>
+
+                                    </div>
+                                    <% } %>
+                                       <% } %>
+                        </div>
+                     </div>
+                     <% } %>
+               </div>
+               <% } %>
+      </div>
+   </main>
+
+
+
+   <script src="/javascripts/skins.js"></script>

@@ -1,0 +1,308 @@
+<% layout('layouts/boilerplate')%>
+
+   <header class="container my-5 ">
+
+      <h1 class="display-6 my-2 py-2">Trade'y Algorytmu Mixed</h1>
+
+      <% if(info && info.length){ %>
+         <div class="lead alert alert-success alert-dismissible fade show" role="alert">
+            <h4 class="alert-heading">Well done ;) !</h4>
+            <hr>
+            <p>
+               <%= info %>
+            </p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>
+         <% } %>
+
+            <span class="links">
+               <a class="btn btn-primary mt-2" href="/skins">Wróć do strony skinów</a>
+               <!-- <a class="btn btn-primary mt-2"
+                  href="<%= url.replace('action=save','action=nothing').replace('action=display','action=nothing') %>">
+                  Szukaj od nowa</a> -->
+            </span>
+   </header>
+
+
+   <main class="container pb-4">
+      <% if(profits){ %>
+         <% let number=1; %>
+            <ul>
+
+               <% for(let profit of profits){ %>
+                  <% if(number <=maxShownSkins){ %>
+                     <% let trade=profit.instance.trade %>
+                        <li class="my-4 p-3 trade rounded border container bg-<%= trade.rarity.replace('_','') %>">
+                           <div class="row">
+
+                              <!-- COLLECTIONS DATA -->
+                              <section class="d-flex justify-content-between">
+
+                                 <div class="col-11">
+                                    <div>
+                                       <%= profit.instance.avg %>
+                                          <%= trade.rarity %>
+                                             [<%= trade.firstSkin.case %> + <%= trade.secondSkin.case %>] => [<%=
+                                                      trade.targetedSkin.case%>]
+                                    </div>
+                                    <div>
+                                       <div>
+                                          Nazwa przeszukania : <%= profit.name %>
+                                       </div>
+                                       <div>
+                                          Podbicie Ceny : <%= profit.priceCorrection %>zł
+                                       </div>
+                                       <% if(profit.pricesType=='stattrakPrices' ){ %>
+                                          <div class="stattrak mt-3">
+                                             StatTrak™
+                                          </div>
+                                          <% } %>
+                                    </div>
+                                 </div>
+
+
+                                 <% if( (action==='save' || action==='display' ) && currentUser ){ %>
+
+                                    <% let isFavourite=false; %>
+                                       <% let favouriteId=profit._id ; %>
+
+                                          <% for(let id of currentUser.favourites){ %>
+                                             <% const index=profit.favourites.indexOf(id); %>
+                                                <% if(index!=-1){favouriteId=id;isFavourite=true;}} %>
+
+                                                   <% if(isFavourite) { %>
+
+                                                      <a class="star col-1 filled" id="<%= favouriteId %>"
+                                                         href="<%= profit._id %>">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                            fill="currentColor" class="bi bi-star-fill"
+                                                            viewBox="0 0 16 16">
+                                                            <path
+                                                               d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                                                         </svg>
+                                                      </a>
+
+                                                      <% } else{%>
+
+                                                         <a class="star col-1 " id="<%= profit._id %>"
+                                                            href="<%= profit._id %>">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                               height="16" fill="currentColor" class="bi bi-star"
+                                                               viewBox="0 0 16 16">
+                                                               <path
+                                                                  d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+                                                            </svg>
+                                                         </a>
+                                                         <% } %>
+
+                                                            <% } %>
+
+
+                                                               <% if( (action==='save' || action==='display' ) &&
+                                                                  currentUser &&currentUser.role=='admin' ){ %>
+
+                                                                  <%if(profit.isHighlighted){%>
+
+                                                                     <a href="<%= profit._id %>"
+                                                                        class="highlight-btn col-1 filled">
+                                                                        <img
+                                                                           src="/assets/svgs/bulbs/lightbulb-solid.svg"
+                                                                           width="16" height="16" alt="">
+                                                                     </a>
+                                                                     <% } else{%>
+                                                                        <a href="<%= profit._id %>"
+                                                                           class="highlight-btn col-1">
+                                                                           <img
+                                                                              src="/assets/svgs/bulbs/lightbulb-regular.svg"
+                                                                              width="16" height="16" alt="">
+                                                                        </a>
+
+                                                                        <% }%>
+                                                                           <% } %>
+
+
+                              </section>
+
+
+                              <!-- TRADE -->
+                              <section class="mt-4 mb-2  d-flex flex-column">
+
+                                 <!-- INPUT PRICE -->
+                                 <h5 class="col-12 d-flex justify-content-center inputPrice">
+                                    (<%= trade.inputPrice %>zł)
+                                 </h5>
+
+                                 <div class="row">
+                                    <a class="link-dark mb-1 d-flex col-12 justify-content-center skin first"
+                                       data-bs-toggle="tooltip" data-bs-placement="right" title="See on the market"
+                                       href="<%= trade.firstSkinUrl %>" target="_blank">
+                                       <%= profit.amount.amount1 %>x
+                                          [<%= trade.firstQuality %>]
+                                             [<%= trade.firstSkinAvgFloat %>]
+                                                (<%=Math.round((trade.firstPrice)*100) /100 %>zł) -
+                                                   <% if(profit.pricesType=='stattrakPrices' ){ %>
+                                                      StatTrak™
+                                                      <% } %>
+                                                         <%= trade.firstSkin.name %>
+                                                            <%= trade.firstSkin.skin %>
+                                    </a>
+                                    <a class="link-dark d-flex col-12 justify-content-center skin second"
+                                       data-bs-toggle="tooltip" data-bs-placement="right" title="See on the market"
+                                       href="<%= trade.secondSkinUrl %>" target="_blank">
+                                       <%= profit.amount.amount2 %>x
+                                          [<%= trade.secondQuality %>]
+                                             [<%= trade.secondSkinAvgFloat %>]
+                                                (<%=Math.round( (trade.secondPrice)*100)/100 %>zł) -
+                                                   <% if(profit.pricesType=='stattrakPrices' ){ %>
+                                                      StatTrak™
+                                                      <% } %>
+                                                         <%= trade.secondSkin.name %>
+                                                            <%= trade.secondSkin.skin %>
+                                    </a>
+
+
+
+                                    <div class="arrow mx-auto my-3"></div>
+
+                                    <a class="link-dark d-flex col-12 justify-content-center  skin output"
+                                       data-bs-toggle="tooltip" data-bs-placement="right" title="See on the market"
+                                       href="<%= trade.targetedSkinUrl %>" target="_blank">
+                                       [<%= trade.targetedQuality %>]
+                                          [<%= trade.targetedSkinFloat %>] -
+                                             <% if(profit.pricesType=='stattrakPrices' ){ %>
+                                                StatTrak™
+                                                <% } %>
+                                                   <%= trade.targetedSkin.name %>
+                                                      <%= trade.targetedSkin.skin %>
+                                                         (<%= Math.round(trade.targetedPrice*100)/100 %>)
+                                    </a>
+
+                                 </div>
+                              </section>
+
+                              <!-- STATS -->
+                              <section class="stats col-12 col-lg-6 offset-lg-3 d-flex flex-column ">
+
+
+
+                                 <div class="d-flex flex-row col-12 mt-auto data text-white">
+                                    <div
+                                       class="d-flex  py-2 w-100 justify-content-center align-items-center bg-primary">
+                                       <%= Math.round(trade.profitPerTradeUp*100)/100 %>zł
+                                    </div>
+                                    <div
+                                       class="d-flex  py-2 w-100 justify-content-center align-items-center bg-success">
+                                       <%= Math.round(trade.returnPercentage*100)/100 %>%
+                                    </div>
+                                    <div class="d-flex  py-2 w-100 justify-content-center align-items-center bg-danger">
+                                       <%=
+                                          Math.round(profit.instance.wantedOutputChance/profit.instance.targetedSkinsNumber*100*100)/100%>
+                                          %
+                                    </div>
+                                 </div>
+                              </section>
+
+
+
+                              <!-- HELPER SKINS -->
+                              <section class="d-flex flex-column flex-lg-row col-12 mt-3 mb-2">
+
+                                 <!-- ALTERNATE INPUTS -->
+                                 <section class="col-12 col-lg-6 ">
+                                    <h6 class="d-flex my-2 pe-5 me-5 justify-content-center">ALTERNATE INPUTS:</h6>
+
+                                    <form class="code-for-bot"
+                                       id="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}` %>">
+
+                                       <ul class="list-unstyled">
+                                          <% for(let alternateSkin of trade.alternateInputSkins){ %>
+
+                                             <li class="d-flex form-check align-items-center">
+
+                                                <input class="form-check-input me-3" type="checkbox"
+                                                   value="<%= alternateSkin.amount %>_<%= alternateSkin.float %>_<%= alternateSkin.botPrice%>_<%= alternateSkin.url %>"
+                                                   name="<%= alternateSkin.url %>"
+                                                   id="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}${alternateSkin.url}`%>">
+                                                <label class="form-check-label py-1 me-3 crosshair"
+                                                   for="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}${alternateSkin.url}`%>">
+                                                   <%=alternateSkin.collectionName %>
+                                                </label>
+                                                <a class="link-dark" target="_blank" title="See on the market"
+                                                   href="<%= alternateSkin.url  %>">
+                                                   <% if(profit.pricesType=='stattrakPrices' ){ %>
+
+                                                      <%=`[${alternateSkin.quality}] - StatTrak™ ${alternateSkin.name}
+                                                         ${alternateSkin.skin} - (${alternateSkin.price})`%>
+
+                                                         <% }else{ %>
+                                                            <%=`[${alternateSkin.quality}] - ${alternateSkin.name}
+                                                               ${alternateSkin.skin} - (${alternateSkin.price})`%>
+                                                               <% } %>
+                                                </a>
+                                             </li>
+
+                                             <% } %>
+                                       </ul>
+                                       <button type="submit" class="btn btn-primary">Generate Bot's Code</button>
+                                    </form>
+                                 </section>
+
+                                 <!-- OUTPUTS -->
+                                 <section class="outputs col-12 col-lg-6 ">
+                                    <h6 class="d-flex my-2 pe-5 me-5 justify-content-center">OUTPUTS:</h6>
+                                    <ul class="list-unstyled">
+                                       <% for(let t=0;t<trade.targetedSkinsArr.length;t++){ %>
+                                          <li class="d-flex mb-1">
+                                             <a class="link-dark" target="_blank" title="See on the market"
+                                                href="<%= trade.targetedSkinsArr[t].url%>">
+
+                                                <% if(profit.pricesType=='stattrakPrices' ){ %>
+
+                                                   [<%=trade.targetedSkinsQuality[t] %>] -
+                                                      [<%=trade.targetedSkinsArr[t].float %>] -
+                                                         StatTrak™
+                                                         <%= trade.targetedSkinsArr[t].name %>
+                                                            <%= trade.targetedSkinsArr[t].skin %> -
+                                                               <%=
+                                                                  Math.round(trade.targetedSkinsArr[t].price*100/0.87)/100%>
+                                                                  (<%=trade.targetedSkinsArr[t].price%>)
+
+                                                                     <% }else{ %>
+                                                                        [<%=trade.targetedSkinsQuality[t] %>] -
+                                                                           [<%=trade.targetedSkinsArr[t].float %>] -
+                                                                              <%= trade.targetedSkinsArr[t].name %>
+                                                                                 <%= trade.targetedSkinsArr[t].skin %> -
+                                                                                    <%=Math.round(trade.targetedSkinsArr[t].price*100
+                                                                                       /0.87)/100%>
+                                                                                       (
+                                                                                       <%=trade.targetedSkinsArr[t].price%>
+                                                                                          )
+
+                                                                                          <% } %>
+
+                                             </a>
+                                          </li>
+                                          <% } %>
+                                    </ul>
+                                 </section>
+
+                              </section>
+
+                           </div>
+
+                        </li>
+                        <% number+=1; %>
+                           <% } %>
+                              <% } %>
+
+
+
+            </ul>
+            <% } %>
+
+   </main>
+
+   <script src="/javascripts/axios.min.js"></script>
+   <script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>
+   <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
+   <script src="/javascripts/bot.js"></script>

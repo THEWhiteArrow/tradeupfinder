@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const any = require('../plugins/any');
 
 const favouriteSchema = new Schema({
    amount: {
@@ -14,8 +15,9 @@ const favouriteSchema = new Schema({
    instance: {
       type: Object
    },
-   originalTradeId: {
-      type: String
+   orginalTrade: {
+      type: Schema.Types.ObjectId,
+      ref: 'Trade'
    },
    pricesType: {
       type: String,
@@ -23,4 +25,5 @@ const favouriteSchema = new Schema({
 
 });
 
+favouriteSchema.plugin(any);
 module.exports = mongoose.model('Favourite', favouriteSchema);

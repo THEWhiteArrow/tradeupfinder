@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const any = require('../plugins/any');
 
 const tradeSchema = new Schema({
    amount: {
@@ -16,9 +17,22 @@ const tradeSchema = new Schema({
    },
    pricesType: {
       type: String,
+   },
+
+   favourites: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Favourite'
+   }],
+
+   isHighlighted: {
+      type: Boolean,
+   },
+   highlightedTrade: {
+      type: Schema.Types.ObjectId,
+      ref: 'Highlight'
    }
 
 });
 
-
+tradeSchema.plugin(any);
 module.exports = mongoose.model('Trade', tradeSchema);
