@@ -18,7 +18,7 @@ const setUpHighlightBtn = async () => {
 const sendHighlightTrade = async (action, highlight, highlightName) => {
 
 
-   let url = `/highlight/${highlight.getAttribute('href')}?action=${action}?highlightName=${highlightName}`;
+   let url = `/highlight/${highlight.getAttribute('href')}?action=${action}&highlightName=${highlightName}`;
 
    console.log(url);
 
@@ -45,46 +45,83 @@ const sendHighlightTrade = async (action, highlight, highlightName) => {
 
 const manageHighlight = async (action, highlight) => {
 
+   if (action == 'add') {
 
-   document.innerHTML += `
-   <section id="bg-blur"
-      class="bg-blur position-absolute d-flex w-100 h-100  justify-content-center align-items-center">
-
+      const newSection = document.createElement('section');
+      newSection.innerHTML = `
       <div class="card" style="width: 20rem; height: fit-content;">
-         <div class="card-body">
-            <form id="highlightNameForm" class="needs-validation" novalidate>
-
-               <label for="highlightNameInput">
-                  <h5 class="card-title">Enter Highlighted Name</h5>
-               </label>
-               <input id="highlightNameInput" name="highlightName" type="text" class="form-control my-2 text-center"
-                  maxlength="20" minlength="5">
-               <div class="invalid-feedback">
-                  Name must be longer than no shorter than 5 characters
-               </div>
-               <button id="highlightNameBtn" type="submit" class="btn btn-success w-100">Submit</button>
-            </form>
-
-         </div>
+      <div class="card-body">
+      <form id="highlightNameForm" class="needs-validation" novalidate>
+      
+      <label for="highlightNameInput">
+      <h5 class="card-title">Enter Highlighted Name</h5>
+      </label>
+      <input id="highlightNameInput" name="highlightName" type="text" class="form-control my-2 text-center"
+      maxlength="20" minlength="5">
+      <div class="invalid-feedback my-3">
+      Name must be longer than no shorter than 5 characters
       </div>
+      <button id="highlightNameBtn" type="submit" class="btn btn-success w-100">Submit</button>
+      </form>
+      
+      </div>
+      </div>`;
 
-   </section>
-   <script src="/javascripts/bootstrapJs/validateForms.js"></script>`;
+      newSection.setAttribute('id', 'bg-blur')
+      newSection.classList.add('d-flex', 'bg-blur', 'position-fixed', 'd-flex', 'w-100', 'h-100', 'justify-content-center', 'align-items-center')
+      document.body.prepend(newSection)
 
-   const highlightNameForm = document.querySelector('#highlightNameForm');
-   const highlightNameInput = document.querySelector('#highlightNameInput');
-   const sectionBlur = document.querySelector('#bg-blur');
+      // <script src="/javascripts/bootstrapJs/validateForms.js"></script>
+      await sleep(1000);
 
-   highlightNameForm.addEventListener('submit', async (e) => {
-      e.stopPropagation();
-      e.preventDefault();
+      validateForms();
 
-      const highlightName = highlightNameInput.value;
-      sectionBlur.remove();
 
-      await sendHighlightTrade(action, highlight, highlightName);
+
+      const highlightNameForm = document.querySelector('#highlightNameForm');
+      const highlightNameInput = document.querySelector('#highlightNameInput');
+      const sectionBlur = document.querySelector('#bg-blur');
+
+      highlightNameForm.addEventListener('submit', async (e) => {
+         e.stopPropagation();
+         e.preventDefault();
+
+         const highlightName = highlightNameInput.value;
+         sectionBlur.remove();
+
+         await sendHighlightTrade(action, highlight, highlightName);
+      })
+
+   } else {
+
+      await sendHighlightTrade(action, highlight);
+   }
+
+}
+
+const sleep = (delay) => {
+   return new Promise((resolve, reject) => {
+      setTimeout(() => {
+         resolve();
+      }, delay);
    })
+}
 
+const validateForms = () => {
+   // Fetch all the forms we want to apply custom Bootstrap validation styles to
+   const forms = document.querySelectorAll('.needs-validation')
+
+   // Loop over them and prevent submission
+   Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+         form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+               event.preventDefault()
+               event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+         }, false)
+      })
 }
 
 setUpHighlightBtn();

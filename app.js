@@ -25,6 +25,7 @@ const mappingRoutes = require('./routes/mapping');
 const homeRoutes = require('./routes/home');
 const highlightRoutes = require('./routes/highlight');
 const favouriteRoutes = require('./routes/favourite');
+const tradeRoutes = require('./routes/trades');
 
 const User = require('./models/userModel');
 
@@ -110,6 +111,7 @@ app.use('/user', userRoutes)
 app.use('/map', mappingRoutes)
 app.use('/highlight', highlightRoutes)
 app.use('/favourites', favouriteRoutes)
+app.use('/trades', tradeRoutes)
 app.use('/', homeRoutes)
 
 // app.get('/', (req, res) => {

@@ -13,8 +13,9 @@ body {
    display: flex;
    flex-direction: column;
    justify-content: space-between;
-   background-color:rgba(31, 58, 99, 0.966);
-   background-image: linear-gradient(rgba(31, 58, 99, 0.35), rgba(31, 58, 99, 0.35)),url('../assets/background/mulyadi-TyjFLWdZris-unsplash.jpg');
+   /* background-color:rgba(110, 169, 218, 0.966); */
+   background-image: url('../assets/background/Circuit\ Board.svg');
+   /* background-image: linear-gradient(rgba(31, 58, 99, 0.35), rgba(31, 58, 99, 0.35)),url('../assets/background/mulyadi-TyjFLWdZris-unsplash.jpg'); */
    background-size: cover;
    /* background from https://www.flickr.com/photos/leenda_k/ */
 }
@@ -231,6 +232,7 @@ footer{
 }
 
 nav#navbar{
+   z-index: 1000;
    font-size: 17px;
    display: flex;
    z-index: 500 !important;
@@ -416,7 +418,7 @@ nav#navbar a:hover,nav#navbar a.navbar-brand{
 
 
 .case-collection-container{
-   opacity:0.90;
+   opacity:0.87;
    transition: opacity 0.1s ease-in-out;
    cursor: pointer;
 }
@@ -573,6 +575,7 @@ nav#navbar a:hover,nav#navbar a.navbar-brand{
 
 nav#settings{
    display: flex;
+   z-index: 1000;
    width:100%;
    height:27px !important;
    padding:2px 2px 2px 2px;
@@ -605,12 +608,15 @@ nav#settings select{
 }
 
 .highlight-home-page{
-   background-color: rgb(224, 224, 224);
-   border:1px solid white;
+   background-color: rgb(181, 225, 255);
+   border:2px solid white;
 }
 
 .bg-blur{
+   z-index: 1000;
    background-color: rgba(0, 0, 0, 0.6);
    -webkit-box-shadow: inset 0px 0px 15px 5px rgba(0,0,0,0.6); 
 box-shadow: inset 0px 0px 15px 5px rgba(0,0,0,0.6);
 }
+
+.display-5{font-size:calc(1.425rem + 1.5vw)};

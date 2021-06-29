@@ -1,5 +1,8 @@
 <% layout('layouts/boilerplate')%>
 
+
+
+
    <header class="container pt-3 pb-1">
       <div class="d-flex justify-content-between">
          <h1 class="d-flex my-4 display-1">Kontrakciarze</h1>
@@ -13,7 +16,7 @@
             <a href="/user/register" class="btn btn-success text-white mt-2 col-12 col-lg-3">Register</a>
             <% }else{ %>
                <a href="/user/logout" class="btn btn-success text-white mt-2 col-12 col-lg-3">Logout</a>
-               <a href="/skins/trades/favourites" class="btn btn-danger text-white mt-2 col-12 col-lg-3">Zobacz
+               <a href="/favourites" class="btn btn-danger text-white mt-2 col-12 col-lg-3">Zobacz
                   ulubione</a>
                <% } %>
                   <a href="/map/map-collection" class="btn btn-info text-white mt-2 col-12 col-lg-3">Zmapuj
@@ -51,7 +54,8 @@
                         <h4 class="alert-heading">
                            <div>Congratulations!</div>
                            <div> You have been given a role of moderator that allows
-                              you to acces more routes and options. Feel free to explore the deepness of the application
+                              you to acces more routes and options. Feel free to explore the deepness of the
+                              application
                               und discover yet uknown.
                            </div>
                            <div>Remember to be responsive, tho!!!</div>
@@ -83,8 +87,8 @@
                               <form class="d-flex flex-column mt-2 col-12" action="/skins/update-thru-servers"
                                  method="POST">
                                  <div class="col-12">
-                                    <label for="server1">Backpack or Steam API</label>
-                                    <input id="server1" class="form-control my-1" type="text" name="variant"
+                                    <label for="variant">Backpack or Steam API</label>
+                                    <input id="variant" class="form-control my-1" type="text" name="variant"
                                        placeholder="variant - defauly backpack - can be left empty"
                                        aria-label=".form-control example">
                                  </div>
@@ -110,7 +114,7 @@
 
                                     <span class="">
                                        <label for="server2">Serwer 2</label>
-                                       <input id="server1" class="form-control my-1" type="number" name="server2[start]"
+                                       <input id="server2" class="form-control my-1" type="number" name="server2[start]"
                                           placeholder="starting point" aria-label=".form-control example" step="1"
                                           value="100">
                                        <input class="form-control my-1" type="number" name="server2[end]"
@@ -120,7 +124,7 @@
 
                                     <span class="">
                                        <label for="server3">Serwer 3</label>
-                                       <input id="server1" class="form-control my-1" type="number" name="server3[start]"
+                                       <input id="server3" class="form-control my-1" type="number" name="server3[start]"
                                           placeholder="starting point" aria-label=".form-control example" step="1"
                                           value="200">
                                        <input class="form-control my-1" type="number" name="server3[end]"
@@ -130,7 +134,7 @@
 
                                     <span class="">
                                        <label for="server4">Serwer 4</label>
-                                       <input id="server1" class="form-control my-1" type="number" name="server4[start]"
+                                       <input id="server4" class="form-control my-1" type="number" name="server4[start]"
                                           placeholder="starting point" aria-label=".form-control example" step="1"
                                           value="300">
                                        <input class="form-control my-1" type="number" name="server4[end]"
@@ -140,7 +144,7 @@
 
                                     <span class="">
                                        <label for="server5">Serwer 5</label>
-                                       <input id="server1" class="form-control my-1" type="number" name="server5[start]"
+                                       <input id="server5" class="form-control my-1" type="number" name="server5[start]"
                                           placeholder="starting point" aria-label=".form-control example" step="1"
                                           value="400">
                                        <input class="form-control my-1" type="number" name="server5[end]"
@@ -150,7 +154,7 @@
 
                                     <span class="">
                                        <label for="server6">Serwer 6</label>
-                                       <input id="server1" class="form-control my-1" type="number" name="server6[start]"
+                                       <input id="server6" class="form-control my-1" type="number" name="server6[start]"
                                           placeholder="starting point" aria-label=".form-control example" step="1"
                                           value="500">
                                        <input class="form-control my-1" type="number" name="server6[end]"
@@ -160,7 +164,7 @@
 
                                     <span class="">
                                        <label for="server7">Serwer 7</label>
-                                       <input id="server1" class="form-control my-1" type="number" name="server7[start]"
+                                       <input id="server7" class="form-control my-1" type="number" name="server7[start]"
                                           placeholder="starting point" aria-label=".form-control example" step="1"
                                           value="600">
                                        <input class="form-control my-1" type="number" name="server7[end]"
@@ -170,7 +174,7 @@
 
                                     <span class="">
                                        <label for="server8">Serwer 8</label>
-                                       <input id="server1" class="form-control my-1" type="number" name="server8[start]"
+                                       <input id="server8" class="form-control my-1" type="number" name="server8[start]"
                                           placeholder="starting point" aria-label=".form-control example" step="1"
                                           value="700">
                                        <input class="form-control my-1" type="number" name="server8[end]"
@@ -180,7 +184,7 @@
 
                                     <span class="">
                                        <label for="server9">Serwer 9</label>
-                                       <input id="server1" class="form-control my-1" type="number" name="server9[start]"
+                                       <input id="server9" class="form-control my-1" type="number" name="server9[start]"
                                           placeholder="starting point" aria-label=".form-control example" step="1"
                                           value="800">
                                        <input class="form-control my-1" type="number" name="server9[end]"
@@ -190,7 +194,7 @@
 
                                     <span class="">
                                        <label for="server10">Serwer 10</label>
-                                       <input id="server1" class="form-control my-1" type="number"
+                                       <input id="server10" class="form-control my-1" type="number"
                                           name="server10[start]" placeholder="starting point"
                                           aria-label=".form-control example" step="1" value="900">
                                        <input class="form-control my-1" type="number" name="server10[end]"
@@ -372,8 +376,8 @@
 
 
                <div class="col-12">
-                  <label for="stattrak" class="mt-2">Check Stattraks?</label>
-                  <select name="stattrak" id="stattrak" class="form-control">
+                  <label for="checkStattrak" class="mt-2">Check Stattraks?</label>
+                  <select name="stattrak" id="checkStattrak" class="form-control">
                      <option value="no" selected>No</option>
                      <option value="yes">Yes</option>
                   </select>
@@ -434,8 +438,7 @@
       </div>
 
 
-
    </main>
 
 
-   <script src="/javascripts/index.js"></script>
+   <script src="/javascripts/main.js"></script>

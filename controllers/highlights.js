@@ -26,7 +26,11 @@ module.exports.manageHighlightTrade = async (req, res) => {
 
 const deleteHighlight = async (orginalTrade) => {
    await Highlight.findByIdAndDelete(orginalTrade.highlightedTrade._id);
-   await Trade.findByIdAndUpdate(orginalTrade._id, { isHighlighted: false, highlightedTrade: null });
+
+   const doesExist = Trade.any({ _id: orginalTrade._id });
+   if (doesExist) {
+      await Trade.findByIdAndUpdate(orginalTrade._id, { isHighlighted: false, highlightedTrade: null });
+   }
 }
 
 const addNewHighlight = async (orginalTrade, highlightName) => {
