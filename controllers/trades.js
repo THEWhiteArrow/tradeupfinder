@@ -2,5 +2,6 @@ const Trade = require('../models/tradeModel');
 
 module.exports.showTrade = async (req, res) => {
    const { tradeId } = req.params;
-   res.json({ success: true, tradeId });
+   const profit = await Trade.findOne({ _id: tradeId })
+   res.render('trades/show', { profit })
 }

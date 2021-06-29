@@ -37,9 +37,15 @@
 
                      <div class="card-body d-flex flex-column">
 
-                        <h3 class="card-title px-2">
-                           <%= profit.highlightName %>
-                        </h3>
+                        <section class="d-flex flex-row justify-content-between">
+                           <h3 class="card-title px-2">
+                              <%= profit.highlightName %>
+                           </h3>
+
+                           <span class="d-flex flex-row">
+                              <%- include('../partials/tradeManaging',{trade:profit})%>
+                           </span>
+                        </section>
 
 
                         <section class="d-flex flex-row flex-wrap">
@@ -88,7 +94,8 @@
                                  <h5 class="lead m-0 d-flex align-items-center display-5">Chances : <%=
                                        Math.round(profit.instance.wantedOutputChance/profit.instance.targetedSkinsNumber*100*100)/100
                                        %> %</h5>
-                                 <h5 class="m-0 me-3 me-1 display-5">Profitability : <%= trade.returnPercentage %>%</h5>
+                                 <h5 class="m-0 me-3 me-1 display-5">Profitability : <%= trade.returnPercentage %>%
+                                 </h5>
 
                               </div>
 
@@ -97,7 +104,8 @@
 
                         <section class="d-flex flex-row">
                            <div class="trade-cost d-flex flex-column justify-content-center align-items-center w-50">
-                              <h5 class="px-2 m-0">Cost per trade-up&nbsp&nbsp:&nbsp&nbsp<%= trade.inputPrice %>zł</h5>
+                              <h5 class="px-2 m-0">Cost per trade-up&nbsp&nbsp:&nbsp&nbsp<%= trade.inputPrice %>zł
+                              </h5>
                            </div>
                            <div
                               class="average-profit d-flex flex-column justify-content-center align-items-center w-50">
@@ -144,4 +152,7 @@
    <script src="/javascripts/axios.min.js"></script>
    <script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>
    <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
-   <script src="/javascripts/bot.js"></script>
+   <!-- <script src="/javascripts/axios.min.js"></script>
+   <script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>
+   <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
+   <script src="/javascripts/bot.js"></script> -->

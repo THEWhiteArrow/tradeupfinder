@@ -10,10 +10,10 @@ const skin = require('../controllers/skins');
 router.route('/')
    .get(catchAsync(skin.showMain));
 
-router.route('/show-database')
+router.route('/database')
    .get(catchAsync(skin.showSkinsDb));
 
-router.route('/show-database/validate')
+router.route('/database/validate')
    .get(isLoggedIn, isModeratorAlso, catchAsync(skin.checkEmptyPrices))
 
 

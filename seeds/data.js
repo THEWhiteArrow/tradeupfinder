@@ -6922,14 +6922,6 @@ module.exports = {
          isInStattrak: false,
       },
       {
-         name: 'MAG-7',
-         skin: 'Core Breach',
-         rarity: 'purple',
-         min_float: 0,
-         max_float: 1,
-         isInStattrak: false,
-      },
-      {
          name: 'AUG',
          skin: 'Random Access',
          rarity: 'purple',
