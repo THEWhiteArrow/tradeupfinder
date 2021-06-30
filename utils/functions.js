@@ -46,7 +46,7 @@ module.exports.getPriceAndVolume = async (data, variant, url, convert, getData) 
          else if (data.median_price) { return { statusCode: 200, newPrice: Number(data.median_price), newVolume: Number(data.amount_sold), icon: data.icon } }
          else if (data.lowest_price) { return { statusCode: 200, newPrice: Number(data.lowest_price), newVolume: Number(data.amount_sold), icon: data.icon } }
          else if (data.highest_price) { return { statusCode: 200, newPrice: Number(data.highest_price), newVolume: Number(data.amount_sold), icon: data.icon } }
-         else { return { statusCode: 200, newPrice: 0, newVolume: 0 }; }
+         else { return { statusCode: 200, newPrice: 0, newVolume: 0, icon: 'none' }; }
       }
 
 

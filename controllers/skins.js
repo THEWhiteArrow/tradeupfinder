@@ -68,7 +68,8 @@ module.exports.checkEmptyPrices = async (req, res) => {
 
 module.exports.updatePrices = async (req, res, next) => {
    //does not supprot steam's volumes
-   const { start = 0, end = length, variant = 'backpack', stattrak = '0' } = req.query;
+   const { start = 0, end = length, variant = 'backpack', stattrak = false } = req.query;
+   console.log(stattrak)
    const skins = await Skin.find({});
 
 
@@ -108,6 +109,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
                updatedIcon = icon;
+               console.log(updatedIcon)
                updatedPrices[quality] = newPrice;
                updatedVolumes[quality] = Math.round(newVolume / updatingDaysSpan);
 
@@ -177,7 +179,7 @@ module.exports.updateSkinPrice = async (req, res) => {
 }
 
 module.exports.useServers = async (req, res) => {
-   const { server1, server2, server3, server4, server5, server6, server7, server8, server9, server10, variant = 'backpack', stattrak = '0' } = req.body;
+   const { server1, server2, server3, server4, server5, server6, server7, server8, server9, server10, variant = 'backpack', stattrak = false } = req.body;
 
 
    console.log(variant)
