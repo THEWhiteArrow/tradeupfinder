@@ -13,9 +13,9 @@ const methodOverride = require('method-override');
 const mongoSanitize = require('express-mongo-sanitize');
 
 const passport = require('passport');
-const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
 const SteamStrategy = require('passport-steam').Strategy;
+const { createNewSteamUser } = require('./utils/functions');
 
 const server = process.env.SERVER || 'local';
 const port = process.env.PORT || 3000;
@@ -115,31 +115,52 @@ app.use(passport.session());
 passport.serializeUser(function (user, done) {
    done(null, user);
 });
-
 passport.deserializeUser(function (obj, done) {
    done(null, obj);
 });
+
 
 passport.use('local', new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
 passport.use('steam', new SteamStrategy({
    returnURL: 'http://localhost:3000/auth/steam/return',
    realm: 'http://localhost:3000/',
-   apiKey: process.env.PORT || 'F5B39258ABFD689135F68E55C914DE69',
+   apiKey: process.env.STEAM_KEY,
 },
    async function (identifier, profile, done) {
       // asynchronous verification, for effect...
-      process.nextTick(async function () {
+      await process.nextTick(async function () {
 
          // To keep the example simple, the user's Steam profile is returned to
          // represent the logged-in user.  In a typical application, you would want
          // to associate the Steam account with a user record in your database,
          // and return that user instead.
          profile.identifier = identifier;
-         console.log(profile._json.steamid)
-         return done(null, profile);
+
+         try {
+            const user = await User.findOne({ "steam.id": profile.id })
+            console.log('steam user doesExist :', user)
+
+
+            if (user != null) {
+               console.log('Logged in an existing user!')
+               return done(null, user);
+
+            } else {
+               const newUser = await createNewSteamUser(profile);
+               console.log(newUser)
+               console.log('Logged in a new user!')
+               return done(null, newUser);
+            }
+
+
+         } catch (e) {
+            console.log('Failed to login via steam')
+            return done(null, false, { message: e });
+         }
       });
    }
 ));
@@ -171,9 +192,10 @@ app.use((req, res, next) => {
    res.locals.error = req.flash('error');
 
 
+   if (server != 'local') return next(new ExpressError("Service Unavaible. We're currently improving our page for you. Please stay patient :)", 503))
+
    next();
 })
-
 
 
 

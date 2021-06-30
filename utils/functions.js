@@ -1,7 +1,29 @@
 const fetch = require('node-fetch');
 const ExpressError = require('../utils/ExpressError');
 const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
+const User = require('../models/userModel');
 
+
+
+module.exports.createNewSteamUser = async (profile) => {
+   const steam = {
+      id: profile.id,
+      avatar: profile.photos[2].value || null
+   }
+
+
+   const newUser = new User({
+      steam,
+      role: 'guest',
+      favourites: [],
+      email: null,
+      username: profile.displayName
+   })
+
+   await newUser.save();
+
+   return newUser;
+}
 
 module.exports.sortingTrades = (trades, sort, order) => {
 
