@@ -31,7 +31,7 @@ module.exports.renderLogin = (req, res) => {
    res.render('users/login');
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = async (req, res) => {
    const { user } = req;
    console.log(user)
    req.flash('success', `Welcome back ${user.username}! We have been waiting for your comeback and are content to have you here :) `);
@@ -41,8 +41,8 @@ module.exports.login = (req, res) => {
    res.redirect(redirectUrl)
 };
 
-module.exports.logout = (req, res) => {
-   req.logout();
+module.exports.logout = async (req, res) => {
+   await req.logout();
    req.flash('success', 'Goodbye!')
    res.redirect('/skins');
 };

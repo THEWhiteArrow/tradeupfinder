@@ -1,7 +1,7 @@
 const ExpressError = require('./utils/ExpressError');
 const Favourite = require('./models/favouriteModel');
 
-const isLoggedIn = (req, res, next) => {
+module.exports.isLoggedIn = (req, res, next) => {
    if (!req.isAuthenticated()) {
       req.session.returnTo = req.originalUrl;
       req.flash('error', 'You must be signed in first!');
@@ -10,19 +10,19 @@ const isLoggedIn = (req, res, next) => {
    next();
 };
 
-const isAdmin = async (req, res, next) => {
+module.exports.isAdmin = async (req, res, next) => {
    const permissionrole = { admin: true, moderator: false, guest: false };
    res.locals.permissionrole = permissionrole;
    next();
 };
 
-const isModeratorAlso = async (req, res, next) => {
+module.exports.isModeratorAlso = async (req, res, next) => {
    const permissionrole = { admin: true, moderator: true, guest: false };
    res.locals.permissionrole = permissionrole;
    next();
 };
 
-const isPermitted = async (req, res, next) => {
+module.exports.isPermitted = async (req, res, next) => {
    const { role } = req.user;
    if (!res.locals.permissionrole[role]) {
       req.flash('error', 'You do not have a permission to do that!')
@@ -32,7 +32,7 @@ const isPermitted = async (req, res, next) => {
 };
 
 
-const userOwnsFavouriteTradeUp = async (req, res, next) => {
+module.exports.userOwnsFavouriteTradeUp = async (req, res, next) => {
    const { favouriteId } = req.params;
    const user = req.user;
 
@@ -49,7 +49,7 @@ const userOwnsFavouriteTradeUp = async (req, res, next) => {
 
 }
 
-const isFavouriteTradeAuthorized = async (req, res, next) => {
+module.exports.isFavouriteTradeAuthorized = async (req, res, next) => {
    const { tradeId, favouriteId } = req.params;
    const { user } = req;
    const { action } = req.query;
@@ -83,7 +83,7 @@ const isFavouriteTradeAuthorized = async (req, res, next) => {
    return res.redirect(`/skins`);
 }
 
-const isResearchAllowed = async (req, res, next) => {
+module.exports.isResearchAllowed = async (req, res, next) => {
    const { action } = req.query;
 
    if (action !== 'display' && action !== 'nothing' && action !== 'save') {
@@ -112,4 +112,9 @@ const isResearchAllowed = async (req, res, next) => {
 
 }
 
-module.exports = { isLoggedIn, isAdmin, isModeratorAlso, isPermitted, isResearchAllowed, isFavouriteTradeAuthorized, userOwnsFavouriteTradeUp };
+
+module.exports.ensureSteamAuthenticated = (req, res, next) => {
+   if (req.isAuthenticated()) { return next(); }
+   res.redirect('/auth');
+}
+

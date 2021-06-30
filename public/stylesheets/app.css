@@ -214,8 +214,10 @@ li.trade {
 
 /* #####################################     NEW     ###################################### */
 
+
+
 footer{
-   margin-top: 70px;
+   margin-top: 80px;
    font-size: 17px;
    display: flex;
    z-index: 500 !important;
@@ -261,6 +263,13 @@ nav#navbar a{
 
    transition: color .1s ease-in-out;
 }
+
+a.steamLink{
+   background-image: url('../assets/social/steamLink.png');
+   width:180px;
+   height: 35px;
+}
+
 
 
 

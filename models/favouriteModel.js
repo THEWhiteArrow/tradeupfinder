@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const any = require('../plugins/any');
+const any = require('../plugins/mongoose/any');
 
 const favouriteSchema = new Schema({
    amount: {

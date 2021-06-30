@@ -10,12 +10,15 @@ const flash = require('connect-flash');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-
 const mongoSanitize = require('express-mongo-sanitize');
+
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
+const bcrypt = require('bcrypt');
+const LocalStrategy = require('passport-local').Strategy;
+const SteamStrategy = require('passport-steam').Strategy;
 
 const server = process.env.SERVER || 'local';
+const port = process.env.PORT || 3000;
 const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
 const MongoStore = require('connect-mongo')(session);
 
@@ -26,8 +29,12 @@ const homeRoutes = require('./routes/home');
 const highlightRoutes = require('./routes/highlight');
 const favouriteRoutes = require('./routes/favourite');
 const tradeRoutes = require('./routes/trades');
+const steamRoutes = require('./routes/steam');
 
 const User = require('./models/userModel');
+
+
+
 
 // MONGO DATABASE
 mongoose.connect(dbUrl, {
@@ -46,19 +53,17 @@ db.once("open", () => {
 // MIDDLEWARE
 const app = express();
 app.engine('ejs', ejsMate);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
-
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(mongoSanitize({ replaceWith: '_' }));
+// app.use(mongoSanitize({ replaceWith: '_' }));
 
 
 const secret = process.env.SECRET || 'thisshoulbeabettersecret!';
-
 const store = new MongoStore({
    url: dbUrl,
    secret: secret,
@@ -68,7 +73,6 @@ const store = new MongoStore({
 store.on('error', function () {
    console.log('SESSION STORE ERROR', e);
 })
-
 const sessionConfig = {
    store,
    name: 'session',
@@ -77,20 +81,86 @@ const sessionConfig = {
    saveUninitialized: true,
    cookie: {
       httpOnly: true,
-      // secure:true,
+      // secure: true,
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
       maxAge: 1000 * 60 * 60 * 24 * 7
    }
 }
-
 app.use(session(sessionConfig));
 app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// PASSPORT 
+
+passport.serializeUser(function (user, done) {
+   done(null, user);
+});
+
+passport.deserializeUser(function (obj, done) {
+   done(null, obj);
+});
+
+passport.use('local', new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+passport.use('steam', new SteamStrategy({
+   returnURL: 'http://localhost:3000/auth/steam/return',
+   realm: 'http://localhost:3000/',
+   apiKey: process.env.PORT || 'F5B39258ABFD689135F68E55C914DE69',
+},
+   async function (identifier, profile, done) {
+      // asynchronous verification, for effect...
+      process.nextTick(async function () {
+
+         // To keep the example simple, the user's Steam profile is returned to
+         // represent the logged-in user.  In a typical application, you would want
+         // to associate the Steam account with a user record in your database,
+         // and return that user instead.
+         profile.identifier = identifier;
+         console.log(profile._json.steamid)
+         return done(null, profile);
+      });
+   }
+));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.use((req, res, next) => {
    res.locals.server = server;
@@ -100,8 +170,10 @@ app.use((req, res, next) => {
    res.locals.success = req.flash('success');
    res.locals.error = req.flash('error');
 
+
    next();
 })
+
 
 
 
@@ -112,19 +184,14 @@ app.use('/map', mappingRoutes)
 app.use('/highlight', highlightRoutes)
 app.use('/favourites', favouriteRoutes)
 app.use('/trades', tradeRoutes)
+app.use('/auth', steamRoutes)
 app.use('/', homeRoutes)
 
-// app.get('/', (req, res) => {
-//    res.send('WELCOME TO CONTRACT BOT !')
-// })
+
 
 app.all('*', (req, res, next) => {
    next(new ExpressError('Page Not Found', 404))
-})
-
-
-
-
+});
 
 
 
@@ -137,7 +204,7 @@ app.use((err, req, res, next) => {
    res.status(statusCode).render('error', { err });
 })
 
-const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
    console.log(`Serving on port ${port}`)
 })

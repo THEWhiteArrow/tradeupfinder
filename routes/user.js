@@ -10,15 +10,16 @@ const users = require('../controllers/users');
 router.route('/register')
    .get(users.renderRegister)
    .post(catchAsync(users.register));
+// CATCHASYNC (?)
 
 router.route('/login')
    .get(users.renderLogin)
-   .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/user/login' }), users.login)
+   .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/user/login' }), catchAsync(users.login))
 
 
 
 
-router.get('/logout', users.logout)
+router.get('/logout', catchAsync(users.logout))
 
 
 module.exports = router;

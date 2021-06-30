@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
    <% if(error && error.length){ %>
-      <div class="lead alert alert-danger alert-dismissible fade show my-3" role="alert">
+      <div class="container card lead alert alert-danger alert-dismissible fade show my-3" role="alert">
          <h4 class="alert-heading">Error!</h4>
          <hr>
          <p>
@@ -9,9 +9,9 @@
          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       <% } %>
-         <div class="container d-flex justify-content-center align-items-center mt-5">
+         <div class="container d-flex justify-content-center align-items-center mb-5">
             <div class="row col-10 col-md-6 col-xl-4">
-               <h1 class="display-3 py-4">Sign In</h1>
+               <h1 class="display-3 pb-4">Sign In</h1>
                <div class="card shadow">
                   <div class="card-body ">
 
@@ -27,15 +27,22 @@
 
                         <div class="mb-3">
                            <label class="form-label" for="password">Password</label>
-                           <input class="form-control" type="password" id="password" name="password" required>
+                           <input class="form-control" type="password" id="password" name="password" required
+                              autocomplete>
                            <div class="valid-feedback">
                               Looks good!
                            </div>
                         </div>
                         <div class="d-flex justify-content-between">
-                           <button class="btn btn-success order-3">Login</button>
+                           <button type="submit" class="btn btn-success order-3">Login</button>
                            <a href="/skins" class="btn btn-danger order-1">Go back</a>
-                           <a href="/user/register" class="btn btn-secondary order-2 text-white">Register</a>
+
+                        </div>
+                        <div class="d-flex flex-column justify-content-between mt-3">
+
+                           <a href="/user/register" class="link-secondary p-0">Don't have account? Register now!</a>
+                           <span class="lead">or</span>
+                           <a href="/auth/steam" class="steamLink"></a>
                         </div>
                      </form>
 

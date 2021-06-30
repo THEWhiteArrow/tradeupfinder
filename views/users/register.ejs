@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 
-   <div class="container d-flex justify-content-center align-items-center mt-5">
+   <div class="container d-flex justify-content-center align-items-center mb-5">
       <div class="row col-10 col-md-6 col-xl-4">
          <h1 class="display-3 py-4">New User</h1>
          <div class="card shadow">
@@ -27,16 +27,23 @@
 
                   <div class="mb-3">
                      <label class="form-label" for="password">Password</label>
-                     <input class="form-control" type="password" id="password" name="password" required>
+                     <input class="form-control" type="password" id="password" name="password" required autocomplete>
                      <div class="valid-feedback">
                         Looks good!
                      </div>
                   </div>
                   <div class="d-flex justify-content-between">
-                     <button class="btn btn-success order-3">Register</button>
+                     <button type="submit" class="btn btn-success order-3">Sign Up</button>
                      <a href="/skins" class="btn btn-danger order-1">Go back</a>
-                     <a href="/user/login" class="btn btn-secondary order-2 text-white">Sign In</a>
                   </div>
+                  <div class="d-flex flex-column justify-content-between mt-3">
+
+
+                     <a href="/user/login" class="link-secondary order-2">Already have an account? Sign In now!</a>
+                     <span class="lead">or</span>
+                     <a href="/auth/steam" class="steamLink"></a>
+                  </div>
+
                </form>
 
             </div>
