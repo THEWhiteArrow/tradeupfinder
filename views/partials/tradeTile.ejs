@@ -1,0 +1,101 @@
+<%- `<${elementName} class="highlight-home-page card mt-5" data-tilt data-tilt-max="2" data-tilt-speed="2000">` %>
+
+
+   <div class="card-body d-flex flex-column">
+
+      <section class="d-flex flex-row justify-content-end">
+
+         <%- include('../partials/tradeManaging',{trade:manageTrade})%>
+
+      </section>
+
+
+      <section class="d-flex flex-row flex-wrap">
+
+         <div class="d-flex align-items-center justify-content-center flex-3">
+
+            <span class="position-relative case-collection-container" type="button" data-bs-container="body"
+               data-bs-toggle="popover" data-bs-placement="bottom"
+               data-bs-title="<%= `${details.firstSkin.name} | ${details.firstSkin.skin}` %>"
+               data-bs-content="Float : <%= details.firstSkinAvgFloat %>">
+               <!-- ZDJĘCIA DO OGARNIĘCIA  !!!!!!!! -->
+               <img src="/assets/cases/mp9.png" alt="mp9" class="img-collection-case mx-3">
+               <div class="skin-number">
+                  <%= trade.amount.amount1 %>
+               </div>
+
+            </span>
+
+            <img src="/assets/plus-lg.svg" alt="plus" class="plus">
+
+            <span class="position-relative case-collection-container" type="button" data-bs-container="body"
+               data-bs-toggle="popover" data-bs-placement="bottom"
+               data-bs-title="<%= `${details.secondSkin.name} | ${details.secondSkin.skin}` %>"
+               data-bs-content="Float : <%= details.secondSkinAvgFloat %>">
+               <img src="/assets/cases/xm1014.png" alt="xm1014" class="img-collection-case mx-3">
+               <div class="skin-number">
+                  <%= trade.amount.amount2 %>
+               </div>
+            </span>
+
+         </div>
+
+         <div class="vertical-hr"></div>
+
+         <!-- <div class="d-flex flex-row rarity-info flex-2">
+         <div class="classified">Classified</div>
+         <div class="covert">Covert</div>
+      </div> -->
+
+         <!-- <div class="vertical-hr"></div> -->
+
+         <div class="d-flex flex-column justify-content-evenly statistics flex-4">
+
+            <div class="d-flex flex-column">
+
+               <h5 class="lead m-0 d-flex align-items-center display-5">Chances : <%=
+                     Math.round(trade.instance.wantedOutputChance/trade.instance.targetedSkinsNumber*100*100)/100 %> %
+               </h5>
+               <h5 class="m-0 me-3 me-1 display-5">Profitability : <%= details.returnPercentage %>%
+               </h5>
+
+            </div>
+
+      </section>
+
+
+      <section class="d-flex flex-row">
+         <div class="trade-cost d-flex flex-column justify-content-center align-items-center w-50">
+            <h5 class="px-2 m-0">Cost per details-up&nbsp&nbsp:&nbsp&nbsp<%= details.inputPrice %>zł
+            </h5>
+         </div>
+         <div class="average-profit d-flex flex-column justify-content-center align-items-center w-50">
+            <h5 class="px-2 m-0">Statistical profit&nbsp&nbsp:&nbsp&nbsp<%= details.profitPerTradeUp %>
+                  zł
+            </h5>
+         </div>
+      </section>
+
+      <section class="d-flex flex-row">
+         <div class="rarity <%= details.rarity %>-<%= details.targetedRarity %> d-flex justify-content-around">
+            <span>
+               <%= details.rarity %>
+            </span>
+            <span>
+               <%= details.targetedRarity %>
+            </span>
+         </div>
+      </section>
+
+
+      <!-- 
+         <p class="lead card-text px-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi,
+            quibusdam
+            voluptatum ratione ab sequi sint sapiente ducimus libero incidunt ipsam.</p> -->
+
+      <a href="<%= showPageLink %>" class="mt-3 btn btn-primary d-flex align-self-end">Zobacz
+         kontrakt</a>
+
+   </div>
+
+   <%- `</${elementName}>` %>

@@ -86,7 +86,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
          const updatedVolumes = {};
          const updatedStattrakVolumes = {};
-
+         const updatedIcon;
 
          const { name, skin, _id } = item;
          // const volume = [updatingDaysSpan];
@@ -96,7 +96,7 @@ module.exports.updatePrices = async (req, res, next) => {
             if (item.prices[quality] !== -1) {
 
                let baseUrl;
-               variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = `http://csgobackpack.net/api/GetItemPrice/?currency=PLN&time=${updatingDaysSpan}&id=`;
+               variant == 'steam' ? baseUrl = 'https://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name=' : baseUrl = `http://csgobackpack.net/api/GetItemPrice/?currency=PLN&icon=1&time=${updatingDaysSpan}&id=`;
                const url = `${baseUrl}${name} | ${skin} (${quality})`;
                const encodedUrl = encodeURI(url);
 
@@ -104,8 +104,10 @@ module.exports.updatePrices = async (req, res, next) => {
                variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                reqNumber += 1;
 
-               const { newPrice, newVolume } = await getPriceAndVolume(data, variant, url, convert, getData);
+               const { newPrice, newVolume, icon } = await getPriceAndVolume(data, variant, url, convert, getData);
 
+
+               updatedIcon = icon;
                updatedPrices[quality] = newPrice;
                updatedVolumes[quality] = Math.round(newVolume / updatingDaysSpan);
 
@@ -126,8 +128,9 @@ module.exports.updatePrices = async (req, res, next) => {
                   variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                   reqNumber += 1;
 
-                  const { newPrice, newVolume } = await getPriceAndVolume(data, variant, url, convert, getData);
+                  const { newPrice, newVolume, icon } = await getPriceAndVolume(data, variant, url, convert, getData);
 
+                  updatedIcon = icon;
                   updatedStattrakPrices[quality] = newPrice;
                   updatedStattrakVolumes[quality] = Math.round(newVolume / updatingDaysSpan);
 
@@ -144,9 +147,9 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
          if (stattrak) {
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes }, { new: true });
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes, icon: updatedIcon }, { new: true });
          } else {
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes }, { new: true });
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes, icon: updatedIcon }, { new: true });
          }
 
       }
@@ -356,7 +359,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
 
 
 
-      res.render('trades/index', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
+      res.render('trades/index', { profitableTrades: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
    } else {
 
@@ -377,7 +380,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
          checkTime(current, hour, minute);
          // action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
 
-         res.render('trades/index', { profits: sortedTrades, maxShownSkins, steamBaseUrl, action })
+         res.render('trades/index', { profitableTrades: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
       } else if (pairs == 3) {
          // const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedThreePairs(req);

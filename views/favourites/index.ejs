@@ -1,0 +1,51 @@
+<% layout('layouts/boilerplate')%>
+
+   <header class="container my-5 ">
+
+      <h1 class="display-6 my-2 py-2">Ulubione Trade'y Algorytmu Mixed</h1>
+
+      <div class="lead alert alert-success alert-dismissible fade show" role="alert">
+         <h4 class="alert-heading">Wszystko co ważne w jednym miejscu!</h4>
+         <hr>
+         <p>
+            Dodawaj trejdy do ulubionych i już nigdy nie przegap świetnej okazji
+         </p>
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+
+
+      <span class="links">
+         <a class="btn btn-primary mt-2" href="/skins">Wróć do strony skinów</a>
+         <!-- <a class="btn btn-primary mt-2"
+               href="<%= url.replace('action=save','action=nothing').replace('action=display','action=nothing') %>">
+               Szukaj od nowa</a> -->
+      </span>
+   </header>
+
+
+   <main class="container">
+
+      <% if(favouriteTrades){ %>
+
+         <ul>
+
+            <% for(let favouriteTrade of favouriteTrades){ %>
+
+               <% const tradeDetails=favouriteTrade.instance.trade %>
+
+                  <%-`
+                     ${include('../partials/tradeTile',{elementName:'li',trade:favouriteTrade,details:tradeDetails,manageTrade:favouriteTrade.orginalTrade,showPageLink:'/favourites/'+favouriteTrade._id+'/edit'})}`%>
+
+                     <% } %>
+
+
+
+         </ul>
+         <% } %>
+
+
+   </main>
+
+   <script src="/javascripts/axios.min.js"></script>
+   <script src="/javascripts/onFavouritesPage/favourites.js"></script>
+   <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>

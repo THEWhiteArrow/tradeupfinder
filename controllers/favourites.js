@@ -91,11 +91,13 @@ module.exports.displayFavouriteTrades = async (req, res) => {
 
    const sortedFavourites = sortingTrades(favourites, sort, order);
 
-   res.render('trades/favourites', { favourites: sortedFavourites, maxShownSkins, steamBaseUrl })
+   res.render('favourites/index', { favouriteTrades: sortedFavourites, maxShownSkins, steamBaseUrl })
 }
 
 module.exports.recheckFavouriteStats = async (req, res) => {
 
+   const originUrl = req.originalUrl;
+   console.log(originUrl)
    const { firstPrice, secondPrice } = req.body;
    const { favouriteId } = req.params;
 
@@ -182,5 +184,12 @@ module.exports.recheckFavouriteStats = async (req, res) => {
       const feedback = { success: false };
       res.json(feedback);
    }
+}
+
+module.exports.renderFavouriteEditPage = async (req, res) => {
+   const { favouriteId } = req.params;
+   const favouriteTrade = await Favourite.findById(favouriteId);
+
+   res.render('favourites/show', { favouriteTrade })
 }
 

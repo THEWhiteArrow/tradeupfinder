@@ -8,7 +8,8 @@ const favourite = require('../controllers/favourites');
 router.route('/manage/:orginalTradeId/:favouriteId')
    .get(isLoggedIn, isFavouriteTradeAuthorized, favourite.manageFavouriteTrade)
 
-router.route('/:favouriteId')
+router.route('/:favouriteId/edit')
+   .get(isLoggedIn, userOwnsFavouriteTradeUp, catchAsync(favourite.renderFavouriteEditPage))
    .post(isLoggedIn, userOwnsFavouriteTradeUp, catchAsync(favourite.recheckFavouriteStats))
 
 router.route('/')

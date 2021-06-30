@@ -259,7 +259,7 @@ nav#navbar a{
    text-decoration: none;
    border-bottom: 2px solid rgb(156, 156, 156);
 
-   transition: color .2s ease-in-out;
+   transition: color .1s ease-in-out;
 }
 
 

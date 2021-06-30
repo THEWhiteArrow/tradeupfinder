@@ -73,6 +73,9 @@ const skinSchema = new Schema({
    },
    stattrakVolumes: {
       type: Object,
+   },
+   icon: {
+      type: String
    }
    // floatedQualities: {
    //    type: Object,

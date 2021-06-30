@@ -1,6 +1,8 @@
 const setUpHighlightBtn = async () => {
    const highlightBtns = document.querySelectorAll('.highlight-btn')
 
+
+
    for (let i = 0; i < highlightBtns.length; i++) {
       highlightBtns[i].addEventListener('click', async (e) => {
          e.preventDefault();
@@ -37,6 +39,10 @@ const sendHighlightTrade = async (action, highlight, highlightName) => {
 
          highlight.innerHTML = `<img src="/assets/svgs/bulbs/lightbulb-regular.svg" width="16" height="16"
          alt="">`;
+
+         // SPRAWDZAM CZY TO JEST STRONA GŁÓWNA Z HIGHLIGHTSAMI
+         const h3 = document.querySelectorAll('h3.card-title')
+         h3.length != 0 ? highlight.parentElement.parentElement.parentElement.parentElement.remove() : null;
       }
       highlight.classList.toggle('filled')
    }

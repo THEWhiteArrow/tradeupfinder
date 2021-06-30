@@ -42,10 +42,10 @@ module.exports.getPriceAndVolume = async (data, variant, url, convert, getData) 
          else { return { statusCode: 200, newPrice: 0, newVolume: 0 }; }
 
       } else {
-         if (data.average_price) { return { statusCode: 200, newPrice: Number(data.average_price), newVolume: Number(data.amount_sold) } }
-         else if (data.median_price) { return { statusCode: 200, newPrice: Number(data.median_price), newVolume: Number(data.amount_sold) } }
-         else if (data.lowest_price) { return { statusCode: 200, newPrice: Number(data.lowest_price), newVolume: Number(data.amount_sold) } }
-         else if (data.highest_price) { return { statusCode: 200, newPrice: Number(data.highest_price), newVolume: Number(data.amount_sold) } }
+         if (data.average_price) { return { statusCode: 200, newPrice: Number(data.average_price), newVolume: Number(data.amount_sold), icon: data.icon } }
+         else if (data.median_price) { return { statusCode: 200, newPrice: Number(data.median_price), newVolume: Number(data.amount_sold), icon: data.icon } }
+         else if (data.lowest_price) { return { statusCode: 200, newPrice: Number(data.lowest_price), newVolume: Number(data.amount_sold), icon: data.icon } }
+         else if (data.highest_price) { return { statusCode: 200, newPrice: Number(data.highest_price), newVolume: Number(data.amount_sold), icon: data.icon } }
          else { return { statusCode: 200, newPrice: 0, newVolume: 0 }; }
       }
 
@@ -65,10 +65,10 @@ module.exports.getPriceAndVolume = async (data, variant, url, convert, getData) 
             else { return { statusCode: 200, newPrice: 0, newVolume: 0 }; }
 
          } else {
-            if (newData.average_price) { return { statusCode: 200, newPrice: Number(newData.average_price), newVolume: Number(data.amount_sold) } }
-            else if (newData.median_price) { return { statusCode: 200, newPrice: Number(newData.median_price), newVolume: Number(data.amount_sold) } }
-            else if (newData.lowest_price) { return { statusCode: 200, newPrice: Number(newData.lowest_price), newVolume: Number(data.amount_sold) } }
-            else if (newData.highest_price) { return { statusCode: 200, newPrice: Number(newData.highest_price), newVolume: Number(data.amount_sold) } }
+            if (newData.average_price) { return { statusCode: 200, newPrice: Number(newData.average_price), newVolume: Number(data.amount_sold), icon: newData.icon } }
+            else if (newData.median_price) { return { statusCode: 200, newPrice: Number(newData.median_price), newVolume: Number(data.amount_sold), icon: newData.icon } }
+            else if (newData.lowest_price) { return { statusCode: 200, newPrice: Number(newData.lowest_price), newVolume: Number(data.amount_sold), icon: newData.icon } }
+            else if (newData.highest_price) { return { statusCode: 200, newPrice: Number(newData.highest_price), newVolume: Number(data.amount_sold), icon: newData.icon } }
             else { return { statusCode: 200, newPrice: 0, newVolume: 0 }; }
          }
 
