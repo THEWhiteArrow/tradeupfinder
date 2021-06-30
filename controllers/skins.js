@@ -86,7 +86,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
          const updatedVolumes = {};
          const updatedStattrakVolumes = {};
-         const updatedIcon;
+         let updatedIcon;
 
          const { name, skin, _id } = item;
          // const volume = [updatingDaysSpan];
