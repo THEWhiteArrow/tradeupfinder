@@ -115,6 +115,7 @@ module.exports.findCheapestSkin = (collection, rarity, quality, pricesType, volu
             case: skin.case,
             prices: skin.prices,
             stattrakPrices: skin.stattrakPrices,
+            icon: skin.icon
          };
          foundSkin = true;
       }
@@ -214,7 +215,7 @@ module.exports.convert = (s) => {
 // }
 
 module.exports.combainToName = (name, skin, q) => {
-   return `${name} | ${skin}(${q})`.replace("'", "&#39");
+   return `${name} | ${skin} (${q})`;
 }
 
 module.exports.mayReplaceSpace = (n) => {

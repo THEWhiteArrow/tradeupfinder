@@ -1,5 +1,4 @@
-const { getData, convert } = require('../utils/functions');
-const { checkQuality, findCheapestSkin, getPriceAndVolume, sortingTrades } = require('../utils/functions');
+const { checkQuality, findCheapestSkin, getPriceAndVolume, sortingTrades, getData, convert, combainToName } = require('../utils/functions');
 const { qualities, rarities, avg_floats } = require('../utils/variables');
 const fetch = require('node-fetch');
 
@@ -65,6 +64,69 @@ module.exports.checkEmptyPrices = async (req, res) => {
    res.render('error', { err, emptySkins })
 }
 
+module.exports.getSkinsIcons = async (req, res) => {
+   const skins = await Skin.find({});
+   const data = await getData('http://csgobackpack.net/api/GetItemsList/v2?prettyprint=true&currency=PLN&details=true', 0);
+   let iconBaseUrl = 'http://cdn.steamcommunity.com/economy/image/';
+
+   if (data.success) {
+
+      for (let skin of skins) {
+         const icon = {
+            'Factory New': null,
+            'Minimal Wear': null,
+            'Field-Tested': null,
+            'Well-Worn': null,
+            'Battle-Scarred': null,
+         }
+         for (let quality of qualities) {
+            if (skin.prices[quality] != -1) {
+               const details = data.items_list[combainToName(skin.name, skin.skin, quality)];
+               if (details) {
+                  const iconUrl = encodeURI(iconBaseUrl + details.icon_url)
+                  icon[quality] = iconUrl;
+               }
+
+            }
+
+         }
+
+
+         const updatedSkin = await Skin.findByIdAndUpdate(skin._id, { icon })
+
+      }
+      res.json({ success: true, random: Math.random() })
+   }
+   else {
+
+      res.json({ success: false, random: Math.random() })
+   }
+   // if (data.success) {
+   //    for (let skin of skins) {
+   //       const icon = {
+   //          'Factory New': null,
+   //          'Minimal Wear': null,
+   //          'Field-Tested': null,
+   //          'Well-Worn': null,
+   //          'Battle-Scarred': null,
+   //       }
+   //       for (let quality of qualities) {
+
+   //          if (skin.prices.quality == -1) {
+
+   //             // const iconUrl = encodeURI(iconBaseUrl + data.items_list[combainToName(skin.name, skin.skin, quality)].icon_url);
+   //             // iconUrl != undefined ? icon.quality = iconUrl : null;
+   //             console.log(combainToName(skin.name, skin.skin, quality));
+   //          }
+   //       }
+   //    }
+   //    res.json({ success: true })
+   // }
+   // else { res.json({ success: false }); }
+
+
+
+}
 
 module.exports.updatePrices = async (req, res, next) => {
    //does not supprot steam's volumes
@@ -87,7 +149,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
          const updatedVolumes = {};
          const updatedStattrakVolumes = {};
-         let updatedIcon;
+         // let updatedIcon;
 
          const { name, skin, _id } = item;
          // const volume = [updatingDaysSpan];
@@ -105,10 +167,11 @@ module.exports.updatePrices = async (req, res, next) => {
                variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                reqNumber += 1;
 
-               const { newPrice, newVolume, icon } = await getPriceAndVolume(data, variant, url, convert, getData);
+               const { newPrice, newVolume } = await getPriceAndVolume(data, variant, url, convert, getData);
+               // const { newPrice, newVolume, icon } = await getPriceAndVolume(data, variant, url, convert, getData);
 
 
-               updatedIcon = icon;
+               // icon != null ? updatedIcon = icon : null;
                console.log(updatedIcon)
                updatedPrices[quality] = newPrice;
                updatedVolumes[quality] = Math.round(newVolume / updatingDaysSpan);
@@ -130,9 +193,10 @@ module.exports.updatePrices = async (req, res, next) => {
                   variant == 'steam' ? data = await getData(encodedUrl, 3200) : data = await getData(encodedUrl, 500);
                   reqNumber += 1;
 
-                  const { newPrice, newVolume, icon } = await getPriceAndVolume(data, variant, url, convert, getData);
+                  const { newPrice, newVolume } = await getPriceAndVolume(data, variant, url, convert, getData);
+                  // const { newPrice, newVolume, icon } = await getPriceAndVolume(data, variant, url, convert, getData);
 
-                  updatedIcon = icon;
+                  // icon != null ? updatedIcon = icon : null;
                   updatedStattrakPrices[quality] = newPrice;
                   updatedStattrakVolumes[quality] = Math.round(newVolume / updatingDaysSpan);
 
@@ -149,9 +213,11 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
          if (stattrak) {
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes, icon: updatedIcon }, { new: true });
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes }, { new: true });
+            // const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes, icon: updatedIcon }, { new: true });
          } else {
-            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes, icon: updatedIcon }, { new: true });
+            // const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes, icon: updatedIcon }, { new: true });
+            const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes }, { new: true });
          }
 
       }
@@ -527,6 +593,7 @@ const mixedTwoPairs = async (req) => {
                                           float,
                                           price: targetedPrice,
                                           targetedQuality,
+                                          icon: targetedSkin.icon,
                                        }
                                     }
 
@@ -542,6 +609,7 @@ const mixedTwoPairs = async (req) => {
                                        float,
                                        case: targetedSkin.case,
                                        quality: targetedQuality,
+                                       icon: targetedSkin.icon,
                                     }
                                     if (pricesType == 'prices') {
                                        targetedSkinPom.url = encodeURI(`${steamBaseUrl}${targetedSkinPom.name} | ${targetedSkinPom.skin} (${targetedSkinPom.quality})`);
@@ -583,6 +651,7 @@ const mixedTwoPairs = async (req) => {
                                        const alternate = {
                                           name: alternateSkin.name,
                                           skin: alternateSkin.skin,
+                                          icon: alternateSkin.icon,
                                           // url: encodeURI(`${alternateUrl}${alternateSkin.name}+${alternateSkin.skin}`),
                                           collectionName: alternateSkin.case
                                        }

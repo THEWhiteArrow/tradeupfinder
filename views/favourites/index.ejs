@@ -34,7 +34,7 @@
                <% const tradeDetails=favouriteTrade.instance.trade %>
 
                   <%-`
-                     ${include('../partials/tradeTile',{elementName:'li',trade:favouriteTrade,details:tradeDetails,manageTrade:favouriteTrade.orginalTrade,showPageLink:'/favourites/'+favouriteTrade._id+'/edit'})}`%>
+                     ${include('../partials/tradeTile',{elementName:'li',title:false,trade:favouriteTrade,details:tradeDetails,manageTrade:favouriteTrade.orginalTrade,showPageLink:'/favourites/'+favouriteTrade._id+'/edit'})}`%>
 
                      <% } %>
 

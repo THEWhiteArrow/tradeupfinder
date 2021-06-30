@@ -84,7 +84,7 @@ const manageFavourite = async (action, star) => {
    if (data.success) {
 
       if (data.action === 'delete') {
-         star.parentElement.parentElement.parentElement.remove()
+         star.parentElement.parentElement.parentElement.parentElement.remove()
       }
 
    }

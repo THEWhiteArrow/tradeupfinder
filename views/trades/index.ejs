@@ -34,7 +34,7 @@
                <% const tradeDetails=profitableTrade.instance.trade %>
 
                   <%-`
-                     ${include('../partials/tradeTile',{elementName:'li',trade:profitableTrade,details:tradeDetails,manageTrade:profitableTrade,showPageLink:'/trades/'+profitableTrade._id})}`%>
+                     ${include('../partials/tradeTile',{elementName:'li',title:false,trade:profitableTrade,details:tradeDetails,manageTrade:profitableTrade,showPageLink:'/trades/'+profitableTrade._id})}`%>
 
                      <% } %>
 

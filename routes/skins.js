@@ -25,7 +25,8 @@ router.route('/mixed-algorithm')
 
 
 
-
+router.route('/update-icons')
+   .get(isLoggedIn, isAdmin, isPermitted, catchAsync(skin.getSkinsIcons));
 
 router.route('/update')
    .get(catchAsync(skin.updatePrices));
