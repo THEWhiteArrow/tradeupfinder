@@ -172,7 +172,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
                // icon != null ? updatedIcon = icon : null;
-               console.log(updatedIcon)
+               // console.log(updatedIcon)
                updatedPrices[quality] = newPrice;
                updatedVolumes[quality] = Math.round(newVolume / updatingDaysSpan);
 
