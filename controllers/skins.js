@@ -130,7 +130,7 @@ module.exports.getSkinsIcons = async (req, res) => {
 
 module.exports.updatePrices = async (req, res, next) => {
    //does not supprot steam's volumes
-   const { start = 0, end = length, variant = 'backpack', stattrak = false } = req.query;
+   const { start = 0, end = length, variant = 'backpack', stattrak = 'false' } = req.query;
    console.log(stattrak)
    const skins = await Skin.find({});
 
@@ -181,7 +181,7 @@ module.exports.updatePrices = async (req, res, next) => {
                updatedPrices[quality] = -1;
             }
 
-            if (stattrak && item.isInStattrak) {
+            if (stattrak == 'true' && item.isInStattrak) {
                if (item.stattrakPrices[quality] !== -1) {
 
                   let baseUrl;
@@ -212,7 +212,7 @@ module.exports.updatePrices = async (req, res, next) => {
 
 
 
-         if (stattrak) {
+         if (stattrak == 'true') {
             const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes }, { new: true });
             // const updatedSkin = await Skin.findByIdAndUpdate(_id, { prices: updatedPrices, stattrakPrices: updatedStattrakPrices, volumes: updatedVolumes, stattrakVolumes: updatedStattrakVolumes, icon: updatedIcon }, { new: true });
          } else {

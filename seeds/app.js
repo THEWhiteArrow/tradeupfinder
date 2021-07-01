@@ -44,7 +44,7 @@ const seedDB = async () => {
       let nOfSkins = 0;
       for (let item of data[collectionName]) {
          nOfSkins += 1;
-         const { skin, name, rarity, min_float, max_float, isInStattrak } = item;
+         const { skin, name, rarity, min_float, max_float, isInStattrak, icon } = item;
 
          // console.log(skin, name, rarity, min_float, max_float)
          const newSkin = new Skin({
@@ -72,7 +72,7 @@ const seedDB = async () => {
             },
             volumes: {},
             stattrakVolumes: {},
-            // floatedQualities: {}
+            icon,
          })
 
          if (min_float > 0.07) { newSkin.prices['Factory New'] = -1; newSkin.stattrakPrices['Factory New'] = -1; }

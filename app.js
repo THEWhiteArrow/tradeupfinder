@@ -198,9 +198,10 @@ app.use(async (req, res, next) => {
       const user = await User.findById(req.user._id);
       res.locals.currentUser = user;
       req.user = user;
-      console.log('User is present : true')
+      // console.log('User is present : true')
       // console.log(res.locals.currentUser)
-   } else { console.log('User is present : false') }
+   }
+   // } else { console.log('User is present : false') }
 
 
 

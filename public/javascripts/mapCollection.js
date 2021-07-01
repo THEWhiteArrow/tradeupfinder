@@ -68,6 +68,7 @@ const mapPage = async () => {
       console.log('souvenirs')
       for (let i = 0; i < rarity.length; i++) {
          hrefs.push(links[i].getAttribute('href'));
+         const icon = links[i].parentElement.parentElement.parentElement.querySelector('img').getAttribute('src');
          const { name, skin } = convertNames(titles[i]);
          let instance = {
             name,
@@ -76,6 +77,7 @@ const mapPage = async () => {
             min_float: '',
             max_float: '',
             isInStattrak: false,
+            icon,
          }
 
          collection.push(instance);
@@ -85,6 +87,7 @@ const mapPage = async () => {
 
       for (let i = 1; i < rarity.length; i++) {
          hrefs.push(links[i - 1].getAttribute('href'));
+         const icon = links[i - 1].parentElement.parentElement.parentElement.querySelector('img').getAttribute('src');
          const { name, skin } = convertNames(titles[i + 1]);
          let instance = {
             name,
@@ -93,6 +96,7 @@ const mapPage = async () => {
             min_float: '',
             max_float: '',
             isInStattrak: true,
+            icon,
          }
 
          collection.push(instance);
@@ -107,7 +111,15 @@ const mapPage = async () => {
    content += '<ul class="my-4">'
    content += `<div>${collectionName}:[</div>`
    for (let skin of collection) {
-      content += `<li>{<div>name:'${skin.name}',</div><div>skin:'${skin.skin}',</div><div>rarity:'${skin.rarity}',</div><div>min_float:'',</div><div>max_float:'',</div><div>isInStattrak:${skin.isInStattrak}</div>},</li>`;
+      content += `<li>{
+         <div>name:"${skin.name}",</div>
+         <div>skin:"${skin.skin}",</div>
+         <div>rarity:"${skin.rarity}",</div>
+         <div>min_float:"",</div>
+         <div>max_float:"",</div>
+         <div>isInStattrak:${skin.isInStattrak}</div>
+         <div>icon:"${skin.icon}",</div>
+      },</li>`;
    }
    content += '] </ul></div>';
    body.innerHTML = content;
@@ -136,9 +148,12 @@ const mapPage = async () => {
       let index = document.body.innerHTML.indexOf('</a>');
       let content = document.body.innerHTML.slice(0, index + 4) + '<a class="btn btn-success mt-2 mx-3" href="/map/map-collection/floats">Zmapuj floaty</a>' + document.body.innerHTML.slice(index + 4);
       document.body.innerHTML = content;
+
+
+      // #################### AUTOMATICALLY REDIRECT ##########################
+      window.location.href = '/map/map-collection/floats'
    }
 
-   // window.location.href = "/skins/map-collection/floats";
 
 }
 

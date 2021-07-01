@@ -75,21 +75,7 @@ const skinSchema = new Schema({
       type: Object,
    },
    icon: {
-      'Factory New': {
-         type: String,
-      },
-      'Minimal Wear': {
-         type: String,
-      },
-      'Field-Tested': {
-         type: String,
-      },
-      'Well-Worn': {
-         type: String,
-      },
-      'Battle-Scarred': {
-         type: String,
-      },
+      type: String,
    }
    // floatedQualities: {
    //    type: Object,

@@ -31,7 +31,7 @@
                data-bs-title="<%= `${details.firstSkin.name} | ${details.firstSkin.skin}` %>"
                data-bs-content="Float : <%= details.firstSkinAvgFloat %>">
                <!-- ZDJĘCIA DO OGARNIĘCIA  !!!!!!!! -->
-               <img src="<%= details.firstSkin.icon[details.firstQuality] %>"
+               <img src="<%= details.firstSkin.icon %>"
                   alt="<%= `${details.firstSkin.name} | ${details.firstSkin.skin}` %>" class="skin-tile-img mx-3">
                <div class="skin-number">
                   <%= trade.amount.amount1 %>
@@ -45,7 +45,7 @@
                data-bs-toggle="popover" data-bs-placement="top"
                data-bs-title="<%= `${details.secondSkin.name} | ${details.secondSkin.skin}` %>"
                data-bs-content="Float : <%= details.secondSkinAvgFloat %>">
-               <img src="<%= details.secondSkin.icon[details.secondQuality] %>"
+               <img src="<%= details.secondSkin.icon %>"
                   alt="<%= `${details.secondSkin.name} | ${details.secondSkin.skin}` %>" class="skin-tile-img mx-3">
                <div class="skin-number">
                   <%= trade.amount.amount2 %>

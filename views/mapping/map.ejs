@@ -27,18 +27,20 @@
       </div>
 
       <% if(showCollection) {%>
-         <ul class="my-3 py-2">
+         <button id="copyBtn" class="btn btn-success my-4">COPY COLLECTION</button>
+         <ul id="collectionDisplay" class="my-3 py-2">
             <div>
                <%= collectionNameServer %>:[
             </div>
             <% for(let skin of skinsServer){ %>
                <li>{
-                  <div>name:'<%=skin.name%>',</div>
-                  <div>skin:'<%=skin.skin%>',</div>
-                  <div>rarity:'<%=skin.rarity%>',</div>
+                  <div>name:"<%=skin.name%>",</div>
+                  <div>skin:"<%=skin.skin%>",</div>
+                  <div>rarity:"<%=skin.rarity%>",</div>
                   <div>min_float:<%=skin.min_float%>,</div>
                   <div>max_float:<%=skin.max_float%>,</div>
                   <div>isInStattrak:<%=skin.isInStattrak%>,</div>
+                  <div>icon:"<%=skin.icon%>",</div>
                   },
                </li>
 
@@ -47,6 +49,7 @@
 
                   <span>],</span>
          </ul>
+         <script src="/javascripts/mapping/copyButton.js"></script>
          <% } %>
 
 

@@ -24,6 +24,13 @@ const manageFloats = async () => {
    axios.post('/map/map-collection', { floats })
 
    document.body.innerHTML = `<div class="container"><h1 class="display-5 mt-5">Brawo! Twoja kolekcja jest już gotowa i czeka na Ciebie!</h1><a class="btn btn-success mt-3" href="/map/map-collection">Kliknij by odebrać</a></div>`
+
+
+   // #################### AUTOMATICALLY REDIRECT ##########################
+   window.location.href = '/map/map-collection'
+
+
+
 }
 
 function getCookie(c_name) {
