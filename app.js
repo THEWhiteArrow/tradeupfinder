@@ -183,7 +183,7 @@ passport.use('steam', new SteamStrategy({
 
 
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
    res.locals.server = server;
    res.locals.currentUser = req.user;
    res.locals.url = req.originalUrl;
@@ -192,8 +192,20 @@ app.use((req, res, next) => {
    res.locals.error = req.flash('error');
 
 
-   if (server != 'local') return next(new ExpressError("Service Unavaible. We're currently improving our page for you. Please stay patient :)", 503))
+   // CHECKING UPDATES IN CURRENT USER !!!
+   console.log('User is present : ')
+   if (req.user != null && req.user != undefined) {
 
+      const user = await User.findById(req.user._id);
+      res.locals.currentUser = user;
+      req.user = user;
+      console.log(true)
+      // console.log(res.locals.currentUser)
+   } else { console.log(false) }
+
+
+
+   if (server != 'local') return next(new ExpressError("Service Unavaible. We're currently improving our page for you. Please stay patient :)", 503))
    next();
 })
 

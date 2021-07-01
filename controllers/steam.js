@@ -11,8 +11,8 @@ module.exports.logoutFromSteam = async (req, res) => {
 }
 
 module.exports.returnToSite = async (req, res) => {
-   //TUTAJ DODAWANIE UZYTKOWNIKA ZE STEAMA DO BAZY DANYCH, CHYBA (?)
-   // console.log(req.user)
+
+   sleep(2000);
    res.redirect('/auth');
 }
 
@@ -39,4 +39,12 @@ const replaceForDesanitizedObj = (obj) => {
    }
 
    return newObj;
+}
+
+const sleep = (delay) => {
+   return new Promise((resolve, reject) => {
+      setTimeout(() => {
+         resolve();
+      }, delay);
+   })
 }

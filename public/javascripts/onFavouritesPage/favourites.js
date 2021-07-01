@@ -75,7 +75,7 @@ const recheckFavouriteStats = async (form) => {
 const manageFavourite = async (action, star) => {
    // const paramss = new URLSearchParams(window.location.search)
    // const researchName = paramss.get('researchName')
-   const url = `/favourites/manage/${star.getAttribute('href')}/${star.getAttribute('href')}?action=delete`
+   const url = `/favourites/manage/${star.getAttribute('href')}/${star.getAttribute('id')}?action=delete`
    console.log(url);
 
    const res = await axios.get(url);

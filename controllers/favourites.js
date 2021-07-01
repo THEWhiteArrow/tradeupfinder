@@ -8,74 +8,88 @@ const steamTax = 0.87;
 const maxShownSkins = 200;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
-module.exports.manageFavouriteTrade = async (req, res) => {
-   const { user } = req;
-   const userId = user._id;
+
+const deleteFavourite = async (req, res) => {
+   const userId = req.user._id;
    const { action } = req.query;
    const { orginalTradeId, favouriteId } = req.params;
 
-   console.log(action)
-   console.log(orginalTradeId, favouriteId)
+   await User.findByIdAndUpdate(userId, { $pull: { favourites: favouriteId } });
+   await Favourite.findByIdAndDelete(favouriteId);
 
-   try {
-
-
-      if (action === 'add') {
-
-         const baseTrade = await Trade.findById(orginalTradeId);
-         // console.log(baseTrade)
-         const { favourites } = user;
-
-         const newFavouriteTrade = new Favourite({
-            amount: baseTrade.amount,
-            priceCorrection: baseTrade.priceCorrection,
-            name: baseTrade.name,
-            instance: baseTrade.instance,
-            pricesType: baseTrade.pricesType,
-            orginalTrade: baseTrade
-         })
-
-         const childrenOfBaseTrade = baseTrade.favourites;
-         childrenOfBaseTrade.push(newFavouriteTrade);
-         const updatedOrginalTrade = await Trade.findByIdAndUpdate(orginalTradeId, { favourites: childrenOfBaseTrade }, { new: true });
-
-         console.log(updatedOrginalTrade)
-
-
-         favourites.push(newFavouriteTrade);
-         await newFavouriteTrade.save();
-
-         const updatedUser = await User.findByIdAndUpdate(userId, { favourites: favourites }, { new: true });
-
-         console.log('added')
-
-         const newFavouriteId = newFavouriteTrade._id;
-         const feedback = { success: true, action, newFavouriteId };
-         res.json(feedback);
-      } else {
-
-
-         await User.findByIdAndUpdate(userId, { $pull: { favourites: favouriteId } });
-
-         const doesExist = Trade.any({ _id: orginalTradeId });
-         if (doesExist) {
-            await Trade.findByIdAndUpdate(orginalTradeId, { $pull: { favourites: favouriteId } });
-         }
-
-         await Favourite.findByIdAndDelete(favouriteId);
-
-
-
-         console.log('deleted')
-         const feedback = { success: true, action };
-         res.json(feedback);
-      }
-
-   } catch (e) {
-      console.log(e)
-      const feedback = { success: false, action };
-      res.json(feedback);
+   const doesExist = Trade.any({ _id: orginalTradeId });
+   if (doesExist) {
+      await Trade.findByIdAndUpdate(orginalTradeId, { $pull: { favourites: favouriteId } });
    }
+
+
+
+   console.log('deleted')
+   const feedback = { success: true, action };
+   res.json(feedback);
+}
+
+const addToFavourite = async (req, res) => {
+   const { action } = req.query;
+   const { user } = req;
+   const userId = user._id;
+   const { orginalTradeId } = req.params;
+   const orginalTrade = await Trade.findById(orginalTradeId);
+   // console.log(orginalTrade)
+   let { favourites } = user;
+
+   const newFavouriteTrade = new Favourite({
+      amount: orginalTrade.amount,
+      priceCorrection: orginalTrade.priceCorrection,
+      name: orginalTrade.name,
+      instance: orginalTrade.instance,
+      pricesType: orginalTrade.pricesType,
+      orginalTrade: orginalTrade
+   })
+   const newFavouriteId = newFavouriteTrade._id;
+
+
+
+
+
+   const favouritesOfOrginalTrade = orginalTrade.favourites;
+   favouritesOfOrginalTrade.push(newFavouriteTrade);
+
+   await Trade.findByIdAndUpdate(orginalTradeId, { favourites: favouritesOfOrginalTrade }, { new: true });
+   // console.log(updatedOrginalTrade)
+
+
+   favourites.push(newFavouriteTrade);
+   await newFavouriteTrade.save();
+
+   await User.findByIdAndUpdate(userId, { favourites: favourites }, { new: true });
+
+   console.log('updated user!')
+   console.log('added')
+   const feedback = { success: true, action, newFavouriteId }
+   res.json(feedback)
+}
+
+module.exports.manageFavouriteTrade = async (req, res) => {
+   const { action } = req.query;
+
+   console.log(action)
+
+
+
+   if (action === 'add') {
+
+      await addToFavourite(req, res);
+
+
+
+   } else if (action == 'delete') {
+
+      await deleteFavourite(req, res);
+   }
+
+
+
 
 }
 
@@ -192,4 +206,3 @@ module.exports.renderFavouriteEditPage = async (req, res) => {
 
    res.render('favourites/show', { favouriteTrade })
 }
-

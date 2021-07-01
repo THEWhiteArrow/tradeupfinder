@@ -4,7 +4,6 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const any = require('../plugins/mongoose/any');
 
 const userSchema = new Schema({
-
    steam: {
       id: {
          type: String,
@@ -32,6 +31,6 @@ const userSchema = new Schema({
 
 });
 
-userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(any);
+userSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model('User', userSchema);

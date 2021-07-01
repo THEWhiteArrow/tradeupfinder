@@ -1,5 +1,6 @@
 const ExpressError = require('./utils/ExpressError');
 const Favourite = require('./models/favouriteModel');
+const Trade = require('./models/tradeModel');
 
 module.exports.isLoggedIn = (req, res, next) => {
    if (!req.isAuthenticated()) {
@@ -33,54 +34,104 @@ module.exports.isPermitted = async (req, res, next) => {
 
 
 module.exports.userOwnsFavouriteTradeUp = async (req, res, next) => {
-   const { favouriteId } = req.params;
+   const { favouriteId, } = req.params;
+
    const user = req.user;
 
    console.log(user, favouriteId)
+   const doesExist = await Favourite.any({ _id: favouriteId });
 
-   for (let id of user.favourites) {
-      if (id == favouriteId) {
-         return next();
+   if (doesExist) {
+
+
+      for (let id of user.favourites) {
+         if (id == favouriteId) {
+            return next();
+         }
       }
+
    }
 
+   return res.json({ success: false });
 
-   res.json({ success: false });
+
+
 
 }
 
 module.exports.isFavouriteTradeAuthorized = async (req, res, next) => {
-   const { tradeId, favouriteId } = req.params;
-   const { user } = req;
-   const { action } = req.query;
+   const { favouriteId, orginalTradeId } = req.params;
+   const { action = null } = req.query;
+   const user = req.user;
 
-   if (action === 'add') return next();
+   console.log(user, favouriteId)
+   const doesExist = await Favourite.any({ _id: favouriteId });
 
 
+   if (action == 'add') return next();
+   if (action == 'delete') {
 
-
-   if (action === 'delete' || action === undefined) {
-
-      //any is faster than exists
-      const doesExist = await Favourite.any({ _id: favouriteId });
-      console.log('doesExist? : ', doesExist)
       if (doesExist) {
 
-         for (let favourite of user.favourites) {
-            if (favourite._id == favouriteId) return next()
+         for (let id of user.favourites) {
+            if (id == favouriteId) {
+               return next();
+            }
          }
+         return res.json({ success: false, message: 'You are not authorized to do that!' })
+
       } else {
-         res.locals.doesExist = false;
-         return res.json({ success: true, action: 'delete' });
+         return res.json({ success: true, conflict: true, action, message: 'That favourite trade does not exist anyway!' })
+
       }
 
+
+
    }
+   return res.json({ success: false, message: 'Action is defined!' })
 
-   if (action === undefined) res.json({ success: false })
 
 
-   req.flash('error', 'You do not own that trade-up OR trade-up that you have tried to delete does not exist!');
-   return res.redirect(`/skins`);
+
+
+
+
+
+
+
+
+   // if (action == 'delete') {
+
+   //    if (doesExist == true) {
+
+   //       for (let id of user.favourites) {
+   //          if (id == favouriteId) {
+   //             return next();
+   //          }
+   //       }
+   //    } else {
+   //       return res.json({ success: true, action, conflict: true });
+   //    }
+
+   // } else if (action == 'add') {
+
+   //    const orginalTrade = await Trade.findById(orginalTradeId);
+   //    for (let id of user.favourites) {
+   //       const index = orginalTrade.favourites.indexOf(id);
+   //       if (index != -1) {
+   //          return res.json({ success: true, action, newFavouriteId: id, conflict: true })
+   //       }
+   //    }
+
+   //    return next();
+
+
+   // } else {
+
+   //    return res.json({ success: false });
+   // }
+
+
 }
 
 module.exports.isResearchAllowed = async (req, res, next) => {
