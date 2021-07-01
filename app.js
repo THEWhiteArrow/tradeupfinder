@@ -109,7 +109,6 @@ app.use(passport.session());
 
 
 
-
 // PASSPORT 
 
 passport.serializeUser(function (user, done) {
@@ -125,9 +124,10 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+
 passport.use('steam', new SteamStrategy({
-   returnURL: 'http://localhost:3000/auth/steam/return',
-   realm: 'http://localhost:3000/',
+   returnURL: process.env.STEAM_RETURN_URL,
+   realm: process.env.STEAM_REALM,
    apiKey: process.env.STEAM_KEY,
 },
    async function (identifier, profile, done) {
@@ -193,19 +193,18 @@ app.use(async (req, res, next) => {
 
 
    // CHECKING UPDATES IN CURRENT USER !!!
-   console.log('User is present : ')
    if (req.user != null && req.user != undefined) {
 
       const user = await User.findById(req.user._id);
       res.locals.currentUser = user;
       req.user = user;
-      console.log(true)
+      console.log('User is present : true')
       // console.log(res.locals.currentUser)
-   } else { console.log(false) }
+   } else { console.log('User is present : false') }
 
 
 
-   if (server != 'local') return next(new ExpressError("Service Unavaible. We're currently improving our page for you. Please stay patient :)", 503))
+   // if (server != 'local') return next(new ExpressError("Service Unavaible. We're currently improving our page for you. Please stay patient :)", 503))
    next();
 })
 
