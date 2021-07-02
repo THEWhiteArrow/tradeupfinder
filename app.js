@@ -141,40 +141,25 @@ passport.use('steam', new SteamStrategy({
          profile.identifier = identifier;
          const steamId = profile.id;
 
-         const doesExist = await User.any({ "steam.id": steamId })
-         console.log(`Is a new steam user : ${doesExist}`);
+         try {
 
-         if (doesExist) {
-            const user = await User.findOne({ "steam.id": steamId })
-            console.log(user);
-            return done(null, user);
-         } else {
-            const newUser = await createNewSteamUser(profile);
-            return done(null, newUser);
+            const doesExist = await User.any({ "steam.id": steamId })
+            console.log(`Is a new steam user : ${doesExist}`);
+
+            if (doesExist) {
+               const user = await User.findOne({ "steam.id": steamId })
+               console.log('Logged in an existing user!')
+               console.log(user);
+               return done(null, user);
+            } else {
+               const newUser = await createNewSteamUser(profile);
+               console.log('Logged in a new user!')
+               return done(null, newUser);
+            }
+         } catch (e) {
+            console.log('Failed to login via steam', e)
+            return done(null, false)
          }
-
-
-         // try {
-         //    const user = await User.findOne({ "steam.id": profile.id })
-         //    console.log('steam user doesExist :', user)
-
-
-         //    if (user != null) {
-         //       console.log('Logged in an existing user!')
-         //       return done(null, user);
-
-         //    } else {
-         //       const newUser = await createNewSteamUser(profile);
-         //       console.log(newUser)
-         //       console.log('Logged in a new user!')
-         //       return done(null, newUser);
-         //    }
-
-
-         // } catch (e) {
-         //    console.log('Failed to login via steam')
-         //    return done(null, false, { message: e });
-         // }
       });
    }
 ));
@@ -207,14 +192,14 @@ app.use(async (req, res, next) => {
    // console.log(res.locals.currentUser);
 
    // CHECKING UPDATES IN CURRENT USER !!!
-   // if (req.user != null && req.user != undefined) {
+   if (req.user != null && req.user != undefined) {
 
-   //    const user = await User.findById(req.user._id);
-   //    res.locals.currentUser = user;
-   //    req.user = user;
-   //    // console.log('User is present : true')
-   //    // console.log(res.locals.currentUser)
-   // }
+      const user = await User.findById(req.user._id);
+      res.locals.currentUser = user;
+      req.user = user;
+      // console.log('User is present : true')
+      // console.log(res.locals.currentUser)
+   }
    // } else { console.log('User is present : false') }
 
 
