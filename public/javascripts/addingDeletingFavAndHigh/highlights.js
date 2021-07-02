@@ -4,13 +4,19 @@ const setUpHighlightBtn = async () => {
 
 
    for (let i = 0; i < highlightBtns.length; i++) {
+      highlightBtns[i].isBusy = false;
       highlightBtns[i].addEventListener('click', async (e) => {
          e.preventDefault();
-         if (highlightBtns[i].classList.contains('filled')) {
-            await manageHighlight('delete', highlightBtns[i]);
+         if (highlightBtns[i].isBusy == false) {
+            highlightBtns[i].isBusy = true;
 
-         } else {
-            await manageHighlight('add', highlightBtns[i]);
+            if (highlightBtns[i].classList.contains('filled')) {
+               await manageHighlight('delete', highlightBtns[i]);
+
+            } else {
+               await manageHighlight('add', highlightBtns[i]);
+            }
+            highlightBtns[i].isBusy = false;
          }
 
       });
@@ -63,7 +69,7 @@ const manageHighlight = async (action, highlight) => {
       <h5 class="card-title">Enter Highlighted Name</h5>
       </label>
       <input id="highlightNameInput" name="highlightName" type="text" class="form-control my-2 text-center"
-      maxlength="20" minlength="5">
+      maxlength="20" minlength="5" >
       <div class="invalid-feedback my-3">
       Name must be longer than no shorter than 5 characters
       </div>
@@ -76,9 +82,10 @@ const manageHighlight = async (action, highlight) => {
       newSection.setAttribute('id', 'bg-blur')
       newSection.classList.add('d-flex', 'bg-blur', 'position-fixed', 'd-flex', 'w-100', 'h-100', 'justify-content-center', 'align-items-center')
       document.body.prepend(newSection)
-
+      const input = document.querySelector('#highlightNameInput')
       // <script src="/javascripts/bootstrapJs/validateForms.js"></script>
-      await sleep(1000);
+      input.focus();
+      // await sleep(1000);
 
       validateForms();
 

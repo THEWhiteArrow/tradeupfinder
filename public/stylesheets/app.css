@@ -425,7 +425,9 @@ nav#navbar a:hover,nav#navbar a.navbar-brand{
 
 /* #####################################     HOT TRADES     ###################################### */
 
-
+.no-underline{
+   text-decoration: none;
+}
 
 .width-fit-content{
    width: fit-content;
@@ -452,16 +454,19 @@ nav#settings select{
    font-size: 0.95rem;
 }
 
-.steam-icon{
+.icons{
    display: flex;
    justify-self: center;
    align-self: center;
    z-index: 100;
    margin-left: 5px;
-   background-image: url('../assets/social/steam.png');
-   background-size: contain;
    width:22px;
    height: 22px;
+}
+
+.social-steam-icon{
+   background-image: url('../assets/social/steam.png');
+   background-size: contain;
 }
 
 .bg-blur{

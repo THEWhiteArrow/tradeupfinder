@@ -39,7 +39,21 @@
             <option value="{'code':'RON','symbol':'L'}">RON (L)</option>
             <option value="{'code':'AED','symbol':'د.إ.'}">AED (د.إ.)</option>
          </select>
-         <a href="https://steamcommunity.com/groups/kontrakciarze" target="_blank" class="steam-icon"></a>
+         <a href="https://steamcommunity.com/groups/kontrakciarze" target="_blank" class="icons social-steam-icon"></a>
+         <% if(currentUser && currentUser.steam!=null){ %>
+            <!-- DOES NOT SUPPORT CUSTOM PROFILE LINKS -->
+            <a href="https://steamcommunity.com/profiles/<%= currentUser.steam.id %>/" target="_blank"
+               class="link-light no-underline d-flex flex-row">
+               <img src="<%= currentUser.steam.avatar  %> " alt="Your Avatar Image" class="icons">
+               <p class="ms-2">
+                  <%= currentUser.username %>
+               </p>
+            </a>
+            <% } else if(currentUser){ %>
+               <p class="link-light ms-2">
+                  <%= currentUser.username %>
+               </p>
+               <% } %>
 
       </span>
 
@@ -52,41 +66,50 @@
    </nav>
 
    <nav id="navbar" class="navbar navbar-expand-md navbar-dark nav-gradient px-0">
-      <div id="menuToggle" class="container-fluid ">
-         <a class="navbar-brand py-0 mx-0 px-2" href="/" aria-current="page">Kontrakciarze</a>
-         <% if(currentUser!=null &&currentUser!=undefined){ %>
+      <div id="menuToggle" class="container-fluid d-flex align-items-center">
+         <a class="navbar-brand m-0 ms-2 p-0" href="/" aria-current="page">Kontrakciarze</a>
+         <% if(!currentUser){ %>
 
-            <a href="/auth" class="steamLink"></a>
-            <% }else{ %>
-               <a href="/auth/steam" class="steamLink"></a>
+            <a href="/auth/steam" class="steamLink ms-3"></a>
+            <% } %>
 
-               <% } %>
-                  <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+               <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"> -->
-                  <button class="navbar-toggler border-0 collapsed" type="button" data-bs-toggle="collapse"
-                     data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
-                     aria-label="Toggle navigation">
-                     <input class="navbar-checkbox" type="checkbox">
-                     <span class="mt-1"></span>
-                     <span></span>
-                     <span></span>
-                  </button>
-                  <!-- <span class="navbar-toggler-icon"></span> -->
-                  <!-- </button> -->
-                  <div class="navbar-collapse justify-content-md-end collapse" id="navbarNavAltMarkup">
-                     <div class="navbar-nav" id="navbarLinks">
-                        <a href="/skins" class="px-2 link-light">Explore</a>
-                        <a href="/favourites" class="px-2 link-light">Favourites</a>
-                        <a href="/skins/database" class="px-2 link-light">Database</a>
-                        <a href="/user/login" class="px-2">
-                           <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-circle"
-                              class="user-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
-                              <path fill="currentColor"
-                                 d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z">
-                              </path>
-                           </svg></a>
-                     </div>
+               <button class="navbar-toggler border-0 collapsed" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                  aria-label="Toggle navigation">
+                  <input class="navbar-checkbox" type="checkbox">
+                  <span class="mt-1"></span>
+                  <span></span>
+                  <span></span>
+               </button>
+               <!-- <span class="navbar-toggler-icon"></span> -->
+               <!-- </button> -->
+               <div class="navbar-collapse justify-content-md-end collapse" id="navbarNavAltMarkup">
+                  <div class="navbar-nav d-flex align-items-center" id="navbarLinks">
+                     <a href="/skins" class="px-2 link-light">Explore</a>
+                     <a href="/favourites" class="px-2 link-light">Favourites</a>
+                     <a href="/skins/database" class="px-2 link-light">Database</a>
+
+                     <% if(!currentUser){ %>
+                        <a href="/user/login" class="ms-3 me-1 px-2 link-light">Login</a>
+                        <a href="/user/register"
+                           class="me-2 px-2 py-1 link-light border border-white border-2 rounded">Register</a>
+                        <% } else{%>
+
+                           <a href="/user/logout"
+                              class="mx-2 px-2 py-1 link-light border border-white border-2 rounded">Logout</a>
+                           <% } %>
+                              <!-- <a href="/user/login" class="px-2">
+                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-circle"
+                           class="user-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+                           <path fill="currentColor"
+                              d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z">
+                           </path>
+                        </svg></a> -->
+
                   </div>
+               </div>
       </div>
 
    </nav>

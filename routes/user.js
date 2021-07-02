@@ -10,7 +10,7 @@ const users = require('../controllers/users');
 router.route('/register')
    .get(users.renderRegister)
    .post(catchAsync(users.register));
-// CATCHASYNC (?)
+
 
 router.route('/login')
    .get(users.renderLogin)

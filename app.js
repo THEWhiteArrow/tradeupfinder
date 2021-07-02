@@ -158,7 +158,7 @@ passport.use('steam', new SteamStrategy({
             }
          } catch (e) {
             console.log('Failed to login via steam', e)
-            return done(null, false)
+            return done(null, false, { message: e })
          }
       });
    }
@@ -189,23 +189,28 @@ app.use(async (req, res, next) => {
    res.locals.info = req.flash('info');
    res.locals.success = req.flash('success');
    res.locals.error = req.flash('error');
-   // console.log(res.locals.currentUser);
 
-   // CHECKING UPDATES IN CURRENT USER !!!
-   try {
 
-      if (req.user != null && req.user != undefined) {
+   // CHECKING UPDATES IN CURRENT USER EXCEPT OF LOGGING IN AND OUT!!!
+   const exceptions = ['/auth', '/auth/steam', '/auth/steam/return', '/user/register', '/user/login', '/user/logout'];
+   const index = exceptions.indexOf(req.originalUrl);
+   if (index == -1) {
 
-         const user = await User.findById(req.user._id);
-         res.locals.currentUser = user;
-         req.user = user;
-         // console.log('User is present : true')
-         // console.log(res.locals.currentUser)
+      try {
+
+         if (req.user != null && req.user != undefined) {
+
+            const user = await User.findById(req.user._id);
+            res.locals.currentUser = user;
+            req.user = user;
+            // console.log('User is present : true')
+            // console.log(res.locals.currentUser)
+         }
+         // } else { console.log('User is present : false') }
+      } catch (e) {
+         console.log(`Failed to update a user : ${req.user.username}`, e)
       }
-   } catch (e) {
-      console.log(`Failed to update a user : ${req.user.username}`, e)
    }
-   // } else { console.log('User is present : false') }
 
 
 

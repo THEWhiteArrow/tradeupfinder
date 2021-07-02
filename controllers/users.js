@@ -43,6 +43,6 @@ module.exports.login = async (req, res) => {
 
 module.exports.logout = async (req, res) => {
    await req.logout();
-   req.flash('success', 'Goodbye!')
+   req.flash('success', 'Goodbye! It was an honour to have you here!')
    res.redirect('/skins');
 };
