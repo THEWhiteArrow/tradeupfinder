@@ -139,28 +139,28 @@ passport.use('steam', new SteamStrategy({
          // to associate the Steam account with a user record in your database,
          // and return that user instead.
          profile.identifier = identifier;
-
-         try {
-            const user = await User.findOne({ "steam.id": profile.id })
-            console.log('steam user doesExist :', user)
-
-
-            if (user != null) {
-               console.log('Logged in an existing user!')
-               return done(null, user);
-
-            } else {
-               const newUser = await createNewSteamUser(profile);
-               console.log(newUser)
-               console.log('Logged in a new user!')
-               return done(null, newUser);
-            }
+         return done(null, profile)
+         // try {
+         //    const user = await User.findOne({ "steam.id": profile.id })
+         //    console.log('steam user doesExist :', user)
 
 
-         } catch (e) {
-            console.log('Failed to login via steam')
-            return done(null, false, { message: e });
-         }
+         //    if (user != null) {
+         //       console.log('Logged in an existing user!')
+         //       return done(null, user);
+
+         //    } else {
+         //       const newUser = await createNewSteamUser(profile);
+         //       console.log(newUser)
+         //       console.log('Logged in a new user!')
+         //       return done(null, newUser);
+         //    }
+
+
+         // } catch (e) {
+         //    console.log('Failed to login via steam')
+         //    return done(null, false, { message: e });
+         // }
       });
    }
 ));
@@ -190,17 +190,17 @@ app.use(async (req, res, next) => {
    res.locals.info = req.flash('info');
    res.locals.success = req.flash('success');
    res.locals.error = req.flash('error');
-
+   console.log(res.locals.currentUser);
 
    // CHECKING UPDATES IN CURRENT USER !!!
-   if (req.user != null && req.user != undefined) {
+   // if (req.user != null && req.user != undefined) {
 
-      const user = await User.findById(req.user._id);
-      res.locals.currentUser = user;
-      req.user = user;
-      // console.log('User is present : true')
-      // console.log(res.locals.currentUser)
-   }
+   //    const user = await User.findById(req.user._id);
+   //    res.locals.currentUser = user;
+   //    req.user = user;
+   //    // console.log('User is present : true')
+   //    // console.log(res.locals.currentUser)
+   // }
    // } else { console.log('User is present : false') }
 
 
