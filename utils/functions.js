@@ -16,7 +16,7 @@ module.exports.createNewSteamUser = async (profile) => {
       steam,
       role: 'guest',
       favourites: [],
-      email: null,
+      email: profile.identifier,
       username: profile.displayName
    })
 
