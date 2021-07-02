@@ -141,8 +141,9 @@ passport.use('steam', new SteamStrategy({
          profile.identifier = identifier;
          const steamId = profile.id;
 
-         const doesExist = await User.deleteMany({ "steam.id": steamId })
+         const doesExist = await User.any({ "steam.id": steamId })
          console.log(`Is a new steam user : ${doesExist}`);
+         console.log(doesExist);
 
          return done(null, profile)
          // try {
@@ -195,7 +196,7 @@ app.use(async (req, res, next) => {
    res.locals.info = req.flash('info');
    res.locals.success = req.flash('success');
    res.locals.error = req.flash('error');
-   console.log(res.locals.currentUser);
+   // console.log(res.locals.currentUser);
 
    // CHECKING UPDATES IN CURRENT USER !!!
    // if (req.user != null && req.user != undefined) {
