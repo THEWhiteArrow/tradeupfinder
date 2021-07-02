@@ -139,6 +139,11 @@ passport.use('steam', new SteamStrategy({
          // to associate the Steam account with a user record in your database,
          // and return that user instead.
          profile.identifier = identifier;
+         const steamId = profile.id;
+
+         const doesExist = await User.deleteMany({ "steam.id": steamId })
+         console.log(`Is a new steam user : ${doesExist}`);
+
          return done(null, profile)
          // try {
          //    const user = await User.findOne({ "steam.id": profile.id })
