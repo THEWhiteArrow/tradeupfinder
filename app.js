@@ -192,13 +192,18 @@ app.use(async (req, res, next) => {
    // console.log(res.locals.currentUser);
 
    // CHECKING UPDATES IN CURRENT USER !!!
-   if (req.user != null && req.user != undefined) {
+   try {
 
-      const user = await User.findById(req.user._id);
-      res.locals.currentUser = user;
-      req.user = user;
-      // console.log('User is present : true')
-      // console.log(res.locals.currentUser)
+      if (req.user != null && req.user != undefined) {
+
+         const user = await User.findById(req.user._id);
+         res.locals.currentUser = user;
+         req.user = user;
+         // console.log('User is present : true')
+         // console.log(res.locals.currentUser)
+      }
+   } catch (e) {
+      console.log(`Failed to update a user : ${req.user.username}`, e)
    }
    // } else { console.log('User is present : false') }
 
