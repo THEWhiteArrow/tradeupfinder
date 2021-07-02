@@ -6,7 +6,7 @@ const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
 const Name = require('../models/nameModel');
 const Trade = require('../models/tradeModel');
-const ServerSideInfo = require('../models/serverSideInfo');
+const ServerInfo = require('../models/serverInfo');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
@@ -17,7 +17,7 @@ const updatingDaysSpan = 2;
 module.exports.showMain = async (req, res, next) => {
    // console.log(req.user)
    const researchesName = await Name.find({});
-   const { skinsUpdateInfo } = await ServerSideInfo.findOne({});
+   const { skinsUpdateInfo } = await ServerInfo.findOne({});
 
    // res.cookie('testtoken', 'lol');
    // res.cookie('testtoken', { amount1: 4, amount2: 6 });
@@ -264,11 +264,11 @@ module.exports.useServers = async (req, res) => {
 
    const date = new Date();
    const skinsUpdateInfo = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}  -  ${date.getHours()} : ${date.getMinutes()}`;
-   // const newServerSideInfo = new ServerSideInfo({
+   // const newServerInfo = new ServerInfo({
    //    skinsUpdateInfo
    // });
 
-   await ServerSideInfo.findOneAndUpdate({}, { skinsUpdateInfo }, { new: true });
+   await ServerInfo.findOneAndUpdate({}, { skinsUpdateInfo, lastChanged: new Date() }, { new: true });
 
    const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}&stattrak=${stattrak}`;
    const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}&stattrak=${stattrak}`;

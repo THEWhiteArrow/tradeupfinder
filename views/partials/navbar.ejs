@@ -2,58 +2,61 @@
    <nav id="settings" class=" d-flex flex-row justify-content-between">
 
       <span class="nav-settings-item">
+         <% const isSelectedCurrency=(code)=>{if(currency.code==code)return 'SELECTED'} %>
+            <select name="currency-menu" id="currency-menu" class="form-select width-fit-content nav-settings-item">
+               <option <%=isSelectedCurrency('USD') %> value="{'code':'USD','symbol':'$'}">USD ($)</option>
+               <option <%=isSelectedCurrency('EUR') %> value="{'code':'EUR','symbol':'€'}">EUR (€)</option>
+               <option <%=isSelectedCurrency('GBP') %> value="{'code':'GBP','symbol':'£'}">GBP (£)</option>
+               <option <%=isSelectedCurrency('JPY') %> value="{'code':'JPY','symbol':'¥'}">JPY (¥)</option>
+               <option <%=isSelectedCurrency('AUD') %> value="{'code':'AUD','symbol':'A$'}">AUD (A$)</option>
+               <option <%=isSelectedCurrency('CAD') %> value="{'code':'CAD','symbol':'C$'}">CAD (C$)</option>
+               <option <%=isSelectedCurrency('NZD') %> value="{'code':'NZD','symbol':'NZ$'}">NZD (NZ$)</option>
+               <option <%=isSelectedCurrency('SGD') %> value="{'code':'SGD','symbol':'S$'}">SGD (S$)</option>
+               <option <%=isSelectedCurrency('HKD') %> value="{'code':'HKD','symbol':'HK$'}">HKD (HK$)</option>
+               <option <%=isSelectedCurrency('SEK') %> value="{'code':'SEK','symbol':'kr'}">SEK (kr)</option>
+               <option <%=isSelectedCurrency('NOK') %> value="{'code':'NOK','symbol':'kr'}">NOK (kr)</option>
+               <option <%=isSelectedCurrency('DKK') %> value="{'code':'DKK','symbol':'kr'}">DKK (kr)</option>
+               <option <%=isSelectedCurrency('ISK') %> value="{'code':'ISK','symbol':'kr'}">ISK (kr)</option>
+               <option <%=isSelectedCurrency('KRW') %> value="{'code':'KRW','symbol':'₩'}">KRW (₩)</option>
+               <option <%=isSelectedCurrency('CNY') %> value="{'code':'CNY','symbol':'¥'}">CNY (¥)</option>
+               <option <%=isSelectedCurrency('CHF') %> value="{'code':'CHF','symbol':'CHF'}">CHF (CHF)</option>
+               <option <%=isSelectedCurrency('MXN') %> value="{'code':'MXN','symbol':'$'}">MXN ($)</option>
+               <option <%=isSelectedCurrency('INR') %> value="{'code':'INR','symbol':'₹'}">INR (₹)</option>
+               <option <%=isSelectedCurrency('ILS') %> value="{'code':'ILS','symbol':'₪'}">ILS (₪)</option>
+               <option <%=isSelectedCurrency('RUB') %> value="{'code':'RUB','symbol':'₽'}">RUB (₽)</option>
+               <option <%=isSelectedCurrency('ZAR') %> value="{'code':'ZAR','symbol':'R'}">ZAR (R)</option>
+               <option <%=isSelectedCurrency('HRK') %> value="{'code':'HRK','symbol':'kn'}">HRK (kn)</option>
+               <option <%=isSelectedCurrency('TRY') %> value="{'code':'TRY','symbol':'₺'}">TRY (₺)</option>
+               <option <%=isSelectedCurrency('BRL') %> value="{'code':'BRL','symbol':'R$'}">BRL (R$)</option>
+               <option <%=isSelectedCurrency('PLN') %> value="{'code':'PLN','symbol':'zł'}">PLN (zł)</option>
+               <option <%=isSelectedCurrency('THB') %> value="{'code':'THB','symbol':'฿'}">THB (฿)</option>
+               <option <%=isSelectedCurrency('IDR') %> value="{'code':'IDR','symbol':'Rp'}">IDR (Rp)</option>
+               <option <%=isSelectedCurrency('HUF') %> value="{'code':'HUF','symbol':'Ft'}">HUF (Ft)</option>
+               <option <%=isSelectedCurrency('CZK') %> value="{'code':'CZK','symbol':'Kč'}">CZK (Kč)</option>
+               <option <%=isSelectedCurrency('PHP') %> value="{'code':'PHP','symbol':'₱'}">PHP (₱)</option>
+               <option <%=isSelectedCurrency('BGN') %> value="{'code':'BGN','symbol':'лв'}">BGN (лв)</option>
+               <option <%=isSelectedCurrency('MYR') %> value="{'code':'MYR','symbol':'MR'}">MYR (MR)</option>
+               <option <%=isSelectedCurrency('RON') %> value="{'code':'RON','symbol':'L'}">RON (L)</option>
+               <option <%=isSelectedCurrency('AED') %> value="{'code':'AED','symbol':'د.إ.'}">AED (د.إ.)</option>
+            </select>
 
-         <select name="currency-menu" id="currency-menu" class="form-select width-fit-content nav-settings-item">
-            <option value="{'code':'USD','symbol':'$'}">USD ($)</option>
-            <option value="{'code':'EUR','symbol':'€'}">EUR (€)</option>
-            <option value="{'code':'GBP','symbol':'£'}">GBP (£)</option>
-            <option value="{'code':'JPY','symbol':'¥'}">JPY (¥)</option>
-            <option value="{'code':'AUD','symbol':'A$'}">AUD (A$)</option>
-            <option value="{'code':'CAD','symbol':'C$'}">CAD (C$)</option>
-            <option value="{'code':'NZD','symbol':'NZ$'}">NZD (NZ$)</option>
-            <option value="{'code':'SGD','symbol':'S$'}">SGD (S$)</option>
-            <option value="{'code':'HKD','symbol':'HK$'}">HKD (HK$)</option>
-            <option value="{'code':'SEK','symbol':'kr'}">SEK (kr)</option>
-            <option value="{'code':'NOK','symbol':'kr'}">NOK (kr)</option>
-            <option value="{'code':'DKK','symbol':'kr'}">DKK (kr)</option>
-            <option value="{'code':'ISK','symbol':'kr'}">ISK (kr)</option>
-            <option value="{'code':'KRW','symbol':'₩'}">KRW (₩)</option>
-            <option value="{'code':'CNY','symbol':'¥'}">CNY (¥)</option>
-            <option value="{'code':'CHF','symbol':'CHF'}">CHF (CHF)</option>
-            <option value="{'code':'MXN','symbol':'$'}">MXN ($)</option>
-            <option value="{'code':'INR','symbol':'₹'}">INR (₹)</option>
-            <option value="{'code':'ILS','symbol':'₪'}">ILS (₪)</option>
-            <option value="{'code':'RUB','symbol':'₽'}">RUB (₽)</option>
-            <option value="{'code':'ZAR','symbol':'R'}">ZAR (R)</option>
-            <option value="{'code':'HRK','symbol':'kn'}">HRK (kn)</option>
-            <option value="{'code':'TRY','symbol':'₺'}">TRY (₺)</option>
-            <option value="{'code':'BRL','symbol':'R$'}">BRL (R$)</option>
-            <option selected value="{'code':'PLN','symbol':'zł'}">PLN (zł)</option>
-            <option value="{'code':'THB','symbol':'฿'}">THB (฿)</option>
-            <option value="{'code':'IDR','symbol':'Rp'}">IDR (Rp)</option>
-            <option value="{'code':'HUF','symbol':'Ft'}">HUF (Ft)</option>
-            <option value="{'code':'CZK','symbol':'Kč'}">CZK (Kč)</option>
-            <option value="{'code':'PHP','symbol':'₱'}">PHP (₱)</option>
-            <option value="{'code':'BGN','symbol':'лв'}">BGN (лв)</option>
-            <option value="{'code':'MYR','symbol':'MR'}">MYR (MR)</option>
-            <option value="{'code':'RON','symbol':'L'}">RON (L)</option>
-            <option value="{'code':'AED','symbol':'د.إ.'}">AED (د.إ.)</option>
-         </select>
-         <a href="https://steamcommunity.com/groups/kontrakciarze" target="_blank" class="icons social-steam-icon"></a>
-         <% if(currentUser && currentUser.steam!=null){ %>
-            <!-- DOES NOT SUPPORT CUSTOM PROFILE LINKS -->
-            <a href="https://steamcommunity.com/profiles/<%= currentUser.steam.id %>/" target="_blank"
-               class="link-light no-underline d-flex flex-row">
-               <img src="<%= currentUser.steam.avatar  %> " alt="Your Avatar Image" class="icons">
-               <p class="ms-2">
-                  <%= currentUser.username %>
-               </p>
-            </a>
-            <% } else if(currentUser){ %>
-               <p class="link-light ms-2">
-                  <%= currentUser.username %>
-               </p>
-               <% } %>
+
+            <a href="https://steamcommunity.com/groups/kontrakciarze" target="_blank"
+               class="icons social-steam-icon"></a>
+            <% if(currentUser && currentUser.steam!=null){ %>
+               <!-- DOES NOT SUPPORT CUSTOM PROFILE LINKS -->
+               <a href="https://steamcommunity.com/profiles/<%= currentUser.steam.id %>/" target="_blank"
+                  class="link-light no-underline d-flex flex-row">
+                  <img src="<%= currentUser.steam.avatar  %> " alt="Your Avatar Image" class="icons">
+                  <p class="ms-2">
+                     <%= currentUser.username %>
+                  </p>
+               </a>
+               <% } else if(currentUser){ %>
+                  <p class="link-light ms-2">
+                     <%= currentUser.username %>
+                  </p>
+                  <% } %>
 
       </span>
 

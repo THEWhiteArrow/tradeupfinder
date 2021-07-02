@@ -30,6 +30,7 @@ const highlightRoutes = require('./routes/highlight');
 const favouriteRoutes = require('./routes/favourite');
 const tradeRoutes = require('./routes/trades');
 const steamRoutes = require('./routes/steam');
+const currencyRoutes = require('./routes/currency');
 
 const User = require('./models/userModel');
 
@@ -190,6 +191,12 @@ app.use(async (req, res, next) => {
    res.locals.success = req.flash('success');
    res.locals.error = req.flash('error');
 
+   // SETTING CURRENCY
+   if (req.session.currency == undefined) {
+      req.session.currency = { code: 'PLN', symbol: 'zł', multiplier: 1 };
+   }
+   res.locals.currency = req.session.currency;
+   // console.log(res.locals.currency)
 
    // CHECKING UPDATES IN CURRENT USER EXCEPT OF LOGGING IN AND OUT!!!
    const exceptions = ['/auth', '/auth/steam', '/auth/steam/return', '/user/register', '/user/login', '/user/logout'];
@@ -212,9 +219,6 @@ app.use(async (req, res, next) => {
       }
    }
 
-
-
-   // if (server != 'local') return next(new ExpressError("Service Unavaible. We're currently improving our page for you. Please stay patient :)", 503))
    next();
 })
 
@@ -228,6 +232,7 @@ app.use('/highlight', highlightRoutes)
 app.use('/favourites', favouriteRoutes)
 app.use('/trades', tradeRoutes)
 app.use('/auth', steamRoutes)
+app.use('/currency', currencyRoutes)
 app.use('/', homeRoutes)
 
 

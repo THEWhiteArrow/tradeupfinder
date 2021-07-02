@@ -81,12 +81,13 @@
 
       <section class="d-flex flex-row mt-3">
          <div class="trade-cost d-flex flex-column justify-content-center align-items-center w-50">
-            <h5 class="px-2 m-0">Cost per trade-up&nbsp&nbsp:&nbsp&nbsp<%= details.inputPrice %>zł
+            <h5 class="px-2 m-0">Cost per trade-up&nbsp&nbsp:&nbsp&nbsp<%= `${details.inputPrice*currency.multiplier}
+                  ${currency.symbol}`%>
             </h5>
          </div>
          <div class="average-profit d-flex flex-column justify-content-center align-items-center w-50">
-            <h5 class="px-2 m-0">Statistical profit&nbsp&nbsp:&nbsp&nbsp<%= details.profitPerTradeUp %>
-                  zł
+            <h5 class="px-2 m-0">Statistical profit&nbsp&nbsp:&nbsp&nbsp<%=
+                  `${details.profitPerTradeUp*currency.multiplier} ${currency.symbol}` %>
             </h5>
          </div>
       </section>
