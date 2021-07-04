@@ -68,10 +68,11 @@ module.exports.setCurrency = async (req, res) => {
    const serverInfo = await ServerInfo.findOne({});
    const multiplier = serverInfo.currenciesMultipliers[code];
 
+   console.log(currentPage.replace(/"/g, '&'))
    req.session.currency = { code, symbol, multiplier }
 
    // console.log(req.query)
    // console.log(code, symbol)
 
-   res.redirect(currentPage.replaceAll('"', '&'));
+   res.redirect(currentPage.replace(/"/g, '&'));
 }
