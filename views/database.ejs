@@ -88,13 +88,13 @@
                                                          <input id="<%= `${skin.name}${skin.skin}${key}` %>"
                                                             class=" form-control mt-0 mb-3" type="number"
                                                             name="prices[<%= key %>]" step="0.01"
-                                                            value="<%= skin.prices[key] %>">
+                                                            value="<%= skin.prices[key]*currency.multiplier %>">
 
                                                          <% if(skin.isInStattrak){%>
                                                             <input id="<%= `StatTrak™${skin.name}${skin.skin}${key}` %>"
                                                                class=" form-control mt-0 mb-3 stattrak" type="number"
                                                                name="stattrakPrices[<%= key %>]" step="0.01"
-                                                               value="<%= skin.stattrakPrices[key] %>">
+                                                               value="<%= skin.stattrakPrices[key]*currency.multiplier %>">
                                                             <% } %>
                                                       </div>
 
@@ -112,12 +112,12 @@
                                                             <%= key %>
                                                          </span>
                                                          <span>
-                                                            <%= skin.prices[key] %>
+                                                            <%= skin.prices[key].currency.multiplier %>
                                                          </span>
                                                          <span> / </span>
                                                          <% if(skin.isInStattrak){%>
                                                             <span class="stattrak">
-                                                               <%= skin.stattrakPrices[key] %>
+                                                               <%= skin.stattrakPrices[key].currency.multiplier %>
                                                             </span>
                                                             <% } %>
                                                       </p>

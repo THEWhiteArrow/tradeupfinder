@@ -11,7 +11,8 @@ module.exports.showTrade = async (req, res) => {
 module.exports.recheckStats = async (req, res) => {
 
    const originUrl = req.originalUrl;
-   console.log(originUrl)
+   // console.log(originUrl)
+   const { currency } = req.session;
    const { firstPrice, secondPrice } = req.body;
    const { tradeId } = req.params;
 
@@ -88,7 +89,8 @@ module.exports.recheckStats = async (req, res) => {
          targetedSkinsNumber,
          firstPrice,
          secondPrice,
-         targetedPrice
+         targetedPrice,
+         symbol: currency.symbol
       };
       res.json(feedback);
    } catch (e) {

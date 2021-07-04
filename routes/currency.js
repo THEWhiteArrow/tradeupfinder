@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
+const { isModeratorAlso, isPermitted } = require('../middleware');
 
 const currency = require('../controllers/currency');
 
 
-
 router.route('/')
-   .post(catchAsync(currency.setCurrency));
+   .get(catchAsync(currency.setCurrency));
 
 router.route('/update')
-   .get(catchAsync(currency.updateCurrencyMultipliers));
+   .get(isModeratorAlso, isPermitted, catchAsync(currency.updateCurrencyMultipliers));
 
 
 

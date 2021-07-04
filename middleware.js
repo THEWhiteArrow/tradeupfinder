@@ -24,12 +24,19 @@ module.exports.isModeratorAlso = async (req, res, next) => {
 };
 
 module.exports.isPermitted = async (req, res, next) => {
-   const { role } = req.user;
-   if (!res.locals.permissionrole[role]) {
-      req.flash('error', 'You do not have a permission to do that!')
+   if (req.user) {
+
+      const { role } = req.user;
+      if (!res.locals.permissionrole[role]) {
+         req.flash('error', 'You do not have a permission to do that!')
+         return res.redirect(`/skins`);
+      }
+      next();
+   } else {
+      req.flash('error', 'You are not permitted to do that!')
       return res.redirect(`/skins`);
+
    }
-   next();
 };
 
 

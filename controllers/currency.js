@@ -1,6 +1,9 @@
+const fetch = require('node-fetch');
 const ServerInfo = require('../models/serverInfo')
 
+
 module.exports.updateCurrencyMultipliers = async (req, res) => {
+   const baseUrl = 'https://free.currconv.com/api/v7/convert'
    const currenciesMultipliers = {
       USD: 1,
       EUR: 1,
@@ -38,20 +41,37 @@ module.exports.updateCurrencyMultipliers = async (req, res) => {
       AED: 1,
    }
 
+   try {
 
-   const updatedServerInfo = await ServerInfo.findOneAndUpdate({}, { currenciesMultipliers }, { new: true });
-   req.flash('success', "Successfully updated currencies' multipliers")
-   res.redirect('/skins');
+
+      for (let currencyCode in currenciesMultipliers) {
+
+         const rez = await fetch(`${baseUrl}?q=PLN_${currencyCode}&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`)
+         const data = await rez.json()
+
+         currenciesMultipliers[currencyCode] = data[`PLN_${currencyCode}`];
+      }
+
+      const updatedServerInfo = await ServerInfo.findOneAndUpdate({}, { currenciesMultipliers }, { new: true });
+
+      console.log(currenciesMultipliers)
+      res.json({ success: true, currenciesMultipliers })
+   } catch (e) {
+      console.log(e)
+      res.json({ success: false, e })
+   }
+
 }
 
 module.exports.setCurrency = async (req, res) => {
-   const { body } = req;
-   const { code, symbol } = body;
+   const { code, symbol, currentPage } = req.query;
    const serverInfo = await ServerInfo.findOne({});
    const multiplier = serverInfo.currenciesMultipliers[code];
 
    req.session.currency = { code, symbol, multiplier }
+
+   // console.log(req.query)
    // console.log(code, symbol)
 
-   res.json({ success: true })
+   res.redirect(currentPage.replaceAll('"', '&'));
 }

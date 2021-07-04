@@ -39,12 +39,12 @@ const changeStats = (form, data) => {
    const returnPercentageEl = row.querySelector('.return-percentage')
    const positiveChanceEl = row.querySelector('.positive-chance')
 
-   inputPriceEl.innerText = `(${data.inputPrice}zł)`
-   firstPriceEl.innerText = `(${data.firstPrice}zł)`
-   secondPriceEl.innerText = `(${data.secondPrice}zł)`
-   targetedPriceEl.innerText = `(${data.targetedPrice}zł)`
+   inputPriceEl.innerText = `(${data.inputPrice} ${data.symbol})`
+   firstPriceEl.innerText = `(${data.firstPrice} ${data.symbol})`
+   secondPriceEl.innerText = `(${data.secondPrice} ${data.symbol})`
+   targetedPriceEl.innerText = `(${data.targetedPrice} ${data.symbol})`
 
-   profitPerTradeUpEl.innerText = `${data.profitPerTradeUp}zł`
+   profitPerTradeUpEl.innerText = `${data.profitPerTradeUp} ${data.symbol}`
    returnPercentageEl.innerText = `${data.returnPercentage}%`
    positiveChanceEl.innerText = `${Math.round(data.wantedOutputChance / data.targetedSkinsNumber * 100 * 100) / 100} %`
 

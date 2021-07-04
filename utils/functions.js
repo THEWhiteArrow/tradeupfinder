@@ -3,7 +3,12 @@ const ExpressError = require('../utils/ExpressError');
 const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
 const User = require('../models/userModel');
 
-
+module.exports.uniteCurrency = (obj, currency) => {
+   for (let key in obj) {
+      obj[key] = Math.round(obj[key] / currency.multiplier * 100) / 100;
+   }
+   return obj;
+}
 
 module.exports.createNewSteamUser = async (profile) => {
    const steam = {

@@ -3,6 +3,10 @@ const { Schema } = mongoose;
 const any = require('../plugins/mongoose/any');
 
 const favouriteSchema = new Schema({
+   owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+   },
    amount: {
       type: Object,
    },

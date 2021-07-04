@@ -3,41 +3,110 @@
 
       <span class="nav-settings-item">
          <% const isSelectedCurrency=(code)=>{if(currency.code==code)return 'SELECTED'} %>
-            <select name="currency-menu" id="currency-menu" class="form-select width-fit-content nav-settings-item">
-               <option <%=isSelectedCurrency('USD') %> value="{'code':'USD','symbol':'$'}">USD ($)</option>
-               <option <%=isSelectedCurrency('EUR') %> value="{'code':'EUR','symbol':'€'}">EUR (€)</option>
-               <option <%=isSelectedCurrency('GBP') %> value="{'code':'GBP','symbol':'£'}">GBP (£)</option>
-               <option <%=isSelectedCurrency('JPY') %> value="{'code':'JPY','symbol':'¥'}">JPY (¥)</option>
-               <option <%=isSelectedCurrency('AUD') %> value="{'code':'AUD','symbol':'A$'}">AUD (A$)</option>
-               <option <%=isSelectedCurrency('CAD') %> value="{'code':'CAD','symbol':'C$'}">CAD (C$)</option>
-               <option <%=isSelectedCurrency('NZD') %> value="{'code':'NZD','symbol':'NZ$'}">NZD (NZ$)</option>
-               <option <%=isSelectedCurrency('SGD') %> value="{'code':'SGD','symbol':'S$'}">SGD (S$)</option>
-               <option <%=isSelectedCurrency('HKD') %> value="{'code':'HKD','symbol':'HK$'}">HKD (HK$)</option>
-               <option <%=isSelectedCurrency('SEK') %> value="{'code':'SEK','symbol':'kr'}">SEK (kr)</option>
-               <option <%=isSelectedCurrency('NOK') %> value="{'code':'NOK','symbol':'kr'}">NOK (kr)</option>
-               <option <%=isSelectedCurrency('DKK') %> value="{'code':'DKK','symbol':'kr'}">DKK (kr)</option>
-               <option <%=isSelectedCurrency('ISK') %> value="{'code':'ISK','symbol':'kr'}">ISK (kr)</option>
-               <option <%=isSelectedCurrency('KRW') %> value="{'code':'KRW','symbol':'₩'}">KRW (₩)</option>
-               <option <%=isSelectedCurrency('CNY') %> value="{'code':'CNY','symbol':'¥'}">CNY (¥)</option>
-               <option <%=isSelectedCurrency('CHF') %> value="{'code':'CHF','symbol':'CHF'}">CHF (CHF)</option>
-               <option <%=isSelectedCurrency('MXN') %> value="{'code':'MXN','symbol':'$'}">MXN ($)</option>
-               <option <%=isSelectedCurrency('INR') %> value="{'code':'INR','symbol':'₹'}">INR (₹)</option>
-               <option <%=isSelectedCurrency('ILS') %> value="{'code':'ILS','symbol':'₪'}">ILS (₪)</option>
-               <option <%=isSelectedCurrency('RUB') %> value="{'code':'RUB','symbol':'₽'}">RUB (₽)</option>
-               <option <%=isSelectedCurrency('ZAR') %> value="{'code':'ZAR','symbol':'R'}">ZAR (R)</option>
-               <option <%=isSelectedCurrency('HRK') %> value="{'code':'HRK','symbol':'kn'}">HRK (kn)</option>
-               <option <%=isSelectedCurrency('TRY') %> value="{'code':'TRY','symbol':'₺'}">TRY (₺)</option>
-               <option <%=isSelectedCurrency('BRL') %> value="{'code':'BRL','symbol':'R$'}">BRL (R$)</option>
-               <option <%=isSelectedCurrency('PLN') %> value="{'code':'PLN','symbol':'zł'}">PLN (zł)</option>
-               <option <%=isSelectedCurrency('THB') %> value="{'code':'THB','symbol':'฿'}">THB (฿)</option>
-               <option <%=isSelectedCurrency('IDR') %> value="{'code':'IDR','symbol':'Rp'}">IDR (Rp)</option>
-               <option <%=isSelectedCurrency('HUF') %> value="{'code':'HUF','symbol':'Ft'}">HUF (Ft)</option>
-               <option <%=isSelectedCurrency('CZK') %> value="{'code':'CZK','symbol':'Kč'}">CZK (Kč)</option>
-               <option <%=isSelectedCurrency('PHP') %> value="{'code':'PHP','symbol':'₱'}">PHP (₱)</option>
-               <option <%=isSelectedCurrency('BGN') %> value="{'code':'BGN','symbol':'лв'}">BGN (лв)</option>
-               <option <%=isSelectedCurrency('MYR') %> value="{'code':'MYR','symbol':'MR'}">MYR (MR)</option>
-               <option <%=isSelectedCurrency('RON') %> value="{'code':'RON','symbol':'L'}">RON (L)</option>
-               <option <%=isSelectedCurrency('AED') %> value="{'code':'AED','symbol':'د.إ.'}">AED (د.إ.)</option>
+            <select name="currency-menu" id="currency-menu" class="form-select width-fit-content nav-settings-item"
+               onchange="location=this.value">
+               <option <%=isSelectedCurrency('USD') %> value="/currency?code=USD&symbol=$&currentPage=<%=
+                     url.replaceAll('&','"') %>">USD
+                     ($)</option>
+               <option <%=isSelectedCurrency('EUR') %> value="/currency?code=EUR&symbol=€&currentPage=<%=
+                     url.replaceAll('&','"') %>">EUR
+                     (€)</option>
+               <option <%=isSelectedCurrency('GBP') %> value="/currency?code=GBP&symbol=£&currentPage=<%=
+                     url.replaceAll('&','"') %>">GBP
+                     (£)</option>
+               <option <%=isSelectedCurrency('JPY') %> value="/currency?code=JPY&symbol=¥&currentPage=<%=
+                     url.replaceAll('&','"') %>">JPY
+                     (¥)</option>
+               <option <%=isSelectedCurrency('AUD') %> value="/currency?code=AUD&symbol=A$&currentPage=<%=
+                     url.replaceAll('&','"') %>">AUD
+                     (A$)</option>
+               <option <%=isSelectedCurrency('CAD') %> value="/currency?code=CAD&symbol=C$&currentPage=<%=
+                     url.replaceAll('&','"') %>">CAD
+                     (C$)</option>
+               <option <%=isSelectedCurrency('NZD') %> value="/currency?code=NZD&symbol=NZ$&currentPage=<%=
+                     url.replaceAll('&','"') %>">NZD
+                     (NZ$)</option>
+               <option <%=isSelectedCurrency('SGD') %> value="/currency?code=SGD&symbol=S$&currentPage=<%=
+                     url.replaceAll('&','"') %>">SGD
+                     (S$)</option>
+               <option <%=isSelectedCurrency('HKD') %> value="/currency?code=HKD&symbol=HK$&currentPage=<%=
+                     url.replaceAll('&','"') %>">HKD
+                     (HK$)</option>
+               <option <%=isSelectedCurrency('SEK') %> value="/currency?code=SEK&symbol=kr&currentPage=<%=
+                     url.replaceAll('&','"') %>">SEK
+                     (kr)</option>
+               <option <%=isSelectedCurrency('NOK') %> value="/currency?code=NOK&symbol=kr&currentPage=<%=
+                     url.replaceAll('&','"') %>">NOK
+                     (kr)</option>
+               <option <%=isSelectedCurrency('DKK') %> value="/currency?code=DKK&symbol=kr&currentPage=<%=
+                     url.replaceAll('&','"') %>">DKK
+                     (kr)</option>
+               <option <%=isSelectedCurrency('ISK') %> value="/currency?code=ISK&symbol=kr&currentPage=<%=
+                     url.replaceAll('&','"') %>">ISK
+                     (kr)</option>
+               <option <%=isSelectedCurrency('KRW') %> value="/currency?code=KRW&symbol=₩&currentPage=<%=
+                     url.replaceAll('&','"') %>">KRW
+                     (₩)</option>
+               <option <%=isSelectedCurrency('CNY') %> value="/currency?code=CNY&symbol=¥&currentPage=<%=
+                     url.replaceAll('&','"') %>">CNY
+                     (¥)</option>
+               <option <%=isSelectedCurrency('CHF') %> value="/currency?code=CHF&symbol=CHF&currentPage=<%=
+                     url.replaceAll('&','"') %>">CHF
+                     (CHF)</option>
+               <option <%=isSelectedCurrency('MXN') %> value="/currency?code=MXN&symbol=$&currentPage=<%=
+                     url.replaceAll('&','"') %>">MXN
+                     ($)</option>
+               <option <%=isSelectedCurrency('INR') %> value="/currency?code=INR&symbol=₹&currentPage=<%=
+                     url.replaceAll('&','"') %>">INR
+                     (₹)</option>
+               <option <%=isSelectedCurrency('ILS') %> value="/currency?code=ILS&symbol=₪&currentPage=<%=
+                     url.replaceAll('&','"') %>">ILS
+                     (₪)</option>
+               <option <%=isSelectedCurrency('RUB') %> value="/currency?code=RUB&symbol=₽&currentPage=<%=
+                     url.replaceAll('&','"') %>">RUB
+                     (₽)</option>
+               <option <%=isSelectedCurrency('ZAR') %> value="/currency?code=ZAR&symbol=R&currentPage=<%=
+                     url.replaceAll('&','"') %>">ZAR
+                     (R)</option>
+               <option <%=isSelectedCurrency('HRK') %> value="/currency?code=HRK&symbol=kn&currentPage=<%=
+                     url.replaceAll('&','"') %>">HRK
+                     (kn)</option>
+               <option <%=isSelectedCurrency('TRY') %> value="/currency?code=TRY&symbol=₺&currentPage=<%=
+                     url.replaceAll('&','"') %>">TRY
+                     (₺)</option>
+               <option <%=isSelectedCurrency('BRL') %> value="/currency?code=BRL&symbol=R$&currentPage=<%=
+                     url.replaceAll('&','"') %>">BRL
+                     (R$)</option>
+               <option <%=isSelectedCurrency('PLN') %> value="/currency?code=PLN&symbol=zł&currentPage=<%=
+                     url.replaceAll('&','"') %>">PLN
+                     (zł)</option>
+               <option <%=isSelectedCurrency('THB') %> value="/currency?code=THB&symbol=฿&currentPage=<%=
+                     url.replaceAll('&','"') %>">THB
+                     (฿)</option>
+               <option <%=isSelectedCurrency('IDR') %> value="/currency?code=IDR&symbol=Rp&currentPage=<%=
+                     url.replaceAll('&','"') %>">IDR
+                     (Rp)</option>
+               <option <%=isSelectedCurrency('HUF') %> value="/currency?code=HUF&symbol=Ft&currentPage=<%=
+                     url.replaceAll('&','"') %>">HUF
+                     (Ft)</option>
+               <option <%=isSelectedCurrency('CZK') %> value="/currency?code=CZK&symbol=Kč&currentPage=<%=
+                     url.replaceAll('&','"') %>">CZK
+                     (Kč)</option>
+               <option <%=isSelectedCurrency('PHP') %> value="/currency?code=PHP&symbol=₱&currentPage=<%=
+                     url.replaceAll('&','"') %>">PHP
+                     (₱)</option>
+               <option <%=isSelectedCurrency('BGN') %> value="/currency?code=BGN&symbol=лв&currentPage=<%=
+                     url.replaceAll('&','"') %>">BGN
+                     (лв)</option>
+               <option <%=isSelectedCurrency('MYR') %> value="/currency?code=MYR&symbol=MR&currentPage=<%=
+                     url.replaceAll('&','"') %>">MYR
+                     (MR)</option>
+               <option <%=isSelectedCurrency('RON') %> value="/currency?code=RON&symbol=L&currentPage=<%=
+                     url.replaceAll('&','"') %>">RON
+                     (L)</option>
+               <option <%=isSelectedCurrency('AED') %> value="/currency?code=AED&symbol=د.إ.&currentPage=<%=
+                     url.replaceAll('&','"') %>">AED
+                     (د.إ.)</option>
             </select>
 
 
@@ -60,11 +129,19 @@
 
       </span>
 
-      <select name="theme-mode" id="theme-mode" class="form-select width-fit-content nav-settings-item">
-         <option value="dark">Dark Mode</option>
-         <option value="light">Light Mode</option>
-         <option value="random">Random Theme</option>
-      </select>
+      <span class="nav-settings-item">
+
+         <% if (currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )) { %>
+
+            <a href="/currency/update" class="link-warning d-flex justify-content-center align-items-center mx-3">Update
+               Currencies</a>
+            <% } %>
+               <select name="theme-mode" id="theme-mode" class="form-select width-fit-content nav-settings-item">
+                  <option value="dark">Dark Mode</option>
+                  <option value="light">Light Mode</option>
+                  <option value="random">Random Theme</option>
+               </select>
+      </span>
 
    </nav>
 
@@ -103,13 +180,7 @@
                            <a href="/user/logout"
                               class="mx-2 px-2 py-1 link-light border border-white border-2 rounded">Logout</a>
                            <% } %>
-                              <!-- <a href="/user/login" class="px-2">
-                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-circle"
-                           class="user-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
-                           <path fill="currentColor"
-                              d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z">
-                           </path>
-                        </svg></a> -->
+
 
                   </div>
                </div>

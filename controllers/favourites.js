@@ -35,6 +35,7 @@ const addToFavourite = async (req, res) => {
    const userId = user._id;
    const { orginalTradeId } = req.params;
    const orginalTrade = await Trade.findById(orginalTradeId);
+   const owner = await User.findById(userId)
    // console.log(orginalTrade)
    let { favourites } = user;
 
@@ -44,7 +45,8 @@ const addToFavourite = async (req, res) => {
       name: orginalTrade.name,
       instance: orginalTrade.instance,
       pricesType: orginalTrade.pricesType,
-      orginalTrade: orginalTrade
+      orginalTrade: orginalTrade,
+      owner
    })
    const newFavouriteId = newFavouriteTrade._id;
 
@@ -96,23 +98,21 @@ module.exports.manageFavouriteTrade = async (req, res) => {
 module.exports.displayFavouriteTrades = async (req, res) => {
    const { user, sort = 'returnPercentage', order = 'descending' } = req;
 
-   const foundUser = await User.findById(user._id)
-      // .populate('favourites')
-      .populate({ path: 'favourites', populate: 'orginalTrade' })
-
-   let favourites = foundUser.favourites;
-
-
+   const favourites = await Favourite.find({ owner: user._id }).populate('orginalTrade');
+   // console.log(favourites[0])
    const sortedFavourites = sortingTrades(favourites, sort, order);
 
    res.render('favourites/index', { favouriteTrades: sortedFavourites, maxShownSkins, steamBaseUrl })
 }
 
 module.exports.recheckFavouriteStats = async (req, res) => {
-
+   const { currency } = req.session;
    const originUrl = req.originalUrl;
-   console.log(originUrl)
-   const { firstPrice, secondPrice } = req.body;
+   // console.log(originUrl)
+   let { firstPrice, secondPrice } = req.body;
+   firstPrice = Math.round(firstPrice / currency.multiplier * 100) / 100;
+   secondPrice = Math.round(secondPrice / currency.multiplier * 100) / 100;
+
    const { favouriteId } = req.params;
 
    try {
@@ -130,7 +130,7 @@ module.exports.recheckFavouriteStats = async (req, res) => {
 
 
       for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
-         let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] * steamTax * 100) / 100;
+         let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] / currency.multiplier * steamTax * 100) / 100;
          console.log(newPrice)
          trade.targetedSkinsArr[i].price = newPrice;
 
@@ -188,7 +188,8 @@ module.exports.recheckFavouriteStats = async (req, res) => {
          targetedSkinsNumber,
          firstPrice,
          secondPrice,
-         targetedPrice
+         targetedPrice,
+         symbol: currency.symbol,
       };
       res.json(feedback);
    } catch (e) {
@@ -202,7 +203,7 @@ module.exports.recheckFavouriteStats = async (req, res) => {
 
 module.exports.renderFavouriteEditPage = async (req, res) => {
    const { favouriteId } = req.params;
-   const favouriteTrade = await Favourite.findById(favouriteId);
+   const favouriteTrade = await Favourite.findById(favouriteId).populate('orginalTrade');
 
    res.render('favourites/show', { favouriteTrade })
 }

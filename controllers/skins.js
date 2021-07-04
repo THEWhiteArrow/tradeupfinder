@@ -1,4 +1,4 @@
-const { checkQuality, findCheapestSkin, getPriceAndVolume, sortingTrades, getData, convert, combainToName } = require('../utils/functions');
+const { checkQuality, findCheapestSkin, getPriceAndVolume, sortingTrades, getData, convert, combainToName, uniteCurrency } = require('../utils/functions');
 const { qualities, rarities, avg_floats } = require('../utils/variables');
 const fetch = require('node-fetch');
 
@@ -232,16 +232,22 @@ module.exports.updatePrices = async (req, res, next) => {
 module.exports.updateSkinPrice = async (req, res) => {
    const { id } = req.params;
    const { prices, stattrakPrices } = req.body;
+   const { currency } = req.session;
+
+   console.log(prices)
 
    let updatedSkin;
    if (stattrakPrices != undefined) {
+      prices = uniteCurrency(prices, currency);
+      stattrakPrice = uniteCurrency(stattrakPrice, currency);
       updatedSkin = await Skin.findByIdAndUpdate(id, { prices, stattrakPrices }, { new: true });
    } else {
+      prices = uniteCurrency(prices, currency);
       updatedSkin = await Skin.findByIdAndUpdate(id, { prices }, { new: true });
    }
 
    req.flash('success', `${updatedSkin.name} ${updatedSkin.skin}'s prices successfully updated`);
-   res.redirect('/skins/show-database');
+   res.redirect('/skins/database');
 }
 
 module.exports.useServers = async (req, res) => {
