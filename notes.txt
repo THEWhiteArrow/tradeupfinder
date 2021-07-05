@@ -1,7 +1,0 @@
- 
-      <% let favouriteId; %>
-
-
-         <% for(let id of currentUser.favourites){ %>
-            <% const index=trade.favourites.indexOf(id); %>
-               <% if(index!=-1){favouriteId=id;isFavourite=true;break;}} %>

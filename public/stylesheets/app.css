@@ -210,11 +210,7 @@ li.trade {
 
 
 
-
-
-/* #####################################     NEW     ###################################### */
-
-
+/* #####################################     FOOTER     ###################################### */
 
 footer{
    margin-top: 80px;
@@ -234,35 +230,7 @@ footer{
    padding: 0px 100px 0;
 }
 
-nav#navbar{
-   z-index: 1000;
-   font-size: 17px;
-   display: flex;
-   z-index: 500 !important;
-   width:100%;
-   justify-content: space-between;
-   align-items: center;   
-   
-
-   background-color: rgb(16, 47, 94);
-   border-bottom: 1px solid rgb(0, 27, 68);
-   
-
-   min-height:60px;
-   
-   padding: 0px 100px 0;
-}
-
-nav#navbar a{
-   display: flex;
-   color:rgba(255, 255, 255, 0.85);
-   margin-top: 10px;
-   padding-bottom: 10px;
-   text-decoration: none;
-   border-bottom: 2px solid rgb(156, 156, 156);
-
-   transition: color .1s ease-in-out;
-}
+/* #####################################     NAVBAR     ###################################### */
 
 a.steamLink{
    background-image: url('../assets/social/steamLink.png');
@@ -270,36 +238,70 @@ a.steamLink{
    height: 35px;
 }
 
+nav#navbar{
+   z-index: 1000;
+   font-size: 17px;
+   display: flex; 
+   width:100%;
+   justify-content: space-between;
+   align-items: center;   
+   
+   background-color: rgb(16, 47, 94);
+   border-bottom: 1px solid rgb(0, 27, 68);
+   
+   padding: 8px 20px;
+}
+
+nav#navbar a {
+   display: flex;
+   color:rgba(255, 255, 255, 0.85);
+   margin-top: 10px;
+   padding-bottom: 10px;
+   text-decoration: none;
+   /* border-bottom: 2px solid rgb(156, 156, 156); */
+
+   transition: color .1s ease-in-out;
+}
+
+nav#navbar li{
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+}
+
+nav#navbar li:nth-of-type(2n+1){
+   background-color: rgb(35, 66, 112);
+}
+
+nav#navbar ul.navbar-nav{
+   width:100%;
+}
+
 
 
 
 
 @media(min-width:768px){
-   nav#navbar a,nav#navbar a:first-of-type{
-      margin-top: 0 !important;
-      padding-bottom: 0px;
-      border-bottom: none;
+   nav#navbar li:nth-of-type(n){
+      background-color: transparent;
+      justify-content: center;
    }
-   nav#navbar a:last-of-type{
-      margin-bottom: 0px;
-   }
+
 }
 
 nav#navbar a.navbar-brand{
-   /* color:rgba(255, 255, 255, 0.85) !important; */
+
    margin-top: 0px; 
    margin-bottom: 0px;
    padding-bottom: 0px;
-   border-bottom:none;
 }
 
-nav#navbar .navbar-collapse{
-   transition: all 0.17s ease-out;
-}
 
 nav#navbar a:hover,nav#navbar a.navbar-brand{
    color:white !important;
 }
+
+
 
 #menuToggle
 {
@@ -350,9 +352,9 @@ nav#navbar a:hover,nav#navbar a.navbar-brand{
   
   transform: 4px 0px;
   
-  transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-              background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-              opacity 0.55s ease;
+  transition: transform 0.3s cubic-bezier(0.77,0.2,0.05,1.0),
+              background 0.3s cubic-bezier(0.77,0.2,0.05,1.0),
+              opacity 0.3s ease;
 }
 
 #menuToggle span:first-child
@@ -383,7 +385,7 @@ nav#navbar a:hover,nav#navbar a.navbar-brand{
 #menuToggle input:checked ~ span:nth-last-child(3)
 {
   opacity: 0;
-  transform: translate(0px,40px) rotate(135deg) scale(0.2, 0.2);
+  transform: translate(0px,10px) rotate(95deg) scale(0.2, 0.2);
 }
 
 /*
@@ -395,43 +397,7 @@ nav#navbar a:hover,nav#navbar a.navbar-brand{
 }
 
 
-/* #####################################     FLEX     ###################################### */
 
-.flex-1{flex:1;}
-.flex-2{flex:2;}
-.flex-3{flex:3;}
-.flex-4{flex:4;}
-.flex-5{flex:5;}
-.flex-6{flex:6;}
-.flex-7{flex:7;}
-.flex-8{flex:8;}
-.flex-9{flex:9;}
-.flex-10{flex:10;}
-.flex-11{flex:11;}
-.flex-12{flex:12;}
-
-/* #####################################     USER     ###################################### */
-
-.user-icon{
-   padding:0;
-   margin:0;
-   /* background-image: url('../assets/user-circle-solid.svg');
-   background-size: cover;
-   background-repeat: no-repeat; */
-   
-   width:25px !important;
-   height: 25px !important;
-}
-
-/* #####################################     HOT TRADES     ###################################### */
-
-.no-underline{
-   text-decoration: none;
-}
-
-.width-fit-content{
-   width: fit-content;
-}
 nav#settings{
    display: flex;
    z-index: 1000;
@@ -468,6 +434,34 @@ nav#settings select{
    background-image: url('../assets/social/steam.png');
    background-size: contain;
 }
+
+/* #####################################     FLEX     ###################################### */
+
+.flex-1{flex:1;}
+.flex-2{flex:2;}
+.flex-3{flex:3;}
+.flex-4{flex:4;}
+.flex-5{flex:5;}
+.flex-6{flex:6;}
+.flex-7{flex:7;}
+.flex-8{flex:8;}
+.flex-9{flex:9;}
+.flex-10{flex:10;}
+.flex-11{flex:11;}
+.flex-12{flex:12;}
+
+ 
+
+/* #####################################     HOT TRADES     ###################################### */
+
+.no-underline{
+   text-decoration: none;
+}
+
+.width-fit-content{
+   width: fit-content;
+}
+
 
 .bg-blur{
    z-index: 1000;

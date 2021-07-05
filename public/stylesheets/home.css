@@ -1,0 +1,82 @@
+
+
+header{
+   display:flex;
+   width:100%;
+   height:200px;
+ 
+   flex-wrap: wrap;
+   justify-content: center;
+   transition: all ease-in-out 0.4s;
+}
+
+header a{
+   position: relative;
+   display: flex;
+   text-transform: uppercase;
+   color:rgb(16, 47, 94);
+   background-color: rgba(255, 255, 255, 0.5);
+   border:2px solid rgb(0, 14, 36);   
+   transition: 0.10s ease-in-out;
+}
+
+.grid-container a:hover{
+   background-color: rgb(16, 47, 94);
+   /* color: var(--bone); */
+   color: white;
+   transition: 0.25s ease-in-out;
+}
+
+header a span{
+   position: absolute;
+   display: flex;
+   width:100%;
+   justify-content: center;
+   text-align: center;
+   top:50%;
+   transform: translate3d(0,-50%,0);
+
+   font-size: 1.25rem;
+
+}
+
+
+/* GRID ELEMENTS */
+
+.grid-container{
+   padding-left: 10px;
+   padding-right: 10px;
+   display: grid;
+   gap: 7px 7px;
+   grid-template-columns: repeat(1,1fr);
+   grid-template-rows: repeat(4, 1fr);
+   grid-template-areas:
+   "jeden"
+   "dwa"
+   "trzy"
+   "cztery";
+} 
+
+@media(min-width:768px){
+   .grid-container{
+      grid-template-columns: repeat(2,1fr);
+   grid-template-rows: repeat(2, 1fr);
+   grid-template-areas:
+   "jeden dwa"
+   "trzy cztery";
+   }
+
+}
+.jeden { grid-area: jeden; }
+.dwa { grid-area: dwa; }
+.trzy { grid-area: trzy; }
+.cztery { grid-area: cztery; }
+.piec { grid-area: piec; }
+.szesc { grid-area: szesc; }
+.siedem { grid-area: siedem; }
+.osiem { grid-area: osiem; }
+.dziewiec { grid-area: dziewiec; }
+.dziesiec { grid-area: dziesiec; }
+.jedenascie { grid-area: jedenascie; }
+.dwanascie { grid-area: dwanascie; }
+.trzynascie { grid-area: trzynascie; } 

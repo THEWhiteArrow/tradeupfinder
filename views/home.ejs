@@ -1,10 +1,23 @@
 <% layout('layouts/boilerplate')%>
 
+   <link rel="stylesheet" href="/stylesheets/home.css">
 
+   <header class="grid-container container mt-5">
+      <a href="/about" class="jeden"><span>About Us</span></a>
+      <a href="/favourites" class="dwa"><span>Favourites</span></a>
+      <a href="/guide" class="trzy"><span>Website Guide</span></a>
+      <a href="https://www.tradeupspy.com/calculator" class="cztery" target="_blank"><span>Calculator</span></a>
+   </header>
 
-   <main>
+   <main class="mt-5 pt-5">
 
       <section class="container">
+         <h1>Highlighted Trades&nbsp;
+            <span class="badge bg-dark d-flex align-items-center">
+               <img src="/assets/svgs/other/fire.svg" height="23" alt="Fire" class="me-1">
+               <span>Hot</span>
+            </span>
+         </h1>
          <ul>
 
             <% for(let highlightedTrade of highlights){ %>

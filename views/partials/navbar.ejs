@@ -168,9 +168,10 @@
 
          <% if (currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )) { %>
 
-            <a href="/currency/update" class="link-warning d-flex justify-content-center align-items-center mx-3">Update
+            <a href="/currency/update" class="link-warning d-flex justify-content-center align-items-center me-1">Update
                Currencies</a>
             <% } %>
+               <a href="/about" class="link-light d-flex justify-content-center align-items-center me-2">Contact us</a>
                <select name="theme-mode" id="theme-mode" class="form-select width-fit-content nav-settings-item">
                   <option value="dark">Dark Mode</option>
                   <option value="light">Light Mode</option>
@@ -180,47 +181,59 @@
 
    </nav>
 
-   <nav id="navbar" class="navbar navbar-expand-md navbar-dark nav-gradient px-0">
+   <nav id="navbar" class="navbar navbar-expand-md navbar-dark nav-gradient">
       <div id="menuToggle" class="container-fluid d-flex align-items-center">
-         <a class="navbar-brand m-0 ms-2 p-0" href="/" aria-current="page">Kontrakciarze</a>
-         <% if(!currentUser){ %>
+         <a class="navbar-brand m-0 p-0" href="/" aria-current="page">Kontrakciarze</a>
 
-            <a href="/auth/steam" class="steamLink ms-3"></a>
-            <% } %>
 
-               <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+         <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"> -->
-               <button class="navbar-toggler border-0 collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
-                  aria-label="Toggle navigation">
-                  <input class="navbar-checkbox" type="checkbox">
-                  <span class="mt-1"></span>
-                  <span></span>
-                  <span></span>
-               </button>
-               <!-- <span class="navbar-toggler-icon"></span> -->
-               <!-- </button> -->
-               <div class="navbar-collapse justify-content-md-end collapse" id="navbarNavAltMarkup">
-                  <div class="navbar-nav d-flex align-items-center" id="navbarLinks">
-                     <a href="/skins" class="px-2 link-light">Explore</a>
-                     <a href="/favourites" class="px-2 link-light">Favourites</a>
-                     <a href="/skins/database" class="px-2 link-light">Database</a>
+
+         <button class="navbar-toggler border-0 collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <input class="navbar-checkbox" type="checkbox">
+            <span class="mt-1"></span>
+            <span></span>
+            <span></span>
+         </button>
+
+
+         <!-- <span class="navbar-toggler-icon"></span>
+      </button> -->
+         <div class="navbar-collapse  collapse" id="navbarNavAltMarkup">
+
+            <ul class="navbar-nav mt-4 mt-md-0 d-flex justify-content-md-end" id="navbarLinks">
+
+               <% if(!currentUser){ %>
+
+                  <li class="nav-item "><a href="/auth/steam" class="steamLink m-0 me-md-3"></a></li>
+                  <% } %>
+                     <li class="nav-item"><a href="/skins" class="px-2 link-light">Explore</a></li>
+                     <li class="nav-item"><a href="/favourites" class="px-2 link-light">Favourites</a></li>
+                     <li class="nav-item"><a href="/skins/database" class="px-2 link-light">Database</a></li>
 
                      <% if(!currentUser){ %>
-                        <a href="/user/login" class="ms-3 me-1 px-2 link-light">Login</a>
-                        <a href="/user/register"
-                           class="me-2 px-2 py-1 link-light border border-white border-2 rounded">Register</a>
+                        <li class="nav-item"><a href="/user/login"
+                              class="ms-0 ms-md-3 me-md-1 px-2 link-light">Login</a></li>
+                        <li class="nav-item"><a href="/user/register"
+                              class="m-0 mt-2 mt-md-0 px-2 py-1 link-light border border-white border-2 rounded width-fit-content">Register</a>
+                        </li>
                         <% } else{%>
 
-                           <a href="/user/logout"
-                              class="mx-2 px-2 py-1 link-light border border-white border-2 rounded">Logout</a>
+                           <li class="nav-item"><a href="/user/logout"
+                                 class="m-0 mt-2 mt-md-0 px-2 py-1 link-light border border-white border-2 rounded ">Logout</a>
+                           </li>
                            <% } %>
 
 
-                  </div>
-               </div>
+            </ul>
+         </div>
       </div>
 
+
    </nav>
+
+
 
 </section>
