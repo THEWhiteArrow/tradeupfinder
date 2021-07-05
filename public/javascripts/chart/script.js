@@ -57,6 +57,7 @@ const manageClasses = (elements, classNameDelete, classNameAdd) => {
 
 
 const createChart = (range) => {
+   const symbol = document.querySelector('.input-price').innerText.slice(document.querySelector('.input-price').innerText.indexOf(' ') + 1, document.querySelector('.input-price').innerText.length - 1)
    const labels = getLabels(range);
    const results = getResults(range);
    const data = {
@@ -72,6 +73,32 @@ const createChart = (range) => {
    const config = {
       type: 'line',
       data: data,
+      options: {
+         responsive: true,
+         scales: {
+            x: {
+               display: true,
+               title: {
+                  display: true,
+                  text: 'Number of attempts',
+                  font: {
+                     size: 17
+                  }
+               },
+            },
+            y: {
+               display: true,
+               title: {
+                  display: true,
+                  text: `Profit   [ ${symbol} ]`,
+                  font: {
+                     size: 17
+                  }
+               }
+            }
+         }
+      }
+
    };
    var ctx = document.getElementById('myChart').getContext('2d');
    myChart = new Chart(ctx, config);
