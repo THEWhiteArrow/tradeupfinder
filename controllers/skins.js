@@ -479,7 +479,7 @@ module.exports.mixedAlgorithm = async (req, res) => {
          if ((process.env.SERVER != 'local' && action == 'save')) {
             const { query } = req;
             console.log(query)
-            const resposne = fetch('http://localhost:8080/skins/mixed-algorithm', {
+            const resposne = fetch('https://steam-market2.herokuapp.com/skins/mixed-algorithm', {
                method: 'POST',
                body: JSON.stringify(query),
                headers: {
