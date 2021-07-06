@@ -3,7 +3,7 @@
 
    <!-- COLLECTIONS DATA -->
    <section class="d-flex justify-content-between">
-      <div class="col-11">
+      <div class="col-9">
          <div>
             <%= profit.instance.avg %>
                <%= trade.rarity %>
@@ -26,16 +26,18 @@
       </div>
 
       <% if (isFavouriteShowPage ) { %>
-         <span class="d-flex flex-row">
+         <span class="d-flex flex-row justify-content-end col-3">
 
             <%- include('../partials/tradeManaging',{trade:profit.orginalTrade})%>
          </span>
 
          <% }else{ %>
+            <span class="d-flex flex-row justify-content-end col-3">
 
-            <%- include('../partials/tradeManaging',{trade:profit})%>
+               <%- include('../partials/tradeManaging',{trade:profit})%>
+            </span>
 
-               <% } %>
+            <% } %>
 
 
    </section>
@@ -138,6 +140,7 @@
                         <%= trade.firstSkin.name %>'s' new price
                      </label>
                      <input id="firstPriceForm<%= profit._id %>" type="number" name="firstPrice"
+                        alt="<%= `${trade.firstSkin.name} | ${trade.firstSkin.skin} (${trade.firstQuality})` %>"
                         value="<%= Math.round(trade.firstPrice*currency.multiplier*100)/100  %>" class="form-control"
                         step="0.01">
                   </div>
@@ -147,6 +150,7 @@
                         <%= trade.secondSkin.name %>'s' new price
                      </label>
                      <input id="secondPriceForm<%= profit._id %>" type="number" name="secondPrice"
+                        alt="<%= `${trade.secondSkin.name} | ${trade.secondSkin.skin} (${trade.secondQuality})` %>"
                         value="<%= Math.round(trade.secondPrice*currency.multiplier*100)/100 %>" class="form-control"
                         step="0.01">
                   </div>
@@ -166,6 +170,7 @@
                         </label>
                         <input id="<%= profit._id %><%= targetedSkin._id %>" type="number"
                            name="<%= targetedSkin._id %>"
+                           alt="<%= `${targetedSkin.name} | ${targetedSkin.skin} (${targetedSkin.quality})` %>"
                            value="<%= Math.round(targetedSkin.price/0.87*currency.multiplier*100)/100 %>"
                            class="form-control" step="0.01">
                      </div>

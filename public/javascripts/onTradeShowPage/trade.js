@@ -59,6 +59,32 @@ const recheckFavouriteStats = async (form) => {
    return data;
 }
 
-
+// const setUpRealLifeTradeUpChecking = async () => {
+//    const steamApiLink = 'http://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name='
+//    const body = {};
+//    const form = document.querySelector('.recheck-form');
+//    const inputs = form.querySelectorAll('input')
+//    const magnifierBtn = document.querySelector('.magnifier');
+//    const alts = [];
+//    inputs.forEach((el, i) => { alts.push(el.alt) })
+//    try {
+//       magnifierBtn.addEventListener('click', async (e) => {
+//          e.preventDefault();
+//          for (let alt of alts) {
+//             // const url = encodeURI(`${steamApiLink}${id}`)
+//             const url = `${steamApiLink}${alt}`
+//             const res = await axios.get(url, { headers: { 'Access-Control-Allow-Origin': '*' } })
+//             // BEDZIE TRZEBA DODAC TIME OUT HANDLING
+//             const data = res.data;
+//             if (data.success) {
+//                console.log(data)
+//             }
+//          }
+//       })
+//    } catch (e) {
+//       console.log(e)
+//    }
+// }
 
 setUpRecheckingForms();
+// setUpRealLifeTradeUpChecking();

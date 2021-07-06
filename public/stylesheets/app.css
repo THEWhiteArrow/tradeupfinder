@@ -69,7 +69,7 @@ div.stattrak:hover{
 	cursor: crosshair;
 }
 
-.star ,.highlight-btn{
+.star ,.highlight-btn,.magnifier{
    background-color: white;
    border-radius: 10px;
    display: flex;

@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 const ServerInfo = require('../models/serverInfoModel')
 
-
 module.exports.updateCurrencyMultipliers = async (req, res) => {
    const baseUrl = 'https://free.currconv.com/api/v7/convert'
    const currenciesMultipliers = {
@@ -67,6 +66,7 @@ module.exports.setCurrency = async (req, res) => {
    const { code, symbol, currentPage } = req.query;
    const serverInfo = await ServerInfo.findOne({});
    const multiplier = serverInfo.currenciesMultipliers[code];
+
 
    // console.log(currentPage.replace(/"/g, '&'))
    req.session.currency = { code, symbol, multiplier }

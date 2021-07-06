@@ -20,3 +20,4 @@ module.exports.shortcuts = {
    'Well-Worn': 'WW',
    'Battle-Scarred': 'BS'
 };
+
