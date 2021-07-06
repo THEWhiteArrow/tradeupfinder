@@ -108,8 +108,8 @@ module.exports.recheckStats = async (req, res) => {
 
 module.exports.updateCurrentTradesByOuterServer = async (req, res) => {
 
-   // const response = fetch('https://steam-market2.herokuapp.com/trades/update-current', {
-   const response = fetch('http://localhost:8080/trades/update-current', {
+   // const response = fetch('http://localhost:8080/trades/update-current', {
+   const response = fetch('https://steam-market2.herokuapp.com/trades/update-current', {
       method: 'GET',
       headers: {
          'auth-token': process.env.HEADERS_TOKEN
