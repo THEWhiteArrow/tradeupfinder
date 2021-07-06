@@ -77,14 +77,6 @@ const skinSchema = new Schema({
    icon: {
       type: String,
    }
-   // floatedQualities: {
-   //    type: Object,
-   // }
-
-   // case: {
-   //    type: Schema.Types.ObjectId,
-   //    ref: 'Case'
-   // }
 });
 
 const Skin = mongoose.model('Skin', skinSchema);

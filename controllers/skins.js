@@ -6,7 +6,7 @@ const Skin = require('../models/skinModel');
 const Case = require('../models/caseModel');
 const Name = require('../models/nameModel');
 const Trade = require('../models/tradeModel');
-const ServerInfo = require('../models/serverInfo');
+const ServerInfo = require('../models/serverInfoModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
@@ -274,9 +274,9 @@ module.exports.useServers = async (req, res) => {
    //    skinsUpdateInfo
    // });
 
-   await ServerInfo.findOneAndUpdate({}, { skinsUpdateInfo, lastChanged: new Date() }, { new: true });
+   await ServerInfo.findOneAndUpdate({}, { outerServerInfo: { valid: true }, skinsUpdateInfo, lastChanged: new Date() }, { new: true });
 
-   const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}&stattrak=${stattrak}`;
+   // const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}&stattrak=${stattrak}`;
    const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}&stattrak=${stattrak}`;
    const server3Url = `https://steam-market3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}&variant=${variant}&stattrak=${stattrak}`;
    const server4Url = `https://steam-market4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}&variant=${variant}&stattrak=${stattrak}`;
@@ -287,17 +287,63 @@ module.exports.useServers = async (req, res) => {
    const server9Url = `https://steam-market9.herokuapp.com/skins/update?start=${server9.start}&end=${server9.end}&variant=${variant}&stattrak=${stattrak}`;
    const server10Url = `https://steam-market10.herokuapp.com/skins/update?start=${server10.start}&end=${server10.end}&variant=${variant}&stattrak=${stattrak}`;
 
-   const response2 = fetch(server2Url, { method: 'GET' });
-   const response3 = fetch(server3Url, { method: 'GET' });
-   const response4 = fetch(server4Url, { method: 'GET' });
-   const response5 = fetch(server5Url, { method: 'GET' });
-   const response6 = fetch(server6Url, { method: 'GET' });
-   const response7 = fetch(server7Url, { method: 'GET' });
-   const response8 = fetch(server8Url, { method: 'GET' });
-   const response9 = fetch(server9Url, { method: 'GET' });
-   const response10 = fetch(server10Url, { method: 'GET' });
+   const response2 = fetch(server2Url, {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   });
+   const response3 = fetch(server3Url, {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   });
+   const response4 = fetch(server4Url, {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   });
+   const response5 = fetch(server5Url, {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   });
+   const response6 = fetch(server6Url, {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   });
+   const response7 = fetch(server7Url, {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   });
+   const response8 = fetch(server8Url, {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   });
+   const response9 = fetch(server9Url, {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   });
+   const response10 = fetch(server10Url, {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   });
 
-   res.redirect(server1Url)
+   req.flash('success', 'Updating skins prices! ESTIMATED TIME : 10 minutes')
+   res.redirect('/skins')
 };
 
 
@@ -650,27 +696,70 @@ const mixedTwoPairs = async (req) => {
                                     counter += 1;
                                  }
 
-                                 for (let alternateSkin of targetedCollection.skins[rarities[r]]) {
+                                 // for (let alternateSkin of targetedCollection.skins[rarities[r]]) {
+                                 //    if ((alternateSkin.case == firstSkin.case && alternateSkin.prices[firstQuality] > 0) || (alternateSkin.case == secondSkin.case && alternateSkin.prices[secondQuality] > 0)) {
+                                 //       let alternateQuality;
+                                 //       const alternate = {
+                                 //          name: alternateSkin.name,
+                                 //          skin: alternateSkin.skin,
+                                 //          icon: alternateSkin.icon,
+                                 //          collectionName: alternateSkin.case }
+                                 //       alternateSkin.case == firstSkin.case ? alternateQuality = firstQuality : alternateQuality = secondQuality;
+                                 //       alternateSkin.case == firstSkin.case ? alternate.amount = amount1 : alternate.amount = amount2;
+                                 //       alternateSkin.case == firstSkin.case ? alternate.float = firstSkinAvgFloat : alternate.float = secondSkinAvgFloat;
+                                 //       alternateSkin.case == firstSkin.case ? alternate.botPrice = firstPrice : alternate.botPrice = secondPrice;
+                                 //       alternate.quality = alternateQuality;
+                                 //       alternate.price = Math.round((alternateSkin[pricesType][alternateQuality] + priceCorrection) * 100) / 100;
+                                 //       if (pricesType == 'prices') {
+                                 //          alternate.url = encodeURI(`${steamBaseUrl}${alternate.name} | ${alternate.skin} (${alternateQuality})`);
+                                 //       } else {
+                                 //          alternate.url = encodeURI(`${steamBaseUrl}StatTrak™ ${alternate.name} | ${alternate.skin} (${alternateQuality})`);
+                                 //       } alternateInputSkins.push(alternate); } counter += 1; }
 
-                                    if ((alternateSkin.case == firstSkin.case && alternateSkin.prices[firstQuality] > 0) || (alternateSkin.case == secondSkin.case && alternateSkin.prices[secondQuality] > 0)) {
-                                       let alternateQuality;
+                                 for (let alternateSkin of targetedCollection.skins[rarities[r]]) {
+                                    if (alternateSkin.case == firstSkin.case && alternateSkin.prices[firstQuality] > 0) {
+
                                        const alternate = {
                                           name: alternateSkin.name,
                                           skin: alternateSkin.skin,
                                           icon: alternateSkin.icon,
-                                          // url: encodeURI(`${alternateUrl}${alternateSkin.name}+${alternateSkin.skin}`),
-                                          collectionName: alternateSkin.case
+                                          collectionName: alternateSkin.case,
+
+                                          quality: firstQuality,
+                                          amount: amount1,
+                                          float: firstSkinAvgFloat,
+                                          botPrice: firstPrice,
+                                          price: Math.round((alternateSkin[pricesType][firstQuality] + priceCorrection) * 100) / 100,
                                        }
-                                       alternateSkin.case == firstSkin.case ? alternateQuality = firstQuality : alternateQuality = secondQuality;
-                                       alternateSkin.case == firstSkin.case ? alternate.amount = amount1 : alternate.amount = amount2;
-                                       alternateSkin.case == firstSkin.case ? alternate.float = firstSkinAvgFloat : alternate.float = secondSkinAvgFloat;
-                                       alternateSkin.case == firstSkin.case ? alternate.botPrice = firstPrice : alternate.botPrice = secondPrice;
-                                       alternate.quality = alternateQuality;
-                                       alternate.price = Math.round((alternateSkin[pricesType][alternateQuality] + priceCorrection) * 100) / 100;
+
                                        if (pricesType == 'prices') {
-                                          alternate.url = encodeURI(`${steamBaseUrl}${alternate.name} | ${alternate.skin} (${alternateQuality})`);
+                                          alternate.url = encodeURI(`${steamBaseUrl}${alternate.name} | ${alternate.skin} (${firstQuality})`);
                                        } else {
-                                          alternate.url = encodeURI(`${steamBaseUrl}StatTrak™ ${alternate.name} | ${alternate.skin} (${alternateQuality})`);
+                                          alternate.url = encodeURI(`${steamBaseUrl}StatTrak™ ${alternate.name} | ${alternate.skin} (${firstQuality})`);
+                                       }
+
+                                       alternateInputSkins.push(alternate);
+                                    }
+
+                                    if ((alternateSkin.case == secondSkin.case && alternateSkin.prices[secondQuality] > 0) && (firstSkin.name != secondSkin.name || firstSkin.skin != secondSkin.skin || firstQuality != secondQuality)) {
+
+                                       const alternate = {
+                                          name: alternateSkin.name,
+                                          skin: alternateSkin.skin,
+                                          icon: alternateSkin.icon,
+                                          collectionName: alternateSkin.case,
+
+                                          quality: secondQuality,
+                                          amount: amount2,
+                                          float: secondSkinAvgFloat,
+                                          botPrice: secondPrice,
+                                          price: Math.round((alternateSkin[pricesType][secondQuality] + priceCorrection) * 100) / 100,
+                                       }
+
+                                       if (pricesType == 'prices') {
+                                          alternate.url = encodeURI(`${steamBaseUrl}${alternate.name} | ${alternate.skin} (${secondQuality})`);
+                                       } else {
+                                          alternate.url = encodeURI(`${steamBaseUrl}StatTrak™ ${alternate.name} | ${alternate.skin} (${secondQuality})`);
                                        }
 
                                        alternateInputSkins.push(alternate);

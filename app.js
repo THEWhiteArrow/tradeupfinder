@@ -31,6 +31,7 @@ const favouriteRoutes = require('./routes/favourite');
 const tradeRoutes = require('./routes/trades');
 const steamRoutes = require('./routes/steam');
 const currencyRoutes = require('./routes/currency');
+const serverRoutes = require('./routes/server');
 
 const User = require('./models/userModel');
 
@@ -219,6 +220,9 @@ app.use(async (req, res, next) => {
       }
    }
 
+
+
+
    next();
 })
 
@@ -233,6 +237,7 @@ app.use('/favourites', favouriteRoutes)
 app.use('/trades', tradeRoutes)
 app.use('/auth', steamRoutes)
 app.use('/currency', currencyRoutes)
+app.use('/server', serverRoutes)
 app.use('/', homeRoutes)
 
 

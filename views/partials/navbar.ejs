@@ -168,6 +168,12 @@
 
          <% if (currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )) { %>
 
+            <a href="/server/validate"
+               class="link-success d-flex justify-content-center align-items-center me-1">Validate Outer Server's Last
+               Action</a>
+            <a href="/trades/update-current"
+               class="link-info d-flex justify-content-center align-items-center me-1">Update
+               Trades</a>
             <a href="/currency/update" class="link-warning d-flex justify-content-center align-items-center me-1">Update
                Currencies</a>
             <% } %>

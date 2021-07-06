@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 const Trade = require('../models/tradeModel');
 const steamTax = 0.87;
 
@@ -100,4 +102,25 @@ module.exports.recheckStats = async (req, res) => {
       const feedback = { success: false };
       res.json(feedback);
    }
+}
+
+
+
+module.exports.updateCurrentTradesByOuterServer = async (req, res) => {
+
+   // const response = fetch('https://steam-market2.herokuapp.com/trades/update-current', {
+   const response = fetch('http://localhost:8080/trades/update-current', {
+      method: 'GET',
+      headers: {
+         'auth-token': process.env.HEADERS_TOKEN
+      }
+   })
+
+   const trades = await Trade.find({});
+   const numberOfTrades = trades.length;
+   const estimatedTime = Math.round(numberOfTrades / 5 * 100) / 100;
+
+   req.flash('success', `Current trades are being refreshed! ESTIMATED TIME : ${estimatedTime} seconds`)
+   res.redirect('/skins')
+
 }

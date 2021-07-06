@@ -9,11 +9,13 @@ const setUpBotForms = () => {
          const maxFloat = [];
          const maxPrice = [];
          let firstAmount = 0, secondAmount = 0;
-
+         const firstPrice = Number(document.querySelector('.first-price').innerText.slice(1, document.querySelector('.first-price').innerText.indexOf(' ')))
+         const secondPrice = Number(document.querySelector('.second-price').innerText.slice(1, document.querySelector('.second-price').innerText.indexOf(' ')))
 
          for (let item of form) {
             if (item && item.checked == true) {
                let { value } = item;
+               console.log(value)
                let dashIndex = 1;
 
                let a = value.slice(0, dashIndex);
@@ -31,7 +33,15 @@ const setUpBotForms = () => {
                value = value.slice(dashIndex + 1);
                dashIndex = value.indexOf('_');
 
-               maxPrice.push(value.slice(0, dashIndex));
+               // Z FAKTU ZE SPRAWDZANIE IDZIE PO KOLEJI WEDLUG KOLEJNOSCI (TAK JAK WIDAC ELEMENTY) TO DOPÓKI NIE DOSZLIŚMY JESZCZE DO SECONDAMOUNT CZYLI W/W JEST RÓWNE 0 
+               // TO KORZYSTAMY CIAGLE Z FIRSTAMOUNT CZYLI Z FIRSTPRICE ITD
+               if (secondPrice == 0) {
+                  maxPrice.push(secondPrice)
+               } else {
+                  maxPrice.push(firstPrice)
+
+               }
+               // maxPrice.push(value.slice(0, dashIndex));
 
                hrefs.push(value.slice(dashIndex + 1));
 

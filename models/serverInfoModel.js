@@ -42,8 +42,15 @@ const serverInfoSchema = new Schema({
       MYR: { type: Number },
       RON: { type: Number },
       AED: { type: Number },
+   },
+   outerServerInfo: {
+      valid: {
+         type: Boolean
+      },
+      message: {
+         type: String
+      }
    }
-
 });
 
 const ServerInfo = mongoose.model('serverInfo', serverInfoSchema);

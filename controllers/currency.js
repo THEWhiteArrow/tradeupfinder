@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const ServerInfo = require('../models/serverInfo')
+const ServerInfo = require('../models/serverInfoModel')
 
 
 module.exports.updateCurrencyMultipliers = async (req, res) => {
