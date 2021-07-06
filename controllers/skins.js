@@ -464,21 +464,8 @@ module.exports.mixedAlgorithm = async (req, res) => {
    console.log(req.query)
 
    if (action == 'display') {
-      // const savedResearch = await Research.findOne({ name: researchName })
-      // if (checkStats == 'yes') {
-      //    const { profits, counterOpt, positiveResults, amount, priceCorrection } = await recheckResearchStats(savedResearch);
-      //    res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
-      // } else {
-      //    const { profits, counterOpt, positiveResults, amount, priceCorrection } = savedResearch;
-      //    res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, avg_floats, priceCorrection });
-      // }
-
       const trades = await Trade.find({ name: researchName });
-      // console.log(res.locals.currentUser)
       const sortedTrades = sortingTrades(trades, sort, order).slice(0, maxShownSkins);
-
-
-
       res.render('trades/index', { profitableTrades: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
    } else {
@@ -487,28 +474,34 @@ module.exports.mixedAlgorithm = async (req, res) => {
       const hour = current.getHours();
       const minute = current.getMinutes();
       if (pairs == 2) {
-         // const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedTwoPairs(req);
+
+         // TUTAJ BEDZIE COS TRZEBA ZROBIC JESLI UZYTKOWNIK NA STRONIE WPROWADZI NOTHING JAKO ACTION
+         if ((process.env.SERVER != 'local' && action == 'save')) {
+            const { query } = req;
+            console.log(query)
+            const resposne = fetch('http://localhost:8080/skins/mixed-algorithm', {
+               method: 'POST',
+               body: JSON.stringify(query),
+               headers: {
+                  'auth-token': process.env.HEADERS_TOKEN,
+                  'content-type': 'application/json',
+               }
+            })
+
+            req.flash('success', 'New Trades are being cooked for you! ESTIMATED TIME : 3 minutes')
+            res.redirect('/skins')
+         } else {
 
 
-         const trades = await mixedTwoPairs(req);
-         // const trades = await Trade.find({});
-
-         const sortedTrades = sortingTrades(trades, sort, order);
+            const trades = await mixedTwoPairs(req);
+            const sortedTrades = sortingTrades(trades, sort, order);
 
 
-
-         checkTime(current, hour, minute);
-         // action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
-
-         res.render('trades/index', { profitableTrades: sortedTrades, maxShownSkins, steamBaseUrl, action })
+            checkTime(current, hour, minute);
+            res.render('trades/index', { profitableTrades: sortedTrades, maxShownSkins, steamBaseUrl, action })
+         }
 
       } else if (pairs == 3) {
-         // const { profits, counterOpt, positiveResults, amount, priceCorrection } = await mixedThreePairs(req);
-
-         // checkTime(current, hour, minute);
-         // action == 'save' ? saveResearch(Research, profits, counterOpt, positiveResults, amount, newResearchName, priceCorrection) : null;
-
-         // res.render('trades/mixed', { profits, counterOpt, positiveResults, amount, maxShownSkins, steamBaseUrl, priceCorrection })
          req.flash('error', `Portójne wyszukiwanie obecnie niedostępne! Braki w zasobach ludzkich!`);
          res.redirect('/skins')
       }
