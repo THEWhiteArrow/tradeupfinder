@@ -34,7 +34,11 @@ const random = (range) => (Math.floor(Math.random() * range) + 1)
 const getLabels = (range) => { const arr = []; for (let i = 0; i <= range; i++) { arr[i] = i; } return arr; }
 
 const getResults = (range) => {
-   const inputPrice = Number(document.querySelector('.input-price .content').innerText)
+   const inputSkins = document.querySelectorAll('input.input-skin')
+   const inputSkinsAmount = document.querySelectorAll('div.skin-card-number')
+   let inputPrice = inputSkins[0].value * inputSkinsAmount[0].innerText.replace('x', '') + inputSkins[1].value * inputSkinsAmount[1].innerText.replace('x', '');
+   inputPrice = Math.round(inputPrice * 100) / 100;
+
    const targetedSkinsArrPrices = getNumber(document.querySelectorAll('input.output-skin'), 'value')
 
 

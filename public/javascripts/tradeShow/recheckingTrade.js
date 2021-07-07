@@ -4,17 +4,14 @@ const setUpRecheckingBtn = async () => {
 
    recheckBtn.addEventListener('click', async (e) => {
 
-      try {
 
-         const data = await getPricesAndFetchData(recheckBtn);
-         console.log(data)
-         if (data.success) {
-            changeStats(data)
-         }
-      } catch (e) {
-         console.warning('Failed to recheck the trade-up')
-         console.error(e)
+
+      const data = await getPricesAndFetchData(recheckBtn);
+      console.log(data)
+      if (data.success) {
+         changeStats(data)
       }
+
 
 
    });
@@ -79,12 +76,16 @@ const getPricesAndFetchData = async (btn) => {
       body[name] = Number(value);
    }
 
+   try {
+      const res = await axios.post(url, body);
+      const data = res.data;
+      return data;
 
-
-   console.log(url)
-   const res = await axios.post(url, body);
-   const data = res.data;
-   return data;
+   } catch (e) {
+      console.error('Failed to recheck the trade-up')
+      alert('Failed to recheck the trade. Check your internet connection and try again later or contact us if an error will keep occurring!')
+      return { success: false }
+   }
 }
 
 

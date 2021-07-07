@@ -1,9 +1,4 @@
-:root{
-   --main:#ffffff;
-   --second:#ffffff;
-}
-
-/* STATS */
+ /* STATS */
 
 .stats{
    color:white;
@@ -18,7 +13,7 @@
    display: flex; 
    justify-content: center; 
    align-items: center; 
-   margin:0 0.5rem;
+   margin:1rem;
 }
 
 .stats-item-title{
@@ -28,7 +23,7 @@
    width: max-content;
 
    /* background-color:var(--main) ; */
-   border: 1px solid var(--second);
+   border: 1px solid white;
    
    border-radius: 8px ;
    padding:4px 5px;
@@ -36,11 +31,15 @@
 }
 
 .stats-item-value{
-   /* background-color:var(--main) ; */
-   border: 1px solid var(--second);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   border: 1px solid white;
    border-radius: 8px ;
    padding:12px 20px;
    font-size: 1.5rem;
+   min-width: 120px;
 }
 
 
