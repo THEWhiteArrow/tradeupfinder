@@ -34,7 +34,7 @@ const changeStats = (data) => {
    tradeUpCostEl.innerText = data.inputPrice;
    tradeUpChancesEl.innerText = data.chances;
    tradeUpProfitabilityEl.innerText = data.returnPercentage;
-   tradeUpProfitPerTradeUpEl = data.profitPerTradeUp;
+   tradeUpProfitPerTradeUpEl.innerText = data.profitPerTradeUp;
 
    console.log('stats changed successfully...')
    // const row = form.parentElement.parentElement;
