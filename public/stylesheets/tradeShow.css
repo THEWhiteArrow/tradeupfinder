@@ -22,7 +22,6 @@
    transform:translate3d(0,-60%,0);
    width: max-content;
 
-   /* background-color:var(--main) ; */
    border: 1px solid white;
    
    border-radius: 8px ;
@@ -45,12 +44,13 @@
 
 /* SKIN CARDS */
 
+
 #inputs,#outputs{
    position: relative;
 }
 
 .input-skins,.output-skins,.alternate-skins{
- 
+   
    height: 100%;
    display: flex;
    flex-direction: row ;
@@ -80,7 +80,7 @@
    top:0;
    left:50%;
    transform:translate3d(-50%,-60%,0);
-
+   
    padding:2px 5px;
    border-radius: 8px;
    background-color: white;
@@ -97,12 +97,12 @@
    top:0;
    left:100%;
    transform:translate3d(-100%,-60%,0);
-
+   
    padding:2px 5px;
    border-radius: 8px;
    background-color: white;
    border:1px solid #212529 !important;
-
+   
 }
 
 hr[role="tournament6"] {
@@ -114,7 +114,7 @@ hr[role="tournament6"] {
    display: flex;
    z-index: 1000;
 }
- 
+
 hr[role="tournament6"]::before {
    position: absolute;
    background-color: rgb(88, 88, 88);
@@ -122,9 +122,73 @@ hr[role="tournament6"]::before {
    border-color: grey;
    padding: 5px;
    -webkit-transform: translate3d(50%,0,0) rotate(45deg);
-       -ms-transform: translate3d(50%,0,0) rotate(45deg);
-           transform: translate3d(50%,0,0) rotate(45deg);
+   -ms-transform: translate3d(50%,0,0) rotate(45deg);
+   transform: translate3d(50%,0,0) rotate(45deg);
    left: 50%;
    margin: -5px 0px 0px -11px;
    content: "";
 }
+
+
+
+/* CUSTOM SWITCH */
+
+.switch {
+   display: inline-block;
+   height: 23px;
+   position: relative;
+   width: 40.5px;
+ }
+ 
+ .switch input {
+   display:none; 
+ }
+
+ .slider {
+   background-color: #df9f9f;
+   bottom: 0;
+   cursor: pointer;
+   left: 0;
+   position: absolute;
+   right: 0;
+   top: 0;
+   transition: .4s;
+ }
+ 
+ .slider:before {
+   background-color: #fff;
+   bottom: 2.7px;
+   content: "";
+   height: 17.55px;
+   left: 2.7px;
+   position: absolute;
+   transition: .4s;
+   width: 17.55px;
+ }
+
+ .slider:after{
+    content:"Edit Globally";
+    color:white;
+    position: absolute;
+    width:max-content;
+    top:0;
+    left:100%;
+
+    transform: translate3d(10%,calc(-52% +  11.5px),0);
+ }
+ 
+ input:checked + .slider {
+   background-color: #66bb6a;
+ }
+ 
+ input:checked + .slider:before {
+   transform: translateX(17.55px);
+ }
+ 
+ .slider.round {
+   border-radius: 17.55px;
+ }
+ 
+ .slider.round:before {
+   border-radius: 50%;
+ } 

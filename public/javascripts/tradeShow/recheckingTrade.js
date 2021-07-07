@@ -56,11 +56,15 @@ const changeStats = (data) => {
 }
 
 const getPricesAndFetchData = async (btn) => {
+   const body = {};
    const url = btn.getAttribute('id')
+
+   const editGloballySwitch = document.querySelectorAll('input#editGloballySwitch');
+   editGloballySwitch.length ? body.editGloballySwitch = editGloballySwitch[0].checked : null;
+
    const inputSkins = document.querySelectorAll('input.input-skin');
    const outputSkins = document.querySelectorAll('input.output-skin');
 
-   const body = {};
 
    for (let el of inputSkins) {
       const name = el.getAttribute('name');

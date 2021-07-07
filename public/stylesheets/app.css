@@ -445,6 +445,11 @@ nav#settings select{
 .flex-11{flex:11;}
 .flex-12{flex:12;}
 
+.justify-self-start{justify-self: flex-start !important;}
+.justify-self-end{justify-self: flex-end !important;}
+.justify-self-center{justify-self: center !important;}
+.justify-self-baseline{justify-self: baseline !important;}
+
 
 /* #####################################    GRADIENS && COLORS     ###################################### */
 

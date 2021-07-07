@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 
 const Trade = require('../models/tradeModel');
+const Highlight = require('../models/highlightModel');
 const steamTax = 0.87;
 
 
@@ -12,38 +13,59 @@ module.exports.showTrade = async (req, res) => {
 
 module.exports.recheckStats = async (req, res) => {
 
-   const originUrl = req.originalUrl;
-   // console.log(originUrl)
+   // EDITING GLOBALLY SETTING UP AND CHECKING PERMISSION
+   const { editGloballySwitch = 'false' } = req.body;
+   const { user } = req;
+   let userPermittedToEditGlobally = false;
+   if (user && (user.role == 'admin' || user.role == 'moderator')) {
+      userPermittedToEditGlobally = true;
+   }
+
+
    const { currency } = req.session;
-   // const { firstPrice, secondPrice } = req.body;
    const { tradeId } = req.params;
 
    try {
       const foundTrade = await Trade.findById(tradeId);
-      const firstPrice = req.body[foundTrade.instance.trade.firstSkin._id];
-      const secondPrice = req.body[foundTrade.instance.trade.secondSkin._id];
+      const firstPrice = Math.round(req.body[foundTrade.instance.trade.firstSkin._id] / currency.multiplier * 100) / 100;
+      const secondPrice = Math.round(req.body[foundTrade.instance.trade.secondSkin._id] / currency.multiplier * 100) / 100;
 
-      const { amount, instance } = foundTrade;
+      const { amount, instance, pricesType } = foundTrade;
       const { targetedSkinsNumber, trade } = instance;
 
-      const { firstSkin, secondSkin, targetedSkin } = trade;
+      const { firstSkin, secondSkin } = trade;
       const firstCollection = firstSkin.case;
       const secondCollection = secondSkin.case;
 
       let total = 0;
-      let targetedPrice;
+
+      let newTargetedSkin = {}
+      let newMaxPrice = 0;
 
 
 
       for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
-         let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] * steamTax * 100) / 100;
-         console.log(newPrice)
-         trade.targetedSkinsArr[i].price = newPrice;
+         let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] / currency.multiplier * steamTax * 100) / 100;
 
-         if (targetedSkin.skin == trade.targetedSkinsArr[i].skin && targetedSkin.name == trade.targetedSkinsArr[i].name) {
-            targetedPrice = req.body[trade.targetedSkinsArr[i]._id];
+         if (newPrice > newMaxPrice) {
+            newTargetedSkin = {
+               _id: trade.targetedSkinsArr[i]._id,
+               name: trade.targetedSkinsArr[i].name,
+               skin: trade.targetedSkinsArr[i].skin,
+               case: trade.targetedSkinsArr[i].case,
+               rarity: trade.targetedSkinsArr[i].rarity,
+               min_float: trade.targetedSkinsArr[i].min_float,
+               max_float: trade.targetedSkinsArr[i].max_float,
+               float: trade.targetedSkinsArr[i].float,
+               price: trade.targetedSkinsArr[i][pricesType][trade.targetedSkinsArr[i].quality],
+               targetedQuality: trade.targetedSkinsArr[i].quality,
+               icon: trade.targetedSkinsArr[i].icon,
+            }
+            newMaxPrice = newPrice;
          }
 
+
+         trade.targetedSkinsArr[i].price = newPrice;
 
          if (trade.targetedSkinsArr[i].case == firstCollection && trade.targetedSkinsArr[i].case == secondCollection) {
             total += (newPrice * 10);
@@ -55,7 +77,7 @@ module.exports.recheckStats = async (req, res) => {
 
       }
 
-      console.log(targetedPrice)
+
       let wantedOutputChance = 0;
       const inputPrice = Math.round((amount.amount1 * firstPrice + amount.amount2 * secondPrice) * 100) / 100;
 
@@ -64,43 +86,63 @@ module.exports.recheckStats = async (req, res) => {
          if (inputPrice <= outputSkin.price) {
             wantedOutputChance += outputSkin.amount;
          }
-         // console.log(outputSkin.price, outputSkin.amount)
+
       }
 
       const avgPrice = total / targetedSkinsNumber;
       const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
       const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
-      // ALSO WE HAVE wantedOutputChance
-      // console.log('-------checked')
+
 
       instance.total = total;
       instance.wantedOutputChance = wantedOutputChance;
+      instance.chances = Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100;
+      instance.trade.targetedSkin = newTargetedSkin
       instance.trade.firstPrice = firstPrice;
       instance.trade.secondPrice = secondPrice;
-      instance.trade.targetedPrice = targetedPrice;
+      instance.trade.targetedPrice = newMaxPrice;
       instance.trade.inputPrice = inputPrice;
       instance.trade.profitPerTradeUp = profitPerTradeUp;
       instance.trade.returnPercentage = returnPercentage;
       instance.trade.targetedSkinsArr = trade.targetedSkinsArr;
 
-      // const updatedFavourite = await Favourite.findByIdAndUpdate(tradeId, { instance }, { new: true });
+
+      // UPDATING IF EDIT GLOBALLY SWITCH AND IF USER ALLOWED
+      if (editGloballySwitch && userPermittedToEditGlobally) {
+
+         if (foundTrade.isHighlighted) {
+
+            if (returnPercentage > 100) {
+               const updatedTrade = await Trade.findByIdAndUpdate(foundTrade._id, { instance })
+               const updatedHighlight = await Highlight.findByIdAndUpdate(foundTrade.highlightedTrade, { instance })
+            } else {
+               const updatedTrade = await Trade.findByIdAndUpdate(foundTrade._id, { instance, isHighlighted: false })
+               // WTEDY USUŃ HIGHLIGHT BO JUZ NIE JEST OPŁACALNY
+               await Highlight.findByIdAndDelete(foundTrade.highlightedTrade)
+            }
+         } else {
+            const updatedTrade = await Trade.findByIdAndUpdate(foundTrade._id, { instance }, { new: true })
+         }
+
+      }
+
 
       const feedback = {
          success: true,
-         inputPrice,
-         profitPerTradeUp,
+         inputPrice: Math.round(inputPrice * currency.multiplier * 100) / 100,
+         profitPerTradeUp: Math.round(profitPerTradeUp * currency.multiplier * 100) / 100,
          returnPercentage,
          wantedOutputChance,
          targetedSkinsNumber,
-         firstPrice,
-         secondPrice,
-         targetedPrice,
+         firstPrice: Math.round(firstPrice * currency.multiplier * 100) / 100,
+         secondPrice: Math.round(secondPrice * currency.multiplier * 100) / 100,
+         targetedPrice: Math.round(newMaxPrice * currency.multiplier * 100) / 100,
          symbol: currency.symbol,
          chances: Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100,
+         editedGlobally: editGloballySwitch,
       };
       res.json(feedback);
    } catch (e) {
-      // console.log('-------failed')
       console.log(e)
 
       const feedback = { success: false };
