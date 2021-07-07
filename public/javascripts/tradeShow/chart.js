@@ -45,7 +45,7 @@ const getResults = (range) => {
       const randomIndex = random(targetedSkinsNumber);
       const outputIndex = checkOutput(randomIndex);
 
-      isSteamFeeApplied ? arr.push(Math.round((arr[arr.length - 1] - inputPrice + targetedSkinsArrPrices[outputIndex]) * steamFeeMultiplier * 100) / 100) : arr.push(arr[arr.length - 1] - inputPrice + targetedSkinsArrPrices[outputIndex]);
+      isSteamFeeApplied ? arr.push(arr[arr.length - 1] - inputPrice + Math.round(targetedSkinsArrPrices[outputIndex] * steamFeeMultiplier * 100) / 100) : arr.push(arr[arr.length - 1] - inputPrice + targetedSkinsArrPrices[outputIndex]);
 
 
    }
