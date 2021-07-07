@@ -10,8 +10,11 @@
                ,symbol:currency.symbol,className:'input-price',bg:bg,}) }` %>
                <%- `${include('./statsItem.ejs',{statsTitle:'Chances',statsValue:
                   profit.instance.chances,symbol:'%',className:'chances',bg:bg,}) }`%>
-                  <%- `${include('./statsItem.ejs',{statsTitle:'Profitability',
-                     statsValue:trade.returnPercentage,symbol:'%',className:'profitability',bg:bg,})}` %>
+                  <%- `${include('./statsItem.ejs',{statsTitle:'Profit Per TradeUp',
+                     statsValue:Math.round(trade.profitPerTradeUp*currency.multiplier*100)/100,
+                     symbol:currency.symbol,className:'perTradeUp',bg:bg,})}`%>
+                     <%- `${include('./statsItem.ejs',{statsTitle:'Profitability',
+                        statsValue:trade.returnPercentage,symbol:'%',className:'profitability',bg:bg,})}` %>
 
 
    </section>
@@ -142,7 +145,7 @@
 </main>
 
 
-
+<script src="/javascripts/tradeShow/recheckingTrade.js"></script>
 <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )){ %>
    <script src="/javascripts/tradeShow/alternateSkinsCheckbox.js"></script>
    <script src="/javascripts/tradeShow/bot.js"></script>

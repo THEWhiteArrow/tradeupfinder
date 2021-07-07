@@ -20,7 +20,6 @@ const setUpRecheckingBtn = async () => {
    });
 }
 
-
 const changeStats = (data) => {
    console.log('changing stats...')
    const inputSkinsEl = document.querySelectorAll('input.input-skin');
@@ -30,10 +29,12 @@ const changeStats = (data) => {
    const tradeUpCostEl = document.querySelector('.stats-item-value.input-price .content');
    const tradeUpChancesEl = document.querySelector('.stats-item-value.chances .content');
    const tradeUpProfitabilityEl = document.querySelector('.stats-item-value.profitability .content');
+   const tradeUpProfitPerTradeUpEl = document.querySelector('.stats-item-value.perTradeUp .content');
 
    tradeUpCostEl.innerText = data.inputPrice;
    tradeUpChancesEl.innerText = data.chances;
    tradeUpProfitabilityEl.innerText = data.returnPercentage;
+   tradeUpProfitPerTradeUpEl = data.profitPerTradeUp;
 
    console.log('stats changed successfully...')
    // const row = form.parentElement.parentElement;
@@ -86,32 +87,5 @@ const getPricesAndFetchData = async (btn) => {
    return data;
 }
 
-// const setUpRealLifeTradeUpChecking = async () => {
-//    const steamApiLink = 'http://steamcommunity.com/market/priceoverview/?appid=730&currency=6&market_hash_name='
-//    const body = {};
-//    const form = document.querySelector('.recheck-form');
-//    const inputs = form.querySelectorAll('input')
-//    const magnifierBtn = document.querySelector('.magnifier');
-//    const alts = [];
-//    inputs.forEach((el, i) => { alts.push(el.alt) })
-//    try {
-//       magnifierBtn.addEventListener('click', async (e) => {
-//          e.preventDefault();
-//          for (let alt of alts) {
-//             // const url = encodeURI(`${steamApiLink}${id}`)
-//             const url = `${steamApiLink}${alt}`
-//             const res = await axios.get(url, { headers: { 'Access-Control-Allow-Origin': '*' } })
-//             // BEDZIE TRZEBA DODAC TIME OUT HANDLING
-//             const data = res.data;
-//             if (data.success) {
-//                console.log(data)
-//             }
-//          }
-//       })
-//    } catch (e) {
-//       console.log(e)
-//    }
-// }
 
 setUpRecheckingBtn();
-// setUpRealLifeTradeUpChecking();
