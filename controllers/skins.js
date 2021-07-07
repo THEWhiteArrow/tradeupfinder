@@ -342,7 +342,7 @@ module.exports.useServers = async (req, res) => {
       }
    });
 
-   req.flash('success', 'Updating skins prices! ESTIMATED TIME : 10 minutes')
+   req.flash('success', 'Updating skins prices! ESTIMATED TIME : 15 minutes')
    res.redirect('/skins')
 };
 
