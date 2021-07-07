@@ -1,5 +1,5 @@
 var myChart;
-var isSteamFeeApplied = false;
+var isSteamFeeApplied = true;
 var range = 10;
 const steamFeeMultiplier = 0.87;
 
