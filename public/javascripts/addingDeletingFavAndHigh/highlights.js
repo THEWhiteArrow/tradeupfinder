@@ -69,7 +69,7 @@ const manageHighlight = async (action, highlight) => {
       <h5 class="card-title">Enter Highlighted Name</h5>
       </label>
       <input id="highlightNameInput" name="highlightName" type="text" class="form-control my-2 text-center"
-      maxlength="20" minlength="5" >
+      maxlength="30" minlength="5" >
       <div class="invalid-feedback my-3">
       Name must be longer than no shorter than 5 characters
       </div>

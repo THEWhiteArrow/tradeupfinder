@@ -15,11 +15,14 @@ module.exports.recheckStats = async (req, res) => {
    const originUrl = req.originalUrl;
    // console.log(originUrl)
    const { currency } = req.session;
-   const { firstPrice, secondPrice } = req.body;
+   // const { firstPrice, secondPrice } = req.body;
    const { tradeId } = req.params;
 
    try {
       const foundTrade = await Trade.findById(tradeId);
+      const firstPrice = req.body[foundTrade.instance.trade.firstSkin._id];
+      const secondPrice = req.body[foundTrade.instance.trade.secondSkin._id];
+
       const { amount, instance } = foundTrade;
       const { targetedSkinsNumber, trade } = instance;
 
@@ -38,7 +41,7 @@ module.exports.recheckStats = async (req, res) => {
          trade.targetedSkinsArr[i].price = newPrice;
 
          if (targetedSkin.skin == trade.targetedSkinsArr[i].skin && targetedSkin.name == trade.targetedSkinsArr[i].name) {
-            targetedPrice = newPrice;
+            targetedPrice = req.body[trade.targetedSkinsArr[i]._id];
          }
 
 
@@ -92,7 +95,8 @@ module.exports.recheckStats = async (req, res) => {
          firstPrice,
          secondPrice,
          targetedPrice,
-         symbol: currency.symbol
+         symbol: currency.symbol,
+         chances: Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100,
       };
       res.json(feedback);
    } catch (e) {

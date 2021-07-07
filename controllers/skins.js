@@ -596,7 +596,7 @@ const mixedTwoPairs = async (req) => {
                            // ######################################################################################################
 
 
-                           const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 1000) / 1000;
+                           const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 10000) / 10000;
                            const firstPrice = firstSkin[pricesType][firstQuality] + priceCorrection;
                            const secondPrice = secondSkin[pricesType][secondQuality] + priceCorrection;
                            const inputPrice = Math.round((amount1 * firstPrice + amount2 * secondPrice) * 100) / 100;
@@ -713,6 +713,7 @@ const mixedTwoPairs = async (req) => {
                                     if (alternateSkin.case == firstSkin.case && alternateSkin.prices[firstQuality] > 0) {
 
                                        const alternate = {
+                                          replacement: firstSkin._id,
                                           name: alternateSkin.name,
                                           skin: alternateSkin.skin,
                                           icon: alternateSkin.icon,
@@ -737,6 +738,7 @@ const mixedTwoPairs = async (req) => {
                                     if ((alternateSkin.case == secondSkin.case && alternateSkin.prices[secondQuality] > 0) && (firstSkin.name != secondSkin.name || firstSkin.skin != secondSkin.skin || firstQuality != secondQuality)) {
 
                                        const alternate = {
+                                          replacement: secondSkin._id,
                                           name: alternateSkin.name,
                                           skin: alternateSkin.skin,
                                           icon: alternateSkin.icon,
@@ -813,7 +815,8 @@ const mixedTwoPairs = async (req) => {
                                  avg,
                                  total,
                                  targetedSkinsNumber,
-                                 wantedOutputChance
+                                 wantedOutputChance,
+                                 chances: Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100,
                               }
 
                               const newTrade = new Trade({

@@ -1,6 +1,7 @@
 var myChart;
 var isSteamFeeApplied = false;
 var range = 10;
+const steamFeeMultiplier = 0.87;
 
 const targetedSkinsArrAmount = getAddedNumbers(document.querySelectorAll('.targetedSkinsArr-amount'))
 const targetedSkinsNumber = targetedSkinsArrAmount[targetedSkinsArrAmount.length - 1]
@@ -8,9 +9,9 @@ const targetedSkinsNumber = targetedSkinsArrAmount[targetedSkinsArrAmount.length
 
 
 
-function getNumber(elements) {
+function getNumber(elements, property) {
    const arr = [];
-   for (let el of elements) arr.push(Number(el.innerText))
+   for (let el of elements) arr.push(Number(el[property]))
    return arr;
 }
 
@@ -33,9 +34,9 @@ const random = (range) => (Math.floor(Math.random() * range) + 1)
 const getLabels = (range) => { const arr = []; for (let i = 0; i <= range; i++) { arr[i] = i; } return arr; }
 
 const getResults = (range) => {
-   const inputPrice = Number(document.querySelector('.input-price').innerText.slice(1, document.querySelector('.input-price').innerText.indexOf(' ')))
-   const targetedSkinsArrPrices = getNumber(document.querySelectorAll('.targetedSkinsArr-price'))
-   const targetedSkinsArrPricesFeeApplied = getNumber(document.querySelectorAll('.targetedSkinsArr-price-fee-applied'))
+   const inputPrice = Number(document.querySelector('.input-price .content').innerText)
+   const targetedSkinsArrPrices = getNumber(document.querySelectorAll('input.output-skin'), 'value')
+
 
 
 
@@ -44,7 +45,7 @@ const getResults = (range) => {
       const randomIndex = random(targetedSkinsNumber);
       const outputIndex = checkOutput(randomIndex);
 
-      isSteamFeeApplied ? arr.push(arr[arr.length - 1] - inputPrice + targetedSkinsArrPricesFeeApplied[outputIndex]) : arr.push(arr[arr.length - 1] - inputPrice + targetedSkinsArrPrices[outputIndex]);
+      isSteamFeeApplied ? arr.push(Math.round((arr[arr.length - 1] - inputPrice + targetedSkinsArrPrices[outputIndex]) * 100) / 100) : arr.push(arr[arr.length - 1] - inputPrice + targetedSkinsArrPrices[outputIndex]);
 
 
    }
@@ -57,7 +58,7 @@ const manageClasses = (elements, classNameDelete, classNameAdd) => {
 
 
 const createChart = (range) => {
-   const symbol = document.querySelector('.input-price').innerText.slice(document.querySelector('.input-price').innerText.indexOf(' ') + 1, document.querySelector('.input-price').innerText.length - 1)
+   const symbol = document.querySelector('.input-price .symbol').innerText;
    const labels = getLabels(range);
    const results = getResults(range);
    const data = {

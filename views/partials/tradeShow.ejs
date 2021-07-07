@@ -1,275 +1,149 @@
-<section class="my-4 p-3 trade rounded border container bg-<%= trade.rarity.replace('_','') %>">
+<link rel="stylesheet" href="/stylesheets/tradeShow.css">
+
+<main class="container-fluid d-flex flex-column mt-5">
+
+   <section class="stats my-4">
+      <% const bg=trade.rarity+"-"+trade.targetedRarity %>
+         <%- include('./statsItem.ejs',{statsTitle:'Avg. Float',
+            statsValue:(profit.instance.avg+'00').slice(0,6),symbol:'',className:'avg-float',bg:bg,}) %>
+            <%- `${include('./statsItem.ejs',{statsTitle:'Cost',statsValue:Math.round(trade.inputPrice*currency.multiplier*100)/100
+               ,symbol:currency.symbol,className:'input-price',bg:bg,}) }` %>
+               <%- `${include('./statsItem.ejs',{statsTitle:'Chances',statsValue:
+                  profit.instance.chances,symbol:'%',className:'chances',bg:bg,}) }`%>
+                  <%- `${include('./statsItem.ejs',{statsTitle:'Profitability',
+                     statsValue:trade.returnPercentage,symbol:'%',className:'profitability',bg:bg,})}` %>
 
 
-   <!-- COLLECTIONS DATA -->
-   <section class="d-flex justify-content-between">
-      <div class="col-9">
-         <div>
-            <%= profit.instance.avg %>
-               <%= trade.rarity %>
-                  [<%= trade.firstSkin.case %> + <%= trade.secondSkin.case %>] => [<%= trade.targetedSkin.case%>]
-         </div>
-         <div>
-            <div>
-               Search name : <%= profit.name %>
-            </div>
-            <div>
-               Price correction : <%= Math.round(profit.priceCorrection*currency.multiplier*100)*100 %>
-                  <%= currency.symbol %>
-            </div>
-            <% if(profit.pricesType=='stattrakPrices' ){ %>
-               <div class="stattrak mt-3">
-                  StatTrak™
-               </div>
-               <% } %>
-         </div>
-      </div>
+   </section>
 
-      <% if (isFavouriteShowPage ) { %>
-         <span class="d-flex flex-row justify-content-end col-3">
+   <section class=" card">
+      <div class="card-header d-flex justify-content-between <%= bg %>">
+         <h3 class="text-white">TradeUp</h3>
+         <% if (isFavouriteShowPage ) { %>
+            <span class="d-flex flex-row justify-content-end">
 
-            <%- include('../partials/tradeManaging',{trade:profit.orginalTrade})%>
-         </span>
+               <%- include('../partials/tradeManaging',{trade:profit.orginalTrade})%>
 
-         <% }else{ %>
-            <span class="d-flex flex-row justify-content-end col-3">
-
-               <%- include('../partials/tradeManaging',{trade:profit})%>
             </span>
 
-            <% } %>
+            <% }else{ %>
+               <span class="d-flex flex-row justify-content-end">
 
+                  <%- include('../partials/tradeManaging',{trade:profit})%>
 
-   </section>
+               </span>
 
-
-   <!-- TRADE -->
-   <section class="mt-4 mb-2  d-flex flex-column">
-      <!-- INPUT PRICE -->
-      <h5 class="col-12 d-flex justify-content-center input-price">
-         (<%= Math.round(trade.inputPrice*currency.multiplier*100)/100 %>
-            <%= currency.symbol %>)
-      </h5>
-
-      <div class="row">
-         <a class="link-dark mb-1 d-flex col-12 justify-content-center skin first" data-bs-toggle="tooltip"
-            data-bs-placement="right" title="See on the market" href="<%= trade.firstSkinUrl %>" target="_blank">
-            <%= profit.amount.amount1 %>x
-               [<%= trade.firstQuality %>]
-                  [<%= trade.firstSkinAvgFloat %>]
-                     <span class="first-price mx-1">
-                        (<%=Math.round(trade.firstPrice*currency.multiplier*100) /100%>
-                           <%= currency.symbol %>)
-                     </span> -
-                     <% if(profit.pricesType=='stattrakPrices' ){ %>
-                        StatTrak™
-                        <% } %>
-                           <%= trade.firstSkin.name %>
-                              <%= trade.firstSkin.skin %>
-         </a>
-
-         <a class="link-dark d-flex col-12 justify-content-center skin second" data-bs-toggle="tooltip"
-            data-bs-placement="right" title="See on the market" href="<%= trade.secondSkinUrl %>" target="_blank">
-            <%= profit.amount.amount2 %>x
-               [<%= trade.secondQuality %>]
-                  [<%= trade.secondSkinAvgFloat %>]
-                     <span class="second-price mx-1">
-                        (<%=Math.round(trade.secondPrice*currency.multiplier*100) /100 %>
-                           <%= currency.symbol %>)
-                     </span> -
-                     <% if(profit.pricesType=='stattrakPrices' ){ %>
-                        StatTrak™
-                        <% } %>
-                           <%= trade.secondSkin.name %>
-                              <%= trade.secondSkin.skin %>
-         </a>
-
-
-         <div class="arrow mx-auto my-3"></div>
-
-         <a class="link-dark d-flex col-12 justify-content-center  skin output" data-bs-toggle="tooltip"
-            data-bs-placement="right" title="See on the market" href="<%= trade.targetedSkinUrl %>" target="_blank">
-            [<%= trade.targetedQuality %>]
-               [<%= trade.targetedSkinFloat %>] -
-                  <% if(profit.pricesType=='stattrakPrices' ){ %>
-                     StatTrak™
-                     <% } %>
-                        <%= trade.targetedSkin.name %>
-                           <%= trade.targetedSkin.skin %>
-                              <span class="targeted-price">
-                                 &nbsp;(<%=Math.round(trade.targetedPrice*currency.multiplier*100) /100 %>
-                                    <%= currency.symbol %>)
-                              </span>
-         </a>
-
-      </div>
-   </section>
-
-   <!-- STATS -->
-   <section class="stats col-12 col-lg-6 offset-lg-3 d-flex flex-column ">
-
-      <div class="d-flex flex-row col-12 mt-auto data text-white">
-         <div class="d-flex  py-2 w-100 justify-content-center align-items-center bg-primary profit-per-tradeup">
-            <%= Math.round(trade.profitPerTradeUp*currency.multiplier*100)/100 %>
-               <%= currency.symbol %>
-         </div>
-         <div class="d-flex  py-2 w-100 justify-content-center align-items-center bg-success return-percentage">
-            <%= trade.returnPercentage %>%
-         </div>
-         <div class="d-flex  py-2 w-100 justify-content-center align-items-center bg-danger positive-chance">
-            <%= Math.round(profit.instance.wantedOutputChance/profit.instance.targetedSkinsNumber*100*100)/100%>
-               %
-         </div>
-      </div>
-
-   </section>
-
-   <!-- UPDATE FORM -->
-   <section class="col-12 d-flex justify-content-center my-3">
-
-      <% if (isFavouriteShowPage) { %>
-
-         <form action="/favourites/<%= profit._id %>/edit" method="POST" <% }else{ %>
-            <form action="/trades/<%= profit._id %>" method="POST" <% } %>
-
-               class="recheck-form d-flex flex-column align-items-center">
-               <h5>Inputs:</h5>
-               <div class="d-flex flex-row">
-                  <div class="form-group">
-                     <label for="firstPriceForm<%= profit._id %>">
-                        <%= trade.firstSkin.name %>'s' new price
-                     </label>
-                     <input id="firstPriceForm<%= profit._id %>" type="number" name="firstPrice"
-                        alt="<%= `${trade.firstSkin.name} | ${trade.firstSkin.skin} (${trade.firstQuality})` %>"
-                        value="<%= Math.round(trade.firstPrice*currency.multiplier*100)/100  %>" class="form-control"
-                        step="0.01">
-                  </div>
-
-                  <div class="form-group">
-                     <label for="secondPriceForm<%= profit._id %>">
-                        <%= trade.secondSkin.name %>'s' new price
-                     </label>
-                     <input id="secondPriceForm<%= profit._id %>" type="number" name="secondPrice"
-                        alt="<%= `${trade.secondSkin.name} | ${trade.secondSkin.skin} (${trade.secondQuality})` %>"
-                        value="<%= Math.round(trade.secondPrice*currency.multiplier*100)/100 %>" class="form-control"
-                        step="0.01">
-                  </div>
-               </div>
-               <h5 class="mt-3">Outputs:</h5>
-
-               <div class="d-flex flex-row flex-wrap justify-content-center">
-                  <% for(let targetedSkin of trade.targetedSkinsArr){ %>
-                     <div class="form-group">
-                        <label for="<%= profit._id %><%= targetedSkin._id %>">
-                           <div>
-                              <%= targetedSkin.name %>
-                           </div>
-                           <div>
-                              <%= targetedSkin.skin %>
-                           </div>
-                        </label>
-                        <input id="<%= profit._id %><%= targetedSkin._id %>" type="number"
-                           name="<%= targetedSkin._id %>"
-                           alt="<%= `${targetedSkin.name} | ${targetedSkin.skin} (${targetedSkin.quality})` %>"
-                           value="<%= Math.round(targetedSkin.price/0.87*currency.multiplier*100)/100 %>"
-                           class="form-control" step="0.01">
-                     </div>
-                     <% } %>
-               </div>
-
-               <button class="btn btn-success w-100">RECHECK</button>
-            </form>
-   </section>
-
-   <!-- HELP SKINS -->
-   <section class="d-flex flex-column flex-lg-row col-12 mt-3 mb-2">
-
-      <!-- ALTERNATE INPUTS -->
-      <div class="col-12 col-lg-6">
-         <h6 class="d-flex my-2">ALTERNATE INPUTS:</h6>
-
-         <form class="code-for-bot"
-            id="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}` %>">
-
-            <ul class="list-unstyled">
-               <% for(let alternateSkin of trade.alternateInputSkins){ %>
-
-                  <li class="d-flex form-check align-items-center">
-
-                     <!-- BOT PRICES WORKS FOR PLN -->
-                     <input class="form-check-input me-3" type="checkbox"
-                        value="<%= alternateSkin.amount %>_<%= alternateSkin.float %>_<%= alternateSkin.botPrice%>_<%= alternateSkin.url %>"
-                        name="<%= alternateSkin.url %>"
-                        id="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}${alternateSkin.url}`%>">
-                     <label class="form-check-label me-3 py-1 crosshair"
-                        for="<%= `${trade.firstSkin.name}${trade.firstSkin.skin}${trade.secondSkin.name}${trade.secondSkin.name}${alternateSkin.url}`%>">
-                        <%=alternateSkin.collectionName %>
-                     </label>
-                     <a class="link-dark" target="_blank" title="See on the market" href="<%= alternateSkin.url  %>">
-                        <% if(profit.pricesType=='stattrakPrices' ){ %>
-
-                           <%=`[${alternateSkin.quality}] - StatTrak™ ${alternateSkin.name} ${alternateSkin.skin} - (${
-                              Math.round(alternateSkin.price*currency.multiplier*100)/100})`%>
-
-                              <% }else{ %>
-                                 <%=`[${alternateSkin.quality}] - ${alternateSkin.name} ${alternateSkin.skin} - (${
-                                    Math.round(alternateSkin.price*currency.multiplier*100)/100})`%>
-                                    <% } %>
-                     </a>
-                  </li>
-
-                  <% } %>
-            </ul>
-            <button type="submit" class="btn btn-primary">Generate Bot's Code</button>
-         </form>
-      </div>
-
-      <!-- OUTPUTS -->
-      <div class="outputs col-12 col-lg-6">
-         <h6 class="d-flex my-2">OUTPUTS:</h6>
-         <ul class="list-unstyled">
-            <% for(let t=0;t<trade.targetedSkinsArr.length;t++){ %>
-               <li class="d-flex mb-1">
-                  <a class="link-dark" target="_blank" title="See on the market"
-                     href="<%= trade.targetedSkinsArr[t].url  %> ">
-
-
-                     [<%=trade.targetedSkinsQuality[t] %>] -
-                        [<%=trade.targetedSkinsArr[t].float %>] -
-                           <% if(profit.pricesType=='stattrakPrices' ){ %> StatTrak™ <% } %>
-                                 <%= trade.targetedSkinsArr[t].name %>
-                                    <%= trade.targetedSkinsArr[t].skin %> -
-                                       <span class="targetedSkinsArr-price">
-                                          <%=
-                                             Math.round(trade.targetedSkinsArr[t].price*currency.multiplier/0.87*100)/100%>
-                                       </span>
-                                       (
-                                       <span class="targetedSkinsArr-price-fee-applied">
-                                          <%=Math.round(trade.targetedSkinsArr[t].price*currency.multiplier*100) /100 %>
-                                       </span>
-                                       )
-                                       <%= Math.round(trade.targetedSkinsArr[t].amount/profit.instance.targetedSkinsNumber*10000)/100
-                                          %>
-                                          <span class="targetedSkinsArr-amount d-none">
-                                             <%= trade.targetedSkinsArr[t].amount %>
-                                          </span>%
-
-
-                  </a>
-               </li>
                <% } %>
-         </ul>
-      </div>
 
+      </div>
+      <div class="card-body">
+
+
+         <div class="row">
+
+
+            <div id="inputs" class="col-12 col-md-5 d-flex flex-column align-items-center">
+               <h3>INPUTS</h3>
+               <hr role=tournament6>
+
+               <div class="input-skins py-3">
+
+
+                  <%- `${include('./skinCard.ejs',{ float:trade.firstSkinAvgFloat,amount:profit.amount.amount1,
+                     price:Math.round(trade.firstPrice*currency.multiplier*100)/100,type:'input-skin',
+                     link:trade.firstSkinUrl, icon:trade.firstSkin.icon, _id:trade.firstSkin._id,
+                     label:trade.firstSkin.name + ' | ' + trade.firstSkin.skin + ' (' + trade.firstQuality + ') ' }) }`
+                     %>
+
+                     <%- `${include('./skinCard.ejs',{ float:trade.secondSkinAvgFloat,amount:profit.amount.amount2,
+                        price:Math.round(trade.secondPrice*currency.multiplier*100)/100,type:'input-skin',
+                        link:trade.secondSkinUrl, icon:trade.secondSkin.icon, _id:trade.secondSkin._id,
+                        label:trade.secondSkin.name + ' | ' + trade.secondSkin.skin + ' (' + trade.secondQuality + ') '
+                        }) }` %>
+
+               </div>
+
+            </div>
+
+            <div id="outputs" class="col-12 col-md-7 d-flex flex-column align-items-center">
+               <h3>OUTPUTS</h3>
+               <hr role=tournament6>
+
+               <div class="output-skins py-4">
+                  <% for(let targetedSkin of trade.targetedSkinsArr) {%>
+                     <%- `${include('./skinCard.ejs',{ float:targetedSkin.float,amount:targetedSkin.amount,
+                        price:Math.round(targetedSkin.price/0.87*currency.multiplier*100)/100,
+                        type:'output-skin',link:targetedSkin.url, icon:targetedSkin.icon, _id:targetedSkin._id,
+                        label:targetedSkin.name+' | '+targetedSkin.skin+' ('+targetedSkin.quality+') '})}`%>
+                  <% } %>
+
+
+               </div>
+
+            </div>
+
+            <% if (isFavouriteShowPage) { %>
+               <button id="/favourites/<%= profit._id %>/edit" class="btn btn-success btn-recheck-trade mt-3">Check Trade</button>
+            <% }else{ %>
+               <button id="/trades/<%= profit._id %>" class="btn btn-success btn-recheck-trade mt-3">Check Trade</button>
+               <% } %> 
+
+         </div>
+
+
+      </div>
    </section>
 
+   <section class="card d-flex mt-5">
+
+      
+         <div class="card-header d-flex justify-content-start <%= bg %>">
+            <h3 class="text-white">Tradeing Simulation</h3>            
+         </div>
+
+         <div class="card-body">
+            
+            <%- include("./chart.ejs") %>
+         
+         </div>
+
+    
+   </section>
+
+   <section class="card d-flex my-5">
+      <div class="card-header d-flex justify-content-between <%= bg %>">
+         <h3 class="text-white">Alternative Input Skins</h3>
+      </div>
+      
+      <div class="card-body">
+
+         <div class="alternate-skins pt-3">
+            <% let type="alternate-skin-checkbox";if( !currentUser || currentUser.role==' guest' )type='alternate-skin'
+                        %>
+                        <% for(let alternateSkin of trade.alternateInputSkins){ %>
+
+                           <%- `${include("./skinCard.ejs",{ float:alternateSkin.float,
+                              price:Math.round(alternateSkin.price*currency.multiplier*100)/100, value:
+                              alternateSkin.replacement +" _ "+alternateSkin.amount + " _ " + alternateSkin.float + " _ " + alternateSkin.botPrice
+                              + " _ " + alternateSkin.url , link:alternateSkin.url, type:type, icon:alternateSkin.icon,
+                              _id:alternateSkin._id,amount:alternateSkin.amount, label:alternateSkin.name+ ' | ' +
+                              alternateSkin.skin + ' (' + alternateSkin.quality + ') ' ,symbol:currency.symbol })}`%>
+
+                              <% } %>
+               </div>
 
 
-</section>
+               <button class=" btn btn-success w-100 mt-3" id="code-for-bot">Generate Bot's Code</button>
 
-<section class="container card">
-   <div class="card-body">
 
-      <%- include('./chart') %>
-   </div>
-</section>
+
+               </div>
+   </section>
+</main>
+
+
+
+<% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )){ %>
+   <script src="/javascripts/tradeShow/alternateSkinsCheckbox.js"></script>
+   <script src="/javascripts/tradeShow/bot.js"></script>
+   <% } %>

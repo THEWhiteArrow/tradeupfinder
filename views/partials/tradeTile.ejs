@@ -67,8 +67,7 @@
 
 
 
-            <h5 class="lead m-0 d-flex align-items-center display-5">Chances : <%=
-                  Math.round(trade.instance.wantedOutputChance/trade.instance.targetedSkinsNumber*100*100)/100 %>
+            <h5 class="lead m-0 d-flex align-items-center display-5">Chances : <%=trade.instance.chances %>
                   %
             </h5>
             <h5 class="m-0 me-3 me-1 display-5">Profitability : <%= details.returnPercentage %>%
@@ -104,8 +103,7 @@
       </a>
 
 
-      <a href="<%= showPageLink %>" class="mt-3 btn btn-primary d-flex align-self-end">Zobacz
-         kontrakt</a>
+      <a href="<%= showPageLink %>" class="mt-3 btn btn-outline-primary d-flex align-self-end">View TradeUp</a>
 
    </div>
 

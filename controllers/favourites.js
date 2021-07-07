@@ -109,14 +109,20 @@ module.exports.recheckFavouriteStats = async (req, res) => {
    const { currency } = req.session;
    const originUrl = req.originalUrl;
    // console.log(originUrl)
-   let { firstPrice, secondPrice } = req.body;
-   firstPrice = Math.round(firstPrice / currency.multiplier * 100) / 100;
-   secondPrice = Math.round(secondPrice / currency.multiplier * 100) / 100;
 
    const { favouriteId } = req.params;
 
    try {
       const favouriteTrade = await Favourite.findById(favouriteId);
+
+
+      let firstPrice = req.body[favouriteTrade.instance.trade.firstSkin._id];
+      let secondPrice = req.body[favouriteTrade.instance.trade.secondSkin._id];
+      firstPrice = Math.round(firstPrice / currency.multiplier * 100) / 100;
+      secondPrice = Math.round(secondPrice / currency.multiplier * 100) / 100;
+
+
+
       const { amount, instance } = favouriteTrade;
       const { targetedSkinsNumber, trade } = instance;
       // console.log(favouriteTrade.instance.total)
@@ -169,7 +175,8 @@ module.exports.recheckFavouriteStats = async (req, res) => {
 
       instance.total = total;
       instance.wantedOutputChance = wantedOutputChance;
-      instance.trade.firstPrice = firstPrice;
+      instance.chances = Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100,
+         instance.trade.firstPrice = firstPrice;
       instance.trade.secondPrice = secondPrice;
       instance.trade.targetedPrice = targetedPrice;
       instance.trade.inputPrice = inputPrice;
@@ -190,6 +197,7 @@ module.exports.recheckFavouriteStats = async (req, res) => {
          secondPrice,
          targetedPrice,
          symbol: currency.symbol,
+         chances: Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100,
       };
       res.json(feedback);
    } catch (e) {
