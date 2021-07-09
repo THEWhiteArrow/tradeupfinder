@@ -28,7 +28,7 @@
 
 
                <a target="_blank" href="<%= link %>">
-                  <img class="card-img-top" src="<%= icon %> " alt="">
+                  <img class="card-img-top" src="<%= icon %> " alt="<%= label %>">
                </a>
                <label for="<%= _id %>" class="text-center skin-card-label">
                   <%= label %>
@@ -36,7 +36,7 @@
                <% if(type=='input-skin' || type=='output-skin' ){ %>
 
                   <input id="<%= _id %>" value="<%= price %>" type="number" name="<%= _id %>"
-                     class="form-control <%= type %> text-center mt-1" step="0.01" autocomplete="off">
+                     class="form-control <%= type %> text-center mt-1" step="0.01" min="0" required>
 
                   <% }else if(type=='alternate-skin-checkbox' ){ %>
 

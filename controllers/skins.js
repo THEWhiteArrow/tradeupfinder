@@ -713,6 +713,7 @@ const mixedTwoPairs = async (req) => {
                                     if (alternateSkin.case == firstSkin.case && alternateSkin.prices[firstQuality] > 0) {
 
                                        const alternate = {
+                                          _id: alternateSkin._id,
                                           replacement: firstSkin._id,
                                           name: alternateSkin.name,
                                           skin: alternateSkin.skin,

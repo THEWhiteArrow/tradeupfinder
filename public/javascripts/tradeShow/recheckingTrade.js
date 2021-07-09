@@ -1,17 +1,19 @@
-const setUpRecheckingBtn = async () => {
-   const recheckBtn = document.querySelector('.btn-recheck-trade')
+const setUpRecheckingTrade = async () => {
+   const recheckForm = document.querySelector('#recheck-trade-form')
 
 
-   recheckBtn.addEventListener('click', async (e) => {
+   recheckForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!recheckForm.classList.contains('is-invalid')) {
 
 
+         const data = await getPricesAndFetchData(recheckForm);
+         console.log(data)
+         if (data.success) {
+            changeStats(data)
+         }
 
-      const data = await getPricesAndFetchData(recheckBtn);
-      console.log(data)
-      if (data.success) {
-         changeStats(data)
       }
-
 
 
    });
@@ -55,9 +57,9 @@ const changeStats = (data) => {
 
 }
 
-const getPricesAndFetchData = async (btn) => {
+const getPricesAndFetchData = async (form) => {
    const body = {};
-   const url = btn.getAttribute('id')
+   const url = form.getAttribute('action')
 
    const editGloballySwitch = document.querySelectorAll('input#editGloballySwitch');
    editGloballySwitch.length ? body.editGloballySwitch = editGloballySwitch[0].checked : null;
@@ -93,4 +95,4 @@ const getPricesAndFetchData = async (btn) => {
 }
 
 
-setUpRecheckingBtn();
+setUpRecheckingTrade();
