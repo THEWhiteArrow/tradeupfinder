@@ -5,19 +5,19 @@ const Name = require('../models/nameModel');
 const ServerInfo = require('../models/serverInfoModel');
 
 module.exports.renderExplore = async (req, res) => {
-   const highlights = await Highlight.find({}).populate('orginalTrade');
 
-
-   res.render('explore', { highlights });
-}
-
-module.exports.renderMain = async (req, res, next) => {
    const researchesName = await Name.find({});
    const { skinsUpdateInfo } = await ServerInfo.findOne({});
 
-   req.flash('info', `Dla Twojej wygody wyświetlone zostało niewięcej niż ${maxShownSkins} możliwych kontraktów`);
+   res.render('explore', { researchesName, skinsUpdateInfo });
+}
 
-   res.render('main', { researchesName, skinsUpdateInfo });
+module.exports.renderMain = async (req, res, next) => {
+   const highlights = await Highlight.find({}).populate('orginalTrade');
+
+
+   req.flash('info', `For your comfort we have no displayed more than ${maxShownSkins} trades on the page!`)
+   res.render('main', { highlights });
 };
 
 module.exports.renderManagment = async (req, res) => {

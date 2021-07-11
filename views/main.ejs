@@ -1,26 +1,17 @@
 <% layout('layouts/boilerplate')%>
+
+   <link rel="stylesheet" href="/stylesheets/tradeTile.css">
    <link rel="stylesheet" href="/stylesheets/main.css">
 
 
-
-   <header class="container mt-5 pt-3">
+   <header class="container mt-5">
       <h1 class="display-5">Kontrakciarze</h1>
-      <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error, soluta fugiat possimus
-         consequuntur deleniti ipsam impedit et quas quis obcaecati debitis nesciunt voluptas placeat omnis ea
-         perferendis. Impedit suscipit sapiente, doloremque facere, eveniet cum rerum ipsa a exercitationem esse
-         aliquid
-         voluptate provident ipsam dicta quae dolorum sed deserunt, illum numquam!</p>
 
+      <section class="grid-1 mt-5">
 
-   </header>
-
-   <main class="container my-5">
-
-      <section class="grid-1">
-
-         <a href='/explore' class="jeden">
-            <span class="grid-1-content">Hot Trades</span>
-            <img class="grid-1-content-bg" src="/assets/svgs/other/fire.svg" alt="">
+         <a href='/trades?q=random' class="jeden">
+            <span class="grid-1-content">Show A Random Trade</span>
+            <img class="grid-1-content-bg" src="/assets/svgs/other/dice-solid.svg" alt="">
          </a>
          <a href='/favourites' class="dwa">
             <span class="grid-1-content">Favourites</span>
@@ -34,174 +25,62 @@
             <span class="grid-1-content">Collaboration</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/hands-helping-solid.svg" alt="">
          </a>
-         <a href='/trades?q=random' class="piec">
-            <span class="grid-1-content">Show Me A Random Trade</span>
-            <img class="grid-1-content-bg" src="/assets/svgs/other/dice-solid.svg" alt="">
+         <a href='/explore' class="piec">
+            <span class="grid-1-content">Explore Our Engine</span>
+            <img class="grid-1-content-bg" src="/assets/svgs/other/graph-up.svg" alt="">
          </a>
 
       </section>
 
-      <section class="my-5">
+   </header>
 
-         <form class="grid-2" action="/trades" method="GET">
+   <main class="container mt-5 pt-5">
 
-            <div class="jeden p-4 d-flex flex-column  border border-2 border-success rounded rounded-3">
+      <section>
+         <h1 class="d-flex flex-row display-5">Highlighted Trades&nbsp;
+            <span class="badge bg-dark d-flex align-items-center">
+               <img src="/assets/svgs/other/fire.svg" height="23" alt="Fire" class="me-1">
+               <span>Hot</span>
+            </span>
+         </h1>
+         <ul>
 
-               <h3 class="px-1 pb-2  border-bottom">Search Options</h3>
+            <% for(let highlightedTrade of highlights){ %>
 
-               <div class="grid-3">
-                  <% const disableIfNeeded=()=>
-                     {if(!currentUser||(currentUser.role!='admin'&&currentUser.role!='moderator'))return 'disabled'}; %>
-                     <div class=" form-floating">
-                        <select class="form-select" name="order" id="order" aria-label="">
-                           <option value="descending" selected>Descending</option>
-                           <option value="ascending">Ascending</option>
-                        </select>
-                        <label for="order">Order Type</label>
-                     </div>
-
-
-                     <div class=" form-floating">
-                        <select class="form-select" name="sort" id="sort" aria-label="">
-                           <option value="returnPercentage" selected>Profitability</option>
-                           <option value="inputPrice">Cost perTradeUp</option>
-                           <option value="profitPerTradeUp">Avg. Profit per TradeUp</option>
-                           <option value="chances">Chances</option>
-                        </select>
-                        <label for="sort">Sort By</label>
-                     </div>
-
-                     <div class=" form-floating">
-                        <select class="form-select" id="action" name="action" aria-label="">
-                           <option value="display" selected>Display</option>
-
-                           <%if(currentUser&&(currentUser.role=='admin'||currentUser.role=='moderator')){%>
-                              <option value="save">Save</option>
-                              <%}%>
-
-                        </select>
-                        <label for="action">Action Type</label>
-                     </div>
-
-                     <div class=" form-floating">
-                        <select name="ratio" id="ratio" class="form-select" <%=disableIfNeeded() %>>
-                           <option value="5-5">5-5</option>
-                           <option value="4-6" selected>4-6</option>
-                           <option value="3-7">3-7</option>
-                           <option value="2-8">2-8</option>
-                           <option value="1-9">1-9</option>
-                        </select>
-                        <label for="ratio">Ratio Type</label>
-                     </div>
-
-                     <div class=" form-floating">
-                        <select name="checkStattraks" id="checkStattraks" class="form-select" <%=disableIfNeeded() %>
-                           >
-                           <option value="no" selected>No</option>
-                           <option value="yes">Yes</option>
-                        </select>
-                        <label for="checkStattraks">Check Stattraks</label>
-                     </div>
-
-                     <div class=" form-floating">
-                        <input type="text" class="form-control" name="newResearchName" id="newResearchName"
-                           autocomplete="true" <%=disableIfNeeded() %> >
-                        <label for="newResearchName" class="form-label">New Research's Name</label>
-                     </div>
-
-                     <div class=" form-floating">
-                        <input type="number" class="form-control" name="priceCorrection" id="priceCorrection"
-                           autocomplete="true" min="0" step="0.01" value="0" <%=disableIfNeeded() %> >
-                        <label for="priceCorrection">Price Correction</label>
-                     </div>
-                     <div class=" form-floating">
-                        <input type="number" class="form-control" name="minVolume" id="minVolume" autocomplete="true"
-                           min="0" step="1" value="100" <%=disableIfNeeded() %> >
-                        <label for="minVolume">Minimal Volume</label>
-                     </div>
-
-                     <div class=" form-floating">
-                        <select name="pairs" id="pairs" class="form-select" <%=disableIfNeeded() %>>
-                           <option value="2" selected>2</option>
-                           <option value="3">3</option>
-
-                        </select>
-                        <label for="pairs"># of Pairs</label>
-                     </div>
-
-
-               </div>
-
-            </div>
-
-            <div class="dwa d-flex flex-column p-4 border border-2 border-primary rounded rounded-3">
-               <h3 class="px-1 pb-2   border-bottom">Available Trades</h3>
-
-               <div class="researches">
-                  <% let i=1;for(let research of researchesName){ %>
-
-                     <div class="d-flex flex-row m-1">
-
-                        <label class="lead form-control flex-1 rounded-0 rounded-start"
-                           for="success-outlined-<%= research.name %>">
-                           <%= research.name %>
-                        </label>
-                        <div class="bg-white">
-
-                           <input type="radio" class="btn-check" name="researchName"
-                              id="success-outlined-<%= research.name %>" value="<%= research.name %>" autocomplete="off"
-                              <% if(i==1){ %>checked <% }i++; %> >
-                              <label class="btn btn-outline-primary rounded-0 rounded-end"
-                                 for="success-outlined-<%= research.name %>">
-
-                                 <svg class="svg-icon-tick" viewBox="0 0 20 20">
-                                    <path fill="white"
-                                       d="M10.219,1.688c-4.471,0-8.094,3.623-8.094,8.094s3.623,8.094,8.094,8.094s8.094-3.623,8.094-8.094S14.689,1.688,10.219,1.688 M10.219,17.022c-3.994,0-7.242-3.247-7.242-7.241c0-3.994,3.248-7.242,7.242-7.242c3.994,0,7.241,3.248,7.241,7.242C17.46,13.775,14.213,17.022,10.219,17.022 M15.099,7.03c-0.167-0.167-0.438-0.167-0.604,0.002L9.062,12.48l-2.269-2.277c-0.166-0.167-0.437-0.167-0.603,0c-0.166,0.166-0.168,0.437-0.002,0.603l2.573,2.578c0.079,0.08,0.188,0.125,0.3,0.125s0.222-0.045,0.303-0.125l5.736-5.751C15.268,7.466,15.265,7.196,15.099,7.03">
-                                    </path>
-                                 </svg>
-
-                              </label>
-                        </div>
-
-                     </div>
+               <% const tradeDetails=highlightedTrade.instance.trade; %>
+                  <%-`
+                     ${include('./partials/tradeTile',{elementName:'li',title:true,trade:highlightedTrade,details:tradeDetails,manageTrade:highlightedTrade.orginalTrade,showPageLink:'/trades/'+highlightedTrade.orginalTrade._id+''})}`%>
 
 
                      <% } %>
-               </div>
-            </div>
 
-            <button class="trzy btn btn-success m-0 width-100">Discover Trades</button>
-         </form>
-
-         <% if(currentUser && (currentUser.role==='admin' || currentUser.role==='moderator' ) ){ %>
-            <form class="d-flex flex-row justify-content-end" action="/trades/delete?_method=DELETE" method="POST">
-               <button class="btn btn-danger">Delete Saved Researches</button>
-            </form>
-            <% } %>
-
+         </ul>
       </section>
 
    </main>
 
 
-
    <div class="toast-container z-index-1000">
 
-      <%- include( "./partials/toast.ejs" , { className : "toast-server-info" , color : "#007aff" ,time:"just now",
-         title:"Server Information", content:"Skin Prices Updated Last Time : "+skinsUpdateInfo, }) %>
 
+      <% if(success && success.length){ %>
 
-         <% if(success && success.length){ %>
+         <%- include( './partials/toast.ejs' , { className:'toast-success', color:'#198754', title:'Congratulations!',
+            content:success,time:'just now' }) %>
 
-            <%-  include( './partials/toast.ejs' , { className:'toast-success', color:'#198754',
-         title:'Congratulations!', content:success,time:'just now' }) %>
+            <% } %>
 
-         <% } %>
+               <% if(error && error.length){ %>
 
-            <% if(error && error.length){ %>
+                  <%- include('./partials/toast.ejs',{ className:'toast-danger', color:'#dc3545', title:'Error',
+                     content:error,time:'just now' }) %>
 
-               <%-  include('./partials/toast.ejs',{ className:'toast-danger', color:'#dc3545', title:'Error',
-         content:error,time:'just now' }) %>
-
-         <% } %>
+                     <% } %>
    </div>
+
+
+
+   <script src=" /javascripts/addingDeletingFavAndHigh/favourites.js">
+   </script>
+   <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
+   <script src="/javascripts/libraries/vanillaTilt.min.js"></script>

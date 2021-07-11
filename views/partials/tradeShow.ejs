@@ -46,6 +46,10 @@
                            <%- h1 %>
                         </h1>
 
+                        <a href="/trades?q=random"
+                           class="btn btn-outline-light d-flex text-center align-items-center ms-2">Show A Random
+                           Trade</a>
+
                         <% if (currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' ) ) { %>
 
                            <label class="switch ms-3 mt-1" for="editGloballySwitch">
@@ -116,10 +120,10 @@
 
                   </div>
 
-                  <button type="submit" class="btn btn-success btn-recheck-trade mt-3">Check Trade</button>
 
 
                </div>
+               <button type="submit" class="btn btn-success btn-recheck-trade mt-3 w-100">Check Trade</button>
 
 
             </form>
@@ -129,6 +133,35 @@
    </section>
 
    <section class="card d-flex mt-5">
+      <div class="card-header d-flex justify-content-between <%= bg %>">
+         <h3 class="text-white">Alternative Input Skins</h3>
+      </div>
+
+      <div class="card-body">
+
+         <div class="alternate-skins pt-3">
+            <% let type="alternate-skin-checkbox" ;if(!currentUser||currentUser.role=='guest' )type='alternate-skin' %>
+               <% for(let alternateSkin of trade.alternateInputSkins){ %>
+
+                  <%- `${include("./skinCard.ejs",{ float:alternateSkin.float,
+                     price:Math.round(alternateSkin.price*currency.multiplier*100)/100, value: alternateSkin.replacement
+                     +" _ "+alternateSkin.amount + " _ " + alternateSkin.float + " _ " + alternateSkin.botPrice
+                           + " _ " + alternateSkin.url , link:alternateSkin.url, type:type, icon:alternateSkin.icon,
+                           _id:alternateSkin._id,amount:alternateSkin.amount, label:alternateSkin.name+ ' | ' +
+                           alternateSkin.skin + ' (' + alternateSkin.quality + ') ' ,symbol:currency.symbol })}`%>
+
+                           <% } %>
+         </div>
+
+
+         <button class=" btn btn-success w-100 mt-3" id="code-for-bot">Generate Bot's Code</button>
+
+
+
+         </div>
+   </section>
+
+   <section class="card d-flex my-5">
 
 
       <div class="card-header d-flex justify-content-start <%= bg %>">
@@ -144,35 +177,7 @@
 
    </section>
 
-   <section class="card d-flex my-5">
-      <div class="card-header d-flex justify-content-between <%= bg %>">
-         <h3 class="text-white">Alternative Input Skins</h3>
-      </div>
 
-      <div class="card-body">
-
-         <div class="alternate-skins pt-3">
-            <% let type="alternate-skin-checkbox" ;if( !currentUser || currentUser.role==' guest' )type='alternate-skin'
-               %>
-               <% for(let alternateSkin of trade.alternateInputSkins){ %>
-
-                  <%- `${include("./skinCard.ejs",{ float:alternateSkin.float,
-                     price:Math.round(alternateSkin.price*currency.multiplier*100)/100, value: alternateSkin.replacement
-                     +" _ "+alternateSkin.amount + " _ " + alternateSkin.float + " _ " + alternateSkin.botPrice
-                              + " _ " + alternateSkin.url , link:alternateSkin.url, type:type, icon:alternateSkin.icon,
-                              _id:alternateSkin._id,amount:alternateSkin.amount, label:alternateSkin.name+ ' | ' +
-                              alternateSkin.skin + ' (' + alternateSkin.quality + ') ' ,symbol:currency.symbol })}`%>
-
-                              <% } %>
-               </div>
-
-
-               <button class=" btn btn-success w-100 mt-3" id="code-for-bot">Generate Bot's Code</button>
-
-
-
-         </div>
-   </section>
 </main>
 
 

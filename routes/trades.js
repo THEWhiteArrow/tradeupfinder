@@ -6,7 +6,7 @@ const { isLoggedIn, isModeratorAtLeast, isAdmin, isPermitted, isResearchAllowed 
 const trade = require('../controllers/trades');
 
 router.route('/')
-   .get(catchAsync(isResearchAllowed), catchAsync(trade.renderTrades));
+   .get(catchAsync(isResearchAllowed), catchAsync(trade.manageTrades));
 
 router.route('/custom-search')
    .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(trade.customSearch));

@@ -1,82 +1,125 @@
 
+/* ################################## GRID-2 ################################# */
 
-header{
-   display:flex;
+
+.grid-2 {
+   /* min-height: 100px; */
    width:100%;
-   height:200px;
- 
-   flex-wrap: wrap;
-   justify-content: center;
-   transition: all ease-in-out 0.4s;
-}
+   display: grid; 
+   grid-template-columns: repeat(10, 1fr); 
+   grid-template-rows: repeat(15,1fr); 
+   gap: 7px 7px; 
+   grid-template-areas: 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "trzy trzy trzy trzy trzy trzy trzy trzy trzy trzy "
+   ;
 
-header a{
-   position: relative;
-   display: flex;
-   text-transform: uppercase;
-   color:var(--main);
-   background-color: rgba(255, 255, 255, 0.5);
-   border:2px solid rgb(0, 14, 36);   
-   transition: 0.10s ease-in-out;
-}
 
-.grid-container a:hover{
-   background-color: var(--main);
-   /* color: var(--bone); */
-   color: white;
-   transition: 0.25s ease-in-out;
-}
-
-header a span{
-   position: absolute;
-   display: flex;
-   width:100%;
-   justify-content: center;
-   text-align: center;
-   top:50%;
-   transform: translate3d(0,-50%,0);
-
-   font-size: 1.25rem;
-
+   
 }
 
 
-/* GRID ELEMENTS */
 
-.grid-container{
-   padding-left: 10px;
-   padding-right: 10px;
-   display: grid;
-   gap: 7px 7px;
-   grid-template-columns: repeat(1,1fr);
-   grid-template-rows: repeat(4, 1fr);
-   grid-template-areas:
-   "jeden"
-   "dwa"
-   "trzy"
-   "cztery";
-} 
-
-@media(min-width:768px){
-   .grid-container{
-      grid-template-columns: repeat(2,1fr);
-   grid-template-rows: repeat(2, 1fr);
-   grid-template-areas:
-   "jeden dwa"
-   "trzy cztery";
+@media (min-width: 992px) { 
+   .grid-2{
+      grid-template-columns: repeat(10, 1fr); 
+      grid-template-rows: repeat(7,1fr); 
+      gap: 0px 7px; 
+      grid-template-areas: 
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "trzy trzy trzy trzy trzy trzy trzy trzy trzy trzy "
+      ; 
    }
+   .grid-2 > .jeden {border-bottom-left-radius: 0 !important;border-bottom-right-radius: 0 !important;}
+   .grid-2 > .dwa {border-bottom-left-radius: 0 !important;border-bottom-right-radius: 0 !important;}
+   .grid-2 > .trzy {border-top-left-radius: 0 !important;border-top-right-radius: 0 !important;}
+ }
 
+
+.grid-2 > .jeden { 
+   grid-area: jeden;  
+   background-color: white;
+   
 }
-.jeden { grid-area: jeden; }
-.dwa { grid-area: dwa; }
-.trzy { grid-area: trzy; }
-.cztery { grid-area: cztery; }
-.piec { grid-area: piec; }
-.szesc { grid-area: szesc; }
-.siedem { grid-area: siedem; }
-.osiem { grid-area: osiem; }
-.dziewiec { grid-area: dziewiec; }
-.dziesiec { grid-area: dziesiec; }
-.jedenascie { grid-area: jedenascie; }
-.dwanascie { grid-area: dwanascie; }
-.trzynascie { grid-area: trzynascie; } 
+
+.grid-2 > .dwa { 
+   grid-area: dwa; 
+   background-color: white;
+}
+
+.grid-2 > .trzy { 
+   grid-area: trzy;  
+}
+
+.svg-icon-tick{
+   width: 20px;
+}
+
+
+.grid-2 label{
+   cursor: pointer;
+}
+
+.grid-2 select {
+   height: 30% !important;
+}
+
+.researches {
+   max-height: 300px;
+   overflow-y: auto;
+}
+
+
+/* ################################## GRID-3 ################################# */
+
+.grid-3 {
+   height:100% !important;
+   display: flex;  
+   flex-direction: row; 
+   flex-wrap: wrap;
+   justify-content: space-evenly;
+   align-items: center;
+
+   /* padding-left: 15px;
+   display: grid; 
+   grid-auto-rows: 1fr; 
+   grid-template-columns: repeat(4, 1fr); 
+   grid-template-rows: 0.9fr 1.1fr repeat(2, 1fr); 
+   gap: 7px 7px; 
+   grid-template-areas: 
+   "jeden dwa trzy siedem"
+   "jeden dwa trzy siedem"
+   "cztery piec szesc siedem"
+   "cztery piec szesc siedem";  */
+ }
+
+ .grid-3 > div { width:30%; margin: 0.55rem 0;}
+ .grid-3 ~ .siedem {flex:1; }
+ 
+ /* .grid-3 > .jeden { grid-area: jeden; margin: auto; width:100%; }
+ .grid-3 > .dwa { grid-area: dwa; margin: auto; width:100%; }
+ .grid-3 > .trzy { grid-area: trzy; margin: auto; width:100%; }
+ .grid-3 > .cztery { grid-area: cztery; margin: auto; width:100%; }
+ .grid-3 > .piec { grid-area: piec; margin: auto; width:100%; }
+ .grid-3 > .szesc { grid-area: szesc; margin: auto; width:100%; }
+ .grid-3 > .siedem { grid-area: siedem;  } */
+ 
+ 

@@ -13,7 +13,7 @@ const maxShownSkins = 200;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 
-module.exports.renderTrades = async (req, res) => {
+module.exports.manageTrades = async (req, res) => {
    let { action = 'nothing', researchName = 'noname', pairs = 2, sort = 'returnPercentage', order = 'descending', q = null } = req.query;
    if (action != 'nothing' && action != 'save' && action != 'display') {
       action = 'nothing';
@@ -27,7 +27,7 @@ module.exports.renderTrades = async (req, res) => {
       const trades = await Trade.aggregate([{ $sample: { size: 1 } }])
       console.log(trades)
 
-      req.flash('success', 'Enjoy your lucky trade!')
+      req.flash('success', 'Enjoy your lucky trade!');
       return res.redirect(`/trades/${trades[0]._id}`);
    }
 
@@ -44,7 +44,6 @@ module.exports.renderTrades = async (req, res) => {
       var endDate = new Date();
       var seconds = (endDate.getTime() - startDate.getTime()) / 1000;
       console.log(seconds)
-
       res.render('trades/index', { profitableTrades: sortedTrades, maxShownSkins, steamBaseUrl, action })
 
    } else {
@@ -66,7 +65,7 @@ module.exports.renderTrades = async (req, res) => {
             })
 
             req.flash('success', 'New Trades are being cooked for you! ESTIMATED TIME : 3 minutes')
-            res.redirect('/')
+            res.redirect('/explore')
          } else {
 
 
@@ -78,7 +77,7 @@ module.exports.renderTrades = async (req, res) => {
 
       } else if (pairs == 3) {
          req.flash('error', `Portójne wyszukiwanie obecnie niedostępne! Braki w zasobach ludzkich!`);
-         res.redirect('/')
+         res.redirect('/explore')
       }
    }
 }
@@ -220,7 +219,7 @@ module.exports.customSearch = async (req, res) => {
       })
 
       req.flash('success', `New Trades are being cooked for you! ESTIMATED TIME : ${2.5 * arr.length} minutes`)
-      res.redirect('/')
+      res.redirect('/explore')
    } else {
 
 
@@ -237,7 +236,7 @@ module.exports.customSearch = async (req, res) => {
       console.log('Researched the whole array successfully!', seconds)
 
       req.flash('success', `The custom search conducted successfully! TIME : ${seconds} seconds`);
-      res.redirect('/');
+      res.redirect('/explore');
    }
 }
 
@@ -401,7 +400,7 @@ module.exports.updateCurrentTradesByOuterServer = async (req, res) => {
    const estimatedTime = Math.round(numberOfTrades / 5 * 100) / 100;
 
    req.flash('success', `Current trades are being refreshed! ESTIMATED TIME : ${estimatedTime} seconds`)
-   res.redirect('/skins')
+   res.redirect('/explore')
 
 }
 
@@ -410,7 +409,7 @@ module.exports.deleteSavedTrades = async (req, res) => {
    await Trade.deleteMany({});
 
    req.flash('success', 'Successfully deleted all trades');
-   res.redirect('/');
+   res.redirect('/explore');
 }
 
 

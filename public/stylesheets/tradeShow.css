@@ -59,10 +59,16 @@
    align-items:center;
 }
 
-.output-skins,.alternate-skins{
+.output-skins{
    max-height: 400px;
    overflow-y: auto;
    align-items:start;
+}
+.alternate-skins{
+   height: min-content;
+   max-height: 400px;
+   overflow-y: auto;
+   align-items:center;
 }
 
 .skin-card{

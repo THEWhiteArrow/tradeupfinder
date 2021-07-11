@@ -346,7 +346,7 @@ module.exports.useServers = async (req, res) => {
    });
 
    req.flash('success', 'Updating skins prices! ESTIMATED TIME : 15 minutes')
-   res.redirect('/main')
+   res.redirect('/explore')
 };
 
 
@@ -452,8 +452,6 @@ module.exports.useServers = async (req, res) => {
 //    console.log(counter)
 //    res.render('trades/trades', { profit, shortcuts });
 // }
-
-
 
 
 

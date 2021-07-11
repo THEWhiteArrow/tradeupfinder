@@ -29,12 +29,12 @@ module.exports.isPermitted = async (req, res, next) => {
       const { role } = req.user;
       if (!res.locals.permissionrole[role]) {
          req.flash('error', 'You do not have a permission to do that!')
-         return res.redirect(`/main`);
+         return res.redirect(`/`);
       }
       next();
    } else {
       req.flash('error', 'You are not permitted to do that!')
-      return res.redirect(`/main`);
+      return res.redirect(`/`);
 
    }
 };
