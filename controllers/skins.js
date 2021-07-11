@@ -247,11 +247,20 @@ module.exports.updateSkinPrice = async (req, res) => {
 }
 
 module.exports.useServers = async (req, res) => {
-   const { server1, server2, server3, server4, server5, server6, server7, server8, server9, server10, variant = 'backpack', stattrak = false } = req.body;
+   const server2 = { start: 0, end: 100 };
+   const server3 = { start: 100, end: 200 };
+   const server4 = { start: 200, end: 300 };
+   const server5 = { start: 300, end: 400 };
+   const server6 = { start: 400, end: 500 };
+   const server7 = { start: 500, end: 600 };
+   const server8 = { start: 600, end: 700 };
+   const server9 = { start: 700, end: 800 };
+   const server10 = { start: 800, end: 1000 };
+   const variant = 'backpack';
+   const stattrak = true;
 
 
    console.log(variant)
-   console.log(server1)
    console.log(server2)
    console.log(server3)
    console.log(server4)
@@ -266,13 +275,11 @@ module.exports.useServers = async (req, res) => {
 
    const date = new Date();
    const skinsUpdateInfo = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}  -  ${date.getHours()} : ${date.getMinutes()}`;
-   // const newServerInfo = new ServerInfo({
-   //    skinsUpdateInfo
-   // });
+
 
    await ServerInfo.findOneAndUpdate({}, { outerServerInfo: { valid: true }, skinsUpdateInfo, lastChanged: new Date() }, { new: true });
 
-   // const server1Url = `https://steam-market1.herokuapp.com/skins/update?start=${server1.start}&end=${server1.end}&variant=${variant}&stattrak=${stattrak}`;
+
    const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}&stattrak=${stattrak}`;
    const server3Url = `https://steam-market3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}&variant=${variant}&stattrak=${stattrak}`;
    const server4Url = `https://steam-market4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}&variant=${variant}&stattrak=${stattrak}`;
@@ -339,7 +346,7 @@ module.exports.useServers = async (req, res) => {
    });
 
    req.flash('success', 'Updating skins prices! ESTIMATED TIME : 15 minutes')
-   res.redirect('/skins')
+   res.redirect('/main')
 };
 
 

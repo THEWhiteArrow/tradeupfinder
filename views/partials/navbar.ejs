@@ -163,23 +163,16 @@
    </span>
 
    <span class="nav-settings-item">
-
-      <% if (currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )) { %>
-
-         <a href="/server/validate" class="link-success d-flex justify-content-center align-items-center me-1">Validate
-            Outer Server's Last
-            Action</a>
-         <a href="/trades/update-current" class="link-info d-flex justify-content-center align-items-center me-1">Update
-            Trades</a>
-         <a href="/currency/update" class="link-warning d-flex justify-content-center align-items-center me-1">Update
-            Currencies</a>
+      <a href="/about" class="link-light d-flex justify-content-center align-items-center me-2">Contact us</a>
+      <select name="theme-mode" id="theme-mode" class="form-select width-fit-content nav-settings-item">
+         <option value="dark">Dark Mode</option>
+         <option value="light">Light Mode</option>
+         <option value="random">Random Theme</option>
+      </select>
+      <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' ) ){ %>
+         <a href="/managment" class="managment ms-2">
+            <img src="/assets/svgs/other/gear-fill.svg" alt="Managment" class="icons"></a>
          <% } %>
-            <a href="/about" class="link-light d-flex justify-content-center align-items-center me-2">Contact us</a>
-            <select name="theme-mode" id="theme-mode" class="form-select width-fit-content nav-settings-item">
-               <option value="dark">Dark Mode</option>
-               <option value="light">Light Mode</option>
-               <option value="random">Random Theme</option>
-            </select>
    </span>
 
 </nav>
@@ -213,31 +206,24 @@
                <li class="nav-item "><a href="/auth/steam" class="steamLink m-0 me-md-3"></a></li>
 
                <% } %>
-                  <% if (currentUser&&currentUser.role=='moderator' ) { %>
-                     <li class="nav-item"><a href="/trades/custom-search" class="px-2 link-light">Custom Search</a></li>
-                     <% } %>
-                        <% if(currentUser&&currentUser.role=='admin' ){ %>
-                           <li class="nav-item"><a href="/trades/custom-search" class="px-2 link-light">Custom
-                                 Search</a></li>
-                           <li class="nav-item"><a href="/map/map-collection" class="px-2 link-light">Mapping</a></li>
-                           <% } %>
-                              <li class="nav-item"><a href="/main" class="px-2 link-light">Explore</a></li>
-                              <li class="nav-item"><a href="/favourites" class="px-2 link-light">Favourites</a></li>
-                              <li class="nav-item"><a href="/skins/database" class="px-2 link-light">Database</a></li>
 
-                              <% if(!currentUser){ %>
-                                 <li class="nav-item"><a href="/user/login"
-                                       class="ms-0 ms-md-3 me-md-1 px-2 link-light">Login</a>
-                                 </li>
-                                 <li class="nav-item"><a href="/user/register"
-                                       class="m-0 mt-2 mt-md-0 px-2 py-1 link-light border border-white border-2 rounded width-fit-content">Register</a>
-                                 </li>
-                                 <% } else{%>
 
-                                    <li class="nav-item"><a href="/user/logout"
-                                          class="m-0 mt-2 mt-md-0 px-2 py-1 link-light border border-white border-2 rounded ">Logout</a>
-                                    </li>
-                                    <% } %>
+                  <li class="nav-item"><a href="/main" class="px-2 link-light">Explore</a></li>
+                  <li class="nav-item"><a href="/favourites" class="px-2 link-light">Favourites</a></li>
+                  <li class="nav-item"><a href="/skins/database" class="px-2 link-light">Database</a></li>
+
+                  <% if(!currentUser){ %>
+                     <li class="nav-item"><a href="/user/login" class="ms-0 ms-md-3 me-md-1 px-2 link-light">Login</a>
+                     </li>
+                     <li class="nav-item"><a href="/user/register"
+                           class="m-0 mt-2 mt-md-0 px-2 py-1 link-light border border-white border-2 rounded width-fit-content">Register</a>
+                     </li>
+                     <% } else{%>
+
+                        <li class="nav-item"><a href="/user/logout"
+                              class="m-0 mt-2 mt-md-0 px-2 py-1 link-light border border-white border-2 rounded ">Logout</a>
+                        </li>
+                        <% } %>
 
 
          </ul>

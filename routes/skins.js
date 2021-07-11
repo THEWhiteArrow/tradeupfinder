@@ -38,7 +38,8 @@ router.route('/update/:id')
 
 
 router.route('/update-thru-servers')
-   .post(isLoggedIn, isAdmin, isPermitted, catchAsync(skin.useServers));
+   // .post(isLoggedIn, isAdmin, isPermitted, catchAsync(skin.useServers));
+   .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(skin.useServers));
 
 
 

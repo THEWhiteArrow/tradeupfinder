@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
+const { isLoggedIn, isModeratorAtLeast, isPermitted } = require('../middleware');
+
 const host = require('../controllers/host');
 
 
@@ -10,6 +12,9 @@ router.route('/')
 
 router.route('/main')
    .get(catchAsync(host.renderMain));
+
+router.route('/managment')
+   .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(host.renderManagment));
 
 
 

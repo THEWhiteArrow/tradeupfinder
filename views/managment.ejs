@@ -1,0 +1,25 @@
+<% layout('layouts/boilerplate')%>
+
+   <section class="container d-flex flex-column my-5 py-5">
+
+      <% if (currentUser&& (currentUser.role=='moderator' || currentUser.role=='admin' ) ) { %>
+
+
+         <a href="/trades/custom-search" class="px-2 link-light btn btn-danger flex-1">Custom Search</a>
+         <a href="/skins/update-thru-servers" class="px-2 link-light btn btn-success flex-1">Update Skins' Prices</a>
+         <a href="/server/validate" class="btn btn-primary d-flex justify-content-center align-items-center">Validate
+            Outer Server's Last Action</a>
+         <a href="/trades/update-current" class="btn btn-info d-flex justify-content-center align-items-center">Update
+            Trades</a>
+         <a href="/currency/update" class="btn btn-warning d-flex justify-content-center align-items-center">Update
+            Currencies</a>
+
+         <% } %>
+
+
+            <% if(currentUser&&currentUser.role=='admin' ){ %>
+               <a href="/map/map-collection" class="px-2 btn btn-secondary">Mapping</a>
+               <% } %>
+
+                  <a href="/main" class="btn btn-dark my-3">Return To Main Page</a>
+   </section>

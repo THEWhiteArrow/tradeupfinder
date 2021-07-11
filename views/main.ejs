@@ -7,8 +7,11 @@
       <h1 class="display-5">Kontrakciarze</h1>
       <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error, soluta fugiat possimus
          consequuntur deleniti ipsam impedit et quas quis obcaecati debitis nesciunt voluptas placeat omnis ea
-         perferendis. Impedit suscipit sapiente, doloremque facere, eveniet cum rerum ipsa a exercitationem esse aliquid
+         perferendis. Impedit suscipit sapiente, doloremque facere, eveniet cum rerum ipsa a exercitationem esse
+         aliquid
          voluptate provident ipsam dicta quae dolorum sed deserunt, illum numquam!</p>
+
+
    </header>
 
    <main class="container my-5">
@@ -48,7 +51,8 @@
 
                <div class="grid-3">
                   <% const disableIfNeeded=()=>
-                     {if(!currentUser||(currentUser.role!='admin'&&currentUser.role!='moderator'))return 'disabled'};
+                     {if(!currentUser||(currentUser.role!='admin'&&currentUser.role!='moderator'))return
+                     'disabled'};
                      %>
                      <div class=" form-floating">
                         <select class="form-select" name="order" id="order" aria-label="">
@@ -185,23 +189,23 @@
 
    <div class="toast-container z-index-1000">
 
-      <%- `${ include("./partials/toast.ejs",{ className:"toast-server-info", color:"#007aff", title:"Server's Info",
-         content:"Skin Prices Updated Last Time : "+skinsUpdateInfo,time:" just now" }) }`%>
+      <%- ` ${ include( "./partials/toast.ejs" , { className : "toast-server-info" , color : "#007aff" ,time:"just now",
+         title:"Server Information", content:"Skin Prices Updated Last Time : "+skinsUpdateInfo, }) }`%>
 
 
          <% if(success && success.length){ %>
 
-            <%- `${ include("./partials/toast.ejs",{ className:"toast-success", color:"#198754",
-               title:"Congratulations!", content:success,time:"just now" }) }`%>
+            <%- `${ include(" ./partials/toast.ejs",{ className:"toast-success", color:"#198754",
+         title:"Congratulations!", content:success,time:"just now" }) }`%>
 
-               <% } %>
+         <% } %>
 
-                  <% if(error && error.length){ %>
+            <% if(error && error.length){ %>
 
-                     <%- `${ include(" ./partials/toast.ejs",{ className:"toast-danger", color:"#dc3545", title:"Error",
-                        content:error,time:"just now" }) }`%>
+               <%- `${ include(" ./partials/toast.ejs",{ className:"toast-danger", color:"#dc3545", title:"Error",
+                  content:error,time:"just now" }) }`%>
 
-                        <% } %>
+                  <% } %>
    </div>
 
 

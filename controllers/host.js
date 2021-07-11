@@ -12,7 +12,6 @@ module.exports.renderHome = async (req, res) => {
 }
 
 module.exports.renderMain = async (req, res, next) => {
-   // console.log(req.user)
    const researchesName = await Name.find({});
    const { skinsUpdateInfo } = await ServerInfo.findOne({});
 
@@ -20,3 +19,7 @@ module.exports.renderMain = async (req, res, next) => {
 
    res.render('main', { researchesName, skinsUpdateInfo });
 };
+
+module.exports.renderManagment = async (req, res) => {
+   res.render('managment')
+}
