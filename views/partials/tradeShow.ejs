@@ -177,9 +177,29 @@
 
 
 
+<div class="toast-container z-index-1000">
 
 
-<script src="/javascripts/bootstrapJs/bs-custom-file-input.min.js"></script>
+
+
+   <% if(success && success.length){ %>
+
+      <%- include( './toast.ejs' , { className:'toast-success', color:'#198754', title:'Congratulations!',
+         content:success,time:'just now' }) %>
+
+         <% } %>
+
+            <% if(error && error.length){ %>
+
+               <%- include('./toast.ejs',{ className:'toast-danger', color:'#dc3545', title:'Error',
+                  content:error,time:'just now' }) %>
+
+                  <% } %>
+</div>
+
+
+<script src=" /javascripts/bootstrapJs/bs-custom-file-input.min.js">
+</script>
 <script src="/javascripts/bootstrapJs/validateForms.js"></script>
 
 <script src="/javascripts/tradeShow/recheckingTrade.js"></script>

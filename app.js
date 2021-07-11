@@ -173,17 +173,6 @@ passport.use('steam', new SteamStrategy({
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 app.use(async (req, res, next) => {
    res.locals.server = server;
    res.locals.currentUser = req.user;

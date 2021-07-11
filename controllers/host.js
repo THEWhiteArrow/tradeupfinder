@@ -4,11 +4,11 @@ const Highlight = require('../models/highlightModel');
 const Name = require('../models/nameModel');
 const ServerInfo = require('../models/serverInfoModel');
 
-module.exports.renderHome = async (req, res) => {
+module.exports.renderExplore = async (req, res) => {
    const highlights = await Highlight.find({}).populate('orginalTrade');
 
 
-   res.render('home', { highlights });
+   res.render('explore', { highlights });
 }
 
 module.exports.renderMain = async (req, res, next) => {

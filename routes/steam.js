@@ -20,7 +20,7 @@ router.route('/logout')
 
 
 router.route('/steam')
-   .get(passport.authenticate('steam', { failureFlash: true, failureRedirect: '/skins' }), steam.callbackError)
+   .get(passport.authenticate('steam', { failureFlash: true, failureRedirect: '/' }), steam.callbackError)
 
 
 
@@ -30,7 +30,7 @@ router.route('/steam')
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 router.route('/steam/return')
-   .get((req, res, next) => { req.url = req.originalUrl; next(); }, passport.authenticate('steam', { failureRedirect: '/skins' }), steam.returnToSite)
+   .get((req, res, next) => { req.url = req.originalUrl; next(); }, passport.authenticate('steam', { failureRedirect: '/' }), steam.returnToSite)
 
 
 module.exports = router;

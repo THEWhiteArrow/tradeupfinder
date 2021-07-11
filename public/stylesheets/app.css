@@ -429,6 +429,22 @@ nav#settings select{
    background-size: contain;
 }
 
+/* ################################## TOASTS ################################# */
+
+.toast-container{
+   position: fixed;
+   top:min(100px,40%);
+   right: 10px;
+}
+
+ 
+ 
+
+
+
+
+
+
 /* #####################################     FLEX     ###################################### */
 
 .flex-1{flex:1;}

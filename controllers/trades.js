@@ -14,11 +14,24 @@ const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 
 module.exports.renderTrades = async (req, res) => {
-   let { action = 'nothing', researchName = 'noname', pairs = 2, sort = 'returnPercentage', order = 'descending' } = req.query;
+   let { action = 'nothing', researchName = 'noname', pairs = 2, sort = 'returnPercentage', order = 'descending', q = null } = req.query;
    if (action != 'nothing' && action != 'save' && action != 'display') {
       action = 'nothing';
    }
    console.log(req.query)
+
+
+
+
+   if (q == 'random') {
+      const trades = await Trade.aggregate([{ $sample: { size: 1 } }])
+      console.log(trades)
+
+      req.flash('success', 'Enjoy your lucky trade!')
+      return res.redirect(`/trades/${trades[0]._id}`);
+   }
+
+
 
    if (action == 'display') {
 
@@ -53,7 +66,7 @@ module.exports.renderTrades = async (req, res) => {
             })
 
             req.flash('success', 'New Trades are being cooked for you! ESTIMATED TIME : 3 minutes')
-            res.redirect('/main')
+            res.redirect('/')
          } else {
 
 
@@ -65,7 +78,7 @@ module.exports.renderTrades = async (req, res) => {
 
       } else if (pairs == 3) {
          req.flash('error', `Portójne wyszukiwanie obecnie niedostępne! Braki w zasobach ludzkich!`);
-         res.redirect('/skins')
+         res.redirect('/')
       }
    }
 }
@@ -207,7 +220,7 @@ module.exports.customSearch = async (req, res) => {
       })
 
       req.flash('success', `New Trades are being cooked for you! ESTIMATED TIME : ${2.5 * arr.length} minutes`)
-      res.redirect('/main')
+      res.redirect('/')
    } else {
 
 
@@ -224,7 +237,7 @@ module.exports.customSearch = async (req, res) => {
       console.log('Researched the whole array successfully!', seconds)
 
       req.flash('success', `The custom search conducted successfully! TIME : ${seconds} seconds`);
-      res.redirect('/main');
+      res.redirect('/');
    }
 }
 
@@ -397,7 +410,7 @@ module.exports.deleteSavedTrades = async (req, res) => {
    await Trade.deleteMany({});
 
    req.flash('success', 'Successfully deleted all trades');
-   res.redirect('/main');
+   res.redirect('/');
 }
 
 

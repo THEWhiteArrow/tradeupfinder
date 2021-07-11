@@ -7,14 +7,14 @@ module.exports.showAccount = async (req, res) => {
 }
 module.exports.logoutFromSteam = async (req, res) => {
    req.logout();
-   res.redirect('/main');
+   res.redirect('/');
 }
 
 module.exports.returnToSite = async (req, res) => {
 
    sleep(2000); //xd
    req.flash('success', `Welcome on the board ${req.user.username}! Explore the opportunities and do not hesitate to seize them!`);
-   res.redirect('/main');
+   res.redirect('/');
 }
 
 module.exports.desanitizeQuery = async (req, res, next) => {

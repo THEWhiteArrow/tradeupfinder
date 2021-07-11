@@ -142,25 +142,26 @@ module.exports.isFavouriteTradeAuthorized = async (req, res, next) => {
 }
 
 module.exports.isResearchAllowed = async (req, res, next) => {
-   const { action } = req.query;
+   const { action, q } = req.query;
+
+   if (action === 'display' || q == 'random') return next();
 
    if (action !== 'display' && action !== 'nothing' && action !== 'save') {
       req.flash('error', 'Incorrect type of action')
-      return res.redirect('/main')
+      return res.redirect('/')
    }
 
-   if (action === 'display') return next();
 
    if (action === 'nothing' || action === 'save') {
       if (!req.isAuthenticated()) {
          req.session.returnTo = req.originalUrl;
          req.flash('error', 'You do not have a permission to do that');
-         return res.redirect('/main')
+         return res.redirect('/')
       } else {
          const { role } = req.user;
          if (role !== 'admin') {
             req.flash('error', 'You do not have a permission to do that!')
-            return res.redirect(`/main`);
+            return res.redirect(`/`);
          } else {
             return next();
          }

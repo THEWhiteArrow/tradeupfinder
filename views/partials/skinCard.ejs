@@ -4,24 +4,24 @@
 
 
    <% if(type=='output-skin' ){ %>
-      <div class="skin-card-float">
+      <div class="skin-card-float border border-1">
          <%= float %>
       </div>
       <span class="targetedSkinsArr-amount d-none">
          <%= amount %>
       </span>
       <% } else if( type=='alternate-skin-checkbox' ){%>
-         <div class="skin-card-float">
+         <div class="skin-card-float border border-1">
             <%= float %>
          </div>
          <span class="alternateSkin-amount d-none">
             <%= amount %>
          </span>
          <% }else if(type=='input-skin' ){ %>
-            <div class="skin-card-float float-input-skin">
+            <div class="skin-card-float border border-1 float-input-skin">
                <%= float %>
             </div>
-            <div class="skin-card-number">
+            <div class="skin-card-number border border-1">
                x<%= amount %>
             </div>
             <% } %>
