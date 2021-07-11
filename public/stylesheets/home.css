@@ -14,14 +14,14 @@ header a{
    position: relative;
    display: flex;
    text-transform: uppercase;
-   color:rgb(16, 47, 94);
+   color:var(--main);
    background-color: rgba(255, 255, 255, 0.5);
    border:2px solid rgb(0, 14, 36);   
    transition: 0.10s ease-in-out;
 }
 
 .grid-container a:hover{
-   background-color: rgb(16, 47, 94);
+   background-color: var(--main);
    /* color: var(--bone); */
    color: white;
    transition: 0.25s ease-in-out;

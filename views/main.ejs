@@ -1,448 +1,208 @@
 <% layout('layouts/boilerplate')%>
+   <link rel="stylesheet" href="/stylesheets/main.css">
 
 
 
-
-
-   <header class="container pt-3 pb-1">
-      <div class="d-flex justify-content-between">
-         <h1 class="d-flex my-4 display-1">Kontrakciarze</h1>
-         <div class="csgo-logo mb-3"></div>
-      </div>
-      <div class="d-flex justify-content-evenly flex-wrap">
-
-         <% if(!currentUser){ %>
-
-            <a href="/user/login" class="btn btn-danger text-white mt-2 col-12 col-lg-3">Login</a>
-            <a href="/user/register" class="btn btn-success text-white mt-2 col-12 col-lg-3">Register</a>
-            <% }else{ %>
-               <a href="/user/logout" class="btn btn-success text-white mt-2 col-12 col-lg-3">Logout</a>
-               <a href="/favourites" class="btn btn-danger text-white mt-2 col-12 col-lg-3">Zobacz
-                  ulubione</a>
-               <% } %>
-                  <a href="/map/map-collection" class="btn btn-info text-white mt-2 col-12 col-lg-3">Zmapuj
-                     kolekcje</a>
-                  <a href="/skins/database" class="btn btn-primary text-white mt-2 col-12 col-lg-3">Skins
-                     Database</a>
-      </div>
-
-
-
-      <% if(success && success.length){ %>
-         <div class="lead alert alert-success alert-dismissible fade show my-3" role="alert">
-            <h4 class="alert-heading">Congratulations!</h4>
-            <hr>
-            <p>
-               <%= success %>
-            </p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-         </div>
-         <% } %>
-
-            <% if(error && error.length){ %>
-               <div class="lead alert alert-danger alert-dismissible fade show my-3" role="alert">
-                  <h4 class="alert-heading">Error!</h4>
-                  <hr>
-                  <p>
-                     <%= error %>
-                  </p>
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-               </div>
-               <% } %>
-
-
-
-                  <% if(currentUser && currentUser.role==='moderator' ){ %>
-                     <div class="lead alert alert-success alert-dismissible fade show mt-5" role="alert">
-                        <h4 class="alert-heading">
-                           <div>Congratulations!</div>
-                           <div> You have been given a role of moderator that allows
-                              you to acces more routes and options. Feel free to explore the deepness of the
-                              application
-                              und discover yet uknown.
-                           </div>
-                           <div>Remember to be responsive, tho!!!</div>
-                        </h4>
-                        <hr>
-                        <p>
-                           <strong>
-                              <%= currentUser.username %>
-                           </strong>
-                           <span>
-                              you are in moderator mode.
-                           </span>
-                        </p>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                     </div>
-                     <% } %>
-
-                        <div class="lead alert alert-info alert-dismissible fade show my-3" role="alert">
-                           <h4 class="alert-heading">Ostatni raz updatowane ceny skinów</h4>
-                           <hr>
-                           <p>
-                              <%= skinsUpdateInfo %>
-                           </p>
-                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-
-                        <% if(currentUser && (currentUser.role==='moderator' || currentUser.role==='admin' )){ %>
-                           <div class="row my-4">
-                              <form class="d-flex flex-column mt-2 col-12" action="/skins/update-thru-servers"
-                                 method="POST">
-                                 <div class="col-12">
-                                    <label for="variant">Backpack or Steam API</label>
-                                    <input id="variant" class="form-control my-1" type="text" name="variant"
-                                       placeholder="variant - defauly backpack - can be left empty"
-                                       aria-label=".form-control example">
-                                 </div>
-                                 <div class="col-12">
-                                    <label for="stattrak">Does update include Stattraks ?</label>
-                                    <select name="stattrak" id="stattrak" class="form-control mt-1 mb-3">
-                                       <option value="true" selected>Yes</option>
-                                       <option value="false">No</option>
-                                    </select>
-                                 </div>
-                                 <div class="d-flex flex-row flex-wrap justify-content-evenly col-12">
-
-
-                                    <!-- <span class="">
-                                       <label for="server1">Serwer 1</label>
-                                       <input id="server1" class="form-control my-1" type="number" name="server1[start]"
-                                          placeholder="starting point" aria-label=".form-control example" step="1"
-                                          value="1">
-                                       <input class="form-control my-1" type="number" name="server1[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="100">
-                                    </span> -->
-
-                                    <span class="">
-                                       <label for="server2">Serwer 2</label>
-                                       <input id="server2" class="form-control my-1" type="number" name="server2[start]"
-                                          placeholder="starting point" aria-label=".form-control example" step="1"
-                                          value="0">
-                                       <input class="form-control my-1" type="number" name="server2[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="100">
-                                    </span>
-
-                                    <span class="">
-                                       <label for="server3">Serwer 3</label>
-                                       <input id="server3" class="form-control my-1" type="number" name="server3[start]"
-                                          placeholder="starting point" aria-label=".form-control example" step="1"
-                                          value="100">
-                                       <input class="form-control my-1" type="number" name="server3[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="200">
-                                    </span>
-
-                                    <span class="">
-                                       <label for="server4">Serwer 4</label>
-                                       <input id="server4" class="form-control my-1" type="number" name="server4[start]"
-                                          placeholder="starting point" aria-label=".form-control example" step="1"
-                                          value="200">
-                                       <input class="form-control my-1" type="number" name="server4[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="300">
-                                    </span>
-
-                                    <span class="">
-                                       <label for="server5">Serwer 5</label>
-                                       <input id="server5" class="form-control my-1" type="number" name="server5[start]"
-                                          placeholder="starting point" aria-label=".form-control example" step="1"
-                                          value="300">
-                                       <input class="form-control my-1" type="number" name="server5[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="400">
-                                    </span>
-
-                                    <span class="">
-                                       <label for="server6">Serwer 6</label>
-                                       <input id="server6" class="form-control my-1" type="number" name="server6[start]"
-                                          placeholder="starting point" aria-label=".form-control example" step="1"
-                                          value="400">
-                                       <input class="form-control my-1" type="number" name="server6[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="500">
-                                    </span>
-
-                                    <span class="">
-                                       <label for="server7">Serwer 7</label>
-                                       <input id="server7" class="form-control my-1" type="number" name="server7[start]"
-                                          placeholder="starting point" aria-label=".form-control example" step="1"
-                                          value="500">
-                                       <input class="form-control my-1" type="number" name="server7[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="600">
-                                    </span>
-
-                                    <span class="">
-                                       <label for="server8">Serwer 8</label>
-                                       <input id="server8" class="form-control my-1" type="number" name="server8[start]"
-                                          placeholder="starting point" aria-label=".form-control example" step="1"
-                                          value="600">
-                                       <input class="form-control my-1" type="number" name="server8[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="700">
-                                    </span>
-
-                                    <span class="">
-                                       <label for="server9">Serwer 9</label>
-                                       <input id="server9" class="form-control my-1" type="number" name="server9[start]"
-                                          placeholder="starting point" aria-label=".form-control example" step="1"
-                                          value="700">
-                                       <input class="form-control my-1" type="number" name="server9[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="800">
-                                    </span>
-
-                                    <span class="">
-                                       <label for="server10">Serwer 10</label>
-                                       <input id="server10" class="form-control my-1" type="number"
-                                          name="server10[start]" placeholder="starting point"
-                                          aria-label=".form-control example" step="1" value="800">
-                                       <input class="form-control my-1" type="number" name="server10[end]"
-                                          placeholder="end point" aria-label=".form-control example" step="1"
-                                          value="1000">
-                                    </span>
-                                 </div>
-
-                                 <button class="btn btn-danger btn-sm col-12 mt-3">Odśwież ceny używając
-                                    serwerów</button>
-
-                              </form>
-                           </div>
-
-                           <% } %>
-
-
+   <header class="container mt-5 pt-3">
+      <h1 class="display-5">Kontrakciarze</h1>
+      <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error, soluta fugiat possimus
+         consequuntur deleniti ipsam impedit et quas quis obcaecati debitis nesciunt voluptas placeat omnis ea
+         perferendis. Impedit suscipit sapiente, doloremque facere, eveniet cum rerum ipsa a exercitationem esse aliquid
+         voluptate provident ipsam dicta quae dolorum sed deserunt, illum numquam!</p>
    </header>
 
-   <main class="container pb-5">
+   <main class="container my-5">
 
-      <hr role=tournament6>
+      <section class="grid-1">
 
-      <div class="row pt-3 pb-5">
-         <form class="col-12 d-flex flex-column" action="/skins/mixed-algorithm" method="GET">
-            <h3>Algorytm Mieszany</h3>
+         <a href='/' class="jeden">
+            <span class="grid-1-content">Hot Trades</span>
+            <img class="grid-1-content-bg" src="/assets/svgs/other/fire.svg" alt="">
+         </a>
+         <a href='/favourites' class="dwa">
+            <span class="grid-1-content">Favourites</span>
+            <img class="grid-1-content-bg" src="/assets/svgs/other/star-half.svg" alt="">
+         </a>
+         <a href='/guide' class="trzy">
+            <span class="grid-1-content">Guide - First Steps</span>
+            <img class="grid-1-content-bg" src="/assets/svgs/other/info-circle-solid.svg" alt="">
+         </a>
+         <a href='/collaboration' class="cztery">
+            <span class="grid-1-content">Collaboration</span>
+            <img class="grid-1-content-bg" src="/assets/svgs/other/hands-helping-solid.svg" alt="">
+         </a>
+         <a href='/trades?q=random' class="piec">
+            <span class="grid-1-content">Show Me A Random Trade</span>
+            <img class="grid-1-content-bg" src="/assets/svgs/other/dice-solid.svg" alt="">
+         </a>
 
-            <% if(currentUser && currentUser.role==='admin' ){ %>
-               <label class="mt-2" for="pairs">Ilość różnych skinów</label>
-               <select name="pairs" id="pairs" class="form-control">
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-               </select>
+      </section>
 
-               <label class="mt-2" for="ratio">Ratio</label>
-               <select name="ratio" id="ratio" class="form-control">
-                  <option value="5-5">5-5</option>
-                  <option value="4-6" selected>4-6</option>
-                  <option value="3-7">3-7</option>
-                  <option value="2-8">2-8</option>
-                  <option value="1-9">1-9</option>
-                  <option value="4-3-3">4-3-3</option>
-                  <option value="4-4-2">4-4-2</option>
-                  <option value="4-5-1">4-5-1</option>
-               </select>
+      <section class="my-5">
 
-               <label class="mt-2" for="sliceStart">SliceStart</label>
-               <select name="sliceStart" id="sliceStart" class="form-control">
-                  <option value="0" selected>0</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
-                  <option value="13">13</option>
-                  <option value="14">14</option>
-                  <option value="15">15</option>
-                  <option value="16">16</option>
-                  <option value="17">17</option>
-                  <option value="18">18</option>
-                  <option value="19">19</option>
-                  <option value="20">20</option>
-                  <option value="21">21</option>
-                  <option value="22">22</option>
-                  <option value="23">23</option>
-                  <option value="24">24</option>
-                  <option value="25">25</option>
-                  <option value="26">26</option>
-                  <option value="27">27</option>
-                  <option value="28">28</option>
-                  <option value="29">29</option>
-                  <option value="30">30</option>
-                  <option value="31">31</option>
-                  <option value="32">32</option>
-                  <option value="33">33</option>
-                  <option value="34">34</option>
-                  <option value="35">35</option>
-                  <option value="36">36</option>
-                  <option value="37">37</option>
-                  <option value="38">38</option>
-                  <option value="39">39</option>
-                  <option value="40">40</option>
-                  <option value="41">41</option>
-                  <option value="42">42</option>
-                  <option value="43">43</option>
-                  <option value="44">44</option>
-                  <option value="45">45</option>
-                  <option value="46">46</option>
-                  <option value="47">47</option>
-                  <option value="48">48</option>
-                  <option value="49">49</option>
-                  <option value="50">50</option>
-                  <option value="51">51</option>
-                  <option value="52">52</option>
-                  <option value="53">53</option>
-                  <option value="54">54</option>
-               </select>
+         <form class="grid-2" action="/trades" method="GET">
 
-               <label class="mt-2" for="sliceEnd">SliceEnd</label>
-               <select name="sliceEnd" id="sliceEnd" class="form-control">
-                  <option value="66" selected>66</option>
-                  <option value="65">65</option>
-                  <option value="64">64</option>
-                  <option value="54">54</option>
-                  <option value="53">53</option>
-                  <option value="52">52</option>
-                  <option value="51">51</option>
-                  <option value="50">50</option>
-                  <option value="49">49</option>
-                  <option value="48">48</option>
-                  <option value="47">47</option>
-                  <option value="46">46</option>
-                  <option value="45">45</option>
-                  <option value="44">44</option>
-                  <option value="43">43</option>
-                  <option value="42">42</option>
-                  <option value="41">41</option>
-                  <option value="40">40</option>
-                  <option value="39">39</option>
-                  <option value="38">38</option>
-                  <option value="37">37</option>
-                  <option value="36">36</option>
-                  <option value="35">35</option>
-                  <option value="34">34</option>
-                  <option value="33">33</option>
-                  <option value="32">32</option>
-                  <option value="31">31</option>
-                  <option value="30">30</option>
-                  <option value="29">29</option>
-                  <option value="28">28</option>
-                  <option value="27">27</option>
-                  <option value="26">26</option>
-                  <option value="25">25</option>
-                  <option value="24">24</option>
-                  <option value="23">23</option>
-                  <option value="22">22</option>
-                  <option value="21">21</option>
-                  <option value="20">20</option>
-                  <option value="19">19</option>
-                  <option value="18">18</option>
-                  <option value="17">17</option>
-                  <option value="16">16</option>
-                  <option value="15">15</option>
-                  <option value="14">14</option>
-                  <option value="13">13</option>
-                  <option value="12">12</option>
-                  <option value="11">11</option>
-                  <option value="10">10</option>
-                  <option value="9">9</option>
-                  <option value="8">8</option>
-                  <option value="7">7</option>
-                  <option value="6">6</option>
-                  <option value="5">5</option>
-                  <option value="4">4</option>
-                  <option value="3">3</option>
-                  <option value="2">2</option>
-                  <option value="1">1</option>
-                  <option value="0">0</option>
-               </select>
+            <div class="jeden p-4 d-flex flex-column  border border-2 border-success rounded rounded-3">
 
-               <label class="mt-2" for="sort">Sort By</label>
-               <select name="sort" id="sort" class="form-control">
-                  <option value="returnPercentage" selected>Return Percentage</option>
-                  <option value="profitPerTradeUp">Profit Per TradeUp</option>
-                  <option value="inputPrice">Input Price</option>
-               </select>
+               <h3 class="px-1 pb-2  border-bottom">Search Options</h3>
 
-               <label class="mt-2" for="sort">Order By</label>
-               <select name="order" id="order" class="form-control">
-                  <option value="descending" selected>Descending</option>
-                  <option value="ascending">Ascending</option>
-               </select>
+               <div class="grid-3">
+                  <% const disableIfNeeded=()=>
+                     {if(!currentUser||(currentUser.role!='admin'&&currentUser.role!='moderator'))return 'disabled'};
+                     %>
+                     <div class=" form-floating">
+                        <select class="form-select" name="order" id="order" aria-label="">
+                           <option value="descending" selected>Descending</option>
+                           <option value="ascending">Ascending</option>
+                        </select>
+                        <label for="order">Order Type</label>
+                     </div>
 
 
-               <div class="col-12">
-                  <label for="checkStattrak" class="mt-2">Check Stattraks?</label>
-                  <select name="stattrak" id="checkStattrak" class="form-control">
-                     <option value="no" selected>No</option>
-                     <option value="yes">Yes</option>
-                  </select>
+                     <div class=" form-floating">
+                        <select class="form-select" name="sort" id="sort" aria-label="">
+                           <option value="returnPercentage" selected>Profitability</option>
+                           <option value="inputPrice">Cost perTradeUp</option>
+                           <option value="profitPerTradeUp">Avg. Profit per TradeUp</option>
+                           <option value="chances">Chances</option>
+                        </select>
+                        <label for="sort">Sort By</label>
+                     </div>
+
+                     <div class=" form-floating">
+                        <select class="form-select" id="action" name="action" aria-label="">
+                           <option value="display" selected>Display</option>
+
+                           <%if(currentUser&&(currentUser.role=='admin'||currentUser.role=='moderator')){%>
+                              <option value="save">Save</option>
+                              <%}%>
+
+                        </select>
+                        <label for="action">Action Type</label>
+                     </div>
+
+                     <div class=" form-floating">
+                        <select name="ratio" id="ratio" class="form-select" <%=disableIfNeeded() %>>
+                           <option value="5-5">5-5</option>
+                           <option value="4-6" selected>4-6</option>
+                           <option value="3-7">3-7</option>
+                           <option value="2-8">2-8</option>
+                           <option value="1-9">1-9</option>
+                        </select>
+                        <label for="ratio">Ratio Type</label>
+                     </div>
+
+                     <div class=" form-floating">
+                        <select name="checkStattraks" id="checkStattraks" class="form-select" <%=disableIfNeeded() %>
+                           >
+                           <option value="no" selected>No</option>
+                           <option value="yes">Yes</option>
+                        </select>
+                        <label for="checkStattraks">Check Stattraks</label>
+                     </div>
+
+                     <div class=" form-floating">
+                        <input type="text" class="form-control" name="newResearchName" id="newResearchName"
+                           autocomplete="true" <%=disableIfNeeded() %> >
+                        <label for="newResearchName" class="form-label">New Research's Name</label>
+                     </div>
+
+                     <div class=" form-floating">
+                        <input type="number" class="form-control" name="priceCorrection" id="priceCorrection"
+                           autocomplete="true" min="0" step="0.01" value="0" <%=disableIfNeeded() %> >
+                        <label for="priceCorrection">Price Correction</label>
+                     </div>
+                     <div class=" form-floating">
+                        <input type="number" class="form-control" name="minVolume" id="minVolume" autocomplete="true"
+                           min="0" step="1" value="100" <%=disableIfNeeded() %> >
+                        <label for="minVolume">Minimal Volume</label>
+                     </div>
+
+                     <div class=" form-floating">
+                        <select name="pairs" id="pairs" class="form-select" <%=disableIfNeeded() %>>
+                           <option value="2" selected>2</option>
+                           <option value="3">3</option>
+
+                        </select>
+                        <label for="pairs"># of Pairs</label>
+                     </div>
+
+
                </div>
 
-               <% } %>
+            </div>
 
-                  <label class="mt-2" for="action">What to do?</label>
-                  <select name="action" id="action" class="form-control">
-                     <option value="nothing" <% if(server=='local' ){ %> selected <% } %> >Nothing</option>
-                     <option value="save">Save</option>
-                     <option value="display" <% if(server!='local' ){ %> selected <% } %> >Display</option>
-                  </select>
+            <div class="dwa d-flex flex-column p-4 border border-2 border-primary rounded rounded-3">
+               <h3 class="px-1 pb-2   border-bottom">Available Trades</h3>
 
+               <div class="researches">
+                  <% let i=1;for(let research of researchesName){ %>
 
+                     <div class="d-flex flex-row m-1">
 
-                  <div class="new-research col-12 d-flex flex-column mt-1">
-                     <label for="newResearchName">New Research's Name</label>
-                     <input id="newResearchName" name="newResearchName" type="text" class="form-control">
-                     <label for="minVolume">Min Volume</label>
-                     <input id="minVolume" name="minVolume" type="number" class="form-control" value="100">
-                  </div>
+                        <label class="lead form-control flex-1 rounded-0 rounded-start"
+                           for="success-outlined-<%= research.name %>">
+                           <%= research.name %>
+                        </label>
+                        <div class="bg-white">
 
-                  <div class="display-research col-12 d-flex flex-column">
-                     <label class="mt-2" for="researchName">Researches' name</label>
-                     <select name="researchName" id="researchName" class="form-control">
-                        <% for(let research of researchesName){ %>
-                           <option value="<%= research.name %>">
-                              <%= research.name %>
-                           </option>
-                           <% } %>
-                     </select>
-                  </div>
+                           <input type="radio" class="btn-check" name="researchName"
+                              id="success-outlined-<%= research.name %>" value="<%= research.name %>" autocomplete="off"
+                              <% if(i==1){ %>checked <% }i++; %> >
+                              <label class="btn btn-outline-primary rounded-0 rounded-end"
+                                 for="success-outlined-<%= research.name %>">
 
-                  <div class="price-correction col-12 d-flex flex-column mt-1">
-                     <label for="priceCorrection">Price Correction</label>
-                     <input type="number" name="priceCorrection" placeholder="priceCorrection e.q. 0.05" step="0.01"
-                        class="form-control">
-                  </div>
+                                 <svg class="svg-icon-tick" viewBox="0 0 20 20">
+                                    <path fill="white"
+                                       d="M10.219,1.688c-4.471,0-8.094,3.623-8.094,8.094s3.623,8.094,8.094,8.094s8.094-3.623,8.094-8.094S14.689,1.688,10.219,1.688 M10.219,17.022c-3.994,0-7.242-3.247-7.242-7.241c0-3.994,3.248-7.242,7.242-7.242c3.994,0,7.241,3.248,7.241,7.242C17.46,13.775,14.213,17.022,10.219,17.022 M15.099,7.03c-0.167-0.167-0.438-0.167-0.604,0.002L9.062,12.48l-2.269-2.277c-0.166-0.167-0.437-0.167-0.603,0c-0.166,0.166-0.168,0.437-0.002,0.603l2.573,2.578c0.079,0.08,0.188,0.125,0.3,0.125s0.222-0.045,0.303-0.125l5.736-5.751C15.268,7.466,15.265,7.196,15.099,7.03">
+                                    </path>
+                                 </svg>
 
-                  <div class="display-checkStats col-12 d-flex flex-column">
-                     <!-- <label class="mt-2" for="checkStats">Check stats with current prices?</label>
-                     <select name="checkStats" id="checkStats">
-                        <option value="no" selected>No</option>
-                        <option value="yes">Yes</option>
-                     </select> -->
-                  </div>
+                              </label>
+                        </div>
+
+                     </div>
 
 
-                  <button class="btn btn-primary mt-3">Wyszukaj trade'upy!</button>
+                     <% } %>
+               </div>
+            </div>
+
+            <button class="trzy btn btn-success m-0 width-100">Discover Trades</button>
          </form>
-         <% if(currentUser && currentUser.role==='admin' ){ %>
-            <form class="d-flex flex-row justify-content-end" action="/skins/delete-trades?_method=DELETE"
-               method="POST">
+
+         <% if(currentUser && (currentUser.role==='admin' || currentUser.role==='moderator' ) ){ %>
+            <form class="d-flex flex-row justify-content-end" action="/trades/delete?_method=DELETE" method="POST">
                <button class="btn btn-danger">Delete Saved Researches</button>
             </form>
             <% } %>
-      </div>
 
+      </section>
 
    </main>
 
 
-   <script src="/javascripts/main.js"></script>
+
+   <div class="toast-container z-index-1000">
+
+      <%- `${ include("./partials/toast.ejs",{ className:"toast-server-info", color:"#007aff", title:"Server's Info",
+         content:"Skin Prices Updated Last Time : "+skinsUpdateInfo,time:" just now" }) }`%>
+
+
+         <% if(success && success.length){ %>
+
+            <%- `${ include("./partials/toast.ejs",{ className:"toast-success", color:"#198754",
+               title:"Congratulations!", content:success,time:"just now" }) }`%>
+
+               <% } %>
+
+                  <% if(error && error.length){ %>
+
+                     <%- `${ include(" ./partials/toast.ejs",{ className:"toast-danger", color:"#dc3545", title:"Error",
+                        content:error,time:"just now" }) }`%>
+
+                        <% } %>
+   </div>
+
+
+   <script src="/javascripts/bootstrapJs/toasts.js" defer></script>

@@ -25,7 +25,7 @@ const MongoStore = require('connect-mongo')(session);
 const skinRoutes = require('./routes/skins');
 const userRoutes = require('./routes/user');
 const mappingRoutes = require('./routes/mapping');
-const homeRoutes = require('./routes/home');
+const hostRoutes = require('./routes/host');
 const highlightRoutes = require('./routes/highlight');
 const favouriteRoutes = require('./routes/favourite');
 const tradeRoutes = require('./routes/trades');
@@ -121,8 +121,8 @@ passport.deserializeUser(function (obj, done) {
 });
 
 
-passport.use('local', new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
+passport.use('local', new LocalStrategy(User.authenticate()));
 passport.deserializeUser(User.deserializeUser());
 
 
@@ -238,7 +238,7 @@ app.use('/trades', tradeRoutes)
 app.use('/auth', steamRoutes)
 app.use('/currency', currencyRoutes)
 app.use('/server', serverRoutes)
-app.use('/', homeRoutes)
+app.use('/', hostRoutes)
 
 
 

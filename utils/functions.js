@@ -3,6 +3,55 @@ const ExpressError = require('../utils/ExpressError');
 const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
 const User = require('../models/userModel');
 
+
+
+
+
+
+
+module.exports.mergeSort = (a, sortBy, orderBy) => {
+   return _mergeSort(a, sortBy, orderBy)
+}
+
+const _mergeArrays = (a, b, sortBy, orderBy) => {
+   const c = []
+
+   if (orderBy == 'descending') {
+
+      while (a.length && b.length) {
+         c.push(a[0].instance.trade[sortBy] < b[0].instance.trade[sortBy] ? b.shift() : a.shift())
+      }
+
+   } else if (orderBy == 'ascending') {
+
+      while (a.length && b.length) {
+         c.push(a[0].instance.trade[sortBy] > b[0].instance.trade[sortBy] ? b.shift() : a.shift())
+      }
+
+   }
+
+   //if we still have values, let's add them at the end of `c`
+   while (a.length) {
+      c.push(a.shift())
+   }
+   while (b.length) {
+      c.push(b.shift())
+   }
+
+   return c
+}
+
+const _mergeSort = (a, sortBy, orderBy) => {
+   if (a.length < 2) return a
+   const middle = Math.floor(a.length / 2)
+   const a_l = a.slice(0, middle)
+   const a_r = a.slice(middle, a.length)
+   const sorted_l = _mergeSort(a_l, sortBy, orderBy)
+   const sorted_r = _mergeSort(a_r, sortBy, orderBy)
+   return _mergeArrays(sorted_l, sorted_r, sortBy, orderBy)
+}
+
+
 module.exports.uniteCurrency = (obj, currency) => {
    for (let key in obj) {
       obj[key] = Math.round(obj[key] / currency.multiplier * 100) / 100;

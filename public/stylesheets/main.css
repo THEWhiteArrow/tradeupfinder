@@ -1,0 +1,238 @@
+/* ################################## TOASTS ################################# */
+
+.toast-container{
+   position: fixed;
+   bottom:min(50px,40%);
+   left: 10px;
+}
+
+ 
+ 
+/* ################################## GRID-1 ################################# */
+
+.grid-1 {
+   min-height: 420px;
+
+   display: grid; 
+   grid-template-columns: repeat(2, 1fr); 
+   grid-template-rows: repeat(3,1fr); 
+   gap: 7px 7px; 
+   grid-template-areas: 
+     "jeden dwa"
+     "trzy cztery"
+     "piec piec"; 
+}
+
+
+ @media (min-width: 992px) { 
+   .grid-1{ 
+      min-height: 320px;
+      grid-template-columns: repeat(4, 1fr); 
+      grid-template-rows: repeat(2,1fr); 
+      gap: 7px 7px; 
+      grid-template-areas: 
+        "jeden dwa piec piec"
+        "trzy cztery piec piec"; 
+   }
+ }
+
+
+
+ .grid-1 .jeden { grid-area: jeden; }
+ .grid-1 .dwa { grid-area: dwa; }
+ .grid-1 .trzy { grid-area: trzy; }
+ .grid-1 .cztery { grid-area: cztery; }
+ .grid-1 .piec { grid-area: piec; }
+
+ .grid-1 a{
+    position: relative;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: blanchedalmond;
+    border: 2px solid cornsilk;
+    color:rgb(92, 92, 92);
+    font-size: 1.2rem;
+    font-weight: 500;
+
+    text-decoration: none;
+ }
+
+ .grid-1 a:after{
+   content:'';
+   z-index: 100;
+   overflow-y: auto;
+
+   position: absolute;   
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   
+   width: 100%;
+   height:100%;
+   padding: 1rem;
+   
+   text-align: center;
+   font-size: 1rem;
+   background-color: white;
+   
+   opacity: 0;
+   clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%); 
+
+   transition: opacity .15s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+               clip-path .25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.grid-1 a:nth-of-type(1):after{content:'Some of currently the best and the most valuable trade-ups that are on a sale. Better grab them quickly!'}
+.grid-1 a:nth-of-type(2):after{content:'What is valuable for you is valuable for us. Here you can view trade-ups added to your favourite list!'}
+.grid-1 a:nth-of-type(3):after{content:'Feeling a bit overwhelmed? We have prepared a special quide just for you so that you can fulfill your trading potential!'}
+.grid-1 a:nth-of-type(4):after{content:'Thanks to hard work and our commitment we have managed to establish some partnerships. See our partners and learn someting new from them!'}
+.grid-1 a:nth-of-type(5):after{content:'Bored of constantly scrolling down in the search for the most appealing trade-up? Let us randomly pick one just for you! However, be aware that due to the randomness it might be either good or bad.'}
+
+.grid-1 a:hover:after{
+   opacity: 1;
+   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.grid-1-content{
+   z-index: 100;
+}
+
+.grid-1-content-bg{
+   position: absolute;
+   width: 80%;
+   height: 80%;
+
+   margin:auto;
+   opacity: 0.5;
+   
+   z-index: 10;
+}
+
+
+/* ################################## GRID-2 ################################# */
+
+
+.grid-2 {
+   /* min-height: 100px; */
+   width:100%;
+   display: grid; 
+   grid-template-columns: repeat(10, 1fr); 
+   grid-template-rows: repeat(15,1fr); 
+   gap: 7px 7px; 
+   grid-template-areas: 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "dwa dwa dwa dwa dwa dwa dwa dwa dwa dwa" 
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "jeden jeden jeden jeden jeden jeden jeden jeden jeden jeden"
+   "trzy trzy trzy trzy trzy trzy trzy trzy trzy trzy "
+   ;
+
+
+   
+}
+
+
+
+@media (min-width: 992px) { 
+   .grid-2{
+      grid-template-columns: repeat(10, 1fr); 
+      grid-template-rows: repeat(7,1fr); 
+      gap: 0px 7px; 
+      grid-template-areas: 
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "dwa dwa dwa dwa jeden jeden jeden jeden jeden jeden "
+      "trzy trzy trzy trzy trzy trzy trzy trzy trzy trzy "
+      ; 
+   }
+   .grid-2 > .jeden {border-bottom-left-radius: 0 !important;border-bottom-right-radius: 0 !important;}
+   .grid-2 > .dwa {border-bottom-left-radius: 0 !important;border-bottom-right-radius: 0 !important;}
+   .grid-2 > .trzy {border-top-left-radius: 0 !important;border-top-right-radius: 0 !important;}
+ }
+
+
+.grid-2 > .jeden { 
+   grid-area: jeden;  
+   background-color: white;
+   
+}
+
+.grid-2 > .dwa { 
+   grid-area: dwa; 
+   background-color: white;
+}
+
+.grid-2 > .trzy { 
+   grid-area: trzy;  
+}
+
+.svg-icon-tick{
+   width: 20px;
+}
+
+
+.grid-2 label{
+   cursor: pointer;
+}
+
+.grid-2 select {
+   height: 30% !important;
+}
+
+.researches {
+   max-height: 300px;
+   overflow-y: auto;
+}
+
+
+/* ################################## GRID-3 ################################# */
+
+.grid-3 {
+   height:100% !important;
+   display: flex;  
+   flex-direction: row; 
+   flex-wrap: wrap;
+   justify-content: space-evenly;
+   align-items: center;
+
+   /* padding-left: 15px;
+   display: grid; 
+   grid-auto-rows: 1fr; 
+   grid-template-columns: repeat(4, 1fr); 
+   grid-template-rows: 0.9fr 1.1fr repeat(2, 1fr); 
+   gap: 7px 7px; 
+   grid-template-areas: 
+   "jeden dwa trzy siedem"
+   "jeden dwa trzy siedem"
+   "cztery piec szesc siedem"
+   "cztery piec szesc siedem";  */
+ }
+
+ .grid-3 > div { width:30%; margin: 0.55rem 0;}
+ .grid-3 ~ .siedem {flex:1; }
+ 
+ /* .grid-3 > .jeden { grid-area: jeden; margin: auto; width:100%; }
+ .grid-3 > .dwa { grid-area: dwa; margin: auto; width:100%; }
+ .grid-3 > .trzy { grid-area: trzy; margin: auto; width:100%; }
+ .grid-3 > .cztery { grid-area: cztery; margin: auto; width:100%; }
+ .grid-3 > .piec { grid-area: piec; margin: auto; width:100%; }
+ .grid-3 > .szesc { grid-area: szesc; margin: auto; width:100%; }
+ .grid-3 > .siedem { grid-area: siedem;  } */
+ 
+ 

@@ -10,7 +10,7 @@ html {
 
 body {
    min-height: 100vh;
-   height:auto;
+   height:100%;
    display: flex;
    flex-direction: column;
 
@@ -217,7 +217,7 @@ footer{
    align-items: center;   
    
 
-   background-color: rgb(16, 47, 94);
+   background-color: var(--main);
    
 
    min-height:40px;
@@ -241,8 +241,7 @@ nav#navbar{
    justify-content: space-between;
    align-items: center;   
    
-   background-color: rgb(16, 47, 94);
-   border-bottom: 1px solid rgb(0, 27, 68);
+   background-color: var(--main);
    
    padding: 8px 20px;
 }
@@ -400,7 +399,7 @@ nav#settings{
    height:27px !important;
    padding:2px 2px 2px 2px;
 
-   background-color: rgb(0, 25, 78);
+   background-color: var(--second);
 }
 nav#settings select{
    cursor:pointer;
@@ -445,6 +444,7 @@ nav#settings select{
 .flex-11{flex:11;}
 .flex-12{flex:12;}
 
+.z-index-1000{z-index: 1000;}
 .justify-self-start{justify-self: flex-start !important;}
 .justify-self-end{justify-self: flex-end !important;}
 .justify-self-center{justify-self: center !important;}

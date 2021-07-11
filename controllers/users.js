@@ -16,7 +16,7 @@ module.exports.register = async (req, res) => {
             // throw new ExpressError('Error occured during automatic attempt to log you in. Please do it by yourself.', 500);
          } else {
             req.flash('success', 'Właśnie założyłeś nowe konto na Kontrakciarze CS:GO! Witamy nowego kontrakciarza');
-            res.redirect('/skins')
+            res.redirect('/main')
          }
 
       })
@@ -36,7 +36,7 @@ module.exports.login = async (req, res) => {
    console.log(user)
    req.flash('success', `Welcome back ${user.username}! We have been waiting for your comeback and are content to have you here :) `);
    // const redirectUrl = req.session.returnTo || '/skins';
-   const redirectUrl = '/skins';
+   const redirectUrl = '/main';
    delete req.session.returnTo;
    res.redirect(redirectUrl)
 };
@@ -44,5 +44,5 @@ module.exports.login = async (req, res) => {
 module.exports.logout = async (req, res) => {
    await req.logout();
    req.flash('success', 'Goodbye! It was an honour to have you here!')
-   res.redirect('/skins');
+   res.redirect('/main');
 };

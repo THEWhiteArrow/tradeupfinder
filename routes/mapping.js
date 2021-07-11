@@ -3,7 +3,7 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const map = require('../controllers/mapping');
 
-const { isLoggedIn, isAdmin, isModeratorAlso, isPermitted, favouriteTradeAuthorized } = require('../middleware');
+const { isLoggedIn, isAdmin, isModeratorAtLeast, isPermitted, favouriteTradeAuthorized } = require('../middleware');
 
 
 router.route('/map-collection')

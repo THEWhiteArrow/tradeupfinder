@@ -5,12 +5,13 @@ const any = require('../plugins/mongoose/any');
 
 const userSchema = new Schema({
    steam: {
-      id: {
-         type: String,
-      },
-      avatar: {
-         type: String
-      }
+      type: Object,
+      // id: {
+      //    type: String,
+      // },
+      // avatar: {
+      //    type: String
+      // }
    },
    email: {
       type: String,

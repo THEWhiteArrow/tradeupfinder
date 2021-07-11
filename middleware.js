@@ -17,7 +17,7 @@ module.exports.isAdmin = async (req, res, next) => {
    next();
 };
 
-module.exports.isModeratorAlso = async (req, res, next) => {
+module.exports.isModeratorAtLeast = async (req, res, next) => {
    const permissionrole = { admin: true, moderator: true, guest: false };
    res.locals.permissionrole = permissionrole;
    next();
@@ -29,12 +29,12 @@ module.exports.isPermitted = async (req, res, next) => {
       const { role } = req.user;
       if (!res.locals.permissionrole[role]) {
          req.flash('error', 'You do not have a permission to do that!')
-         return res.redirect(`/skins`);
+         return res.redirect(`/main`);
       }
       next();
    } else {
       req.flash('error', 'You are not permitted to do that!')
-      return res.redirect(`/skins`);
+      return res.redirect(`/main`);
 
    }
 };
@@ -146,7 +146,7 @@ module.exports.isResearchAllowed = async (req, res, next) => {
 
    if (action !== 'display' && action !== 'nothing' && action !== 'save') {
       req.flash('error', 'Incorrect type of action')
-      return res.redirect('/skins')
+      return res.redirect('/main')
    }
 
    if (action === 'display') return next();
@@ -155,12 +155,12 @@ module.exports.isResearchAllowed = async (req, res, next) => {
       if (!req.isAuthenticated()) {
          req.session.returnTo = req.originalUrl;
          req.flash('error', 'You do not have a permission to do that');
-         return res.redirect('/skins')
+         return res.redirect('/main')
       } else {
          const { role } = req.user;
          if (role !== 'admin') {
             req.flash('error', 'You do not have a permission to do that!')
-            return res.redirect(`/skins`);
+            return res.redirect(`/main`);
          } else {
             return next();
          }
