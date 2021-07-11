@@ -51,9 +51,7 @@
 
                <div class="grid-3">
                   <% const disableIfNeeded=()=>
-                     {if(!currentUser||(currentUser.role!='admin'&&currentUser.role!='moderator'))return
-                     'disabled'};
-                     %>
+                     {if(!currentUser||(currentUser.role!='admin'&&currentUser.role!='moderator'))return 'disabled'}; %>
                      <div class=" form-floating">
                         <select class="form-select" name="order" id="order" aria-label="">
                            <option value="descending" selected>Descending</option>
@@ -189,24 +187,25 @@
 
    <div class="toast-container z-index-1000">
 
-      <%- ` ${ include( "./partials/toast.ejs" , { className : "toast-server-info" , color : "#007aff" ,time:"just now",
-         title:"Server Information", content:"Skin Prices Updated Last Time : "+skinsUpdateInfo, }) }`%>
+      <%- include( "./partials/toast.ejs" , { className : "toast-server-info" , color : "#007aff" ,time:"just now",
+         title:"Server Information", content:"Skin Prices Updated Last Time : "+skinsUpdateInfo, }) %>
 
 
          <% if(success && success.length){ %>
 
-            <%- `${ include(" ./partials/toast.ejs",{ className:"toast-success", color:"#198754",
-         title:"Congratulations!", content:success,time:"just now" }) }`%>
+            <%-  include( './partials/toast.ejs' , { className:'toast-success', color:'#198754',
+         title:'Congratulations!', content:success,time:'just now' }) %>
 
          <% } %>
 
             <% if(error && error.length){ %>
 
-               <%- `${ include(" ./partials/toast.ejs",{ className:"toast-danger", color:"#dc3545", title:"Error",
-                  content:error,time:"just now" }) }`%>
+               <%-  include('./partials/toast.ejs',{ className:'toast-danger', color:'#dc3545', title:'Error',
+         content:error,time:'just now' }) %>
 
-                  <% } %>
+         <% } %>
    </div>
 
 
-   <script src="/javascripts/bootstrapJs/toasts.js" defer></script>
+   <script src='/javascripts/bootstrapJs/toasts.js' defer>
+   </script>

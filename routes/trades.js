@@ -12,7 +12,7 @@ router.route('/custom-search')
    .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(trade.customSearch));
 
 router.route('/delete')
-   .delete(isLoggedIn, isAdmin, catchAsync(trade.deleteSavedTrades));
+   .delete(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(trade.deleteSavedTrades));
 
 router.route('/update-current')
    .get(isModeratorAtLeast, isPermitted, catchAsync(trade.updateCurrentTradesByOuterServer))

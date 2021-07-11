@@ -403,14 +403,14 @@ module.exports.deleteSavedTrades = async (req, res) => {
 
 
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', newResearchName = 'noname', action = 'nothing', checkStattrak = 'no', minVolume = 100 } = req.query;
+   const { ratio = '4-6', newResearchName = 'noname', action = 'nothing', checkStattraks = 'no', minVolume = 100 } = req.query;
    // CONVERTS PRICE CORRECTION
    let { priceCorrection } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'))
 
    // SETS TYPE OF ALGORITHM - NORMAL AND STATTRAK
    let pricesType, volumesType;
-   switch (checkStattrak) {
+   switch (checkStattraks) {
       case 'no':
          pricesType = 'prices';
          volumesType = 'volumes';

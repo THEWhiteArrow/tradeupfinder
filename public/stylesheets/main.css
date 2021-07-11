@@ -2,8 +2,8 @@
 
 .toast-container{
    position: fixed;
-   bottom:min(50px,40%);
-   left: 10px;
+   top:min(100px,40%);
+   right: 10px;
 }
 
  
@@ -88,7 +88,7 @@
 .grid-1 a:nth-of-type(1):after{content:'Some of currently the best and the most valuable trade-ups that are on a sale. Better grab them quickly!'}
 .grid-1 a:nth-of-type(2):after{content:'What is valuable for you is valuable for us. Here you can view trade-ups added to your favourite list!'}
 .grid-1 a:nth-of-type(3):after{content:'Feeling a bit overwhelmed? We have prepared a special quide just for you so that you can fulfill your trading potential!'}
-.grid-1 a:nth-of-type(4):after{content:'Thanks to hard work and our commitment we have managed to establish some partnerships. See our partners and learn someting new from them!'}
+.grid-1 a:nth-of-type(4):after{content:'Thanks to hard work and our commitment we have managed to establish some partnerships. See them over there!'}
 .grid-1 a:nth-of-type(5):after{content:'Bored of constantly scrolling down in the search for the most appealing trade-up? Let us randomly pick one just for you! However, be aware that due to the randomness it might be either good or bad.'}
 
 .grid-1 a:hover:after{

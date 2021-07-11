@@ -37,7 +37,7 @@ const getResults = (range) => {
    const inputSkins = document.querySelectorAll('input.input-skin')
    const inputSkinsAmount = document.querySelectorAll('div.skin-card-number')
    let inputPrice = Math.abs(inputSkins[0].value) * Math.abs(inputSkinsAmount[0].innerText.replace('x', '')) + Math.abs(inputSkins[1].value) * Math.abs(inputSkinsAmount[1].innerText.replace('x', ''));
-   inputPrice = Math.Math.round(inputPrice * 100) / 100;
+   inputPrice = Math.round(inputPrice * 100) / 100;
 
    const targetedSkinsArrPrices = getNumber(document.querySelectorAll('input.output-skin'), 'value')
 
