@@ -12,17 +12,17 @@
             Prices</a>
          <a href="/trades/custom-search" class="mb-1 px-2 link-light btn btn-danger flex-1">Custom Search</a>
          <a href="/trades/update-current"
-            class="mb-1 btn btn-info d-flex justify-content-center align-items-center">Update
-            Trades</a>
-         <a href="/server/validate"
-            class="mb-1 btn btn-primary d-flex justify-content-center align-items-center">Validate
-            Outer Server's Last Action</a>
-         <a href="/currency/update" class="mb-1 btn btn-warning d-flex justify-content-center align-items-center">Update
-            Currencies</a>
+            class="mb-1 btn btn-info d-flex justify-content-center align-items-center">Update Trades</a>
          <% } %>
 
 
             <% if(currentUser&&currentUser.role=='admin' ){ %>
+               <a href="/server/validate"
+                  class="mb-1 btn btn-primary d-flex justify-content-center align-items-center">Validate
+                  Outer Server's Last Action</a>
+               <a href="/currency/update"
+                  class="mb-1 btn btn-warning d-flex justify-content-center align-items-center">Update
+                  Currencies</a>
                <a href="/map/map-collection" class="mb-1 px-2 btn btn-secondary">Mapping</a>
                <% } %>
 
