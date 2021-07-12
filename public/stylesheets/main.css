@@ -29,11 +29,11 @@
 
 
 
- .grid-1 .jeden { grid-area: jeden;border-radius: 16px; }
- .grid-1 .dwa { grid-area: dwa; border-radius: 16px;}
- .grid-1 .trzy { grid-area: trzy;border-radius: 16px; }
- .grid-1 .cztery { grid-area: cztery; border-radius: 16px;}
- .grid-1 .piec { grid-area: piec; border-radius: 16px;}
+ .grid-1 .jeden { grid-area: jeden;border-radius: 8px; }
+ .grid-1 .dwa { grid-area: dwa; border-radius: 8px;}
+ .grid-1 .trzy { grid-area: trzy;border-radius: 8px; }
+ .grid-1 .cztery { grid-area: cztery; border-radius: 8px;}
+ .grid-1 .piec { grid-area: piec; border-radius: 8px;}
 
  .grid-1 a{
     position: relative;
@@ -45,7 +45,7 @@
 
     background-color: var(--main-grid-a-bg);
     border: 2px solid var(--main-grid-a-border);
-    color:rgb(255, 255, 255);
+    color:var(--main-grid-a-text);
     /* text-shadow: 0 0 1px black; */
     font-size: 1.25rem;
     font-weight: 500;
@@ -55,7 +55,7 @@
 
  .grid-1 a:after{
     content:'';
-    border-radius: 16px;
+    border-radius: 8px;
     z-index: 100;
     overflow-y: auto;
 
@@ -70,6 +70,7 @@
    
    text-align: center;
    font-size: 1rem;
+   color:var(--main-grid-a-text);
    background-color: var(--main-grid-a-after-bg);
    
    opacity: 0;
