@@ -1,6 +1,6 @@
 .trade-tile{
-   background-color: rgb(181, 225, 255);
-   border:2px solid white;
+   background-color: var(--trade-tile-bg);
+   border:2px solid var(--trade-tile-border);
 }
 
 .skin-tile-container{

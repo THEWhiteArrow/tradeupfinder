@@ -1,4 +1,4 @@
-<nav id="settings" class="sticky-top d-flex flex-row justify-content-between">
+<nav id="settings" class="d-flex flex-row justify-content-between">
 
    <span class="nav-settings-item">
       <% const isSelectedCurrency=(code)=>{if(currency.code==code)return 'SELECTED'} %>
@@ -176,13 +176,13 @@
 
 </nav>
 
-<nav id="navbar" class="sticky-top navbar navbar-expand-md navbar-dark nav-gradient">
+<nav id="navbar" class=" navbar navbar-expand-md navbar-dark nav-gradient">
    <div id="menuToggle" class="container-fluid d-flex align-items-center">
       <a class="navbar-brand m-0 p-0" href="/" aria-current="page">Kontrakciarze</a>
 
 
       <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-         aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"> -->
+               aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"> -->
 
       <button class="navbar-toggler border-0 collapsed" type="button" data-bs-toggle="collapse"
          data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
@@ -195,7 +195,7 @@
 
 
       <!-- <span class="navbar-toggler-icon"></span>
-      </button> -->
+            </button> -->
       <div class="navbar-collapse  collapse" id="navbarNavAltMarkup">
 
          <ul class="navbar-nav mt-4 mt-md-0 d-flex justify-content-md-end" id="navbarLinks">
@@ -216,12 +216,12 @@
                      <li class="nav-item"><a href="/user/login" class="ms-0 ms-md-3 me-md-1 px-2 link-light">Login</a>
                      </li>
                      <li class="nav-item"><a href="/user/register"
-                           class="m-0 mt-2 mt-md-0 px-2 py-1 link-light border border-white border-2 rounded width-fit-content">Register</a>
+                           class="m-0 my-2 my-md-0 px-2 py-1 link-light border border-white border-2 rounded width-fit-content">Register</a>
                      </li>
                      <% } else{%>
 
                         <li class="nav-item"><a href="/user/logout"
-                              class="m-0 mt-2 mt-md-0 px-2 py-1 link-light border border-white border-2 rounded ">Logout</a>
+                              class="m-0 my-2 my-md-0 px-2 py-1 link-light border border-white border-2 rounded ">Logout</a>
                         </li>
                         <% } %>
 

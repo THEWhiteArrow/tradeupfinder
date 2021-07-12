@@ -41,11 +41,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
 
-    background-color: blanchedalmond;
-    border: 2px solid cornsilk;
-    color:rgb(92, 92, 92);
-    font-size: 1.2rem;
+    background-color: var(--main-grid-a-bg);
+    border: 2px solid var(--main-grid-a-border);
+    color:rgb(255, 255, 255);
+    /* text-shadow: 0 0 1px black; */
+    font-size: 1.25rem;
     font-weight: 500;
 
     text-decoration: none;
@@ -67,7 +69,7 @@
    
    text-align: center;
    font-size: 1rem;
-   background-color: white;
+   background-color: var(--main-grid-a-after-bg);
    
    opacity: 0;
    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%); 
@@ -97,7 +99,7 @@
    height: 75%;
 
    margin:auto;
-   opacity: 0.35;
+   opacity: 0.25;
    
    z-index: 10;
 }

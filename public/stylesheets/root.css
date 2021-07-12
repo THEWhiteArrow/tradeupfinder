@@ -1,5 +1,37 @@
 :root{
-   --main:rgb(16, 47, 94);
-   --second:rgb(0, 25, 78);
+   /* --main:rgb(16, 47, 94);
+   --second:rgb(0, 25, 78); */
+   /* CSS HEX */
+   --prussian-blue: #012a4a;
+   --indigo-dye: #013a63ff;
+   --indigo-dye-2: #01497cff;
+   --usafa-blue: #014f86ff;
+   --sapphire-blue: #2a6f97ff;
+   --celadon-blue: #2c7da0ff;
+   --blue-green: #468fafff;
+   --maximum-blue: #61a5c2ff;
+   --dark-sky-blue: #89c2d9ff;
+   --light-blue: rgb(179, 214, 226);
+   --azure: #d4eef5;
+   --light-azure: #f0fbff;
 
+
+
+
+
+
+
+   --body-bg:white;
+   --nav-navbar-bg:var(--indigo-dye);
+   --nav-settings-bg:var(--prussian-blue);
+
+   --main-grid-a-bg:var(--dark-sky-blue);
+   --main-grid-a-after-bg:var(--maximum-blue);
+   --main-grid-a-border:var(--maximum-blue);
+
+   --trade-tile-bg:var(--dark-sky-blue);
+   --trade-tile-border:var(--maximum-blue);
+
+   --explore-grid-2-jeden:white;
+   --explore-grid-2-dwa:white;
 }

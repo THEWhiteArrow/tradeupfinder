@@ -13,12 +13,15 @@ body {
    height:100%;
    display: flex;
    flex-direction: column;
- 
-   background-image: url('../assets/background/Circuit\ Board.svg'); 
-   background-size: cover; 
+   flex: 1;
+   background-color: var(--body-bg);
+
 }
 
- 
+ .navbarSpace{ 
+    width: 100% ;
+    padding-top: 61px;
+ }
  
 .crosshair {
 	cursor: crosshair;
@@ -88,7 +91,7 @@ footer{
    align-items: center;   
    
 
-   background-color: var(--main);
+   background-color: var(--indigo-dye);
    
 
    min-height:40px;
@@ -112,9 +115,11 @@ nav#navbar{
    justify-content: space-between;
    align-items: center;   
    
-   background-color: var(--main);
-   
+   background-color: var(--nav-navbar-bg);
    padding: 8px 20px;
+
+  
+   box-shadow: 0px 9px 50px 20px rgba(1,42,74,0.2);
 }
 
 nav#navbar a {
@@ -270,7 +275,7 @@ nav#settings{
    height:27px !important;
    padding:2px 2px 2px 2px;
 
-   background-color: var(--second);
+   background-color: var(--nav-settings-bg);
 }
 nav#settings select{
    cursor:pointer;

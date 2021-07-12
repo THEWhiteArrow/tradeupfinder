@@ -56,13 +56,13 @@
 
 .grid-2 > .jeden { 
    grid-area: jeden;  
-   background-color: white;
+   background-color: var(--explore-grid-2-jeden);
    
 }
 
 .grid-2 > .dwa { 
    grid-area: dwa; 
-   background-color: white;
+   background-color: var(--explore-grid-2-dwa)
 }
 
 .grid-2 > .trzy { 
