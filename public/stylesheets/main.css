@@ -29,11 +29,11 @@
 
 
 
- .grid-1 .jeden { grid-area: jeden; }
- .grid-1 .dwa { grid-area: dwa; }
- .grid-1 .trzy { grid-area: trzy; }
- .grid-1 .cztery { grid-area: cztery; }
- .grid-1 .piec { grid-area: piec; }
+ .grid-1 .jeden { grid-area: jeden;border-radius: 16px; }
+ .grid-1 .dwa { grid-area: dwa; border-radius: 16px;}
+ .grid-1 .trzy { grid-area: trzy;border-radius: 16px; }
+ .grid-1 .cztery { grid-area: cztery; border-radius: 16px;}
+ .grid-1 .piec { grid-area: piec; border-radius: 16px;}
 
  .grid-1 a{
     position: relative;
@@ -54,9 +54,10 @@
  }
 
  .grid-1 a:after{
-   content:'';
-   z-index: 100;
-   overflow-y: auto;
+    content:'';
+    border-radius: 16px;
+    z-index: 100;
+    overflow-y: auto;
 
    position: absolute;   
    display: flex;

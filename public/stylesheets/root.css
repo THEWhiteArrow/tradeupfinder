@@ -1,8 +1,7 @@
 :root{
-   /* --main:rgb(16, 47, 94);
-   --second:rgb(0, 25, 78); */
+ 
    /* CSS HEX */
-   --prussian-blue: #012a4a;
+   /* --prussian-blue: #012a4a;
    --indigo-dye: #013a63ff;
    --indigo-dye-2: #01497cff;
    --usafa-blue: #014f86ff;
@@ -13,24 +12,43 @@
    --dark-sky-blue: #89c2d9ff;
    --light-blue: rgb(179, 214, 226);
    --azure: #d4eef5;
-   --light-azure: #f0fbff;
+   --light-azure: #f0fbff; */
+
+   /* CSS HEX */
+   /* --black: #000000ff;
+   --oxford-blue: #14213dff;
+   --orange-web: #fca311ff;
+   --light-orange-web: rgb(238, 181, 89);
+   --platinum: #eeeeee;
+   --white: #ffffffff; */
+
+   /* CSS HEX */
+   --navy-blue: #03045eff;
+   --dark-cornflower-blue: #023e8aff;
+   --star-command-blue: #0077b6ff;
+   --blue-green: #0096c7ff;
+   --cerulean-crayola: #00b4d8ff;
+   --sky-blue-crayola: #48cae4ff;
+   --sky-blue-crayola-2: #90e0efff;
+   --blizzard-blue: #ade8f4ff;
+   --powder-blue: #caf0f8ff;
+   --powder-white: #e9e9e9;
 
 
 
 
 
 
+   --body-bg:var(--powder-white);
+   --nav-navbar-bg:var(--dark-cornflower-blue);
+   --nav-settings-bg:var(--navy-blue);
 
-   --body-bg:white;
-   --nav-navbar-bg:var(--indigo-dye);
-   --nav-settings-bg:var(--prussian-blue);
+   --main-grid-a-bg:var(--sky-blue-crayola);
+   --main-grid-a-after-bg:var(--blue-green);
+   --main-grid-a-border:var(--dark-cornflower-blue);
 
-   --main-grid-a-bg:var(--dark-sky-blue);
-   --main-grid-a-after-bg:var(--maximum-blue);
-   --main-grid-a-border:var(--maximum-blue);
-
-   --trade-tile-bg:var(--dark-sky-blue);
-   --trade-tile-border:var(--maximum-blue);
+   --trade-tile-bg:var(--sky-blue-crayola);
+   --trade-tile-border:var(--dark-cornflower-blue);
 
    --explore-grid-2-jeden:white;
    --explore-grid-2-dwa:white;
