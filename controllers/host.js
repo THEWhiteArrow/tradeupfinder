@@ -37,31 +37,39 @@ module.exports.sendEmail = async (req, res) => {
    const { body } = req;
    console.log(body)
 
+   if (res.locals.server != 'local') {
 
-   const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      port: 587,
-      auth: {
-         user: process.env.EMAIL_SENDER_NAME,
-         pass: process.env.EMAIL_SENDER_PASSWORD
+
+
+      const transporter = nodemailer.createTransport({
+         service: 'gmail',
+         port: 587,
+         auth: {
+            user: process.env.EMAIL_SENDER_NAME,
+            pass: process.env.EMAIL_SENDER_PASSWORD
+         }
+      });
+
+
+
+      const options = {
+         from: body.email, // sender address
+         to: "damian.trafialek@gmail.com", // list of receivers
+         subject: "An Email From Kontrakciarze.com", // Subject line
+         text: body.text, // plain text body
+         html: `<b>${body.text}</b>`, // html body
+         // replyTo: body.email,
       }
-   });
+      const info = await transporter.sendMail(options);
 
+      console.log("Message sent: %s", info.messageId);
+      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
+      req.flash('success', 'Successfully sent an email!')
+      res.redirect('/')
+   } else {
+      req.flash('error', 'An email was not sent because you are on the local server!')
+      res.redirect('/')
 
-   const options = {
-      from: body.email, // sender address
-      to: "damian.trafialek@gmail.com", // list of receivers
-      subject: "An Email From Kontrakciarze.com", // Subject line
-      text: body.text, // plain text body
-      html: `<b>${body.text}</b>`, // html body
-      // replyTo: body.email,
    }
-   const info = await transporter.sendMail(options);
-
-   console.log("Message sent: %s", info.messageId);
-   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
-   req.flash('success', 'Successfully sent an email!')
-   res.redirect('/')
 }

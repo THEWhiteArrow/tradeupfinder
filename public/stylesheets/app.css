@@ -85,12 +85,12 @@ ul:not(.bullets) {
 
 footer{
    margin-top: 80px;
- 
-   
+   background-color: var(--footer-bg); 
+}
 
-   background-color: var(--footer-bg);
-   
- 
+.bg-footer-feature{
+   background-color: var(--footer-feature-bg); 
+
 }
 
 /* #####################################     NAVBAR     ###################################### */

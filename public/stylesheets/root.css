@@ -47,6 +47,7 @@
 --medium-gray: #828c96;
 --slate-gray: #6c757dff;
 --davys-grey: #495057ff; 
+--light-gunmetal: #363c42;
 --gunmetal: #1e2329;
 --charleston-green: #181a20;
 
@@ -74,4 +75,5 @@
    --explore-h3-color:var(--text-light-white);
    
    --footer-bg:var(--gunmetal); 
+   --footer-feature-bg:var(--light-gunmetal);
 }
