@@ -17,6 +17,13 @@ router.route('/managment')
    .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(host.renderManagment));
 
 
+router.route('/about')
+   .get(catchAsync(host.renderAboutUs));
+
+router.route('/guide')
+   .get(catchAsync(host.renderGuide));
+
+
 
 
 

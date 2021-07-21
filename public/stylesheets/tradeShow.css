@@ -93,6 +93,9 @@
    /* border:1px solid #212529 !important; */
 }
 
+.skin-card-img{ filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.3));}
+
+
 .float-input-skin{
    left:0;
    transform:translate3d(0,-60%,0);

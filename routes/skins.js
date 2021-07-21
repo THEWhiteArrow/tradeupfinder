@@ -7,21 +7,14 @@ const skin = require('../controllers/skins');
 
 
 
-// router.route('/')
-//    .get(catchAsync(skin.showMain));
+
 
 router.route('/database')
-   .get(catchAsync(skin.showSkinsDb));
+   .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(skin.showSkinsDb));
 
 router.route('/database/validate')
    .get(isLoggedIn, isModeratorAtLeast, catchAsync(skin.checkEmptyPrices))
 
-
-// router.route('/trades')
-//    .get(catchAsync(skin.prepareTrades));
-
-// router.route('/mixed-algorithm')
-//    .get(catchAsync(isResearchAllowed), catchAsync(skin.mixedAlgorithm));
 
 
 
@@ -30,7 +23,6 @@ router.route('/update-icons')
 
 router.route('/update')
    .get(catchAsync(skin.updatePrices));
-// .get(isLoggedIn, isAdmin, isPermitted, catchAsync(skin.updatePrices));
 
 router.route('/update/:id')
    .post(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(skin.updateSkinPrice))
@@ -38,7 +30,6 @@ router.route('/update/:id')
 
 
 router.route('/update-thru-servers')
-   // .post(isLoggedIn, isAdmin, isPermitted, catchAsync(skin.useServers));
    .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(skin.useServers));
 
 

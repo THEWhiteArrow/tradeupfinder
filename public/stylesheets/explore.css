@@ -69,6 +69,8 @@
    grid-area: trzy;  
 }
 
+.grid-2 h3{color:var(--explore-h3-color);}
+
 .svg-icon-tick{
    width: 20px;
 }
@@ -88,9 +90,9 @@
 }
 
 
-/* ################################## GRID-3 ################################# */
+/* ################################## research-names-container ################################# */
 
-.grid-3 {
+.research-names-container {
    height:100% !important;
    display: flex;  
    flex-direction: row; 
@@ -111,15 +113,8 @@
    "cztery piec szesc siedem";  */
  }
 
- .grid-3 > div { width:30%; margin: 0.55rem 0;}
- .grid-3 ~ .siedem {flex:1; }
+ .research-names-container > div { width:30%; margin: 0.55rem 0;}
+ .research-names-container ~ .siedem {flex:1; }
  
- /* .grid-3 > .jeden { grid-area: jeden; margin: auto; width:100%; }
- .grid-3 > .dwa { grid-area: dwa; margin: auto; width:100%; }
- .grid-3 > .trzy { grid-area: trzy; margin: auto; width:100%; }
- .grid-3 > .cztery { grid-area: cztery; margin: auto; width:100%; }
- .grid-3 > .piec { grid-area: piec; margin: auto; width:100%; }
- .grid-3 > .szesc { grid-area: szesc; margin: auto; width:100%; }
- .grid-3 > .siedem { grid-area: siedem;  } */
  
  

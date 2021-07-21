@@ -43,7 +43,7 @@
     align-items: center;
     text-align: center;
 
-    background-color: var(--main-grid-a-bg);
+    /* background-color: var(--main-grid-a-bg); */
     border: 2px solid var(--main-grid-a-border);
     color:var(--main-grid-a-text);
     /* text-shadow: 0 0 1px black; */
@@ -71,7 +71,7 @@
    text-align: center;
    font-size: 1rem;
    color:var(--main-grid-a-text);
-   background-color: var(--main-grid-a-after-bg);
+   /* background-color: var(--main-grid-a-after-bg); */
    
    opacity: 0;
    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%); 
@@ -85,6 +85,24 @@
 .grid-1 a:nth-of-type(3):after{content:'Feeling a bit overwhelmed? We have prepared a special quide just for you so that you can fulfill your trading potential!'}
 .grid-1 a:nth-of-type(4):after{content:'Thanks to hard work and our commitment we have managed to establish some partnerships. See them over there!'}
 .grid-1 a:nth-of-type(5):after{content:'Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae vel nesciunt omnis quidem ex voluptate fugit voluptatem a sequi consequuntur.'}
+
+
+.grid-1 a.grey-light_blue:after{
+   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#b0c3d9 0%, #5e98d9 100%);
+}
+.grid-1 a.light_blue-blue:after{
+   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#5e98d9 0%,#4b69ff 100%);
+}
+.grid-1 a.blue-purple:after{
+   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#4b69ff 0%,#8847ff 100%);
+}
+.grid-1 a.purple-pink:after{
+   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#8847ff 0%,#d32ee6 100%);
+}
+.grid-1 a.pink-red:after{
+   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#d32ee6 0%,#eb4b4b 100%);
+}
+
 
 .grid-1 a:hover:after{
    opacity: 1;

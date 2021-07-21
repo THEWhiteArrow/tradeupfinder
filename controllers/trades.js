@@ -25,10 +25,17 @@ module.exports.manageTrades = async (req, res) => {
 
    if (q == 'random') {
       const trades = await Trade.aggregate([{ $sample: { size: 1 } }])
-      console.log(trades)
+      if (trades.length != 0) {
 
-      req.flash('success', 'Enjoy your lucky trade!');
-      return res.redirect(`/trades/${trades[0]._id}`);
+         console.log(trades)
+         req.flash('success', 'Enjoy your lucky trade!');
+         return res.redirect(`/trades/${trades[0]._id}`);
+
+      } else {
+
+         req.flash('error', 'Currently no trades avaible!');
+         return res.redirect(`/explore`);
+      }
    }
 
 
@@ -406,7 +413,7 @@ module.exports.updateCurrentTradesByOuterServer = async (req, res) => {
 
 module.exports.deleteSavedTrades = async (req, res) => {
    await Name.deleteMany({});
-   await Trade.deleteMany({});
+   await Trade.deleteMany({ isHighlighted: false, favourites: [] });
 
    req.flash('success', 'Successfully deleted all trades');
    res.redirect('/explore');

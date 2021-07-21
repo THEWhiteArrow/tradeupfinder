@@ -1,0 +1,128 @@
+<% layout('layouts/boilerplate')%>
+
+   <main class="container d-flex flex-column align-items-start justify-content-center mt-5">
+
+      <section id="about">
+         <h1 class="display-3 mb-4">About us!</h1>
+
+         <p class="lead text-justify">I am an 18-teen years old web-developer who, so far, has been single-handed
+            developing this
+            website as a project and as an unique in its kind platform that makes it possible for YOU to manage
+            trade-ups
+            on your own. You will NOT find here any unreal and fake trade-ups on account of the fact that whatever I do
+            I
+            do it with thoughts that decent people are actually going to try out my website. Motivated by honestly I
+            focus
+            on conveying all the necessary information unchanged and realistic.</p>
+
+         <p class="lead text-justify">
+            I am open to your words of opinion. You can freely suggest some changes and perharps YOU will be the one who
+            is
+            going to push our development in the right dirrections!
+         </p>
+
+         <p class="lead text-justify">
+            All the algorithms that occur on the page has been improved several times so that we are sure we deliver the
+            best possible experiences. Please NOTE that the page is under continous development so if you happen to
+            notice
+            anything that is NOT working properly or is difficult in usage please give me a sign. You can do for
+            instance
+            by emailing me and attaching a screenshot or a description of a problem.
+         </p>
+
+
+
+      </section>
+
+      <section id="collaboration" class="pt-10  w-100">
+
+         <h3 class="title display-5 mb-4">Collaboration!</h3>
+
+         <p class="lead text-justify">
+            Currently we are trying to establish collaborations that would help us gain popularity and more traffic.
+            Down
+            below are going to appear people that we are working with. If you are intrested in a collaboration please
+            give
+            us a notice.
+         </p>
+
+         <div class="mt-4 d-flex flex-row justify-content-center flex-wrap">
+
+            <div class="card mx-3 my-1 rounded-pill overflow-hidden" style="width: 11.5rem;">
+               <a href="#izak">
+                  <img src="/assets/collaboration/izak.jpg" class="card-img-top" alt="...">
+               </a>
+               <div class="card-body">
+                  <h5 class="card-title text-center lead">Izak</h5>
+               </div>
+            </div>
+
+            <div class="card mx-3 my-1 rounded-pill overflow-hidden" style="width: 11.5rem;">
+               <a href="#pasha">
+                  <img src="./assets/collaboration/pasha.jpg" class="card-img-top" alt="...">
+               </a>
+               <div class="card-body">
+                  <h5 class="card-title text-center lead">Pasha</h5>
+               </div>
+            </div>
+
+            <div class="card mx-3 my-1 rounded-pill overflow-hidden" style="width: 11.5rem;">
+               <a href="#jacob">
+                  <img src="./assets/collaboration/jacob.jpg" class="card-img-top" alt="...">
+               </a>
+               <div class="card-body">
+                  <h5 class="card-title text-center lead">Jacob</h5>
+               </div>
+            </div>
+
+         </div>
+
+      </section>
+
+      <form id="contact" class="pt-10 mb-5 pb-5  d-flex flex-column validated-form" method="POST" novalidate="">
+
+         <h3 class="title display-5 my-4">Contact us!</h3>
+         <h5 class="pb-3 lead">In order to start our dialogue we made it easy for YOU to tell us what is on your
+            MIND. You can either write to us directly on our mail <a
+               class="mailto text-dark no-underline border border-dark border-top-0 border-start-0 border-end-0"
+               href="mailto:contact@kontrakciarze.com">contact@kontrakciarze.com</a> or fill a contact form here on the
+            page below.</h5>
+
+         <div class="d-flex flex-column position-relative mb-2">
+            <label for="name" class="form-label paragraph">Name</label>
+            <input id="name" name="name" type="text" class="form-control" required>
+            <div class="invalid-feedback">
+               Please insert your name
+            </div>
+
+         </div>
+
+         <div class="d-flex flex-column position-relative mb-2">
+            <label for="email" class="form-label paragraph">E-mail</label>
+            <div class="input-group has-validation">
+               <span class="input-group-text" id="inputGroupPrepend">@</span>
+               <input type="email" class="form-control" id="email" name="email" aria-describedby="inputGroupPrepend"
+                  required>
+               <div class="invalid-feedback">
+                  Please insert your email
+               </div>
+            </div>
+
+         </div>
+         <div class="d-flex flex-column position-relative mb-2">
+            <label for="text" class="form-label paragraph">Your thoughts</label>
+            <textarea name="text" id="text" class="form-control" required rows="6"></textarea>
+            <div class="invalid-feedback">
+               Please say something
+            </div>
+         </div>
+
+         <button id="submit" class="btn btn-success my-1 text-uppercase" type="submit">Submit</button>
+      </form>
+
+
+
+   </main>
+
+   <script src=" /javascripts/bootstrapJs/bs-custom-file-input.min.js"></script>
+   <script src="/javascripts/bootstrapJs/validateForms.js"></script>

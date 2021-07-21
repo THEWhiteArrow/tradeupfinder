@@ -66,8 +66,7 @@ ul {
 }
  
 
- 
-
+.text-justify{text-align: justify;}
 
 
 .inputPrice {
@@ -91,7 +90,7 @@ footer{
    align-items: center;   
    
 
-   background-color: var(--indigo-dye);
+   background-color: var(--footer-bg);
    
 
    min-height:40px;
@@ -117,8 +116,8 @@ nav#navbar{
    
    background-color: var(--nav-navbar-bg);
    padding: 8px 20px;
-
-  
+   
+   
    box-shadow: 0px 9px 50px 20px rgba(1,42,74,0.2);
 }
 
@@ -129,7 +128,7 @@ nav#navbar a {
    padding-bottom: 10px;
    text-decoration: none;
    /* border-bottom: 2px solid rgb(156, 156, 156); */
-
+   
    transition: color .1s ease-in-out;
 }
 
@@ -140,7 +139,7 @@ nav#navbar li{
 }
 
 nav#navbar li:nth-of-type(2n+1){
-   background-color: rgb(35, 66, 112);
+   background-color: rgba(255, 255, 255, 0.1);
 }
 
 nav#navbar ul.navbar-nav{
@@ -157,10 +156,17 @@ nav#navbar ul.navbar-nav{
       justify-content: center;
    }
 
+   .border-md-log{ 
+      border:2px solid white !important;
+   } 
+   
 }
 
-nav#navbar a.navbar-brand{
 
+
+
+nav#navbar a.navbar-brand{
+   
    margin-top: 0px; 
    margin-bottom: 0px;
    padding-bottom: 0px;
@@ -306,7 +312,6 @@ nav#settings select{
 }
 
 
-
 /* ################################## TOASTS ################################# */
 
 
@@ -318,8 +323,8 @@ nav#settings select{
    right: 10px;
 }
 
- 
- 
+
+
 
 
 
@@ -347,6 +352,7 @@ nav#settings select{
 .justify-self-center{justify-self: center !important;}
 .justify-self-baseline{justify-self: baseline !important;}
 
+.pt-10{padding-top:6rem!important}
 
 /* #####################################    GRADIENS && COLORS     ###################################### */
 
@@ -373,22 +379,22 @@ nav#settings select{
 }
 
 
-.pink-red{
-   background-image: linear-gradient(90deg,#d32ee6 0%,#eb4b4b 100%);
-}
-.purple-pink{
-   background-image: linear-gradient(90deg,#8847ff 0%,#d32ee6 100%);
-}
-.blue-purple{
-   background-image: linear-gradient(90deg,#4b69ff 0%,#8847ff 100%);
+
+.grey-light_blue{
+   background-image: linear-gradient(90deg,#b0c3d9 0%, #5e98d9 100%);
 }
 .light_blue-blue{
    background-image: linear-gradient(90deg,#5e98d9 0%,#4b69ff 100%);
 }
-.grey-light_blue{
-   background-image: linear-gradient(90deg,#b0c3d9 0%, #5e98d9 100%);
+.blue-purple{
+   background-image: linear-gradient(90deg,#4b69ff 0%,#8847ff 100%);
 }
-
+.purple-pink{
+   background-image: linear-gradient(90deg,#8847ff 0%,#d32ee6 100%);
+}
+.pink-red{
+   background-image: linear-gradient(90deg,#d32ee6 0%,#eb4b4b 100%);
+}
 
 
 
@@ -409,7 +415,10 @@ nav#settings select{
    z-index: 1000;
    background-color: rgba(0, 0, 0, 0.6);
    -webkit-box-shadow: inset 0px 0px 15px 5px rgba(0,0,0,0.6); 
-box-shadow: inset 0px 0px 15px 5px rgba(0,0,0,0.6);
+   box-shadow: inset 0px 0px 15px 5px rgba(0,0,0,0.6);
 }
 
-.display-5{font-size:calc(1.425rem + 1.5vw)};
+.display-5{font-size:calc(1.425rem + 1.5vw);}
+ 
+
+

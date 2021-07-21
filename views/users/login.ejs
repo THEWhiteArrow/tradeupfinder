@@ -1,4 +1,5 @@
 <% layout('layouts/boilerplate')%>
+
    <% if(error && error.length){ %>
       <div class="container card lead alert alert-danger alert-dismissible fade show my-3" role="alert">
          <h4 class="alert-heading">Error!</h4>
@@ -9,7 +10,8 @@
          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       <% } %>
-         <div class="container d-flex justify-content-center align-items-center mb-5">
+
+         <div class="container d-flex justify-content-center align-items-center my-5">
             <div class="row col-10 col-md-6 col-xl-4">
                <h1 class="display-3 pb-4">Sign In</h1>
                <div class="card shadow">

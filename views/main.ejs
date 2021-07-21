@@ -9,23 +9,23 @@
 
       <section class="grid-1 mt-5">
 
-         <a href='/trades?q=random' class="jeden">
+         <a href='/trades?q=random' class="jeden grey-light_blue">
             <span class="grid-1-content">Show A Random Trade</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/dice-solid.svg" alt="">
          </a>
-         <a href='/favourites' class="dwa">
+         <a href='/favourites' class="dwa light_blue-blue">
             <span class="grid-1-content">Favourites</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/star-half.svg" alt="">
          </a>
-         <a href='/guide' class="trzy">
+         <a href='/guide' class="trzy blue-purple">
             <span class="grid-1-content">Guide - First Steps</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/info-circle-solid.svg" alt="">
          </a>
-         <a href='/collaboration' class="cztery">
+         <a href='/about#collaboration' class="cztery purple-pink">
             <span class="grid-1-content">Collaboration</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/hands-helping-solid.svg" alt="">
          </a>
-         <a href='/explore' class="piec">
+         <a href='/explore' class="piec pink-red">
             <span class="grid-1-content">Explore Our Engine</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/graph-up.svg" alt="">
          </a>
@@ -34,7 +34,7 @@
 
    </header>
 
-   <main class="container mt-5 pt-5">
+   <main class="container my-5 pt-5">
 
       <section>
          <h1 class="d-flex flex-row display-5">Highlighted Trades&nbsp;
@@ -43,18 +43,20 @@
                <span>Hot</span>
             </span>
          </h1>
-         <ul>
+         <% if (highlights) { %>
+            <ul>
 
-            <% for(let highlightedTrade of highlights){ %>
+               <% for(let highlightedTrade of highlights){ %>
 
-               <% const tradeDetails=highlightedTrade.instance.trade; %>
-                  <%-`
-                     ${include('./partials/tradeTile',{elementName:'li',title:true,trade:highlightedTrade,details:tradeDetails,manageTrade:highlightedTrade.orginalTrade,showPageLink:'/trades/'+highlightedTrade.orginalTrade._id+''})}`%>
+                  <% const tradeDetails=highlightedTrade.instance.trade; %>
+                     <%-`
+                        ${include('./partials/tradeTile',{elementName:'li',title:true,trade:highlightedTrade,details:tradeDetails,manageTrade:highlightedTrade.orginalTrade,showPageLink:'/trades/'+highlightedTrade.orginalTrade._id})}`%>
 
 
-                     <% } %>
+                        <% } %>
 
-         </ul>
+            </ul>
+            <% } %>
       </section>
 
    </main>

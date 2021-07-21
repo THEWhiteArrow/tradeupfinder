@@ -23,3 +23,10 @@ module.exports.renderMain = async (req, res, next) => {
 module.exports.renderManagment = async (req, res) => {
    res.render('managment')
 }
+
+module.exports.renderAboutUs = async (req, res) => {
+   res.render('about')
+}
+module.exports.renderGuide = async (req, res) => {
+   res.render('guide')
+}

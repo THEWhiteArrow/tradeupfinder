@@ -274,7 +274,7 @@ module.exports.useServers = async (req, res) => {
    console.log(stattrak)
 
    const date = new Date();
-   const skinsUpdateInfo = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}  -  ${date.getHours()} : ${date.getMinutes()}`;
+   const skinsUpdateInfo = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}  -  ${date.getHours()} : ${date.getMinutes()}`;
 
 
    await ServerInfo.findOneAndUpdate({}, { outerServerInfo: { valid: true }, skinsUpdateInfo, lastChanged: new Date() }, { new: true });

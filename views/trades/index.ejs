@@ -2,27 +2,24 @@
 
    <link rel="stylesheet" href="/stylesheets/tradeTile.css">
 
-   <header class="container my-5 ">
+   <header class="container my-5 d-flex flex-column">
 
-      <h1 class="display-6 my-2 py-2">Trade'y Algorytmu Mixed</h1>
+      <% let name='currently not avaible' ; %>
+         <% if(profitableTrades.length)name=profitableTrades[0].name %>
+            <h1 class="display-6 my-2 py-2">Trade-ups : <%= name %>
+            </h1>
 
-      <% if(info && info.length){ %>
-         <div class="lead alert alert-success alert-dismissible fade show" role="alert">
-            <h4 class="alert-heading">Well done ;) !</h4>
-            <hr>
-            <p>
-               <%= info %>
+            <p class="lead text-justify">
+               Trade-ups here has been gathered just for YOU. Discover and research the best ones that suits you the
+               most. To
+               see a certain trade-up just click "View Trade-up"
             </p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-         </div>
-         <% } %>
 
-            <span class="links">
-               <a class="btn btn-primary mt-2" href="/">View Main Page</a>
-               <!-- <a class="btn btn-primary mt-2"
-                  href="<%= url.replace('action=save','action=nothing').replace('action=display','action=nothing') %>">
-                  Szukaj od nowa</a> -->
-            </span>
+
+
+            <a class="btn btn-dark mt-2 d-flex align-self-end" href="/">View Main Page</a>
+
+
    </header>
 
 
