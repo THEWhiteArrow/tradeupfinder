@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const flash = require('connect-flash');
 
 const maxShownSkins = 200;
 const Highlight = require('../models/highlightModel');
@@ -38,13 +39,15 @@ module.exports.sendEmail = async (req, res) => {
 
 
    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
+      host: 'smtp.ethereal.email',
       port: 587,
       auth: {
          user: process.env.EMAIL_SENDER_NAME,
          pass: process.env.EMAIL_SENDER_PASSWORD
       }
    });
+
+
 
    const options = {
       from: body.email, // sender address
@@ -59,5 +62,6 @@ module.exports.sendEmail = async (req, res) => {
    console.log("Message sent: %s", info.messageId);
    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
-   res.redirect('/about')
+   req.flash('success', 'Successfully sent an email!')
+   res.redirect('/')
 }
