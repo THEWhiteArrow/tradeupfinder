@@ -1,0 +1,36 @@
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+   aria-labelledby="staticBackdropLabel" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content px-2">
+         <div class="modal-header">
+            <h5 class="modal-title display-6" id="staticBackdropLabel">We value your privacy</h5>
+            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+         </div>
+         <div class="modal-body">
+            <h5>Our policy</h5>
+            <p class="lead">We ONLY use cookies that are connected to your account and session. There're NO THIRD
+               PARTIES cookies that would hurt you browser. It's all user-friendly! Congratulations!</p>
+         </div>
+         <form action="/server/cookies" method="POST" id="cookies-form" class="modal-footer">
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Accept and close</button>
+         </form>
+      </div>
+   </div>
+</div>
+
+
+
+<script>
+   const myModal = new bootstrap.Modal(document.getElementById("staticBackdrop"), {});
+   document.onreadystatechange = function () {
+      myModal.show();
+   };
+
+   const cookieForm = document.querySelector('#cookies-form');
+   cookieForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cookieResponse = await fetch(cookieForm.getAttribute('action'), { method: 'POST' });
+      console.log(await cookieResponse.json())
+   })
+</script>

@@ -62,12 +62,13 @@ module.exports.uniteCurrency = (obj, currency) => {
 module.exports.createNewSteamUser = async (profile) => {
    const steam = {
       id: profile.id,
-      avatar: profile.photos[2].value || null
+      avatar: profile.photos[2].value || null,
    }
 
 
    const newUser = new User({
       steam,
+      premium: true,
       role: 'guest',
       favourites: [],
       email: profile.identifier,

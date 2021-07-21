@@ -1,30 +1,73 @@
 <% layout('layouts/boilerplate')%>
 
-   <section class="container d-flex flex-column my-5 py-5">
+   <section class="container d-flex flex-column my-5  ">
 
-      <% if (currentUser&& (currentUser.role=='moderator' || currentUser.role=='admin' ) ) { %>
+      <h1 class="display-3 mb-5">Manage Your Account</h1>
+
+      <% if (currentUser) { %>
+
+         <% if (currentUser.steam) { %>
+            <h3 class="fs-3">Avatar : <img src="<%= currentUser.steam.avatar %>" width="35px" alt="Your steam avatar">
+            </h3>
+            <% } %>
+               <h3 class="fs-3">Username : <span class="fw-light">
+                     <%= currentUser.username %>
+                  </span>
+               </h3>
+               <h3 class="fs-3">Role : <span class="fw-light">
+                     <%= currentUser.role %>
+                  </span>
+               </h3>
+               <h3 class="fs-3">Email or steam identificator : <span class="fw-light">
+                     <%= currentUser.email %>
+                  </span>
+               </h3>
+               <% if (currentUser.favourites) { %>
+
+                  <h3 class="fs-3">Favourite Trade-Ups' ids :
+
+                     <ul class="fw-light bullets ps-5">
+                        <% for(let favouriteId of currentUser.favourites) {%>
+                           <li>
+                              <%= favouriteId%>
+                           </li>
+                           <% } %>
+                     </ul>
+                  </h3>
+                  <% } %>
 
 
-         <form class="" action="/trades/delete?_method=DELETE" method="POST">
-            <button class="mb-1 btn btn-danger w-100">Delete Saved Trades</button>
-         </form>
-         <a href="/skins/update-thru-servers" class="mb-1 px-2 link-light btn btn-success flex-1">Update Skins'
-            Prices</a>
-         <a href="/trades/custom-search" class="mb-1 px-2 link-light btn btn-danger flex-1">Custom Search</a>
-         <a href="/trades/update-current"
-            class="mb-1 btn btn-info d-flex justify-content-center align-items-center">Update Trades</a>
-         <% } %>
+                     <% } %>
 
 
-            <% if(currentUser&&currentUser.role=='admin' ){ %>
-               <a href="/server/validate"
-                  class="mb-1 btn btn-primary d-flex justify-content-center align-items-center">Validate
-                  Outer Server's Last Action</a>
-               <a href="/currency/update"
-                  class="mb-1 btn btn-warning d-flex justify-content-center align-items-center">Update
-                  Currencies</a>
-               <a href="/map/map-collection" class="mb-1 px-2 btn btn-secondary">Mapping</a>
-               <% } %>
 
-                  <a href="/" class="btn btn-dark my-3">View Main Page</a>
+                        <% if (currentUser&& (currentUser.role=='moderator' || currentUser.role=='admin' ) ) { %>
+
+
+                           <form class="" action="/trades/delete?_method=DELETE" method="POST">
+                              <button class="mb-1 btn btn-danger w-100">Delete Saved Trades</button>
+                           </form>
+                           <a href="/skins/update-thru-servers"
+                              class="mb-1 px-2 link-light btn btn-success flex-1">Update
+                              Skins'
+                              Prices</a>
+                           <a href="/trades/custom-search" class="mb-1 px-2 link-light btn btn-danger flex-1">Custom
+                              Search</a>
+                           <a href="/trades/update-current"
+                              class="mb-1 btn btn-info d-flex justify-content-center align-items-center">Update
+                              Trades</a>
+                           <% } %>
+
+
+                              <% if(currentUser&&currentUser.role=='admin' ){ %>
+                                 <a href="/server/validate"
+                                    class="mb-1 btn btn-primary d-flex justify-content-center align-items-center">Validate
+                                    Outer Server's Last Action</a>
+                                 <a href="/currency/update"
+                                    class="mb-1 btn btn-warning d-flex justify-content-center align-items-center">Update
+                                    Currencies</a>
+                                 <a href="/map/map-collection" class="mb-1 px-2 btn btn-secondary">Mapping</a>
+                                 <% } %>
+
+                                    <a href="/" class="btn btn-dark my-3">View Main Page</a>
    </section>

@@ -6,7 +6,16 @@
 
       <% let name='currently not avaible' ; %>
          <% if(profitableTrades.length)name=profitableTrades[0].name %>
-            <h1 class="display-6 my-2 py-2">Trade-ups : <%= name %>
+
+            <div class="d-flex flex-row justify-content-between align-items-center">
+
+               <h1 class="display-6 my-2 py-2">Trade-Ups : <%= name %>
+               </h1>
+               <a class="btn btn-dark mt-2 d-flex" href="/">View Main Page</a>
+
+            </div>
+
+            <h1 class="display-6 my-2 py-2">
             </h1>
 
             <p class="lead text-justify">
@@ -15,9 +24,6 @@
                see a certain trade-up just click "View Trade-up"
             </p>
 
-
-
-            <a class="btn btn-dark mt-2 d-flex align-self-end" href="/">View Main Page</a>
 
 
    </header>

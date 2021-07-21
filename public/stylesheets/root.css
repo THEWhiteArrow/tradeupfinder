@@ -39,7 +39,9 @@
    /* CSS HEX */
 --cultured: #f8f9faff;
 --cultured-2: #e9ecefff;
---gainsboro: #dee2e6ff;
+--gainsboro: #dbe5ff;
+/* --gainsboro: #dee2e6ff; */
+
 --light-gray: #ced4daff;
 --cadet-blue-crayola: #adb5bdff;
 --medium-gray: #828c96;

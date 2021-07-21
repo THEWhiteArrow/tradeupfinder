@@ -86,7 +86,7 @@ const sessionConfig = {
       // secure: true,
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
       maxAge: 1000 * 60 * 60 * 24 * 7
-   }
+   },
 }
 app.use(session(sessionConfig));
 app.use(flash());
@@ -180,13 +180,14 @@ app.use(async (req, res, next) => {
    res.locals.info = req.flash('info');
    res.locals.success = req.flash('success');
    res.locals.error = req.flash('error');
+   res.locals.cookiesAcceptance = req.session.cookiesAcceptance;
 
    // SETTING CURRENCY
    if (req.session.currency == undefined) {
       req.session.currency = { code: 'PLN', symbol: 'zł', multiplier: 1 };
    }
+
    res.locals.currency = req.session.currency;
-   // console.log(res.locals.currency)
 
    // CHECKING UPDATES IN CURRENT USER EXCEPT OF LOGGING IN AND OUT!!!
    const exceptions = ['/auth', '/auth/steam', '/auth/steam/return', '/user/register', '/user/login', '/user/logout'];

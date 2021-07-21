@@ -8,7 +8,7 @@ module.exports.register = async (req, res) => {
    try {
       const { username, email, password } = req.body;
       const role = 'guest';
-      const user = new User({ email, username, role, steam: null });
+      const user = new User({ email, username, role, steam: null, premium: true });
       const registeredUser = await User.register(user, password);
       req.login(registeredUser, err => {
          if (err) {

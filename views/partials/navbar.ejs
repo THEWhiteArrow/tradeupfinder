@@ -163,11 +163,12 @@
    </span>
 
    <span class="nav-settings-item">
-      <select name="theme-mode" id="theme-mode" class="form-select width-fit-content nav-settings-item">
+      <!-- SELECTING THEMS WILL BE POSSIBLY DEVELOPED LATER ON -->
+      <!-- <select name="theme-mode" id="theme-mode" class="form-select width-fit-content nav-settings-item">
          <option value="dark">Dark Mode</option>
          <option value="light">Light Mode</option>
          <option value="random">Random Theme</option>
-      </select>
+      </select> -->
       <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' ) ){ %>
          <a href="/managment" class="managment ms-2">
             <img src="/assets/svgs/other/gear-fill.svg" alt="Managment" class="icons"></a>

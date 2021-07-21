@@ -14,7 +14,7 @@ router.route('/explore')
 
 
 router.route('/managment')
-   .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(host.renderManagment));
+   .get(isLoggedIn, catchAsync(host.renderManagment));
 
 
 router.route('/about')
