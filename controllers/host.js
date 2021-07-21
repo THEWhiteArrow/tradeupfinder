@@ -1,5 +1,6 @@
-const maxShownSkins = 200;
+const nodemailer = require("nodemailer");
 
+const maxShownSkins = 200;
 const Highlight = require('../models/highlightModel');
 const Name = require('../models/nameModel');
 const ServerInfo = require('../models/serverInfoModel');
@@ -29,4 +30,34 @@ module.exports.renderAboutUs = async (req, res) => {
 }
 module.exports.renderGuide = async (req, res) => {
    res.render('guide')
+}
+
+module.exports.sendEmail = async (req, res) => {
+   const { body } = req;
+   console.log(body)
+
+
+   const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      auth: {
+         user: process.env.EMAIL_SENDER_NAME,
+         pass: process.env.EMAIL_SENDER_PASSWORD
+      }
+   });
+
+   const options = {
+      from: body.email, // sender address
+      to: "damian.trafialek@gmail.com", // list of receivers
+      subject: "An Email From Kontrakciarze.com", // Subject line
+      text: body.text, // plain text body
+      html: `<b>${body.text}</b>`, // html body
+      // replyTo: body.email,
+   }
+   const info = await transporter.sendMail(options);
+
+   console.log("Message sent: %s", info.messageId);
+   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+   res.redirect('/about')
 }

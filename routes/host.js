@@ -18,7 +18,8 @@ router.route('/managment')
 
 
 router.route('/about')
-   .get(catchAsync(host.renderAboutUs));
+   .get(catchAsync(host.renderAboutUs))
+   .post(catchAsync(host.sendEmail));
 
 router.route('/guide')
    .get(catchAsync(host.renderGuide));
