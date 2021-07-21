@@ -56,14 +56,14 @@ body {
 
  
  
-li {
+ul:not(.bullets) {
    list-style-type: none;
+   padding: 0;
 }
 
  
-ul {
-   padding: 0;
-}
+ 
+ 
  
 
 .text-justify{text-align: justify;}
@@ -326,12 +326,11 @@ nav#settings select{
 
 
 
+ 
 
 
 
-
-
-/* #####################################     FLEX     ###################################### */
+/* #####################################     FLEX & BOOTSTRAP PATCHES     ###################################### */
 
 .flex-1{flex:1;}
 .flex-2{flex:2;}
@@ -352,7 +351,9 @@ nav#settings select{
 .justify-self-center{justify-self: center !important;}
 .justify-self-baseline{justify-self: baseline !important;}
 
-.pt-10{padding-top:6rem!important}
+
+.pt-10{padding-top:6rem! important;}
+.mx-auto{margin-left: auto !important;margin-right: auto !important;}
 
 /* #####################################    GRADIENS && COLORS     ###################################### */
 

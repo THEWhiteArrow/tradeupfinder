@@ -14,30 +14,33 @@
 </head>
 
 <body>
-   <%- include('../partials/navbar')%>
-      <div class="navbarSpace d-none"></div>
 
-      <%- body %>
-
-
-         <%- include('../partials/footer')%>
+   <%- include('../partials/cookiesInfo')%>
+      <%- include('../partials/navbar')%>
+         <div class="navbarSpace d-none"></div>
 
 
-            <script src="/javascripts/axios.min.js"></script>
-            <script src="/javascripts/popper.min.js"></script>
-            <script src="/javascripts/bootstrap.min.js"></script>
-            <script src="/javascripts/bootstrapJs/popovers.js"></script>
+         <%- body %>
 
-            <script src='/javascripts/bootstrapJs/toasts.js'></script>
-            <script src="/javascripts/navbar/navbar.js"></script>
 
-            <script>
-               const addStyles = styles => {
-                  const styleEl = document.createElement('style')
-                  styleEl.innerHTML = `:root{ ${styles} }`;
-                  document.body.append(styleEl);
-               }
-            </script>
+            <%- include('../partials/footer')%>
+
+
+               <script src="/javascripts/axios.min.js"></script>
+               <script src="/javascripts/popper.min.js"></script>
+               <script src="/javascripts/bootstrap.min.js"></script>
+               <script src="/javascripts/bootstrapJs/popovers.js"></script>
+
+               <script src='/javascripts/bootstrapJs/toasts.js'></script>
+               <script src="/javascripts/navbar/navbar.js"></script>
+
+               <script>
+                  const addStyles = styles => {
+                     const styleEl = document.createElement('style')
+                     styleEl.innerHTML = `:root{ ${styles} }`;
+                     document.body.append(styleEl);
+                  }
+               </script>
 </body>
 
 </html>
