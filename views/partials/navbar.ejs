@@ -169,7 +169,7 @@
          <option value="light">Light Mode</option>
          <option value="random">Random Theme</option>
       </select> -->
-      <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' ) ){ %>
+      <% if(currentUser ){ %>
          <a href="/managment" class="managment ms-2">
             <img src="/assets/svgs/other/gear-fill.svg" alt="Managment" class="icons"></a>
          <% } %>
