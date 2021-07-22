@@ -1,26 +1,76 @@
+const confettiContainer = document.querySelector('.confetti-container');
+
+const checkOnPageFormValidity = form => {
+   if (!form.checkValidity()) {
+      e.preventDefault()
+      e.stopPropagation()
+      form.classList.add('is-invalid')
+      form.classList.add('was-validated')
+   } else {
+      form.classList.remove('is-invalid')
+      form.classList.add('was-validated')
+   }
+}
+
+const animateConfetti = () => {
+
+   //reset animation
+   confettiContainer.classList.remove('animate');
+
+   confettiContainer.classList.add('animate');
+   setTimeout(function () {
+      confettiContainer.classList.remove('animate');
+   }, 500);
+}
+
 const setUpRecheckingTrade = async () => {
    const recheckForm = document.querySelector('#recheck-trade-form')
 
+   const recheckInputElements = recheckForm.querySelectorAll('input');
 
-   recheckForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!recheckForm.classList.contains('is-invalid')) {
+   const isRecheckingBusy = [false];
+
+   recheckInputElements.forEach((el) => {
+      el.addEventListener('input', async (e) => {
+         e.preventDefault();
+         let recheckingInfo = {};
+         isRecheckingBusy.push(true);
 
 
-         const data = await getPricesAndFetchData(recheckForm);
-         console.log(data)
-         if (data.success) {
-            changeStats(data)
+         checkOnPageFormValidity(recheckForm);
+
+
+         if (!recheckForm.classList.contains('is-invalid')) {
+
+            const newInfo = await getPricesAndFetchData(recheckForm, 'readonly', {})
+            recheckingInfo = newInfo;
+
          }
 
-      }
+         setTimeout(async () => {
+
+            isRecheckingBusy.pop();
+            if (isRecheckingBusy.length == 1) {
+               const data = await getPricesAndFetchData(recheckForm, 'request', recheckingInfo);
+               console.log(data)
+               if (data.success) {
+                  changeStats(data)
+               }
+
+               animateConfetti();
+               destroyChart()
+               createChart(range)
+            }
+
+         }, 1000);
 
 
-   });
+
+      });
+   })
 }
 
 const changeStats = (data) => {
-   console.log('changing stats...')
    const inputSkinsEl = document.querySelectorAll('input.input-skin');
    inputSkinsEl[0].value = data.firstPrice;
    inputSkinsEl[1].value = data.secondPrice;
@@ -35,7 +85,7 @@ const changeStats = (data) => {
    tradeUpProfitabilityEl.innerText = data.returnPercentage;
    tradeUpProfitPerTradeUpEl.innerText = data.profitPerTradeUp;
 
-   console.log('stats changed successfully...')
+   console.log('recalculated the trade-up successfully...')
    // const row = form.parentElement.parentElement;
    // const inputPriceEl = row.querySelector('.input-price')
    // const firstPriceEl = row.querySelector('.first-price')
@@ -57,7 +107,7 @@ const changeStats = (data) => {
 
 }
 
-const getPricesAndFetchData = async (form) => {
+const getPricesAndFetchData = async (form, action, info) => {
    const body = {};
    const url = form.getAttribute('action')
 
@@ -67,12 +117,12 @@ const getPricesAndFetchData = async (form) => {
    const inputSkins = document.querySelectorAll('input.input-skin');
    const outputSkins = document.querySelectorAll('input.output-skin');
 
-
+   let n = 1;
    for (let el of inputSkins) {
       const name = el.getAttribute('name');
       const value = el.value;
-
-      body[name] = Number(value);
+      body[n + ':' + name] = Number(value);
+      n++;
    }
 
    for (let el of outputSkins) {
@@ -82,15 +132,20 @@ const getPricesAndFetchData = async (form) => {
       body[name] = Number(value);
    }
 
-   try {
-      const res = await axios.post(url, body);
-      const data = res.data;
-      return data;
+   if (action == 'readonly') {
+      return body;
+   } else if (action == 'request') {
 
-   } catch (e) {
-      console.error('Failed to recheck the trade-up')
-      alert('Failed to recheck the trade. Check your internet connection and try again later or contact us if an error will keep occurring!')
-      return { success: false }
+      try {
+         const res = await axios.post(url, info);
+         const data = res.data;
+         return data;
+
+      } catch (e) {
+         console.error('Failed to recheck the trade-up')
+         alert('Failed to recheck the trade. Check your internet connection and try again later or contact us if an error will keep occurring!')
+         return { success: false }
+      }
    }
 }
 

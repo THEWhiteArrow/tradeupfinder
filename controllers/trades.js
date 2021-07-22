@@ -266,11 +266,12 @@ module.exports.recheckStats = async (req, res) => {
 
    const { currency } = req.session;
    const { tradeId } = req.params;
+   // console.log(req.body)
 
    try {
       const foundTrade = await Trade.findById(tradeId);
-      const firstPrice = Math.round(req.body[foundTrade.instance.trade.firstSkin._id] / currency.multiplier * 100) / 100;
-      const secondPrice = Math.round(req.body[foundTrade.instance.trade.secondSkin._id] / currency.multiplier * 100) / 100;
+      const firstPrice = Math.round(req.body['1:' + foundTrade.instance.trade.firstSkin._id] / currency.multiplier * 100) / 100;
+      const secondPrice = Math.round(req.body['2:' + foundTrade.instance.trade.secondSkin._id] / currency.multiplier * 100) / 100;
 
       const { amount, instance, pricesType } = foundTrade;
       const { targetedSkinsNumber, trade } = instance;
@@ -350,7 +351,7 @@ module.exports.recheckStats = async (req, res) => {
 
 
       // UPDATING IF EDIT GLOBALLY SWITCH AND IF USER ALLOWED
-      if (editGloballySwitch && userPermittedToEditGlobally) {
+      if (editGloballySwitch == true && userPermittedToEditGlobally) {
 
          if (foundTrade.isHighlighted) {
 

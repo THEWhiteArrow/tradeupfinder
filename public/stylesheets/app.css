@@ -9,6 +9,7 @@ html {
 }
 
 body {
+   overflow-x: hidden;
    min-height: 100vh;
    height:100%;
    display: flex;
@@ -502,6 +503,8 @@ nav#settings .custom-options::-webkit-scrollbar {
 
 
 /* #####################################    GRADIENS && COLORS     ###################################### */
+
+.bg-success-muted{background-color: #257c54cb !important;}
 
 .red{
    background-color: #eb4b4b;
