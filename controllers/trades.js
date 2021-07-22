@@ -415,6 +415,11 @@ module.exports.deleteSavedTrades = async (req, res) => {
    await Name.deleteMany({});
    await Trade.deleteMany({ isHighlighted: false, favourites: [] });
 
+   const newLegacyTrades = await Trade.find({ name: { $ne: 'legacy' } })
+   for (let trade of newLegacyTrades) {
+      await Trade.findByIdAndUpdate(trade._id, { name: 'legacy' })
+   }
+
    req.flash('success', 'Successfully deleted all trades');
    res.redirect('/explore');
 }
