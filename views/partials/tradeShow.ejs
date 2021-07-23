@@ -121,7 +121,7 @@
                      <div class="output-skins py-3 slim-scrollbar">
                         <% for(let targetedSkin of trade.targetedSkinsArr) {%>
                            <%- `${include('./skinCard.ejs',{ float:targetedSkin.float, amount:targetedSkin.amount,
-                              price:Math.round(targetedSkin.price/0.87*currency.multiplier*100)/100,
+                              price:Math.round(targetedSkin.price*currency.multiplier*100)/100,
                               type:'output-skin',link:targetedSkin.url, icon:targetedSkin.icon, _id:targetedSkin._id,
                               label:`${targetedSkin.name} | ${targetedSkin.skin} (${targetedSkin.quality})` })}` %>
                               <% } %>
