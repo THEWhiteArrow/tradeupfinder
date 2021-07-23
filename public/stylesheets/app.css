@@ -418,22 +418,22 @@ nav#settings select option{
 
 
 /* width */
-nav#settings .custom-options::-webkit-scrollbar {
-   width: 7px;
+.slim-scrollbar::-webkit-scrollbar {
+   width: 9px;
  }
  
  /* Track */
- nav#settings .custom-options::-webkit-scrollbar-track {
+ .slim-scrollbar::-webkit-scrollbar-track {
    background: #f1f1f1;
  }
  
  /* Handle */
- nav#settings .custom-options::-webkit-scrollbar-thumb {
+ .slim-scrollbar::-webkit-scrollbar-thumb {
    background: #888;
  }
  
  /* Handle on hover */
- nav#settings .custom-options::-webkit-scrollbar-thumb:hover {
+ .slim-scrollbar::-webkit-scrollbar-thumb:hover {
    background: #555;
  }
 
@@ -490,6 +490,11 @@ nav#settings .custom-options::-webkit-scrollbar {
 .flex-10{flex:10;}
 .flex-11{flex:11;}
 .flex-12{flex:12;}
+
+.order-1{order: 1;}
+.order-2{order: 2;}
+.order-3{order: 3;}
+.order-4{order: 4;}
 
 .z-index-1000{z-index: 1000;}
 .justify-self-start{justify-self: flex-start !important;}

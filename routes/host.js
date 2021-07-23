@@ -24,6 +24,9 @@ router.route('/about')
 router.route('/guide')
    .get(catchAsync(host.renderGuide));
 
+router.route('/policy')
+   .get(catchAsync(host.renderPolicy));
+
 
 
 

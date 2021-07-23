@@ -23,9 +23,9 @@
 
 
 
-      <section class="d-flex flex-row flex-wrap">
+      <section class="d-flex flex-column flex-lg-row">
 
-         <div class="d-flex align-items-center justify-content-center flex-3">
+         <div class="my-3 my-lg-1 d-flex flex-column flex-sm-row align-items-center justify-content-center flex-3">
 
             <span class="position-relative skin-tile-container" type="button" data-bs-container="body"
                data-bs-toggle="popover" data-bs-placement="top"
@@ -55,24 +55,17 @@
 
          </div>
 
-         <div class="vertical-hr"></div>
-
-         <!-- <div class="d-flex flex-row rarity-info flex-2">
-         <div class="classified">Classified</div>
-         <div class="covert">Covert</div>
-      </div> -->
-
-         <!-- <div class="vertical-hr"></div> -->
-
-         <div class=" d-flex flex-column justify-content-evenly statistics flex-4">
+         <div class="vertical-hr d-none d-lg-block"></div>
 
 
 
-            <h5 class="lead m-0 d-flex align-items-center display-5">Chances : <%=trade.instance.chances %>
-                  %
-            </h5>
-            <h5 class="m-0 me-3 me-1 display-5">Profitability : <%= details.returnPercentage %>%
-            </h5>
+         <div
+            class=" d-flex flex-column justify-content-evenly align-items-center align-items-lg-start statistics flex-4">
+
+
+
+            <h5 class="m-0 d-flex align-items-center display-5">Chances : <%=trade.instance.chances %> %</h5>
+            <h5 class="m-0 display-5 text-center">Profitability : <%= details.returnPercentage %>%</h5>
 
          </div>
 
@@ -83,14 +76,18 @@
 
          <a href='<%= showPageLink %>' class="no-underline d-flex flex-row">
 
-            <div class="trade-cost d-flex flex-column justify-content-center align-items-center w-50">
-               <h5 class="px-2 m-0">Cost per trade-up&nbsp&nbsp:&nbsp&nbsp<%=
-                     `${Math.round(details.inputPrice*currency.multiplier*100)/100} ${currency.symbol}`%>
+            <div class="trade-cost w-50  d-flex flex-column flex-sm-row">
+               <h5 class="px-2 m-0">Cost : </h5>
+               <h5 class="pe-2 m-0">
+                  <%=`${Math.round(details.inputPrice*currency.multiplier*100) /100} ${currency.symbol}`%>
                </h5>
             </div>
-            <div class="average-profit d-flex flex-column justify-content-center align-items-center w-50">
-               <h5 class="px-2 m-0">Statistical profit&nbsp&nbsp:&nbsp&nbsp<%=
-                     `${Math.round(details.profitPerTradeUp*currency.multiplier*100)/100} ${currency.symbol}` %>
+
+
+            <div class="average-profit w-50  d-flex flex-column flex-sm-row">
+               <h5 class="px-2 m-0">Profit : </h5>
+               <h5 class="pe-2 m-0">
+                  <%=`${Math.round(details.profitPerTradeUp*currency.multiplier*100) /100} ${currency.symbol}` %>
                </h5>
             </div>
 

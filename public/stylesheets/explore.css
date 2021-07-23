@@ -1,9 +1,8 @@
 /* ################################## GRID-2 ################################# */
 
 
-.grid-2 {
-   /* min-height: 100px; */
-   width:100%;
+/* .container-2 {
+   min-height: 100px; 
    display: grid; 
    grid-template-columns: repeat(10, 1fr); 
    grid-template-rows: repeat(15,1fr); 
@@ -26,14 +25,15 @@
    "trzy trzy trzy trzy trzy trzy trzy trzy trzy trzy "
    ;
 
-
+   display: flex;
+   flex-direction: column;
    
-}
+} */
 
 
 
-@media (min-width: 992px) { 
-   .grid-2{
+/* @media (min-width: 992px) { 
+   .container-2{
       grid-template-columns: repeat(10, 1fr); 
       grid-template-rows: repeat(7,1fr); 
       gap: 0px 7px; 
@@ -47,51 +47,74 @@
       "trzy trzy trzy trzy trzy trzy trzy trzy trzy trzy "
       ; 
    }
-   .grid-2 > .jeden {border-bottom-left-radius: 0 !important;border-bottom-right-radius: 0 !important;}
-   .grid-2 > .dwa {border-bottom-left-radius: 0 !important;border-bottom-right-radius: 0 !important;}
-   .grid-2 > .trzy {border-top-left-radius: 0 !important;border-top-right-radius: 0 !important;}
- }
+   .container-2 > .jeden {border-bottom-left-radius: 0 !important;border-bottom-right-radius: 0 !important;}
+   .container-2 > .dwa {border-bottom-left-radius: 0 !important;border-bottom-right-radius: 0 !important;}
+   .container-2 > .trzy {border-top-left-radius: 0 !important;border-top-right-radius: 0 !important;}
+ } */
 
 
-.grid-2 > .jeden { 
-   grid-area: jeden;  
+.container-2 > .jeden { 
+   /* grid-area: jeden;   */
    background-color: var(--explore-grid-2-jeden);
    
 }
 
-.grid-2 > .dwa { 
-   grid-area: dwa; 
+.container-2 > .dwa { 
+   /* grid-area: dwa;  */
    background-color: var(--explore-grid-2-dwa)
 }
 
-.grid-2 > .trzy { 
+/* .container-2 > .trzy { 
    grid-area: trzy;  
-}
+} */
 
-.grid-2 h3{color:var(--explore-h3-color);}
+.container-2 h3{color:var(--explore-h3-color);}
 
 .svg-icon-tick{
    width: 20px;
 }
 
 
-.grid-2 label{
+.container-2 label{
    cursor: pointer;
 }
 
-.grid-2 select {
+.container-2 select {
    height: 30% !important;
 }
 
-.researches {
+.researches { 
    max-height: 300px;
    overflow-y: auto;
 }
 
+@media (min-width: 992px) { 
 
-/* ################################## research-names-container ################################# */
+   .w-avaible-trades{
+      width: 30% !important;
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-bottom:0 !important;
+   }
+   .w-search-options{
+      width: calc(70% - 7px) !important; 
+      margin-left:auto !important ;
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-bottom:0 !important;
+   }
+   
+   .discover-btn{
+      
+      border-top-left-radius: 0 !important;
+      border-top-right-radius: 0 !important;
+   }
+ 
+}
 
-.research-names-container {
+/* ################################## search-options ################################# */
+
+.search-inputs {
    height:100% !important;
    display: flex;  
    flex-direction: row; 
@@ -112,16 +135,24 @@
    "cztery piec szesc siedem";  */
  }
 
- .research-names-container > div { width:30%; margin: 0.55rem 0;}
- .research-names-container ~ .siedem {flex:1; }
+ .search-inputs > div { width:95%; margin: 0.55rem 0;} 
 
  .bg-light-primary{background-color: #9dc4ff ;}
  .border-left-0{border-left: none;}
 
  input[type=radio]:checked + label svg path   {
     fill:white;
-   } 
+} 
 
-   input[type=radio]:hover + label svg path   {
-      fill:white;
-     } 
+input[type=radio]:hover + label svg path   {
+   fill:white;
+} 
+
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) { .search-inputs > div { width:47%;} }
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) { .search-inputs > div { width:31%;} }
+
+ 

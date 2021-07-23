@@ -6,7 +6,7 @@
 
       <div class="d-flex flex-row justify-content-between align-items-center">
 
-         <h1 class="display-6 my-2 py-2">Favourite Trade-Ups</h1>
+         <h1 class="display-3 my-2 py-2">Favourite Trade-Ups</h1>
          <a class="btn btn-dark mt-2 d-flex" href="/">View Main Page</a>
 
       </div>
@@ -21,8 +21,7 @@
 
    <main class="container">
 
-      <% if(favouriteTrades){ %>
-
+      <% if(favouriteTrades.length){ %>
          <ul>
 
             <% for(let favouriteTrade of favouriteTrades){ %>
@@ -37,8 +36,19 @@
 
 
          </ul>
-         <% } %>
+         <% }else{ %>
 
+            <h2 class="display-6">
+               Oww!
+               <br>
+               It apperas you have got no favourite trades added!
+               <br>
+               Let's dive right into them!
+            </h2>
+
+            <a class="btn btn-success mt-2 d-flex justify-content-center" href="/explore">EXPLORE TRADES!</a>
+
+            <% } %>
 
    </main>
 

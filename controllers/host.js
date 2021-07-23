@@ -32,6 +32,9 @@ module.exports.renderAboutUs = async (req, res) => {
 module.exports.renderGuide = async (req, res) => {
    res.render('guide')
 }
+module.exports.renderPolicy = async (req, res) => {
+   res.render('policy')
+}
 
 module.exports.sendEmail = async (req, res) => {
    const { body } = req;

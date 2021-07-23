@@ -21,9 +21,15 @@
 
    </section>
 
-   <section class=" card">
+   <section class="card bg-transparent border-0">
 
-      <div class="card-header d-flex justify-content-between align-items-center <%= bg %>">
+      <a href="/trades?q=random"
+         class="border border-bottom-0 btn btn-primary d-flex text-center align-items-center width-fit-content rounded-0 rounded-top">Show
+         A
+         Random
+         Trade</a>
+
+      <div class="card-header border border-top-0 d-flex justify-content-between align-items-center <%= bg %>">
 
          <% let h1='Trade-Up' %>
             <% if(profit.pricesType=='stattrakPrices' )h1+='<span class=" ms-3 badge bg-warning">StatTrak</span>' %>
@@ -45,10 +51,6 @@
                         <h1 class="text-white">
                            <%- h1 %>
                         </h1>
-
-                        <a href="/trades?q=random"
-                           class="btn btn-outline-light d-flex text-center align-items-center ms-2">Show A Random
-                           Trade</a>
 
                         <% if (currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' ) ) { %>
 
@@ -74,7 +76,8 @@
       <% let actionUrl=`/trades/${profit._id}` %>
          <% if (isFavouriteShowPage)actionUrl=`/favourites/${profit._id}/edit` %>
 
-            <form id="recheck-trade-form" class="card-body validated-form" action="<%= actionUrl %>" novalidate>
+            <form id="recheck-trade-form" class="card-body border border-top-0 bg-white validated-form"
+               action="<%= actionUrl %>" novalidate>
 
                <div class="row">
 
@@ -107,7 +110,7 @@
                      <h3>OUTPUTS</h3>
                      <hr role=tournament6>
 
-                     <div class="output-skins py-4">
+                     <div class="output-skins py-4 slim-scrollbar">
                         <% for(let targetedSkin of trade.targetedSkinsArr) {%>
                            <%- `${include('./skinCard.ejs',{ float:targetedSkin.float, amount:targetedSkin.amount,
                               price:Math.round(targetedSkin.price/0.87*currency.multiplier*100)/100,
@@ -155,7 +158,7 @@
 
       <div class="card-body">
 
-         <div class="alternate-skins pt-3">
+         <div class="alternate-skins pt-3 slim-scrollbar">
             <% let type="alternate-skin-checkbox" ;if(!currentUser||currentUser.role=='guest' )type='alternate-skin' %>
                <% for(let alternateSkin of trade.alternateInputSkins){ %>
 
