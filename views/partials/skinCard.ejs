@@ -4,9 +4,14 @@
 
 
    <% if(type=='output-skin' ){ %>
-      <div class="skin-card-float border border-1">
+      <div class="skin-card-float skin-card-float-left border border-1">
          <%= float %>
       </div>
+      <div class="skin-card-chances  border border-1">
+         <%= Math.round(amount/profit.instance.targetedSkinsNumber*100 *100)/100 %>%
+
+      </div>
+
       <span class="targetedSkinsArr-amount d-none">
          <%= amount %>
       </span>
@@ -18,12 +23,15 @@
             <%= amount %>
          </span>
          <% }else if(type=='input-skin' ){ %>
-            <div class="skin-card-float border border-1 float-input-skin">
+            <input id="<%= sn %>float:<%= _id %>" name="<%= sn %>float:<%= _id %>" type="number"
+               class="form-control text-center skin-card-float skin-card-float-left border border-1 box-shadow-inset"
+               value="<%= float %>" step="0.01" min="0.01" required>
+            <!-- <div class="skin-card-float skin-card-float-left border border-1">
                <%= float %>
-            </div>
-            <div class="skin-card-number border border-1">
-               x<%= amount %>
-            </div>
+            </div> -->
+            <!-- <div class="skin-card-number border border-1">
+               <%= sn %>
+            </div> -->
             <% } %>
 
 
@@ -33,21 +41,27 @@
                <label for="<%= _id %>" class="text-center skin-card-label">
                   <%= label %>
                </label>
-               <% if(type=='input-skin' || type=='output-skin' ){ %>
+               <% if(type=='input-skin' ){ %>
 
-                  <input id="<%= _id %>" value="<%= price %>" type="number" name="<%= _id %>"
-                     class="form-control skin-pice-input <%= type %> text-center mt-1" step="0.01" min="0.01" required>
+                  <input id="<%= sn %><%= _id %>" value="<%= price %>" type="number" name="<%= sn %><%= _id %>"
+                     class="form-control box-shadow-inset <%= type %> text-center mt-1" step="0.01" min="0.01" required>
+                  <% }else if( type=='output-skin' ) {%>
 
-                  <% }else if(type=='alternate-skin-checkbox' ){ %>
+                     <input id="<%= _id %>" value="<%= price %>" type="number" name="<%= _id %>"
+                        class="form-control box-shadow-inset <%= type %> text-center mt-1" step="0.01" min="0.01"
+                        required>
 
-                     <input class="btn-check" type="checkbox" value="<%= value %>" id="<%= _id %>" autocomplete="off">
-                     <label for="<%= _id %>"
-                        class="btn btn-outline-primary btn-checkbox text-center form-label mb-0 mt-1">
-                        <%= `${price}${symbol}` %>
-                     </label>
-                     <% }else if(type=='alternate-skin' ){ %>
-                        <label for="<%= _id %>" class="text-center form-label mb-0 mt-1">
+                     <% }else if(type=='alternate-skin-checkbox' ){ %>
+
+                        <input class="btn-check" type="checkbox" value="<%= value %>" id="<%= _id %>"
+                           autocomplete="off">
+                        <label for="<%= _id %>"
+                           class="btn btn-outline-primary btn-checkbox text-center form-label mb-0 mt-1">
                            <%= `${price}${symbol}` %>
                         </label>
-                        <% } %>
+                        <% }else if(type=='alternate-skin' ){ %>
+                           <label for="<%= _id %>" class="text-center form-label mb-0 mt-1">
+                              <%= `${price}${symbol}` %>
+                           </label>
+                           <% } %>
 </div>

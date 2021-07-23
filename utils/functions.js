@@ -7,7 +7,15 @@ const User = require('../models/userModel');
 
 
 
+module.exports.sumUpBodyPart = (n, amount, body, id, extraName = '') => {
+   let sum = 0;
 
+   for (let i = 1; i <= amount; ++i) {
+      sum += body[`${n}:${i}:${extraName}${id}`]
+   }
+
+   return sum;
+}
 
 module.exports.mergeSort = (a, sortBy, orderBy) => {
    return _mergeSort(a, sortBy, orderBy)

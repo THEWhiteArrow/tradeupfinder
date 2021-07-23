@@ -35,8 +35,10 @@ const getLabels = (range) => { const arr = []; for (let i = 0; i <= range; i++) 
 
 const getResults = (range) => {
    const inputSkins = document.querySelectorAll('input.input-skin')
-   const inputSkinsAmount = document.querySelectorAll('div.skin-card-number')
-   let inputPrice = Math.abs(inputSkins[0].value) * Math.abs(inputSkinsAmount[0].innerText.replace('x', '')) + Math.abs(inputSkins[1].value) * Math.abs(inputSkinsAmount[1].innerText.replace('x', ''));
+   inputPrice = 0;
+   for (let el of inputSkins) inputPrice += Math.abs(el.value)
+
+
    inputPrice = Math.round(inputPrice * 100) / 100;
 
    const targetedSkinsArrPrices = getNumber(document.querySelectorAll('input.output-skin'), 'value')

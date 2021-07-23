@@ -59,7 +59,7 @@
    align-items:center;
 }
 
-.output-skins{
+.input-skins,.output-skins{
    max-height: 400px;
    overflow-y: auto;
    align-items:start;
@@ -74,7 +74,10 @@
 .skin-card{
    position: relative;
    width:8.5rem;
-   margin:0.7rem 0.8rem;
+   
+   --scale:1;
+   margin:calc(0.9rem*var(--scale)) calc(0.8rem*var(--scale));
+   transform: scale(var(--scale));
 }
 
 .skin-card-label{
@@ -82,6 +85,7 @@
 }
 
 .skin-card-float{
+   z-index: 10;
    position: absolute;
    top:0;
    left:50%;
@@ -95,18 +99,18 @@
 
 .skin-card-img{ filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.3));}
 
-.skin-pice-input{
+.box-shadow-inset{
    /* background-color: rgba(8, 8, 8, 0.03); */
-   -webkit-box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.25); 
-   box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.25);
+   -webkit-box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.35); 
+   box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.35);
 }
 
-.float-input-skin{
+.skin-card-float-left{
    left:0;
    transform:translate3d(0,-60%,0);
 }
 
-.skin-card-number{
+.skin-card-number,.skin-card-chances{
    position: absolute;
    top:0;
    left:100%;

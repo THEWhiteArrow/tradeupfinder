@@ -82,35 +82,43 @@
                <div class="row">
 
 
-                  <div id="inputs" class="col-12 col-md-5 d-flex flex-column align-items-center">
+                  <div id="inputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
                      <h3>INPUTS</h3>
                      <hr role=tournament6>
 
-                     <div class="input-skins py-3">
+                     <div class="py-3 input-skins slim-scrollbar">
+
+                        <% for(let i=1;i<=profit.amount.amount1;++i){ %>
+
+                           <%- `${include('./skinCard.ejs',{ float:trade.firstSkinAvgFloat,amount:profit.amount.amount1,
+                              price:Math.round(trade.firstPrice*currency.multiplier*100)/100,type:'input-skin',
+                              link:trade.firstSkinUrl, icon:trade.firstSkin.icon, _id:trade.firstSkin._id,
+                              label:trade.firstSkin.name + ' | ' + trade.firstSkin.skin + ' (' + trade.firstQuality
+                              + ') ' , sn:'1:'+i+':' }) }` %>
+
+                              <% } %>
 
 
-                        <%- `${include('./skinCard.ejs',{ float:trade.firstSkinAvgFloat,amount:profit.amount.amount1,
-                           price:Math.round(trade.firstPrice*currency.multiplier*100)/100,type:'input-skin',
-                           link:trade.firstSkinUrl, icon:trade.firstSkin.icon, _id:trade.firstSkin._id,
-                           label:trade.firstSkin.name + ' | ' + trade.firstSkin.skin + ' (' + trade.firstQuality + ') '
-                           }) }` %>
+                                 <% for(let i=1;i<=profit.amount.amount2;++i){ %>
 
-                           <%- `${include('./skinCard.ejs',{
-                              float:trade.secondSkinAvgFloat,amount:profit.amount.amount2,
-                              price:Math.round(trade.secondPrice*currency.multiplier*100)/100,type:'input-skin',
-                              link:trade.secondSkinUrl, icon:trade.secondSkin.icon, _id:trade.secondSkin._id,
-                              label:trade.secondSkin.name + ' | ' + trade.secondSkin.skin + ' (' + trade.secondQuality
-                              + ') ' }) }` %>
+                                    <%- `${include('./skinCard.ejs',{
+                                       float:trade.secondSkinAvgFloat,amount:profit.amount.amount2,
+                                       price:Math.round(trade.secondPrice*currency.multiplier*100)/100,type:'input-skin',
+                                       link:trade.secondSkinUrl, icon:trade.secondSkin.icon, _id:trade.secondSkin._id,
+                                       label:trade.secondSkin.name + ' | ' + trade.secondSkin.skin + ' (' +
+                                       trade.secondQuality + ') ' ,sn:'2:'+i+':' }) }` %>
+
+                                       <% } %>
 
                      </div>
 
                   </div>
 
-                  <div id="outputs" class="col-12 col-md-7 d-flex flex-column align-items-center">
+                  <div id="outputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
                      <h3>OUTPUTS</h3>
                      <hr role=tournament6>
 
-                     <div class="output-skins py-4 slim-scrollbar">
+                     <div class="output-skins py-3 slim-scrollbar">
                         <% for(let targetedSkin of trade.targetedSkinsArr) {%>
                            <%- `${include('./skinCard.ejs',{ float:targetedSkin.float, amount:targetedSkin.amount,
                               price:Math.round(targetedSkin.price/0.87*currency.multiplier*100)/100,
