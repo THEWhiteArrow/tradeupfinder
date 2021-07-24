@@ -288,22 +288,39 @@ module.exports.recheckStats = async (req, res) => {
       const secondPricePart = sumUpBodyPart('2', amount.amount2, req.body, secondSkin._id, '')
       const inputPrice = Math.round((firstPricePart + secondPricePart) / currency.multiplier * 100) / 100;
 
-
-      const newAvgFloat = Math.round((sumUpBodyPart('1', amount.amount1, req.body, firstSkin._id, 'float:') + sumUpBodyPart('2', amount.amount2, req.body, secondSkin._id, 'float:')) / 10 * 1000) / 1000;
-      if (newAvgFloat != instance.avg) {
-         console.log(newAvgFloat)
-         // CHANGE TARGETED SKINS PRICES RIGHT AWAY
-
-         // AND LATER ON THOSE PRICES ARE NEEDED TO BE SENT BACK TO CHANGE ON PAGE PRICES BECAUSE IT WILL MAKE A DIFFERENCE
-      }
-
       let total = 0;
       let newTargetedSkin = {}
       let newMaxPrice = 0;
 
+      const newAvgFloat = Math.round((sumUpBodyPart('1', amount.amount1, req.body, firstSkin._id, 'float:') + sumUpBodyPart('2', amount.amount2, req.body, secondSkin._id, 'float:')) / 10 * 10000) / 10000;
+      let isAvgFloatChanged = false;
+      if (newAvgFloat != instance.avg) {
+         isAvgFloatChanged = true;
+         console.log(newAvgFloat)
+         // CHANGE TARGETED SKINS PRICES RIGHT AWAY
+         //chaniging inthe part below
+         // AND LATER ON THOSE PRICES ARE NEEDED TO BE SENT BACK TO CHANGE ON PAGE PRICES BECAUSE IT WILL MAKE A DIFFERENCE
+      }
+
+      const outputSkinsNewData = [];
+      const newTargetedSkinsQuality = [];
       for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
+
          let newPriceSteamTaxed = Math.round(req.body[trade.targetedSkinsArr[i]._id] / currency.multiplier * steamTax * 100) / 100;
          let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] / currency.multiplier * 100) / 100;
+
+         if (isAvgFloatChanged) {
+            const newFloat = Math.round(((trade.targetedSkinsArr[i].max_float - trade.targetedSkinsArr[i].min_float) * newAvgFloat + trade.targetedSkinsArr[i].min_float) * 1000) / 1000;
+            const newQuality = checkQuality(newFloat);
+            // CHANGE TARGETED SKINS PRICES RIGHT AWAY
+            newPrice = trade.targetedSkinsArr[i].prices[newQuality]
+            newPriceSteamTaxed = Math.round(newPrice * steamTax * 100) / 100;
+
+            outputSkinsNewData.push({ _id: trade.targetedSkinsArr[i]._id, price: newPrice, float: newFloat, quality: newQuality })
+            newTargetedSkinsQuality.push(newQuality);
+         }
+
+
 
          if (newPriceSteamTaxed > newMaxPrice) {
 
@@ -336,7 +353,12 @@ module.exports.recheckStats = async (req, res) => {
             total += (newPriceSteamTaxed * Number(amount.amount2));
          }
 
+
+
       }
+
+
+
 
 
       let wantedOutputChance = 0;
@@ -366,6 +388,14 @@ module.exports.recheckStats = async (req, res) => {
       instance.trade.profitPerTradeUp = profitPerTradeUp;
       instance.trade.returnPercentage = returnPercentage;
       instance.trade.targetedSkinsArr = trade.targetedSkinsArr;
+
+      if (newAvgFloat != instance.avg) {
+         instance.trade.targetedSkinsQuality = newTargetedSkinsQuality;
+         // CHANGE TARGETED SKINS PRICES RIGHT AWAY
+
+         // AND LATER ON THOSE PRICES ARE NEEDED TO BE SENT BACK TO CHANGE ON PAGE PRICES BECAUSE IT WILL MAKE A DIFFERENCE
+      }
+
 
 
       // UPDATING IF EDIT GLOBALLY SWITCH AND IF USER ALLOWED
@@ -403,6 +433,11 @@ module.exports.recheckStats = async (req, res) => {
          chances: Math.round(wantedOutputChance / targetedSkinsNumber * 100 * 100) / 100,
          editedGlobally: editGloballySwitch,
       };
+
+      isAvgFloatChanged ? feedback.isAvgFloatChanged = true : feedback.isAvgFloatChanged = false;
+      isAvgFloatChanged ? feedback.outputSkinsNewData = outputSkinsNewData : null;
+
+
       res.json(feedback);
    } catch (e) {
       console.log(e)

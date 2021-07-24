@@ -1,6 +1,6 @@
 const confettiContainer = document.querySelector('.confetti-container');
 
-const checkOnPageFormValidity = form => {
+const checkOnPageFormValidity = (form, e) => {
    if (!form.checkValidity()) {
       e.preventDefault()
       e.stopPropagation()
@@ -37,7 +37,7 @@ const setUpRecheckingTrade = async () => {
          isRecheckingBusy.push(true);
 
 
-         checkOnPageFormValidity(recheckForm);
+         checkOnPageFormValidity(recheckForm, e);
 
 
          if (!recheckForm.classList.contains('is-invalid')) {
@@ -52,7 +52,7 @@ const setUpRecheckingTrade = async () => {
             isRecheckingBusy.pop();
             if (isRecheckingBusy.length == 1) {
                const data = await getPricesAndFetchData(recheckForm, 'request', recheckingInfo);
-               console.log(data)
+               // console.log(data)
                if (data.success) {
                   changeStats(data)
                }
@@ -74,18 +74,33 @@ const changeStats = (data) => {
    // const inputSkinsEl = document.querySelectorAll('input.input-skin');
    // inputSkinsEl[0].value = data.firstPrice;
    // inputSkinsEl[1].value = data.secondPrice;
+   const tradeUpCostEl = document.querySelector('.stats-item-value.input-price .content')
+   const tradeUpChancesEl = document.querySelector('.stats-item-value.chances .content')
+   const tradeUpProfitabilityEl = document.querySelector('.stats-item-value.profitability .content')
+   const tradeUpProfitPerTradeUpEl = document.querySelector('.stats-item-value.perTradeUp .content')
 
-   const tradeUpAvgFloatEl = document.querySelector('.stats-item-value.avg-float .content');
-   const tradeUpCostEl = document.querySelector('.stats-item-value.input-price .content');
-   const tradeUpChancesEl = document.querySelector('.stats-item-value.chances .content');
-   const tradeUpProfitabilityEl = document.querySelector('.stats-item-value.profitability .content');
-   const tradeUpProfitPerTradeUpEl = document.querySelector('.stats-item-value.perTradeUp .content');
-
-   tradeUpAvgFloatEl.innerText = (data.avgFloat + '00').slice(0, 6);
    tradeUpCostEl.innerText = data.inputPrice;
    tradeUpChancesEl.innerText = data.chances;
    tradeUpProfitabilityEl.innerText = data.returnPercentage;
    tradeUpProfitPerTradeUpEl.innerText = data.profitPerTradeUp;
+
+   if (data.isAvgFloatChanged) {
+      console.log('...user changed floats...')
+      const tradeUpAvgFloatEl = document.querySelector('.stats-item-value.avg-float .content').innerText = (data.avgFloat + '00').slice(0, 6);
+
+      for (let info of data.outputSkinsNewData) {
+         const outputSkinCard = document.querySelector(`#skin-${info._id}`)
+         const label = outputSkinCard.querySelector('label')
+         const priceInput = outputSkinCard.querySelector('input.price-input')
+         const float = outputSkinCard.querySelector('.skin-card-float')
+
+         let qIndex = label.innerText.indexOf('(');
+         label.innerText = label.innerText.slice(0, qIndex) + `(${info.quality})`;
+
+         float.innerText = info.float;
+         priceInput.value = info.price;
+      }
+   }
 
    console.log('recalculated the trade-up successfully...')
 
@@ -99,8 +114,8 @@ const getPricesAndFetchData = async (form, action, info) => {
    editGloballySwitch.length ? body.editGloballySwitch = editGloballySwitch[0].checked : null;
 
    const inputFloats = document.querySelectorAll('input.skin-card-float');
-   const inputSkins = document.querySelectorAll('input.input-skin');
-   const outputSkins = document.querySelectorAll('input.output-skin');
+   const inputSkins = document.querySelectorAll('.input-skin input.price-input');
+   const outputSkins = document.querySelectorAll('.output-skin input.price-input');
 
    for (let el of inputFloats) {
       const name = el.getAttribute('name');

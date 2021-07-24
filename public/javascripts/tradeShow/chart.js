@@ -34,14 +34,14 @@ const random = (range) => (Math.floor(Math.random() * range) + 1)
 const getLabels = (range) => { const arr = []; for (let i = 0; i <= range; i++) { arr[i] = i; } return arr; }
 
 const getResults = (range) => {
-   const inputSkins = document.querySelectorAll('input.input-skin')
+   const inputSkins = document.querySelectorAll('.input-skin input.price-input')
    inputPrice = 0;
    for (let el of inputSkins) inputPrice += Math.abs(el.value)
 
 
    inputPrice = Math.round(inputPrice * 100) / 100;
 
-   const targetedSkinsArrPrices = getNumber(document.querySelectorAll('input.output-skin'), 'value')
+   const targetedSkinsArrPrices = getNumber(document.querySelectorAll('.output-skin input.price-input'), 'value')
 
 
 

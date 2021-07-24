@@ -1,4 +1,4 @@
-<div class="card skin-card">
+<div id="skin-<%= _id %>" class="card skin-card <%= type %>">
 
 
 
@@ -25,7 +25,7 @@
          <% }else if(type=='input-skin' ){ %>
             <input id="<%= sn %>float:<%= _id %>" name="<%= sn %>float:<%= _id %>" type="number"
                class="form-control text-center skin-card-float skin-card-float-left border border-1 box-shadow-inset"
-               value="<%= float %>" step="0.01" min="0.01" required>
+               value="<%= (float+'00').slice(0,5) %>" step="0.001" min="0.001" required>
             <!-- <div class="skin-card-float skin-card-float-left border border-1">
                <%= float %>
             </div> -->
@@ -44,11 +44,12 @@
                <% if(type=='input-skin' ){ %>
 
                   <input id="<%= sn %><%= _id %>" value="<%= price %>" type="number" name="<%= sn %><%= _id %>"
-                     class="form-control box-shadow-inset <%= type %> text-center mt-1" step="0.01" min="0.01" required>
+                     class="form-control box-shadow-inset  text-center mt-1 price-input" step="0.01" min="0.01"
+                     required>
                   <% }else if( type=='output-skin' ) {%>
 
                      <input id="<%= _id %>" value="<%= price %>" type="number" name="<%= _id %>"
-                        class="form-control box-shadow-inset <%= type %> text-center mt-1" step="0.01" min="0.01"
+                        class="form-control box-shadow-inset  text-center mt-1 price-input" step="0.01" min="0.01"
                         required>
 
                      <% }else if(type=='alternate-skin-checkbox' ){ %>
