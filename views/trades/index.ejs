@@ -37,9 +37,8 @@
                   <% ++i; %>
 
                      <% const tradeDetails=profitableTrade.instance.trade %>
-                        <% let animationData=`data-aos="fade-${directions[i%2]}" data-aos-once="true"
-                           data-aos-duration="400" `; %>
-                           <% i<=0 ? animationData='' :null; %>
+                        <% let animationData=`data-aos="fade-${directions[i%2]}" data-aos-duration="400" `; %>
+                           <% i<=2 ? animationData='' :null; %>
 
                               <%-`
                                  ${include('../partials/tradeTile',{elementName:'li',title:false,trade:profitableTrade,details:tradeDetails,manageTrade:profitableTrade,showPageLink:'/trades/'+profitableTrade._id,

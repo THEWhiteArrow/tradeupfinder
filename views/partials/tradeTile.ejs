@@ -64,9 +64,19 @@
 
 
 
-            <h5 class="m-0 d-flex align-items-center display-5">Chances : <%=trade.instance.chances %> %</h5>
-            <h5 class="m-0 display-5 text-center">Profitability : <%= details.returnPercentageTaxed %>% / <%=
-                     details.returnPercentage %>%</h5>
+            <h5 class="m-0 d-flex flex-row display-6 text-center">
+               <span> Chances :&nbsp;</span>
+               <span>
+                  <%=trade.instance.chances %> %
+               </span>
+            </h5>
+            <h5 class="mt-1 d-flex flex-column flex-xl-row display-6 text-center">
+               <span>Profitability
+                  :&nbsp;</span>
+               <span>
+                  <%= details.returnPercentageTaxed %>% / <%= details.returnPercentage %>%
+               </span>
+            </h5>
 
          </div>
 
@@ -77,20 +87,29 @@
 
          <a href='<%= showPageLink %>' class="no-underline d-flex flex-row">
 
-            <div class="trade-cost w-50  d-flex flex-column flex-sm-row">
-               <h5 class="px-2 m-0">Cost : </h5>
-               <h5 class="pe-2 m-0">
-                  <%=`${Math.round(details.inputPrice*currency.multiplier*100) /100} ${currency.symbol}`%>
+            <div class="trade-cost w-50">
+               <h5 class="px-2 m-0 d-flex flex-column flex-md-row text-center">
+                  <span>
+                     Cost :&nbsp;
+                  </span>
+                  <span>
+                     <%=`${Math.round(details.inputPrice*currency.multiplier*100) /100} ${currency.symbol}`%>
+                  </span>
                </h5>
             </div>
 
 
-            <div class="average-profit w-50  d-flex flex-column flex-sm-row">
-               <h5 class="px-2 m-0">Profit : </h5>
-               <h5 class="pe-2 m-0">
-                  <%=`${Math.round(details.profitPerTradeUpTaxed*currency.multiplier*100) /100} ${currency.symbol}` %>
-                     /
-                     <%=`${Math.round(details.profitPerTradeUp*currency.multiplier*100) /100} ${currency.symbol}` %>
+            <div class="average-profit w-50">
+               <h5 class="px-2 m-0 d-flex flex-column flex-md-row text-center">
+                  <span>
+                     Profit :&nbsp;
+                  </span>
+                  <span>
+                     <%=`${Math.round(details.profitPerTradeUpTaxed*currency.multiplier*100) /100} ${currency.symbol}`
+                        %>
+                        /
+                        <%=`${Math.round(details.profitPerTradeUp*currency.multiplier*100) /100} ${currency.symbol}` %>
+                  </span>
                </h5>
             </div>
 

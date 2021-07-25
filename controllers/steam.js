@@ -18,6 +18,7 @@ module.exports.returnToSite = async (req, res) => {
 }
 
 module.exports.desanitizeQuery = async (req, res, next) => {
+   console.log(req.query)
    console.log(req.user)
    const query = replaceForDesanitizedObj(req.query)
 

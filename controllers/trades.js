@@ -9,7 +9,7 @@ const Highlight = require('../models/highlightModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
-const maxShownSkins = 200;
+const maxShownTrades = 200;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 
@@ -45,13 +45,13 @@ module.exports.manageTrades = async (req, res) => {
       var startDate = new Date();
       // Do your operations
       const trades = await Trade.find({ name: researchName });
-      // const sortedTrades = sortingTrades(trades, sort, order).slice(0, maxShownSkins);
-      const sortedTrades = mergeSort(trades, sort, order).slice(0, maxShownSkins);
+      // const sortedTrades = sortingTrades(trades, sort, order).slice(0, maxShownTrades:res.locals.maxShownTrades);
+      const sortedTrades = mergeSort(trades, sort, order).slice(0, res.locals.maxShownTrades);
 
       var endDate = new Date();
       var seconds = (endDate.getTime() - startDate.getTime()) / 1000;
       console.log(seconds)
-      res.render('trades/index', { profitableTrades: sortedTrades, maxShownSkins, steamBaseUrl, action })
+      res.render('trades/index', { profitableTrades: sortedTrades, maxShownTrades: res.locals.maxShownTrades, steamBaseUrl, action })
 
    } else {
 
@@ -77,9 +77,9 @@ module.exports.manageTrades = async (req, res) => {
 
 
             const trades = await mixedTwoPairs(req);
-            const sortedTrades = mergeSort(trades, sort, order).slice(0, maxShownSkins);
+            const sortedTrades = mergeSort(trades, sort, order).slice(0, res.locals.maxShownTrades);
 
-            res.render('trades/index', { profitableTrades: sortedTrades, maxShownSkins, steamBaseUrl, action })
+            res.render('trades/index', { profitableTrades: sortedTrades, maxShownTrades: res.locals.maxShownTrades, steamBaseUrl, action })
          }
 
       } else if (pairs == 3) {

@@ -1,3 +1,25 @@
+@font-face {
+   font-family: 'LibreFranklin';
+   src: url('../fonts/LibreFranklin-VariableFont_wght.ttf');
+}
+@font-face {
+   font-family: 'Mulish';
+   src: url('../fonts/Mulish-VariableFont_wght.ttf');
+}
+@font-face {
+   font-family: 'Raleway';
+   src: url('../fonts/Raleway-VariableFont_wght.ttf');
+}
+@font-face {
+   font-family: 'QucikSand';
+   src: url('../fonts/Quicksand-VariableFont_wght.ttf');
+}
+@font-face {
+   font-family: 'Caveat';
+   src: url('../fonts/Caveat-VariableFont_wght.ttf');
+}
+.f-caveat{font-family: 'Caveat', serif !important; }
+
 * {
    box-sizing: border-box !important;
 }
@@ -9,6 +31,12 @@ html {
 }
 
 body {
+   /* font-family: 'LibreFranklin', serif; */
+   /* font-family: 'Mulish', serif; */
+   /* font-family: 'Raleway', serif; */
+   font-family: 'QucikSand', serif;
+   /* font-family: 'Caveat', serif; */
+
    overflow-x: hidden;
    min-height: 100vh;
    height:100%;
@@ -58,6 +86,8 @@ background-image: url("data:image/svg+xml,%3Csvg width='180' height='180' viewBo
    background-color: white !important;
 }
 
+
+
  
  
 ul:not(.bullets) {
@@ -100,6 +130,21 @@ a.steamLink{
    background-image: url('../assets/social/steamLink.png');
    width:180px;
    height: 35px;
+   position: relative;
+  
+}
+
+a.steamLink:after{
+   content:'';
+   position: absolute;
+   width:100%;
+   height: 100%; 
+   
+   transition: background-color .15s ease-in-out;
+}
+
+a.steamLink:hover:after{
+   background-color:rgba(33,33,33,0.3);  
 }
 
 nav#navbar{

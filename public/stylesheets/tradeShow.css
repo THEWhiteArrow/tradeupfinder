@@ -1,3 +1,13 @@
+#compact-mode-btn:after{
+   content:'';
+   position:absolute;
+   width:100%;
+   height: 100%;
+   top:0;left:0;
+   background-color: white;
+   z-index: -1;
+}
+
 /* STATS */
 
 .stats{
@@ -287,10 +297,11 @@ canvas#myChart{
    position: absolute;
    content: '';
    display: block;
-   width: 140%;
-   height: 100%;
-   left: -20%;
    z-index: 1000;
+
+   width:100%;
+   height:100%;
+
    transition: all ease-in-out 0.5s;
    background-repeat: no-repeat;
  }
@@ -298,15 +309,15 @@ canvas#myChart{
  .confetti-container:before {
    display: none;
    top: -75%;
-   background-image: radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, transparent 20%, #a000f0 20%, transparent 30%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, transparent 10%, #a000f0 15%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%);
-   background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%, 10% 10%, 18% 18%;
+   background-image: radial-gradient(circle, #00f080 20%, transparent 20%), radial-gradient(circle, transparent 20%, #0024f0 20%, transparent 30%), radial-gradient(circle, #29bd24 20%, transparent 20%), radial-gradient(circle, #3396cf 20%, transparent 20%), radial-gradient(circle, transparent 10%, #f0cc00 15%, transparent 20%), radial-gradient(circle, #c772f1 20%, transparent 20%), radial-gradient(circle, #a8f000 20%, transparent 20%), radial-gradient(circle, #00f0f0 20%, transparent 20%), radial-gradient(circle, #cf6666 20%, transparent 20%);
+   background-size: 100px 100px, 200px 200px, 150px 150px, 200px 200px, 180px 180px, 100px 100px, 150px 150px, 100px 100px, 180px 180px;
  }
  
  .confetti-container:after {
    display: none;
    bottom: -75%;
-   background-image: radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, transparent 10%, #a000f0 15%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%);
-   background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 10% 10%, 20% 20%;
+   background-image: radial-gradient(circle, #f0005c 20%, transparent 20%), radial-gradient(circle, #a000f0 20%, transparent 20%), radial-gradient(circle, transparent 10%, #ecf000 15%, transparent 20%), radial-gradient(circle, #f00000 20%, transparent 20%), radial-gradient(circle, #00f080 20%, transparent 20%), radial-gradient(circle, #5400f0 20%, transparent 20%), radial-gradient(circle, #f08800 20%, transparent 20%);
+   background-size: 150px 150px, 200px 200px, 180px 180px, 200px 200px, 150px 150px, 100px 100px, 200px 200px;
  }
  
  .confetti-container.animate:before {
@@ -322,7 +333,7 @@ canvas#myChart{
  topBubbles {  0% {
   background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%;
  }
-  50% {
+  40% {
   background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%, 50% 50%, 65% 20%, 90% 30%;
  }
   100% {
@@ -334,7 +345,7 @@ canvas#myChart{
  bottomBubbles {  0% {
   background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%, 70% -10%, 70% 0%;
  }
-  50% {
+  40% {
   background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%, 105% 0%;
  }
   100% {

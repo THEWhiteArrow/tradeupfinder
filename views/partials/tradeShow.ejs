@@ -36,7 +36,7 @@
             Show A Random Trade</a>
 
          <button id="compact-mode-btn"
-            class="btn btn-outline-primary rounded-0 border border-bottom-0 border-primary d-none d-md-inline">Switch
+            class="position-relative btn btn-outline-primary rounded-0 border border-bottom-0 border-primary d-none d-md-inline">Switch
             To Normal Calculator Mode</button>
 
       </div>
@@ -108,7 +108,7 @@
                               link:inputSkin.link, icon:inputSkin.icon, _id:inputSkin._id, label:inputSkin.name + ' | '
                               + inputSkin.skin + ' (' + inputSkin.quality + ') ' , sn:inputSkin.sn,
                               min_float:inputSkin.min_float, max_float:inputSkin.max_float,
-                              animationData:`data-aos="zoom-in" data-aos-once="true" data-aos-anchor="#inputs" ` })}`%>
+                              animationData:`data-aos="zoom-in" data-aos-anchor="#inputs" ` })}`%>
 
                               <% } %>
 
@@ -129,7 +129,7 @@
                               type:'output-skin',link:targetedSkin.url, icon:targetedSkin.icon, _id:targetedSkin._id,
                               label:`${targetedSkin.name} | ${targetedSkin.skin}
                               (${targetedSkin.quality})`,sn:targetedSkin._id, animationData:`data-aos="zoom-in"
-                              data-aos-once="true" data-aos-anchor="#outputs" ` })}` %>
+                              data-aos-anchor="#outputs" ` })}` %>
                               <% } %>
 
 
@@ -183,7 +183,7 @@
                            _id:alternateSkin._id,amount:alternateSkin.amount, label:alternateSkin.name+ ' | ' +
                            alternateSkin.skin + ' (' + alternateSkin.quality + ') '
                      ,symbol:currency.symbol,sn:alternateSkin._id, animationData:`data-aos="zoom-in"
-                     data-aos-once="true" data-aos-anchor=".alternate-skins" `})}`%>
+                     data-aos-anchor=".alternate-skins" `})}`%>
 
                      <% } %>
          </div>

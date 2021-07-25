@@ -10,7 +10,9 @@ const flash = require('connect-flash');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
+
 const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -35,6 +37,7 @@ const serverRoutes = require('./routes/server');
 
 const User = require('./models/userModel');
 
+const maxShownTrades = process.env.MAX_SHOWN_TRADES || 69;
 
 
 
@@ -62,7 +65,59 @@ app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use(helmet());
 // app.use(mongoSanitize({ replaceWith: '_' }));
+
+
+
+const scriptSrcUrls = [];
+const styleSrcUrls = [];
+const connectSrcUrls = [];
+const fontSrcUrls = [
+   "https://fonts.gstatic.com/",
+];
+
+app.use(
+   helmet.contentSecurityPolicy({
+      directives: {
+         defaultSrc: [],
+         connectSrc: ["'self'", ...connectSrcUrls],
+         scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+         styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+         workerSrc: ["'self'", "blob:"],
+         objectSrc: [],
+         imgSrc: [
+            "'self'",
+            "blob:",
+            "data:",
+            "https://steamcdn-a.akamaihd.net/",
+         ],
+         fontSrc: [
+            "'self'",
+            "data:",
+            ...fontSrcUrls
+         ],
+      },
+   })
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const secret = process.env.SECRET || 'thisshoulbeabettersecret!';
@@ -97,21 +152,7 @@ app.use(passport.session());
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// PASSPORT 
+// PASSPORT STRATEGIES
 
 passport.serializeUser(function (user, done) {
    done(null, user);
@@ -175,6 +216,7 @@ passport.use('steam', new SteamStrategy({
 
 app.use(async (req, res, next) => {
    res.locals.server = server;
+   res.locals.maxShownTrades = maxShownTrades;
    res.locals.currentUser = req.user;
    res.locals.url = req.originalUrl;
    res.locals.info = req.flash('info');
@@ -186,14 +228,12 @@ app.use(async (req, res, next) => {
    if (req.session.currency == undefined) {
       req.session.currency = { code: 'PLN', symbol: 'zł', multiplier: 1 };
    }
-
    res.locals.currency = req.session.currency;
 
    // CHECKING UPDATES IN CURRENT USER EXCEPT OF LOGGING IN AND OUT!!!
    const exceptions = ['/auth', '/auth/steam', '/auth/steam/return', '/user/register', '/user/login', '/user/logout'];
    const index = exceptions.indexOf(req.originalUrl);
    if (index == -1) {
-
       try {
 
          if (req.user != null && req.user != undefined) {
@@ -211,7 +251,8 @@ app.use(async (req, res, next) => {
    }
 
 
-
+   // console.log(res.locals.url)
+   if (res.locals.url.indexOf('/auth/steam/return') == -1) { app.use(mongoSanitize({ replaceWith: '_' })); }
 
    next();
 })
