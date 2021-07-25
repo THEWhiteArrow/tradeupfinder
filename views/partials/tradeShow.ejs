@@ -6,17 +6,24 @@
 
    <section class="stats my-4 confetti-container">
       <% const bg=trade.rarity+"-"+trade.targetedRarity %>
+
          <%- include('./statsItem.ejs',{statsTitle:'Avg. Float',
             statsValue:(profit.instance.avg+'00').slice(0,6),symbol:'',className:'avg-float',bg:bg,}) %>
+
             <%- `${include('./statsItem.ejs',{statsTitle:'Cost',statsValue:Math.round(trade.inputPrice*currency.multiplier*100)/100
                ,symbol:currency.symbol,className:'input-price',bg:bg,}) }` %>
+
                <%- `${include('./statsItem.ejs',{statsTitle:'Chances',statsValue:
                   profit.instance.chances,symbol:'%',className:'chances',bg:bg,}) }`%>
+
                   <%- `${include('./statsItem.ejs',{statsTitle:'Avg. Profit',
-                     statsValue:Math.round(trade.profitPerTradeUp*currency.multiplier*100)/100,
+                     statsValue:Math.round(trade.profitPerTradeUpTaxed*currency.multiplier*100)/100 + ' / ' +
+                     Math.round(trade.profitPerTradeUp*currency.multiplier*100)/100,
                      symbol:currency.symbol,className:'perTradeUp',bg:bg,})}`%>
+
                      <%- `${include('./statsItem.ejs',{statsTitle:'Profitability',
-                        statsValue:trade.returnPercentage,symbol:'%',className:'profitability',bg:bg,})}` %>
+                        statsValue:trade.returnPercentageTaxed + ' / ' +
+                        trade.returnPercentage,symbol:'%',className:'profitability',bg:bg,})}` %>
 
 
    </section>
@@ -88,27 +95,17 @@
 
                      <div class="py-3 input-skins slim-scrollbar">
 
-                        <% for(let i=1;i<=profit.amount.amount1;++i){ %>
+                        <% for(let inputSkin of trade.inputSkinsArr){ %>
 
-                           <%- `${include('./skinCard.ejs',{ float:trade.firstSkinAvgFloat,amount:profit.amount.amount1,
-                              price:Math.round(trade.firstPrice*currency.multiplier*100)/100,type:'input-skin',
-                              link:trade.firstSkinUrl, icon:trade.firstSkin.icon, _id:trade.firstSkin._id,
-                              label:trade.firstSkin.name + ' | ' + trade.firstSkin.skin + ' (' + trade.firstQuality
-                              + ') ' , sn:'1:'+i+':' }) }` %>
+                           <%- `${include('./skinCard.ejs',{ float:inputSkin.float,amount:'',
+                              price:Math.round(inputSkin.price*currency.multiplier*100)/100,type:'input-skin',
+                              link:inputSkin.link, icon:inputSkin.icon, _id:inputSkin._id, label:inputSkin.name + ' | '
+                              + inputSkin.skin + ' (' + inputSkin.quality + ') ' , sn:inputSkin.sn,
+                              min_float:inputSkin.min_float, max_float:inputSkin.max_float}) }` %>
 
                               <% } %>
 
 
-                                 <% for(let i=1;i<=profit.amount.amount2;++i){ %>
-
-                                    <%- `${include('./skinCard.ejs',{
-                                       float:trade.secondSkinAvgFloat,amount:profit.amount.amount2,
-                                       price:Math.round(trade.secondPrice*currency.multiplier*100)/100,type:'input-skin',
-                                       link:trade.secondSkinUrl, icon:trade.secondSkin.icon, _id:trade.secondSkin._id,
-                                       label:trade.secondSkin.name + ' | ' + trade.secondSkin.skin + ' (' +
-                                       trade.secondQuality + ') ' ,sn:'2:'+i+':' }) }` %>
-
-                                       <% } %>
 
                      </div>
 
@@ -123,7 +120,8 @@
                            <%- `${include('./skinCard.ejs',{ float:targetedSkin.float, amount:targetedSkin.amount,
                               price:Math.round(targetedSkin.price*currency.multiplier*100)/100,
                               type:'output-skin',link:targetedSkin.url, icon:targetedSkin.icon, _id:targetedSkin._id,
-                              label:`${targetedSkin.name} | ${targetedSkin.skin} (${targetedSkin.quality})` })}` %>
+                              label:`${targetedSkin.name} | ${targetedSkin.skin}
+                              (${targetedSkin.quality})`,sn:targetedSkin._id })}` %>
                               <% } %>
 
 
@@ -175,7 +173,7 @@
                      +" _ "+alternateSkin.amount + " _ " + alternateSkin.float + " _ " + alternateSkin.botPrice
                            + " _ " + alternateSkin.url , link:alternateSkin.url, type:type, icon:alternateSkin.icon,
                            _id:alternateSkin._id,amount:alternateSkin.amount, label:alternateSkin.name+ ' | ' +
-                           alternateSkin.skin + ' (' + alternateSkin.quality + ') ' ,symbol:currency.symbol })}`%>
+                           alternateSkin.skin + ' (' + alternateSkin.quality + ') ' ,symbol:currency.symbol,sn:alternateSkin._id })}`%>
 
                            <% } %>
          </div>
@@ -236,6 +234,7 @@
 <script src="/javascripts/bootstrapJs/validateForms.js"></script>
 
 <script src="/javascripts/tradeShow/recheckingTrade.js"></script>
+
 <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )){ %>
    <script src="/javascripts/tradeShow/alternateSkinsCheckbox.js"></script>
    <script src="/javascripts/tradeShow/bot.js"></script>

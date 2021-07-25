@@ -1,11 +1,11 @@
-<div id="skin-<%= _id %>" class="card skin-card <%= type %>">
+<div id="<%= sn %>" class="card skin-card <%= type %>">
 
 
 
 
    <% if(type=='output-skin' ){ %>
       <div class="skin-card-float skin-card-float-left border border-1">
-         <%= float %>
+         <%= (float+'0000').slice(0,6) %>
       </div>
       <div class="skin-card-chances  border border-1">
          <%= Math.round(amount/profit.instance.targetedSkinsNumber*100 *100)/100 %>%
@@ -23,9 +23,10 @@
             <%= amount %>
          </span>
          <% }else if(type=='input-skin' ){ %>
-            <input id="<%= sn %>float:<%= _id %>" name="<%= sn %>float:<%= _id %>" type="number"
+            <input id="float:<%= sn %>" name="float:<%= sn %>" type="number"
                class="form-control text-center skin-card-float skin-card-float-left border border-1 box-shadow-inset"
-               value="<%= (float+'00').slice(0,5) %>" step="0.001" min="0.001" required>
+               value="<%= (float+'00').slice(0,5) %>" step="0.001" min="<%= min_float %>" max="<%= max_float %>"
+               required>
             <!-- <div class="skin-card-float skin-card-float-left border border-1">
                <%= float %>
             </div> -->
@@ -43,12 +44,12 @@
                </label>
                <% if(type=='input-skin' ){ %>
 
-                  <input id="<%= sn %><%= _id %>" value="<%= price %>" type="number" name="<%= sn %><%= _id %>"
+                  <input id="inputPrice:<%= sn %>" value="<%= price %>" type="number" name="inputPrice:<%= sn %>"
                      class="form-control box-shadow-inset  text-center mt-1 price-input" step="0.01" min="0.01"
                      required>
                   <% }else if( type=='output-skin' ) {%>
 
-                     <input id="<%= _id %>" value="<%= price %>" type="number" name="<%= _id %>"
+                     <input id="outputPrice:<%= _id %>" value="<%= price %>" type="number" name="outputPrice:<%= _id %>"
                         class="form-control box-shadow-inset  text-center mt-1 price-input" step="0.01" min="0.01"
                         required>
 

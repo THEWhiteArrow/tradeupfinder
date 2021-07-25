@@ -45,24 +45,30 @@ const setUpRecheckingTrade = async () => {
             const newInfo = await getPricesAndFetchData(recheckForm, 'readonly', {})
             recheckingInfo = newInfo;
 
-         }
+            setTimeout(async () => {
 
-         setTimeout(async () => {
+               isRecheckingBusy.pop();
+               if (isRecheckingBusy.length == 1) {
+                  const data = await getPricesAndFetchData(recheckForm, 'request', recheckingInfo);
+                  // console.log(data)
+                  if (data.success) {
+                     changeStats(data)
+                  }
 
-            isRecheckingBusy.pop();
-            if (isRecheckingBusy.length == 1) {
-               const data = await getPricesAndFetchData(recheckForm, 'request', recheckingInfo);
-               // console.log(data)
-               if (data.success) {
-                  changeStats(data)
+                  animateConfetti();
+                  destroyChart()
+                  createChart(range)
                }
 
-               animateConfetti();
-               destroyChart()
-               createChart(range)
-            }
+            }, 750);
+         } else {
+            setTimeout(async () => {
 
-         }, 750);
+               isRecheckingBusy.pop();
+
+            }, 750);
+         }
+
 
 
 
@@ -81,12 +87,13 @@ const changeStats = (data) => {
 
    tradeUpCostEl.innerText = data.inputPrice;
    tradeUpChancesEl.innerText = data.chances;
-   tradeUpProfitabilityEl.innerText = data.returnPercentage;
-   tradeUpProfitPerTradeUpEl.innerText = data.profitPerTradeUp;
+   tradeUpProfitabilityEl.innerText = data.returnPercentageTaxed + ' / ' + data.returnPercentage;
+   tradeUpProfitPerTradeUpEl.innerText = data.profitPerTradeUpTaxed + ' / ' + data.profitPerTradeUp;
 
    if (data.isAvgFloatChanged) {
       console.log('...user changed floats...')
-      const tradeUpAvgFloatEl = document.querySelector('.stats-item-value.avg-float .content').innerText = (data.avgFloat + '00').slice(0, 6);
+      const tradeUpAvgFloatEl = document.querySelector('.stats-item-value.avg-float .content')
+      tradeUpAvgFloatEl.innerText = (data.avgFloat + '000').slice(0, 6);
 
       for (let info of data.outputSkinsNewData) {
          const outputSkinCard = document.querySelector(`#skin-${info._id}`)
@@ -100,6 +107,13 @@ const changeStats = (data) => {
          float.innerText = info.float;
          priceInput.value = info.price;
       }
+
+      const inputSkinCardLabel = document.querySelectorAll(`.input-skin label`)
+      for (let i = 0; i < 10; ++i) {
+         let qIndex = inputSkinCardLabel[i].innerText.indexOf('(');
+         inputSkinCardLabel[i].innerText = inputSkinCardLabel[i].innerText.slice(0, qIndex) + `(${data.inputSkinsQualities[i]})`;
+      }
+
    }
 
    console.log('recalculated the trade-up successfully...')

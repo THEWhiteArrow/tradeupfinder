@@ -1,4 +1,4 @@
-const { checkQuality, findCheapestSkin, mergeSort, sumUpBodyPart } = require('../utils/functions');
+const { checkQuality, findCheapestSkin, mergeSort, recheckTrade, isEmpty } = require('../utils/functions');
 const { qualities, rarities, avg_floats } = require('../utils/variables');
 const fetch = require('node-fetch');
 
@@ -257,194 +257,13 @@ module.exports.showTrade = async (req, res) => {
 
 module.exports.recheckStats = async (req, res) => {
 
-   // EDITING GLOBALLY SETTING UP AND CHECKING PERMISSION
-   const { editGloballySwitch = 'false' } = req.body;
-   const { user } = req;
-   let userPermittedToEditGlobally = false;
-   if (user && (user.role == 'admin' || user.role == 'moderator')) {
-      userPermittedToEditGlobally = true;
+   if (!isEmpty(req.body)) {
+      const feedback = await recheckTrade(req, res, steamTax, Trade, 'Trade', Highlight)
+      res.json(feedback);
+   } else {
+      res.json({ success: false });
    }
 
-
-   const { currency } = req.session;
-   const { tradeId } = req.params;
-   console.log(req.body)
-
-   try {
-      const foundTrade = await Trade.findById(tradeId);
-      // const firstPrice = Math.round(req.body['1:' + foundTrade.instance.trade.firstSkin._id] / currency.multiplier * 100) / 100;
-      // const secondPrice = Math.round(req.body['2:' + foundTrade.instance.trade.secondSkin._id] / currency.multiplier * 100) / 100;
-
-
-      const { amount, instance, pricesType } = foundTrade;
-      const { targetedSkinsNumber, trade } = instance;
-
-      const { firstSkin, secondSkin } = trade;
-      const firstCollection = firstSkin.case;
-      const secondCollection = secondSkin.case;
-
-
-      const firstPricePart = sumUpBodyPart('1', amount.amount1, req.body, firstSkin._id, '')
-      const secondPricePart = sumUpBodyPart('2', amount.amount2, req.body, secondSkin._id, '')
-      const inputPrice = Math.round((firstPricePart + secondPricePart) / currency.multiplier * 100) / 100;
-
-      let total = 0;
-      let newTargetedSkin = {}
-      let newMaxPrice = 0;
-
-      const newAvgFloat = Math.round((sumUpBodyPart('1', amount.amount1, req.body, firstSkin._id, 'float:') + sumUpBodyPart('2', amount.amount2, req.body, secondSkin._id, 'float:')) / 10 * 10000) / 10000;
-      let isAvgFloatChanged = false;
-      if (newAvgFloat != instance.avg) {
-         isAvgFloatChanged = true;
-         console.log(newAvgFloat)
-         // CHANGE TARGETED SKINS PRICES RIGHT AWAY
-         //chaniging inthe part below
-         // AND LATER ON THOSE PRICES ARE NEEDED TO BE SENT BACK TO CHANGE ON PAGE PRICES BECAUSE IT WILL MAKE A DIFFERENCE
-      }
-
-      const outputSkinsNewData = [];
-      const newTargetedSkinsQuality = [];
-      for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
-
-         let newPriceSteamTaxed = Math.round(req.body[trade.targetedSkinsArr[i]._id] / currency.multiplier * steamTax * 100) / 100;
-         let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] / currency.multiplier * 100) / 100;
-
-         if (isAvgFloatChanged) {
-            const newFloat = Math.round(((trade.targetedSkinsArr[i].max_float - trade.targetedSkinsArr[i].min_float) * newAvgFloat + trade.targetedSkinsArr[i].min_float) * 1000) / 1000;
-            const newQuality = checkQuality(newFloat);
-            // CHANGE TARGETED SKINS PRICES RIGHT AWAY
-            newPrice = trade.targetedSkinsArr[i].prices[newQuality]
-            newPriceSteamTaxed = Math.round(newPrice * steamTax * 100) / 100;
-
-            outputSkinsNewData.push({ _id: trade.targetedSkinsArr[i]._id, price: newPrice, float: newFloat, quality: newQuality })
-            newTargetedSkinsQuality.push(newQuality);
-         }
-
-
-
-         if (newPriceSteamTaxed > newMaxPrice) {
-
-            newTargetedSkin = {
-               _id: trade.targetedSkinsArr[i]._id,
-               name: trade.targetedSkinsArr[i].name,
-               skin: trade.targetedSkinsArr[i].skin,
-               case: trade.targetedSkinsArr[i].case,
-               rarity: trade.targetedSkinsArr[i].rarity,
-               min_float: trade.targetedSkinsArr[i].min_float,
-               max_float: trade.targetedSkinsArr[i].max_float,
-               float: trade.targetedSkinsArr[i].float,
-               price: newPrice,
-               priceSteamTaxed: newPriceSteamTaxed,
-               targetedQuality: trade.targetedSkinsArr[i].quality,
-               icon: trade.targetedSkinsArr[i].icon,
-            }
-            newMaxPrice = newPriceSteamTaxed;
-         }
-
-
-         trade.targetedSkinsArr[i].price = newPrice;
-         trade.targetedSkinsArr[i].priceSteamTaxed = newPriceSteamTaxed;
-
-         if (trade.targetedSkinsArr[i].case == firstCollection && trade.targetedSkinsArr[i].case == secondCollection) {
-            total += (newPriceSteamTaxed * 10);
-         } else if (trade.targetedSkinsArr[i].case == firstCollection) {
-            total += (newPriceSteamTaxed * Number(amount.amount1));
-         } else if (trade.targetedSkinsArr[i].case == secondCollection) {
-            total += (newPriceSteamTaxed * Number(amount.amount2));
-         }
-
-
-
-      }
-
-
-
-
-
-      let wantedOutputChance = 0;
-      // const inputPrice = Math.round((amount.amount1 * firstPrice + amount.amount2 * secondPrice) * 100) / 100;
-
-
-      for (let outputSkin of trade.targetedSkinsArr) {
-         if (inputPrice <= outputSkin.priceSteamTaxed) {
-            wantedOutputChance += outputSkin.amount;
-         }
-
-      }
-
-      const avgPrice = total / targetedSkinsNumber;
-      const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
-      const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
-
-
-      instance.total = total;
-      instance.wantedOutputChance = wantedOutputChance;
-      instance.chances = Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100;
-      instance.trade.targetedSkin = newTargetedSkin
-      instance.trade.firstPrice = firstPricePart;
-      instance.trade.secondPrice = secondPricePart;
-      instance.trade.targetedPrice = newMaxPrice;
-      instance.trade.inputPrice = inputPrice;
-      instance.trade.profitPerTradeUp = profitPerTradeUp;
-      instance.trade.returnPercentage = returnPercentage;
-      instance.trade.targetedSkinsArr = trade.targetedSkinsArr;
-
-      if (newAvgFloat != instance.avg) {
-         instance.trade.targetedSkinsQuality = newTargetedSkinsQuality;
-         // CHANGE TARGETED SKINS PRICES RIGHT AWAY
-
-         // AND LATER ON THOSE PRICES ARE NEEDED TO BE SENT BACK TO CHANGE ON PAGE PRICES BECAUSE IT WILL MAKE A DIFFERENCE
-      }
-
-
-
-      // UPDATING IF EDIT GLOBALLY SWITCH AND IF USER ALLOWED
-      if (editGloballySwitch == true && userPermittedToEditGlobally) {
-
-         if (foundTrade.isHighlighted) {
-
-            if (returnPercentage > 100) {
-               const updatedTrade = await Trade.findByIdAndUpdate(foundTrade._id, { instance })
-               const updatedHighlight = await Highlight.findByIdAndUpdate(foundTrade.highlightedTrade, { instance })
-            } else {
-               const updatedTrade = await Trade.findByIdAndUpdate(foundTrade._id, { instance, isHighlighted: false })
-               // WTEDY USUŃ HIGHLIGHT BO JUZ NIE JEST OPŁACALNY
-               await Highlight.findByIdAndDelete(foundTrade.highlightedTrade)
-            }
-         } else {
-            const updatedTrade = await Trade.findByIdAndUpdate(foundTrade._id, { instance }, { new: true })
-         }
-
-      }
-
-
-      const feedback = {
-         success: true,
-         inputPrice: Math.round(inputPrice * currency.multiplier * 100) / 100,
-         profitPerTradeUp: Math.round(profitPerTradeUp * currency.multiplier * 100) / 100,
-         returnPercentage,
-         wantedOutputChance,
-         targetedSkinsNumber,
-         avgFloat: newAvgFloat,
-         // firstPrice: Math.round(firstPricePart * currency.multiplier * 100) / 100,
-         // secondPrice: Math.round(secondPricePart * currency.multiplier * 100) / 100,
-         // targetedPrice: Math.round(newMaxPrice * currency.multiplier * 100) / 100,
-         symbol: currency.symbol,
-         chances: Math.round(wantedOutputChance / targetedSkinsNumber * 100 * 100) / 100,
-         editedGlobally: editGloballySwitch,
-      };
-
-      isAvgFloatChanged ? feedback.isAvgFloatChanged = true : feedback.isAvgFloatChanged = false;
-      isAvgFloatChanged ? feedback.outputSkinsNewData = outputSkinsNewData : null;
-
-
-      res.json(feedback);
-   } catch (e) {
-      console.log(e)
-
-      const feedback = { success: false };
-      res.json(feedback);
-   }
 }
 
 module.exports.updateCurrentTradesByOuterServer = async (req, res) => {
@@ -512,6 +331,8 @@ const mixedTwoPairs = async (req) => {
       amount2 = 6;
    }
 
+   console.log(amount1, amount2)
+
    let counter = 0;
    const profits = [];
 
@@ -547,6 +368,10 @@ const mixedTwoPairs = async (req) => {
                            if (secondSkinAvgFloat > secondSkin.max_float) secondSkinAvgFloat = secondSkin.max_float;
                            if (secondSkinAvgFloat < secondSkin.min_float) secondSkinAvgFloat = secondSkin.min_float;
 
+                           const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 10000) / 10000;
+                           const firstPrice = firstSkin[pricesType][firstQuality] + priceCorrection;
+                           const secondPrice = secondSkin[pricesType][secondQuality] + priceCorrection;
+                           const inputPrice = Math.round((amount1 * firstPrice + amount2 * secondPrice) * 100) / 100;
 
                            // MANUAL FLOATS CORRECTION
                            // ######################################################################################################
@@ -557,19 +382,63 @@ const mixedTwoPairs = async (req) => {
                            // if (firstSkin.skin == "Prototype" && firstQuality == "Factory New") firstSkinAvgFloat = 0.053;
                            // if (secondSkin.skin == "Prototype" && secondQuality == "Factory New") secondSkinAvgFloat = 0.053;
                            // ######################################################################################################
+                           let firstSkinLink = '';
+                           let secondSkinLink = '';
 
+                           if (pricesType === 'stattrakPrices') {
+                              firstSkinLink = encodeURI(`${steamBaseUrl}StatTrak™ ${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`);
+                              secondSkinLink = encodeURI(`${steamBaseUrl}StatTrak™ ${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`);
+                           } else if (pricesType === 'prices') {
+                              firstSkinLink = encodeURI(`${steamBaseUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`);
+                              secondSkinLink = encodeURI(`${steamBaseUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`);
+                           }
 
-                           const avg = Math.round(((amount1 * firstSkinAvgFloat + amount2 * secondSkinAvgFloat) / 10) * 10000) / 10000;
-                           const firstPrice = firstSkin[pricesType][firstQuality] + priceCorrection;
-                           const secondPrice = secondSkin[pricesType][secondQuality] + priceCorrection;
-                           const inputPrice = Math.round((amount1 * firstPrice + amount2 * secondPrice) * 100) / 100;
+                           const inputSkinsArr = [];
+                           for (let i = 1; i <= amount1; ++i)inputSkinsArr.push({
+                              _id: firstSkin._id,
+                              name: firstSkin.name,
+                              skin: firstSkin.skin,
+                              case: firstSkin.case,
+                              rarity: firstSkin.rarity,
+                              min_float: firstSkin.min_float,
+                              max_float: firstSkin.max_float,
+
+                              icon: firstSkin.icon,
+
+                              float: firstSkinAvgFloat,
+                              link: firstSkinLink,
+                              price: firstPrice,
+                              quality: firstQuality,
+                              sn: `1:${i}:${firstSkin._id}`,
+                           })
+                           for (let i = 1; i <= amount2; ++i)inputSkinsArr.push({
+                              _id: secondSkin._id,
+                              name: secondSkin.name,
+                              skin: secondSkin.skin,
+                              case: secondSkin.case,
+                              rarity: secondSkin.rarity,
+                              min_float: secondSkin.min_float,
+                              max_float: secondSkin.max_float,
+
+                              icon: secondSkin.icon,
+
+                              float: secondSkinAvgFloat,
+                              link: secondSkinLink,
+                              price: secondPrice,
+                              quality: secondQuality,
+                              sn: `2:${i}:${secondSkin._id}`,
+                           })
+
 
                            let wantedOutputChance = 0;
 
                            let targetedSkinsArr = [];
                            let alternateInputSkins = [];
                            let targetedSkinsNumber = 0;
+
                            let total = 0;
+                           let totalTaxed = 0;
+
                            let targetedSkinsQuality = []
 
                            let max = 0;
@@ -582,7 +451,7 @@ const mixedTwoPairs = async (req) => {
                                  for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
 
                                     const { min_float, max_float } = targetedSkin;
-                                    const float = Math.round(((max_float - min_float) * avg + min_float) * 1000) / 1000;
+                                    const float = Math.round(((max_float - min_float) * avg + min_float) * 10000) / 10000;
                                     const targetedQuality = checkQuality(float);
 
                                     const targetedPriceSteamTaxed = Math.round((targetedSkin[pricesType][targetedQuality] * steamTax) * 100) / 100;
@@ -631,19 +500,22 @@ const mixedTwoPairs = async (req) => {
 
 
                                     if (targetedCollection.name == firstSkin.case && targetedCollection.name == secondSkin.case) {
-                                       total += (targetedPriceSteamTaxed * (amount1 + amount2));
+                                       total += (targetedPrice * (amount1 + amount2));
+                                       totalTaxed += (targetedPriceSteamTaxed * (amount1 + amount2));
                                        targetedSkinsNumber += (1 * (amount1 + amount2));
                                        inputPrice <= targetedPriceSteamTaxed ? wantedOutputChance += (amount1 + amount2) : null;
                                        targetedSkinPom.amount = amount1 + amount2;
 
                                     } else if (targetedCollection.name == firstSkin.case) {
-                                       total += (targetedPriceSteamTaxed * amount1);
+                                       total += (targetedPrice * amount1);
+                                       totalTaxed += (targetedPriceSteamTaxed * amount1);
                                        targetedSkinsNumber += (1 * amount1);
                                        inputPrice <= targetedPriceSteamTaxed ? wantedOutputChance += (amount1) : null;
                                        targetedSkinPom.amount = amount1;
 
                                     } else if (targetedCollection.name == secondSkin.case) {
-                                       total += (targetedPriceSteamTaxed * amount2);
+                                       total += (targetedPrice * amount2);
+                                       totalTaxed += (targetedPriceSteamTaxed * amount2);
                                        targetedSkinsNumber += (1 * amount2);
                                        inputPrice <= targetedPriceSteamTaxed ? wantedOutputChance += (amount2) : null;
                                        targetedSkinPom.amount = amount2;
@@ -714,11 +586,16 @@ const mixedTwoPairs = async (req) => {
 
 
                            const avgPrice = total / targetedSkinsNumber;
+                           const avgPriceTaxed = totalTaxed / targetedSkinsNumber;
                            const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
+                           const profitPerTradeUpTaxed = Math.round((avgPriceTaxed - inputPrice) * 100) / 100;
                            const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
+                           const returnPercentageTaxed = Math.round(((avgPriceTaxed) / inputPrice * 100) * 100) / 100;
 
                            if (profitPerTradeUp > 0 && inputPrice < 100) {
                               const trade = {
+                                 inputSkinsArr,
+
                                  firstSkin,
                                  secondSkin,
                                  targetedSkin: maxSkin,
@@ -743,8 +620,11 @@ const mixedTwoPairs = async (req) => {
                                  targetedSkinsArr,
                                  targetedSkinsQuality,
                                  alternateInputSkins,
+
                                  profitPerTradeUp,
+                                 profitPerTradeUpTaxed,
                                  returnPercentage,
+                                 returnPercentageTaxed,
                               }
 
                               if (pricesType === 'stattrakPrices') {
@@ -761,6 +641,7 @@ const mixedTwoPairs = async (req) => {
                                  trade,
                                  avg,
                                  total,
+                                 totalTaxed,
                                  targetedSkinsNumber,
                                  wantedOutputChance,
                                  chances: Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100,

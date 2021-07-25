@@ -11,6 +11,7 @@
    <link rel="stylesheet" href="/stylesheets/root.css">
    <link rel="stylesheet" href="/stylesheets/app.css">
 
+   <script src="/javascripts/axios.min.js"></script>
 </head>
 
 <body class="slim-scrollbar">
@@ -26,7 +27,7 @@
          <%- include('../partials/footer')%>
 
 
-            <script src="/javascripts/axios.min.js"></script>
+
             <script src="/javascripts/popper.min.js"></script>
             <script src="/javascripts/bootstrap.min.js"></script>
             <script src="/javascripts/bootstrapJs/popovers.js"></script>
@@ -34,8 +35,12 @@
             <script src='/javascripts/bootstrapJs/toasts.js'></script>
             <script src="/javascripts/navbar/navbar.js"></script>
 
-            <% if (!cookiesAcceptance) { %>
 
+
+
+
+
+            <% if (!cookiesAcceptance) { %>
                <%- include('../partials/cookiesModal')%>
                   <% } %>
 
