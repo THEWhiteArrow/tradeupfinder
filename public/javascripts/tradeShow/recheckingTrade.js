@@ -91,6 +91,7 @@ const changeStats = (data) => {
    tradeUpProfitabilityEl.innerText = data.returnPercentageTaxed + ' / ' + data.returnPercentage;
    tradeUpProfitPerTradeUpEl.innerText = data.profitPerTradeUpTaxed + ' / ' + data.profitPerTradeUp;
 
+   console.log(data)
    if (data.isAvgFloatChanged) {
       console.log('...user changed floats...')
       const tradeUpAvgFloatEl = document.querySelector('.stats-item-value.avg-float .content')
@@ -104,7 +105,6 @@ const changeStats = (data) => {
 
          float.innerText = info.float;
          let qIndex = label.innerText.indexOf('(');
-         let qIndex2 = label.innerText.indexOf(')');
 
          // const oldQuality = label.innerText.slice(qIndex + 1, qIndex2)
          // if (oldQuality != info.quality) {

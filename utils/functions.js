@@ -106,9 +106,8 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
       const newTargetedSkinsQuality = [];
       for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
 
-         let newPriceSteamTaxed = Math.round(req.body['outputPrice:' + trade.targetedSkinsArr[i]._id] / currency.multiplier * steamTax * 100) / 100;
-         let newPrice = Math.round(req.body['outputPrice:' + trade.targetedSkinsArr[i]._id] / currency.multiplier * 100) / 100;
-         trade.targetedSkinsArr[i].prices[trade.targetedSkinsArr[i].quality] = newPrice;
+         let newPriceSteamTaxed = 0, newPrice = 0;
+
 
          if (isAvgFloatChanged) {
             const newFloat = Math.round(((trade.targetedSkinsArr[i].max_float - trade.targetedSkinsArr[i].min_float) * newAvgFloat + trade.targetedSkinsArr[i].min_float) * 10000) / 10000;
@@ -123,6 +122,11 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
             outputSkinsNewData.push({ _id: trade.targetedSkinsArr[i]._id, price: newPrice, float: newFloat, quality: newQuality })
             newTargetedSkinsQuality.push(newQuality);
             // }
+         } else {
+            newPriceSteamTaxed = Math.round(req.body['outputPrice:' + trade.targetedSkinsArr[i]._id] / currency.multiplier * steamTax * 100) / 100;
+            newPrice = Math.round(req.body['outputPrice:' + trade.targetedSkinsArr[i]._id] / currency.multiplier * 100) / 100;
+            trade.targetedSkinsArr[i].prices[trade.targetedSkinsArr[i].quality] = newPrice;
+
          }
 
 
