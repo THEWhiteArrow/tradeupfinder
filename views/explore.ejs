@@ -116,9 +116,9 @@
                <h3 class="px-1 pb-2   border-bottom">Available Trades</h3>
 
                <div class="researches">
-                  <% let i=1;for(let research of researchesName){ %>
+                  <% let i=0;for(let research of researchesName){ %>
 
-                     <div class="d-flex flex-row m-1">
+                     <div data-aos="zoom-in" date-aos-delay="<%= 50*i %>" class="d-flex flex-row m-1">
 
                         <label class="lead form-control flex-1 rounded-0 rounded-start"
                            for="success-outlined-<%= research.name %>">
@@ -128,7 +128,7 @@
 
                            <input type="radio" class="btn-check" name="researchName"
                               id="success-outlined-<%= research.name %>" value="<%= research.name %>" autocomplete="off"
-                              <% if(i==1){ %>checked <% }i++; %> >
+                              <% if(i==0){ %>checked <% }i++; %> >
                               <label class="btn  btn-outline-primary border-0 h-100 rounded-0 rounded-end"
                                  for="success-outlined-<%= research.name %>">
 

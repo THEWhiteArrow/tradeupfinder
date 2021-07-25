@@ -23,15 +23,17 @@
 
       <% if(favouriteTrades.length){ %>
          <ul class="mb-5 pb-5">
+            <% let i=0;let directions=['right','left']; %>
+               <% for(let favouriteTrade of favouriteTrades){ %>
+                  <% ++i; %>
 
-            <% for(let favouriteTrade of favouriteTrades){ %>
+                     <% const tradeDetails=favouriteTrade.instance.trade %>
 
-               <% const tradeDetails=favouriteTrade.instance.trade %>
+                        <%-`
+                           ${include('../partials/tradeTile',{elementName:'li',title:false,trade:favouriteTrade,details:tradeDetails,manageTrade:favouriteTrade.orginalTrade,showPageLink:'/favourites/'+favouriteTrade._id+'/edit',
+                           animationData:`data-aos="fade-${directions[i%2]}" `})}`%>
 
-                  <%-`
-                     ${include('../partials/tradeTile',{elementName:'li',title:false,trade:favouriteTrade,details:tradeDetails,manageTrade:favouriteTrade.orginalTrade,showPageLink:'/favourites/'+favouriteTrade._id+'/edit'})}`%>
-
-                     <% } %>
+                           <% } %>
 
 
 

@@ -107,7 +107,8 @@
                               price:Math.round(inputSkin.price*currency.multiplier*100)/100,type:'input-skin',
                               link:inputSkin.link, icon:inputSkin.icon, _id:inputSkin._id, label:inputSkin.name + ' | '
                               + inputSkin.skin + ' (' + inputSkin.quality + ') ' , sn:inputSkin.sn,
-                              min_float:inputSkin.min_float, max_float:inputSkin.max_float}) }` %>
+                              min_float:inputSkin.min_float, max_float:inputSkin.max_float,
+                              animationData:`data-aos="zoom-in" data-aos-once="true" data-aos-anchor="#inputs" ` })}`%>
 
                               <% } %>
 
@@ -127,7 +128,8 @@
                               price:Math.round(targetedSkin.price*currency.multiplier*100)/100,
                               type:'output-skin',link:targetedSkin.url, icon:targetedSkin.icon, _id:targetedSkin._id,
                               label:`${targetedSkin.name} | ${targetedSkin.skin}
-                              (${targetedSkin.quality})`,sn:targetedSkin._id })}` %>
+                              (${targetedSkin.quality})`,sn:targetedSkin._id, animationData:`data-aos="zoom-in"
+                              data-aos-once="true" data-aos-anchor="#outputs" ` })}` %>
                               <% } %>
 
 
@@ -170,26 +172,28 @@
 
       <div class="card-body">
 
-         <div class="alternate-skins pt-3 slim-scrollbar">
+         <div id="alternates" class="alternate-skins pt-3 slim-scrollbar">
             <% let type="alternate-skin-checkbox" ;if(!currentUser||currentUser.role=='guest' )type='alternate-skin' %>
                <% for(let alternateSkin of trade.alternateInputSkins){ %>
 
-                  <%- `${include("./skinCard.ejs",{ float:alternateSkin.float,
+                  <%- `${include('./skinCard.ejs',{ float:alternateSkin.float,
                      price:Math.round(alternateSkin.price*currency.multiplier*100)/100, value: alternateSkin.replacement
-                     +" _ "+alternateSkin.amount + " _ " + alternateSkin.float + " _ " + alternateSkin.botPrice
-                           + " _ " + alternateSkin.url , link:alternateSkin.url, type:type, icon:alternateSkin.icon,
+                     +' _ '+alternateSkin.amount + ' _ ' + alternateSkin.float + ' _ ' + alternateSkin.botPrice
+                           + ' _ ' + alternateSkin.url , link:alternateSkin.url, type:type, icon:alternateSkin.icon,
                            _id:alternateSkin._id,amount:alternateSkin.amount, label:alternateSkin.name+ ' | ' +
-                           alternateSkin.skin + ' (' + alternateSkin.quality + ') ' ,symbol:currency.symbol,sn:alternateSkin._id })}`%>
+                           alternateSkin.skin + ' (' + alternateSkin.quality + ') '
+                     ,symbol:currency.symbol,sn:alternateSkin._id, animationData:`data-aos="zoom-in"
+                     data-aos-once="true" data-aos-anchor=".alternate-skins" `})}`%>
 
-                           <% } %>
-         </div>
-
-         <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator')){ %> 
-         <button class=" btn btn-success w-100 mt-3" id="code-for-bot">Generate Bot's Code</button>
                      <% } %>
-
-
          </div>
+
+         <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )){ %>
+            <button class=" btn btn-success w-100 mt-3" id="code-for-bot">Generate Bot's Code</button>
+            <% } %>
+
+
+      </div>
    </section>
 
    <section class="card d-flex my-5">

@@ -32,15 +32,17 @@
       <% if(profitableTrades){ %>
 
          <ul>
+            <% let i=0;let directions=['right','left']; %>
+               <% for(let profitableTrade of profitableTrades){ %>
+                  <% ++i; %>
 
-            <% for(let profitableTrade of profitableTrades){ %>
+                     <% const tradeDetails=profitableTrade.instance.trade %>
 
-               <% const tradeDetails=profitableTrade.instance.trade %>
+                        <%-`
+                           ${include('../partials/tradeTile',{elementName:'li',title:false,trade:profitableTrade,details:tradeDetails,manageTrade:profitableTrade,showPageLink:'/trades/'+profitableTrade._id,
+                           animationData:`data-aos="fade-${directions[i%2]}" `})}`%>
 
-                  <%-`
-                     ${include('../partials/tradeTile',{elementName:'li',title:false,trade:profitableTrade,details:tradeDetails,manageTrade:profitableTrade,showPageLink:'/trades/'+profitableTrade._id})}`%>
-
-                     <% } %>
+                           <% } %>
 
 
 

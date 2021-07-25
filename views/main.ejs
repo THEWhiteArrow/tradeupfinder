@@ -22,23 +22,23 @@
 
       <section class="grid-1 mt-5">
 
-         <a href='/trades?q=random' class="jeden grey-light_blue">
+         <a data-aos="flip-left" data-aos-delay="0" href='/trades?q=random' class="jeden grey-light_blue">
             <span class=" grid-1-content">Show A Random Trade</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/dice-solid.svg" alt="">
          </a>
-         <a href='/favourites' class="dwa light_blue-blue">
+         <a data-aos="flip-right" data-aos-delay="50" href='/favourites' class="dwa light_blue-blue">
             <span class="grid-1-content">Favourites</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/star-half.svg" alt="">
          </a>
-         <a href='/guide' class="trzy blue-purple">
+         <a data-aos="flip-left" data-aos-delay="150" href='/guide' class="trzy blue-purple">
             <span class=" grid-1-content">Guide - First Steps</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/info-circle-solid.svg" alt="">
          </a>
-         <a href='/about#collaboration' class="cztery purple-pink">
+         <a data-aos="flip-right" data-aos-delay="250" href='/about#collaboration' class="cztery purple-pink">
             <span class=" grid-1-content">Collaboration</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/hands-helping-solid.svg" alt="">
          </a>
-         <a href='/explore' class="piec pink-red">
+         <a data-aos="flip-down" data-aos-delay="300" href='/explore' class="piec pink-red">
             <span class=" grid-1-content">Explore Our Engine</span>
             <img class="grid-1-content-bg" src="/assets/svgs/other/graph-up.svg" alt="">
          </a>
@@ -58,15 +58,19 @@
          </h1>
          <% if (highlights) { %>
             <ul>
+               <% let i=0;let directions=['right','left']; %>
+                  <% for(let highlightedTrade of highlights){ %>
+                     <% ++i; %>
 
-               <% for(let highlightedTrade of highlights){ %>
+                        <% const tradeDetails=highlightedTrade.instance.trade; %>
+                           <%-` ${include('./partials/tradeTile',{
+                              elementName:'li',title:true,trade:highlightedTrade,details:tradeDetails,
+                              manageTrade:highlightedTrade.orginalTrade,
+                              showPageLink:'/trades/'+highlightedTrade.orginalTrade._id, animationData:`data-tilt
+                              data-tilt-max="1.2" data-tilt-speed="2000" data-aos="fade-${directions[i%2]}" ` })}`%>
 
-                  <% const tradeDetails=highlightedTrade.instance.trade; %>
-                     <%-`
-                        ${include('./partials/tradeTile',{elementName:'li',title:true,trade:highlightedTrade,details:tradeDetails,manageTrade:highlightedTrade.orginalTrade,showPageLink:'/trades/'+highlightedTrade.orginalTrade._id})}`%>
 
-
-                        <% } %>
+                              <% } %>
 
             </ul>
             <% } %>
@@ -80,7 +84,7 @@
 
       <% if(success && success.length){ %>
 
-         <%- include( './partials/toast.ejs' , { className:'toast-success', color:'#198754', title:'Congratulations!',
+         <%- include( ' ./partials/toast.ejs' , { className:'toast-success', color:'#198754', title:'Congratulations!',
             content:success,time:'just now' }) %>
 
             <% } %>
