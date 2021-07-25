@@ -39,7 +39,7 @@ const cookBody = (body, currency, amount, arr) => {
 module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName, Highlight) => {
 
    // EDITING GLOBALLY SETTING UP AND CHECKING PERMISSION
-   const { editGloballySwitch = 'false', isAvgFloatChanged = 'false' } = req.body;
+   const { editGloballySwitch = false, isAvgFloatChanged = 'false' } = req.body;
    const { user } = req;
    let userPermittedToEditGlobally = false;
    if (user && (user.role == 'admin' || user.role == 'moderator')) {
@@ -108,18 +108,21 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
 
          let newPriceSteamTaxed = Math.round(req.body['outputPrice:' + trade.targetedSkinsArr[i]._id] / currency.multiplier * steamTax * 100) / 100;
          let newPrice = Math.round(req.body['outputPrice:' + trade.targetedSkinsArr[i]._id] / currency.multiplier * 100) / 100;
+         trade.targetedSkinsArr[i].prices[trade.targetedSkinsArr[i].quality] = newPrice;
 
          if (isAvgFloatChanged) {
             const newFloat = Math.round(((trade.targetedSkinsArr[i].max_float - trade.targetedSkinsArr[i].min_float) * newAvgFloat + trade.targetedSkinsArr[i].min_float) * 10000) / 10000;
             const newQuality = checkQuality(newFloat);
             // CHANGE TARGETED SKINS PRICES RIGHT AWAY
-
+            // if (newQuality != trade.targetedSkinsArr[i].quality) {
+            trade.targetedSkinsArr[i].quality = newQuality;
             //HERE THOSE OUTPUT SKINS SHOULD HAVE BEEN POPULATED AND THE PRICES CHECKED DIRECTLY FROM THE SKINS MODELS DB
             newPrice = trade.targetedSkinsArr[i].prices[newQuality]
             newPriceSteamTaxed = Math.round(newPrice * steamTax * 100) / 100;
 
             outputSkinsNewData.push({ _id: trade.targetedSkinsArr[i]._id, price: newPrice, float: newFloat, quality: newQuality })
             newTargetedSkinsQuality.push(newQuality);
+            // }
          }
 
 

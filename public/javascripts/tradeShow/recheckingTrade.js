@@ -102,11 +102,22 @@ const changeStats = (data) => {
          const priceInput = outputSkinCard.querySelector('input.price-input')
          const float = outputSkinCard.querySelector('.skin-card-float')
 
-         let qIndex = label.innerText.indexOf('(');
-         label.innerText = label.innerText.slice(0, qIndex) + `(${info.quality})`;
-
          float.innerText = info.float;
+         let qIndex = label.innerText.indexOf('(');
+         let qIndex2 = label.innerText.indexOf(')');
+
+         // const oldQuality = label.innerText.slice(qIndex + 1, qIndex2)
+         // if (oldQuality != info.quality) {
+
+
+         outputSkinCard.style.opacity = '0';
+         label.innerText = label.innerText.slice(0, qIndex) + `(${info.quality})`;
          priceInput.value = info.price;
+         setTimeout(() => {
+            outputSkinCard.style.opacity = 1;
+         }, 1000)
+         // }
+
       }
 
       for (let info of data.inputSkinsNewData) {
