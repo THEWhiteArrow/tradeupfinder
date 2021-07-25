@@ -1,4 +1,7 @@
 const confettiContainer = document.querySelector('.confetti-container');
+const compactModeBtn = document.querySelector('#compact-mode-btn');
+const inputSkinsContainer = document.querySelector('#inputs');
+const outputSkinsContainer = document.querySelector('#outputs');
 
 const checkOnPageFormValidity = (form, e) => {
    if (!form.checkValidity()) {
@@ -77,9 +80,7 @@ const setUpRecheckingTrade = async () => {
 }
 
 const changeStats = (data) => {
-   // const inputSkinsEl = document.querySelectorAll('input.input-skin');
-   // inputSkinsEl[0].value = data.firstPrice;
-   // inputSkinsEl[1].value = data.secondPrice;
+
    const tradeUpCostEl = document.querySelector('.stats-item-value.input-price .content')
    const tradeUpChancesEl = document.querySelector('.stats-item-value.chances .content')
    const tradeUpProfitabilityEl = document.querySelector('.stats-item-value.profitability .content')
@@ -96,7 +97,7 @@ const changeStats = (data) => {
       tradeUpAvgFloatEl.innerText = (data.avgFloat + '000').slice(0, 6);
 
       for (let info of data.outputSkinsNewData) {
-         const outputSkinCard = document.querySelector(`#skin-${info._id}`)
+         const outputSkinCard = document.getElementById(`skin-${info._id}`)
          const label = outputSkinCard.querySelector('label')
          const priceInput = outputSkinCard.querySelector('input.price-input')
          const float = outputSkinCard.querySelector('.skin-card-float')
@@ -108,15 +109,20 @@ const changeStats = (data) => {
          priceInput.value = info.price;
       }
 
-      const inputSkinCardLabel = document.querySelectorAll(`.input-skin label`)
-      for (let i = 0; i < 10; ++i) {
-         let qIndex = inputSkinCardLabel[i].innerText.indexOf('(');
-         inputSkinCardLabel[i].innerText = inputSkinCardLabel[i].innerText.slice(0, qIndex) + `(${data.inputSkinsQualities[i]})`;
+      for (let info of data.inputSkinsNewData) {
+         const inputSkinCard = document.getElementById(`skin-${info.sn}`)
+         const label = inputSkinCard.querySelector('label')
+
+         let qIndex = label.innerText.indexOf('(');
+         label.innerText = label.innerText.slice(0, qIndex) + `(${info.quality})`;
+
       }
+
+
 
    }
 
-   console.log('recalculated the trade-up successfully...')
+   console.log('...recalculated successfully...')
 
 }
 
@@ -131,11 +137,20 @@ const getPricesAndFetchData = async (form, action, info) => {
    const inputSkins = document.querySelectorAll('.input-skin input.price-input');
    const outputSkins = document.querySelectorAll('.output-skin input.price-input');
 
+   const tradeUpAvgFloatEl = document.querySelector('.stats-item-value.avg-float .content')
+   const onPageAvgFloat = Number(tradeUpAvgFloatEl.innerText);
+   let totalFloat = 0;
+
    for (let el of inputFloats) {
       const name = el.getAttribute('name');
       const value = el.value;
+      totalFloat += Number(value);
       body[name] = Number(value);
    }
+   totalFloat = Math.round(totalFloat / 10 * 10000) / 10000;
+   // console.log(totalFloat)
+   // console.log(onPageAvgFloat)
+   totalFloat == onPageAvgFloat ? body.isAvgFloatChanged = false : body.isAvgFloatChanged = true;
 
    for (let el of inputSkins) {
       const name = el.getAttribute('name');
@@ -167,5 +182,20 @@ const getPricesAndFetchData = async (form, action, info) => {
    }
 }
 
+const setUpCompactModeBtn = () => {
+   compactModeBtn.addEventListener('click', () => {
+      compactModeBtn.classList.toggle('btn-primary');
+      compactModeBtn.classList.toggle('btn-outline-primary');
+
+
+      inputSkinsContainer.classList.toggle('col-md-6');
+      outputSkinsContainer.classList.toggle('col-md-6');
+
+      !compactModeBtn.classList.contains('btn-outline-primary') ? compactModeBtn.innerText = 'Switch To Compact Calculator Mode' : compactModeBtn.innerText = "Switch To Normal Calculator Mode";
+   })
+}
+
 
 setUpRecheckingTrade();
+setUpCompactModeBtn();
+

@@ -39,7 +39,7 @@ const cookBody = (body, currency, amount, arr) => {
 module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName, Highlight) => {
 
    // EDITING GLOBALLY SETTING UP AND CHECKING PERMISSION
-   const { editGloballySwitch = 'false' } = req.body;
+   const { editGloballySwitch = 'false', isAvgFloatChanged = 'false' } = req.body;
    const { user } = req;
    let userPermittedToEditGlobally = false;
    if (user && (user.role == 'admin' || user.role == 'moderator')) {
@@ -87,17 +87,18 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
       // const newSecondQuality = checkQuality(avgFloatSecondPart);
 
       // const newAvgFloat = Math.round((sumUpBodyPart('1', amount.amount1, req.body, firstSkin._id, 'float:') + sumUpBodyPart('2', amount.amount2, req.body, secondSkin._id, 'float:')) / 10 * 10000) / 10000;
-      let isAvgFloatChanged = false;
-      let inputSkinsQualities;
-      if (newAvgFloat != instance.avg) {
-         isAvgFloatChanged = true;
+
+      // JUST FOR THE SAKE OF PEACE FLOATS WILL BE CHECKED EVERY TIME 
+
+      let inputSkinsNewData;
+      if (isAvgFloatChanged) {
          console.log(newAvgFloat)
-         inputSkinsQualities = newInputSkinsArr.map(el => (el.quality))
+         inputSkinsNewData = newInputSkinsArr.map(el => ({ quality: el.quality, sn: el.sn }))
          // CHANGE TARGETED SKINS PRICES RIGHT AWAY
          //chaniging inthe part below
          // AND LATER ON THOSE PRICES ARE NEEDED TO BE SENT BACK TO CHANGE ON PAGE PRICES BECAUSE IT WILL MAKE A DIFFERENCE
       }
-      console.log('inputSkinsQualities : ', inputSkinsQualities)
+      console.log('inputSkinsNewData : ', inputSkinsNewData)
 
 
 
@@ -253,7 +254,7 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
 
       isAvgFloatChanged ? feedback.isAvgFloatChanged = true : feedback.isAvgFloatChanged = false;
       isAvgFloatChanged ? feedback.outputSkinsNewData = outputSkinsNewData : null;
-      isAvgFloatChanged ? feedback.inputSkinsQualities = inputSkinsQualities : null;
+      isAvgFloatChanged ? feedback.inputSkinsNewData = inputSkinsNewData : null;
 
 
       return feedback;

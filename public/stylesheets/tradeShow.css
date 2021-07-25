@@ -60,7 +60,7 @@
 }
 
 .input-skins,.output-skins{
-   max-height: 400px;
+   max-height: 460px;
    overflow-y: auto;
    align-items:start;
 }

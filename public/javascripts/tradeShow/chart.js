@@ -70,7 +70,7 @@ const createChart = (range) => {
    const data = {
       labels: labels,
       datasets: [{
-         label: 'Trade Up Simulation',
+         label: 'Trade-Up Simulation',
          data: results,
          fill: true,
          borderColor: 'rgb(235, 64, 52)',
@@ -96,7 +96,7 @@ const createChart = (range) => {
             y: {
                display: true,
                title: {
-                  display: true,
+                  display: false,
                   text: `Profit   [ ${symbol} ]`,
                   font: {
                      size: 17

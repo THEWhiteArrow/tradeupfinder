@@ -592,7 +592,7 @@ const mixedTwoPairs = async (req) => {
                            const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
                            const returnPercentageTaxed = Math.round(((avgPriceTaxed) / inputPrice * 100) * 100) / 100;
 
-                           if (profitPerTradeUp > 0 && inputPrice < 100) {
+                           if (profitPerTradeUpTaxed > 0) {
                               const trade = {
                                  inputSkinsArr,
 

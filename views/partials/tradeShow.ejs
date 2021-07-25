@@ -30,11 +30,17 @@
 
    <section class="card bg-transparent border-0">
 
-      <a href="/trades?q=random"
-         class="border border-bottom-0 btn btn-primary d-flex text-center align-items-center width-fit-content rounded-0 rounded-top">Show
-         A
-         Random
-         Trade</a>
+      <div class="d-flex-flex-row justify-content-start">
+
+         <a href="/trades?q=random" class="btn btn-primary rounded-0 border border-bottom-0 border-primary">
+            Show A Random Trade</a>
+
+         <button id="compact-mode-btn"
+            class="btn btn-outline-primary rounded-0 border border-bottom-0 border-primary d-none d-md-inline">Switch
+            To Normal Calculator Mode</button>
+
+      </div>
+
 
       <div class="card-header border border-top-0 d-flex justify-content-between align-items-center <%= bg %>">
 
@@ -145,7 +151,7 @@
 
 
                   <span>
-                     Change the prices and
+                     Change the prices or floats and
                      the trade-up will be automatically recalculated!
                   </span>
 
