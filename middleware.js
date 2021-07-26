@@ -66,43 +66,41 @@ module.exports.userOwnsFavouriteTradeUp = async (req, res, next) => {
 
 }
 
+
+
+
+
+
+
+
+
 module.exports.isFavouriteTradeAuthorized = async (req, res, next) => {
-   const { favouriteId, orginalTradeId } = req.params;
+   const { orginalTradeId } = req.params;
    const { action = null } = req.query;
-   const user = req.user;
-
-   console.log(user, favouriteId)
-   const doesExist = await Favourite.any({ _id: favouriteId });
+   const userId = req.user._id;
 
 
-   if (action == 'add') return next();
+   const doesExist = await Trade.any({ _id: orginalTradeId });
+   if (action == 'add' && doesExist) {
+      return next();
+   } else if (action == 'add' && !doesExist) {
+      return res.json({ success: false, message: 'The trade thta you are trying to add does not exist!' })
+   }
+
    if (action == 'delete') {
 
-      if (doesExist) {
-
-         for (let id of user.favourites) {
-            if (id == favouriteId) {
-               return next();
-            }
-         }
-         return res.json({ success: false, message: 'You are not authorized to do that!' })
+      const doesFavouriteExist = await Favourite.any({ orginalTrade: orginalTradeId, owner: userId })
+      if (doesFavouriteExist) {
+         return next();
 
       } else {
-         return res.json({ success: true, conflict: true, action, message: 'That favourite trade does not exist anyway!' })
-
+         return res.json({ success: true, conflict: true, action, message: 'That favourite trade does not exist already!' })
       }
 
-
-
    }
-   return res.json({ success: false, message: 'Action is defined!' })
 
 
-
-
-
-
-
+   return res.json({ success: false, message: 'Action is not defined!' })
 
 
 
@@ -140,6 +138,16 @@ module.exports.isFavouriteTradeAuthorized = async (req, res, next) => {
 
 
 }
+
+
+
+
+
+
+
+
+
+
 
 module.exports.isResearchAllowed = async (req, res, next) => {
    const { action, q } = req.query;

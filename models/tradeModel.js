@@ -3,26 +3,32 @@ const { Schema } = mongoose;
 const any = require('../plugins/mongoose/any');
 
 const tradeSchema = new Schema({
-   amount: {
-      type: Object,
-   },
-   priceCorrection: {
-      type: Number,
-   },
+
+
    name: {
       type: String,
    },
-   instance: {
+   arrays: {
+      type: Object
+   },
+   data: {
+      type: Object
+   },
+   statistics: {
       type: Object
    },
    pricesType: {
       type: String,
    },
 
-   favourites: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Favourite'
-   }],
+   // favourites: [{
+   //    type: Schema.Types.ObjectId,
+   //    ref: 'Favourite'
+   // }],
+
+   favouritesInfo: {
+      type: Object,
+   },
 
    isHighlighted: {
       type: Boolean,
@@ -32,7 +38,7 @@ const tradeSchema = new Schema({
       ref: 'Highlight'
    }
 
-});
+}, { minimize: false });
 
 tradeSchema.plugin(any);
 module.exports = mongoose.model('Trade', tradeSchema);

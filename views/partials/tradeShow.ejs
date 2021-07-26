@@ -1,29 +1,27 @@
 <link rel="stylesheet" href="/stylesheets/tradeShow.css">
 
-<!-- FALLBACK MUST BE ADDED IF PROFIT DOES NOT EXIST -->
-
 <main class="container d-flex flex-column mt-5">
 
    <section class="stats my-4 confetti-container">
-      <% const bg=trade.rarity+"-"+trade.targetedRarity %>
+      <% const bg=data.rarity+"-"+data.targetedRarity %>
 
          <%- include('./statsItem.ejs',{statsTitle:'Avg. Float',
-            statsValue:(profit.instance.avg+'00').slice(0,6),symbol:'',className:'avg-float',bg:bg,}) %>
+            statsValue:(statistics.avgFloat+'00').slice(0,6),symbol:'',className:'avg-float',bg:bg,}) %>
 
-            <%- `${include('./statsItem.ejs',{statsTitle:'Cost',statsValue:Math.round(trade.inputPrice*currency.multiplier*100)/100
+            <%- `${include('./statsItem.ejs',{statsTitle:'Cost',statsValue:Math.round(statistics.tradeCost*currency.multiplier*100)/100
                ,symbol:currency.symbol,className:'input-price',bg:bg,}) }` %>
 
                <%- `${include('./statsItem.ejs',{statsTitle:'Chances',statsValue:
-                  profit.instance.chances,symbol:'%',className:'chances',bg:bg,}) }`%>
+                  statistics.chances,symbol:'%',className:'chances',bg:bg,}) }`%>
 
                   <%- `${include('./statsItem.ejs',{statsTitle:'Avg. Profit',
-                     statsValue:Math.round(trade.profitPerTradeUpTaxed*currency.multiplier*100)/100 + ' / ' +
-                     Math.round(trade.profitPerTradeUp*currency.multiplier*100)/100,
+                     statsValue:Math.round(statistics.profitPerTradeUpTaxed*currency.multiplier*100)/100 + ' / ' +
+                     Math.round(statistics.profitPerTradeUp*currency.multiplier*100)/100,
                      symbol:currency.symbol,className:'perTradeUp',bg:bg,})}`%>
 
                      <%- `${include('./statsItem.ejs',{statsTitle:'Profitability',
-                        statsValue:trade.returnPercentageTaxed + ' / ' +
-                        trade.returnPercentage,symbol:'%',className:'profitability',bg:bg,})}` %>
+                        statsValue:statistics.returnPercentageTaxed + ' / ' +
+                        statistics.returnPercentage,symbol:'%',className:'profitability',bg:bg,})}` %>
 
 
    </section>
@@ -45,15 +43,16 @@
       <div class="card-header border border-top-0 d-flex justify-content-between align-items-center <%= bg %>">
 
          <% let h1='Trade-Up' %>
-            <% if(profit.pricesType=='stattrakPrices' )h1+='<span class=" ms-3 badge bg-warning">StatTrak</span>' %>
+            <% if(pricesType=='stattrakPrices' )h1+='<span class=" ms-3 badge bg-warning">StatTrak</span>' %>
 
-               <% if (isFavouriteShowPage ) { %>
+               <% if (isOnFavouritePage ) { %>
                   <h1 class="text-white">
                      <%- h1 %>
                   </h1>
                   <span class="d-flex flex-row justify-content-end">
 
-                     <%- include('../partials/tradeManaging',{trade:profit.orginalTrade})%>
+                     <%-
+                        `${include('../partials/tradeManaging',{_id,favouritesInfo,isHighlighted,isOnFavouritePage})}`%>
 
                   </span>
 
@@ -78,7 +77,8 @@
 
                      <span class="d-flex flex-row justify-content-end">
 
-                        <%- include('../partials/tradeManaging',{trade:profit})%>
+                        <%-
+                           `${include('../partials/tradeManaging',{_id,favouritesInfo,isHighlighted,isOnFavouritePage})}`%>
 
                      </span>
 
@@ -86,80 +86,80 @@
 
       </div>
 
-      <% let actionUrl=`/trades/${profit._id}` %>
-         <% if (isFavouriteShowPage)actionUrl=`/favourites/${profit._id}/edit` %>
-
-            <form id="recheck-trade-form" class="card-body border border-top-0 bg-white validated-form"
-               action="<%= actionUrl %>" novalidate>
-
-               <div class="row">
-
-
-                  <div id="inputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
-                     <h3>INPUTS</h3>
-                     <hr role=tournament6>
-
-                     <div class="py-3 input-skins slim-scrollbar">
-
-                        <% for(let inputSkin of trade.inputSkinsArr){ %>
-
-                           <%- `${include('./skinCard.ejs',{ float:inputSkin.float,amount:'',
-                              price:Math.round(inputSkin.price*currency.multiplier*100)/100,type:'input-skin',
-                              link:inputSkin.link, icon:inputSkin.icon, _id:inputSkin._id, label:inputSkin.name + ' | '
-                              + inputSkin.skin + ' (' + inputSkin.quality + ') ' , sn:inputSkin.sn,
-                              min_float:inputSkin.min_float, max_float:inputSkin.max_float,
-                              animationData:`data-aos="zoom-in" data-aos-anchor="#inputs" ` })}`%>
-
-                              <% } %>
 
 
 
-                     </div>
+      <form id="recheck-trade-form" class="card-body border border-top-0 bg-white validated-form"
+         action="<%= recheckFormUrl %>" novalidate>
 
-                  </div>
-
-                  <div id="outputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
-                     <h3>OUTPUTS</h3>
-                     <hr role=tournament6>
-
-                     <div class="output-skins py-3 slim-scrollbar">
-                        <% for(let targetedSkin of trade.targetedSkinsArr) {%>
-                           <%- `${include('./skinCard.ejs',{ float:targetedSkin.float, amount:targetedSkin.amount,
-                              price:Math.round(targetedSkin.price*currency.multiplier*100)/100,
-                              type:'output-skin',link:targetedSkin.url, icon:targetedSkin.icon, _id:targetedSkin._id,
-                              label:`${targetedSkin.name} | ${targetedSkin.skin}
-                              (${targetedSkin.quality})`,sn:targetedSkin._id, animationData:`data-aos="zoom-in"
-                              data-aos-anchor="#outputs" ` })}` %>
-                              <% } %>
+         <div class="row">
 
 
-                     </div>
+            <div id="inputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
+               <h3>INPUTS</h3>
+               <hr role=tournament6>
 
-                  </div>
+               <div class="py-3 input-skins slim-scrollbar">
+
+                  <% for(let inputSkin of arrays.inputSkinsArr){ %>
+
+                     <%- `${include('./skinCard.ejs',{ float:inputSkin.float,amount:'',
+                        price:Math.round(inputSkin.price*currency.multiplier*100)/100,type:'input-skin',
+                        link:inputSkin.link, icon:inputSkin.icon, _id:inputSkin._id, label:inputSkin.name + ' | ' +
+                        inputSkin.skin + ' (' + inputSkin.quality + ') ' , sn:inputSkin.sn,
+                        min_float:inputSkin.min_float, max_float:inputSkin.max_float, animationData:`data-aos="zoom-in"
+                        data-aos-anchor="#inputs" ` })}`%>
+
+                        <% } %>
 
 
 
                </div>
 
-               <p class="text-justify mt-3 bg-muted border px-2 py-1 bg-success-muted text-light">
+            </div>
 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                     class="bi bi-info-square mb-1" viewBox="0 0 16 16">
-                     <path
-                        d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-                     <path
-                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-                  </svg>
+            <div id="outputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
+               <h3>OUTPUTS</h3>
+               <hr role=tournament6>
+
+               <div class="output-skins py-3 slim-scrollbar">
+                  <% for(let targetedSkin of arrays.targetedSkinsArr) {%>
+                     <%- `${include('./skinCard.ejs',{ float:targetedSkin.float, amount:targetedSkin.amount,
+                        price:Math.round(targetedSkin.price*currency.multiplier*100)/100,
+                        type:'output-skin',link:targetedSkin.url, icon:targetedSkin.icon, _id:targetedSkin._id,
+                        label:`${targetedSkin.name} | ${targetedSkin.skin}
+                        (${targetedSkin.quality})`,sn:targetedSkin._id, animationData:`data-aos="zoom-in"
+                        data-aos-anchor="#outputs" `,allOutputsNumber:statistics.allOutputsNumber })}` %>
+                        <% } %>
 
 
-                  <span>
-                     Change the prices or floats and
-                     the trade-up will be automatically recalculated!
-                  </span>
+               </div>
 
-               </p>
+            </div>
 
-            </form>
+
+
+         </div>
+
+         <p class="text-justify mt-3 bg-muted border px-2 py-1 bg-success-muted text-light">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+               class="bi bi-info-square mb-1" viewBox="0 0 16 16">
+               <path
+                  d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+               <path
+                  d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+            </svg>
+
+
+            <span>
+               Change the prices or floats and
+               the trade-up will be automatically recalculated!
+            </span>
+
+         </p>
+
+      </form>
 
 
 
@@ -174,7 +174,7 @@
 
          <div id="alternates" class="alternate-skins pt-3 slim-scrollbar">
             <% let type="alternate-skin-checkbox" ;if(!currentUser||currentUser.role=='guest' )type='alternate-skin' %>
-               <% for(let alternateSkin of trade.alternateInputSkins){ %>
+               <% for(let alternateSkin of arrays.alternateInputSkinsArr){ %>
 
                   <%- `${include('./skinCard.ejs',{ float:alternateSkin.float,
                      price:Math.round(alternateSkin.price*currency.multiplier*100)/100, value: alternateSkin.replacement

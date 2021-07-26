@@ -1,9 +1,15 @@
 <% layout('layouts/boilerplate')%>
 
+   <% let
+      wouldBeHighlighted=false;if(favouriteTrade.orginalTrade!=null){wouldBeHighlighted=favouriteTrade.orginalTrade.isHighlighted}
+      %>
 
-   <%- include('../partials/tradeShow.ejs',{ profit:favouriteTrade, trade:favouriteTrade.instance.trade,
-      isFavouriteShowPage:true})%>
+      <%- include('../partials/tradeShow.ejs',{ _id:favouriteTrade.orginalTradeId, arrays:favouriteTrade.arrays,
+         statistics:favouriteTrade.statistics, data:favouriteTrade.data, pricesType:favouriteTrade.pricesType,
+         favouritesInfo:null, recheckFormUrl:`/favourites/${favouriteTrade._id}/edit`, isHighlighted:wouldBeHighlighted
+         || false, isOnFavouritePage:true })%>
 
 
-      <script src="/javascripts/onFavouritesPage/favourites.js"></script>
-      <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
+
+         <script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>
+         <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>

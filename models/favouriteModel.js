@@ -7,25 +7,30 @@ const favouriteSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User'
    },
-   amount: {
-      type: Object,
-   },
-   priceCorrection: {
-      type: Number,
-   },
-   name: {
+   orginalTradeId: {
       type: String,
-   },
-   instance: {
-      type: Object
    },
    orginalTrade: {
       type: Schema.Types.ObjectId,
       ref: 'Trade'
    },
+
+
+   name: {
+      type: String,
+   },
    pricesType: {
       type: String,
-   }
+   },
+   arrays: {
+      type: Object
+   },
+   statistics: {
+      type: Object
+   },
+   data: {
+      type: Object
+   },
 
 });
 

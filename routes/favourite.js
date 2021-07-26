@@ -5,7 +5,7 @@ const { isLoggedIn, userOwnsFavouriteTradeUp, isFavouriteTradeAuthorized } = req
 
 const favourite = require('../controllers/favourites');
 
-router.route('/manage/:orginalTradeId/:favouriteId')
+router.route('/manage/:orginalTradeId')
    .get(isLoggedIn, isFavouriteTradeAuthorized, catchAsync(favourite.manageFavouriteTrade))
 
 router.route('/:favouriteId/edit')

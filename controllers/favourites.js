@@ -1,4 +1,4 @@
-const { sortingTrades, recheckTrade, isEmpty } = require('../utils/functions');
+const { mergeSort, recheckTrade, isEmpty } = require('../utils/functions');
 const Favourite = require('../models/favouriteModel');
 const User = require('../models/userModel');
 const Trade = require('../models/tradeModel');
@@ -12,14 +12,24 @@ const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 const deleteFavourite = async (req, res) => {
    const userId = req.user._id;
    const { action } = req.query;
-   const { orginalTradeId, favouriteId } = req.params;
+   const { orginalTradeId } = req.params;
 
-   await User.findByIdAndUpdate(userId, { $pull: { favourites: favouriteId } });
-   await Favourite.findByIdAndDelete(favouriteId);
+   const deletedFavouriteTrade = await Favourite.findOneAndDelete({ orginalTrade: orginalTradeId, owner: userId });
+   // console.log(deletedFavouriteTrade)
 
-   const doesExist = Trade.any({ _id: orginalTradeId });
+   await User.findByIdAndUpdate(userId, { $pull: { favourites: deletedFavouriteTrade._id } });
+
+
+
+   const doesExist = await Trade.any({ _id: orginalTradeId });
    if (doesExist) {
-      await Trade.findByIdAndUpdate(orginalTradeId, { $pull: { favourites: favouriteId } });
+
+      const orginalTrade = await Trade.findById(orginalTradeId);
+
+      let { favouritesInfo } = orginalTrade;
+
+      delete favouritesInfo[userId];
+      await Trade.findByIdAndUpdate(orginalTradeId, { favouritesInfo }, { new: true });
    }
 
 
@@ -34,42 +44,57 @@ const addToFavourite = async (req, res) => {
    const { user } = req;
    const userId = user._id;
    const { orginalTradeId } = req.params;
+
+   // const doesExist = await Trade.any({ _id: orginalTradeId });
+   // if (doesExist) {
+
    const orginalTrade = await Trade.findById(orginalTradeId);
+   // console.log(orginalTrade._id);
+   // console.log(orginalTrade.favouritesInfo);
+
+   const { favouritesInfo } = orginalTrade;
    const owner = await User.findById(userId)
-   // console.log(orginalTrade)
    let { favourites } = user;
 
    const newFavouriteTrade = new Favourite({
-      amount: orginalTrade.amount,
-      priceCorrection: orginalTrade.priceCorrection,
+      owner,
+      orginalTradeId: orginalTradeId,
+      orginalTrade,
+
+
       name: orginalTrade.name,
-      instance: orginalTrade.instance,
       pricesType: orginalTrade.pricesType,
-      orginalTrade: orginalTrade,
-      owner
+      arrays: orginalTrade.arrays,
+      statistics: orginalTrade.statistics,
+      data: orginalTrade.data,
+
+
    })
    const newFavouriteId = newFavouriteTrade._id;
+   favouritesInfo[userId] = newFavouriteId;
 
 
 
 
 
-   const favouritesOfOrginalTrade = orginalTrade.favourites;
-   favouritesOfOrginalTrade.push(newFavouriteTrade);
-
-   await Trade.findByIdAndUpdate(orginalTradeId, { favourites: favouritesOfOrginalTrade }, { new: true });
+   await Trade.findByIdAndUpdate(orginalTradeId, { favouritesInfo }, { new: true });
    // console.log(updatedOrginalTrade)
 
 
    favourites.push(newFavouriteTrade);
    await newFavouriteTrade.save();
 
-   await User.findByIdAndUpdate(userId, { favourites: favourites }, { new: true });
+   await User.findByIdAndUpdate(userId, { favourites }, { new: true });
 
    console.log('updated user!')
    console.log('added')
-   const feedback = { success: true, action, newFavouriteId }
+   const feedback = { success: true, action }
    res.json(feedback)
+   // } else {
+   //    const feedback = { success: false, action }
+   //    res.json(feedback)
+
+   // }
 }
 
 module.exports.manageFavouriteTrade = async (req, res) => {
@@ -100,7 +125,8 @@ module.exports.displayFavouriteTrades = async (req, res) => {
 
    const favourites = await Favourite.find({ owner: user._id }).populate('orginalTrade');
    // console.log(favourites[0])
-   const sortedFavourites = sortingTrades(favourites, sort, order);
+   const sortedFavourites = mergeSort(favourites, sort, order);
+
 
    res.render('favourites/index', { favouriteTrades: sortedFavourites, maxShownSkins, steamBaseUrl })
 }
@@ -119,85 +145,5 @@ module.exports.recheckFavouriteStats = async (req, res) => {
    } else {
       res.json({ success: false });
    }
-
-
-   // const { currency } = req.session;
-   // const originUrl = req.originalUrl;
-   // // console.log(originUrl)
-   // const { favouriteId } = req.params;
-   // try {
-   //    const favouriteTrade = await Favourite.findById(favouriteId);
-   //    let firstPrice = req.body[favouriteTrade.instance.trade.firstSkin._id];
-   //    let secondPrice = req.body[favouriteTrade.instance.trade.secondSkin._id];
-   //    firstPrice = Math.round(firstPrice / currency.multiplier * 100) / 100;
-   //    secondPrice = Math.round(secondPrice / currency.multiplier * 100) / 100;
-   //    const { amount, instance } = favouriteTrade;
-   //    const { targetedSkinsNumber, trade } = instance;
-   //    // console.log(favouriteTrade.instance.total)
-   //    const { firstSkin, secondSkin, targetedSkin } = trade;
-   //    const firstCollection = firstSkin.case;
-   //    const secondCollection = secondSkin.case;
-   //    let total = 0;
-   //    let targetedPrice;
-   //    for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
-   //       let newPrice = Math.round(req.body[trade.targetedSkinsArr[i]._id] / currency.multiplier * steamTax * 100) / 100;
-   //       console.log(newPrice)
-   //       trade.targetedSkinsArr[i].price = newPrice;
-   //       if (targetedSkin.skin == trade.targetedSkinsArr[i].skin && targetedSkin.name == trade.targetedSkinsArr[i].name) {
-   //          targetedPrice = newPrice;
-   //       }
-   //       if (trade.targetedSkinsArr[i].case == firstCollection && trade.targetedSkinsArr[i].case == secondCollection) {
-   //          total += (newPrice * 10);
-   //       } else if (trade.targetedSkinsArr[i].case == firstCollection) {
-   //          total += (newPrice * Number(amount.amount1));
-   //       } else if (trade.targetedSkinsArr[i].case == secondCollection) {
-   //          total += (newPrice * Number(amount.amount2));
-   //       }
-   //    }
-   //    console.log(targetedPrice)
-   //    let wantedOutputChance = 0;
-   //    const inputPrice = Math.round((amount.amount1 * firstPrice + amount.amount2 * secondPrice) * 100) / 100;
-   //    for (let outputSkin of trade.targetedSkinsArr) {
-   //       if (inputPrice <= outputSkin.price) {
-   //          wantedOutputChance += outputSkin.amount;
-   //       }
-   //       // console.log(outputSkin.price, outputSkin.amount)
-   //    }
-   //    const avgPrice = total / targetedSkinsNumber;
-   //    const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
-   //    const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
-   //    // ALSO WE HAVE wantedOutputChance
-   //    // console.log('-------checked')
-   //    instance.total = total;
-   //    instance.wantedOutputChance = wantedOutputChance;
-   //    instance.chances = Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100,
-   //       instance.trade.firstPrice = firstPrice;
-   //    instance.trade.secondPrice = secondPrice;
-   //    instance.trade.targetedPrice = targetedPrice;
-   //    instance.trade.inputPrice = inputPrice;
-   //    instance.trade.profitPerTradeUp = profitPerTradeUp;
-   //    instance.trade.returnPercentage = returnPercentage;
-   //    instance.trade.targetedSkinsArr = trade.targetedSkinsArr;
-   //    const updatedFavourite = await Favourite.findByIdAndUpdate(favouriteId, { instance }, { new: true });
-   //    const feedback = {
-   //       success: true,
-   //       inputPrice,
-   //       profitPerTradeUp,
-   //       returnPercentage,
-   //       wantedOutputChance,
-   //       targetedSkinsNumber,
-   //       firstPrice,
-   //       secondPrice,
-   //       targetedPrice,
-   //       symbol: currency.symbol,
-   //       chances: Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100,
-   //    };
-   //    res.json(feedback);
-   // } catch (e) {
-   //    // console.log('-------failed')
-   //    console.log(e)
-   //    const feedback = { success: false };
-   //    res.json(feedback);
-   // }
 }
 

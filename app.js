@@ -251,7 +251,7 @@ app.use(async (req, res, next) => {
    }
 
 
-   // console.log(res.locals.url)
+   // console.log(res.locals.currentUser)
    if (res.locals.url.indexOf('/auth/steam/return') == -1) { app.use(mongoSanitize({ replaceWith: '_' })); }
 
    next();

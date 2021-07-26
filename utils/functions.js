@@ -3,38 +3,6 @@ const ExpressError = require('../utils/ExpressError');
 const { qualities, rarities, avg_floats, shortcuts } = require('./variables');
 const User = require('../models/userModel');
 
-const normalizePrice = (p, currency) => {
-   return Math.round(p / currency.multiplier * 100) / 100;
-}
-
-const cookBody = (body, currency, amount, arr) => {
-   let inputPrice = 0;
-   let newAvgFloat = 0;
-   let newFirstSkinAvgFloat = 0;
-   let newSecondSkinAvgFloat = 0;
-
-
-   for (let i = 0; i < arr.length; ++i) {
-
-      const float = body[`float:${arr[i].sn}`];
-      let newPrice = body[`inputPrice:${arr[i].sn}`];
-      newPrice = normalizePrice(newPrice, currency);
-      inputPrice += newPrice;
-      newAvgFloat += float;
-
-      arr[i].price = newPrice;
-      arr[i].float = float;
-      arr[i].quality = checkQuality(float);
-
-      i < amount.amount1 ? newFirstSkinAvgFloat += float : newSecondSkinAvgFloat += float;
-   }
-
-   newFirstSkinAvgFloat = Math.round(newFirstSkinAvgFloat / amount.amount1 * 10000) / 10000;
-   newSecondSkinAvgFloat = Math.round(newSecondSkinAvgFloat / amount.amount2 * 10000) / 10000;
-   newAvgFloat = Math.round(newAvgFloat / 10 * 10000) / 10000;
-
-   return { inputPrice, newInputSkinsArr: arr, newAvgFloat, newFirstSkinAvgFloat, newSecondSkinAvgFloat };
-}
 
 module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName, Highlight) => {
 
@@ -59,8 +27,11 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
 
    try {
       const foundTrade = await Instance.findById(instanceId);
-      // const firstPrice = Math.round(req.body['1:' + foundTrade.instance.trade.firstSkin._id] / currency.multiplier * 100) / 100;
-      // const secondPrice = Math.round(req.body['2:' + foundTrade.instance.trade.secondSkin._id] / currency.multiplier * 100) / 100;
+
+      // const { arrays, statistics, data } = foundTrade;
+      // const { inputSkinsArr, outputSkinsArr, alternateInputSkinsArr } = arrays;
+      // const { amount } = data;
+
 
 
       const { amount, instance, pricesType } = foundTrade;
@@ -273,6 +244,46 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
    }
 }
 
+
+
+
+
+
+
+
+const normalizePrice = (p, currency) => {
+   return Math.round(p / currency.multiplier * 100) / 100;
+}
+
+const cookBody = (body, currency, amount, arr) => {
+   let inputPrice = 0;
+   let newAvgFloat = 0;
+   let newFirstSkinAvgFloat = 0;
+   let newSecondSkinAvgFloat = 0;
+
+
+   for (let i = 0; i < arr.length; ++i) {
+
+      const float = body[`float:${arr[i].sn}`];
+      let newPrice = body[`inputPrice:${arr[i].sn}`];
+      newPrice = normalizePrice(newPrice, currency);
+      inputPrice += newPrice;
+      newAvgFloat += float;
+
+      arr[i].price = newPrice;
+      arr[i].float = float;
+      arr[i].quality = checkQuality(float);
+
+      i < amount.amount1 ? newFirstSkinAvgFloat += float : newSecondSkinAvgFloat += float;
+   }
+
+   newFirstSkinAvgFloat = Math.round(newFirstSkinAvgFloat / amount.amount1 * 10000) / 10000;
+   newSecondSkinAvgFloat = Math.round(newSecondSkinAvgFloat / amount.amount2 * 10000) / 10000;
+   newAvgFloat = Math.round(newAvgFloat / 10 * 10000) / 10000;
+
+   return { inputPrice, newInputSkinsArr: arr, newAvgFloat, newFirstSkinAvgFloat, newSecondSkinAvgFloat };
+}
+
 const checkQuality = (float) => {
 
    if (float < 0.07) {
@@ -345,13 +356,13 @@ const _mergeArrays = (a, b, sortBy, orderBy) => {
    if (orderBy == 'descending') {
 
       while (a.length && b.length) {
-         c.push(a[0].instance.trade[sortBy] < b[0].instance.trade[sortBy] ? b.shift() : a.shift())
+         c.push(a[0].statistics[sortBy] < b[0].statistics[sortBy] ? b.shift() : a.shift())
       }
 
    } else if (orderBy == 'ascending') {
 
       while (a.length && b.length) {
-         c.push(a[0].instance.trade[sortBy] > b[0].instance.trade[sortBy] ? b.shift() : a.shift())
+         c.push(a[0].statistics[sortBy] > b[0].statistics[sortBy] ? b.shift() : a.shift())
       }
 
    }

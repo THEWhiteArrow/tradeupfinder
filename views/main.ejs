@@ -70,16 +70,18 @@
          <% if (highlights) { %>
             <ul>
                <% let i=0;let directions=['right','left']; %>
-                  <% for(let highlightedTrade of highlights){ %>
-                     <% ++i; %>
+                  <% let animationData=`data-tilt data-tilt-max="1.2" data-tilt-speed="2000"
+                     data-aos="fade-${directions[i%2]}" data-aos-duration="400" ` %>
+                     <% for(let highlightedTrade of highlights){ %>
+                        <% ++i; %>
 
-                        <% const tradeDetails=highlightedTrade.instance.trade; %>
-                           <%-` ${include('./partials/tradeTile',{
-                              elementName:'li',title:true,trade:highlightedTrade,details:tradeDetails,
-                              manageTrade:highlightedTrade.orginalTrade,
-                              showPageLink:'/trades/'+highlightedTrade.orginalTrade._id, animationData:`data-tilt
-                              data-tilt-max="1.2" data-tilt-speed="2000" data-aos="fade-${directions[i%2]}"
-                              data-aos-duration="400" ` })}`%>
+
+
+                           <%-`
+                              ${include('./partials/tradeTile.ejs',{elementName:'li',title:highlightedTrade.highlightName,statistics:highlightedTrade.orginalTrade.statistics,data:highlightedTrade.orginalTrade.data,_id:highlightedTrade.orginalTrade._id,
+                              favouritesInfo:highlightedTrade.orginalTrade.favouritesInfo,isHighlighted:true,
+                              showPageLink:'/trades/'+highlightedTrade.orginalTrade._id,isOnFavouritePage:false,
+                              animationData:animationData})}`%>
 
 
                               <% } %>

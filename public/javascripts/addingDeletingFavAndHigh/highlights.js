@@ -51,6 +51,11 @@ const sendHighlightTrade = async (action, highlight, highlightName) => {
          h3.length != 0 ? highlight.parentElement.parentElement.parentElement.parentElement.remove() : null;
       }
       highlight.classList.toggle('filled')
+   } else if (data.success == false) {
+      highlight.classList.add('shake');
+      setTimeout(() => {
+         highlight.classList.remove('shake');
+      }, 1000)
    }
 }
 
@@ -63,13 +68,13 @@ const manageHighlight = async (action, highlight) => {
       newSection.innerHTML = `
       <div class="card" style="width: 20rem; height: fit-content;">
       <div class="card-body">
-      <form id="highlightNameForm" class="needs-validation" novalidate>
+      <form id="highlightNameForm" >
       
       <label for="highlightNameInput">
       <h5 class="card-title">Enter Highlighted Name</h5>
       </label>
       <input id="highlightNameInput" name="highlightName" type="text" class="form-control my-2 text-center"
-      maxlength="30" minlength="5" >
+      maxlength="30" minlength="5" required>
       <div class="invalid-feedback my-3">
       Name must be longer than no shorter than 5 characters
       </div>
@@ -77,18 +82,16 @@ const manageHighlight = async (action, highlight) => {
       </form>
       
       </div>
-      </div>`;
+      </div> 
+      
+      `;
 
       newSection.setAttribute('id', 'bg-blur')
       newSection.classList.add('d-flex', 'bg-blur', 'position-fixed', 'd-flex', 'w-100', 'h-100', 'justify-content-center', 'align-items-center')
       document.body.prepend(newSection)
       const input = document.querySelector('#highlightNameInput')
-      // <script src="/javascripts/bootstrapJs/validateForms.js"></script>
       input.focus();
-      // await sleep(1000);
-
-      validateForms();
-
+      await sleep(1000);
 
 
       const highlightNameForm = document.querySelector('#highlightNameForm');
@@ -120,21 +123,13 @@ const sleep = (delay) => {
    })
 }
 
-const validateForms = () => {
-   // Fetch all the forms we want to apply custom Bootstrap validation styles to
-   const forms = document.querySelectorAll('.needs-validation')
 
-   // Loop over them and prevent submission
-   Array.prototype.slice.call(forms)
-      .forEach(function (form) {
-         form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-               event.preventDefault()
-               event.stopPropagation()
-            }
-            form.classList.add('was-validated')
-         }, false)
-      })
-}
+
+
+
+
+
+
+
 
 setUpHighlightBtn();

@@ -1,6 +1,7 @@
 const { checkQuality, findCheapestSkin, mergeSort, recheckTrade, isEmpty } = require('../utils/functions');
 const { qualities, rarities, avg_floats } = require('../utils/variables');
 const fetch = require('node-fetch');
+const ExpressError = require('../utils/ExpressError');
 
 const Case = require('../models/caseModel');
 const Name = require('../models/nameModel');
@@ -9,7 +10,7 @@ const Highlight = require('../models/highlightModel');
 
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
-const maxShownTrades = 200;
+
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 
@@ -45,13 +46,16 @@ module.exports.manageTrades = async (req, res) => {
       var startDate = new Date();
       // Do your operations
       const trades = await Trade.find({ name: researchName });
-      // const sortedTrades = sortingTrades(trades, sort, order).slice(0, maxShownTrades:res.locals.maxShownTrades);
+      // // const sortedTrades = sortingTrades(trades, sort, order).slice(0, maxShownTrades:res.locals.maxShownTrades);
       const sortedTrades = mergeSort(trades, sort, order).slice(0, res.locals.maxShownTrades);
+
+      sortedTrades.forEach(el => { console.log(el.favouritesInfo) })
 
       var endDate = new Date();
       var seconds = (endDate.getTime() - startDate.getTime()) / 1000;
       console.log(seconds)
       res.render('trades/index', { profitableTrades: sortedTrades, maxShownTrades: res.locals.maxShownTrades, steamBaseUrl, action })
+      // res.render('trades/index', { profitableTrades: trades, maxShownTrades: res.locals.maxShownTrades, steamBaseUrl, action })
 
    } else {
 
@@ -247,10 +251,23 @@ module.exports.customSearch = async (req, res) => {
    }
 }
 
-module.exports.showTrade = async (req, res) => {
+module.exports.showTrade = async (req, res, next) => {
    const { tradeId } = req.params;
-   const profit = await Trade.findOne({ _id: tradeId })
-   res.render('trades/show', { profit })
+   try {
+
+      const doesExist = await Trade.any({ _id: tradeId })
+      if (doesExist) {
+         const profit = await Trade.findOne({ _id: tradeId })
+         res.render('trades/show', { profit })
+
+      } else {
+         next(new ExpressError('The trade-up you are looking for does not exist!', 404));
+      }
+   } catch (e) {
+      console.log(e)
+      next(new ExpressError('The trade-up you are looking for does not exist!', 404));
+   }
+
 }
 
 
@@ -287,7 +304,7 @@ module.exports.updateCurrentTradesByOuterServer = async (req, res) => {
 
 module.exports.deleteSavedTrades = async (req, res) => {
    await Name.deleteMany({});
-   await Trade.deleteMany({ isHighlighted: false, favourites: [] });
+   await Trade.deleteMany({ isHighlighted: false, favouritesInfo: {} });
 
    const newLegacyTrades = await Trade.find({ name: { $ne: 'legacy' } })
    for (let trade of newLegacyTrades) {
@@ -337,13 +354,15 @@ const mixedTwoPairs = async (req) => {
    const profits = [];
 
 
-   const collections = await Case.find({})
+   let collections = await Case.find({})
       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } });
+      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } })
+
+   collections = collections.slice(0, 10)
 
    for (let r = 0; r < rarities.length - 1; r++) {
 
@@ -430,19 +449,17 @@ const mixedTwoPairs = async (req) => {
                            })
 
 
-                           let wantedOutputChance = 0;
+                           let positiveOutputsNumber = 0;
 
                            let targetedSkinsArr = [];
-                           let alternateInputSkins = [];
-                           let targetedSkinsNumber = 0;
+                           let alternateInputSkinsArr = [];
+                           let allOutputsNumber = 0;
 
                            let total = 0;
                            let totalTaxed = 0;
 
-                           let targetedSkinsQuality = []
-
-                           let max = 0;
-                           let maxSkin = {};
+                           // let max = 0;
+                           // let maxSkin = {};
 
 
                            for (let targetedCollection of collections) {
@@ -458,23 +475,24 @@ const mixedTwoPairs = async (req) => {
                                     const targetedPrice = Math.round((targetedSkin[pricesType][targetedQuality]) * 100) / 100;
 
                                     // targetedSkin.price = targetedPrice;
-                                    if (max < targetedPriceSteamTaxed) {
-                                       max = targetedPriceSteamTaxed;
-                                       maxSkin = {
-                                          _id: targetedSkin._id,
-                                          name: targetedSkin.name,
-                                          skin: targetedSkin.skin,
-                                          case: targetedSkin.case,
-                                          rarity: targetedSkin.rarity,
-                                          min_float: targetedSkin.min_float,
-                                          max_float: targetedSkin.max_float,
-                                          float,
-                                          price: targetedPrice,
-                                          priceSteamTaxed: targetedPriceSteamTaxed,
-                                          targetedQuality,
-                                          icon: targetedSkin.icon,
-                                       }
-                                    }
+
+                                    // if (max < targetedPriceSteamTaxed) {
+                                    //    max = targetedPriceSteamTaxed;
+                                    //    maxSkin = {
+                                    //       _id: targetedSkin._id,
+                                    //       name: targetedSkin.name,
+                                    //       skin: targetedSkin.skin,
+                                    //       case: targetedSkin.case,
+                                    //       rarity: targetedSkin.rarity,
+                                    //       min_float: targetedSkin.min_float,
+                                    //       max_float: targetedSkin.max_float,
+                                    //       float,
+                                    //       price: targetedPrice,
+                                    //       priceSteamTaxed: targetedPriceSteamTaxed,
+                                    //       targetedQuality,
+                                    //       icon: targetedSkin.icon,
+                                    //    }
+                                    // }
 
                                     const targetedSkinPom = {
                                        _id: targetedSkin._id,
@@ -502,27 +520,27 @@ const mixedTwoPairs = async (req) => {
                                     if (targetedCollection.name == firstSkin.case && targetedCollection.name == secondSkin.case) {
                                        total += (targetedPrice * (amount1 + amount2));
                                        totalTaxed += (targetedPriceSteamTaxed * (amount1 + amount2));
-                                       targetedSkinsNumber += (1 * (amount1 + amount2));
-                                       inputPrice <= targetedPriceSteamTaxed ? wantedOutputChance += (amount1 + amount2) : null;
+                                       allOutputsNumber += (1 * (amount1 + amount2));
+                                       inputPrice <= targetedPriceSteamTaxed ? positiveOutputsNumber += (amount1 + amount2) : null;
                                        targetedSkinPom.amount = amount1 + amount2;
 
                                     } else if (targetedCollection.name == firstSkin.case) {
                                        total += (targetedPrice * amount1);
                                        totalTaxed += (targetedPriceSteamTaxed * amount1);
-                                       targetedSkinsNumber += (1 * amount1);
-                                       inputPrice <= targetedPriceSteamTaxed ? wantedOutputChance += (amount1) : null;
+                                       allOutputsNumber += (1 * amount1);
+                                       inputPrice <= targetedPriceSteamTaxed ? positiveOutputsNumber += (amount1) : null;
                                        targetedSkinPom.amount = amount1;
 
                                     } else if (targetedCollection.name == secondSkin.case) {
                                        total += (targetedPrice * amount2);
                                        totalTaxed += (targetedPriceSteamTaxed * amount2);
-                                       targetedSkinsNumber += (1 * amount2);
-                                       inputPrice <= targetedPriceSteamTaxed ? wantedOutputChance += (amount2) : null;
+                                       allOutputsNumber += (1 * amount2);
+                                       inputPrice <= targetedPriceSteamTaxed ? positiveOutputsNumber += (amount2) : null;
                                        targetedSkinPom.amount = amount2;
                                     }
 
 
-                                    targetedSkinsQuality.push(targetedQuality);
+
                                     targetedSkinsArr.push(targetedSkinPom);
                                     counter += 1;
                                  }
@@ -551,7 +569,7 @@ const mixedTwoPairs = async (req) => {
                                           alternate.url = encodeURI(`${steamBaseUrl}StatTrak™ ${alternate.name} | ${alternate.skin} (${firstQuality})`);
                                        }
 
-                                       alternateInputSkins.push(alternate);
+                                       alternateInputSkinsArr.push(alternate);
                                     }
 
                                     if ((alternateSkin.case == secondSkin.case && alternateSkin.prices[secondQuality] > 0) && (firstSkin.name != secondSkin.name || firstSkin.skin != secondSkin.skin || firstQuality != secondQuality)) {
@@ -576,7 +594,7 @@ const mixedTwoPairs = async (req) => {
                                           alternate.url = encodeURI(`${steamBaseUrl}StatTrak™ ${alternate.name} | ${alternate.skin} (${secondQuality})`);
                                        }
 
-                                       alternateInputSkins.push(alternate);
+                                       alternateInputSkinsArr.push(alternate);
                                     }
                                     counter += 1;
                                  }
@@ -585,77 +603,87 @@ const mixedTwoPairs = async (req) => {
 
 
 
-                           const avgPrice = total / targetedSkinsNumber;
-                           const avgPriceTaxed = totalTaxed / targetedSkinsNumber;
+                           const avgPrice = total / allOutputsNumber;
+                           const avgPriceTaxed = totalTaxed / allOutputsNumber;
                            const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
                            const profitPerTradeUpTaxed = Math.round((avgPriceTaxed - inputPrice) * 100) / 100;
                            const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
                            const returnPercentageTaxed = Math.round(((avgPriceTaxed) / inputPrice * 100) * 100) / 100;
 
-                           if (profitPerTradeUpTaxed > 0) {
-                              const trade = {
+                           if (returnPercentageTaxed > 100) {
+
+                              const arrays = {
                                  inputSkinsArr,
-
-                                 firstSkin,
-                                 secondSkin,
-                                 targetedSkin: maxSkin,
-
-                                 firstQuality,
-                                 secondQuality,
-                                 targetedQuality: maxSkin.targetedQuality,
-
-                                 firstPrice,
-                                 secondPrice,
-                                 inputPrice,
-                                 targetedPrice: maxSkin.price,
-                                 targetedPriceSteamTaxed: maxSkin.priceSteamTaxed,
-
-                                 firstSkinAvgFloat,
-                                 secondSkinAvgFloat,
-                                 targetedSkinFloat: maxSkin.float,
-
-                                 rarity: rarities[r],
-                                 targetedRarity: rarities[r + 1],
-
                                  targetedSkinsArr,
-                                 targetedSkinsQuality,
-                                 alternateInputSkins,
+                                 alternateInputSkinsArr,
+                              }
 
+                              const statistics = {
+                                 tradeCost: inputPrice,
                                  profitPerTradeUp,
                                  profitPerTradeUpTaxed,
                                  returnPercentage,
                                  returnPercentageTaxed,
-                              }
-
-                              if (pricesType === 'stattrakPrices') {
-                                 trade.firstSkinUrl = encodeURI(`${steamBaseUrl}StatTrak™ ${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`);
-                                 trade.secondSkinUrl = encodeURI(`${steamBaseUrl}StatTrak™ ${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`);
-                                 trade.targetedSkinUrl = encodeURI(`${steamBaseUrl}StatTrak™ ${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`);
-                              } else if (pricesType === 'prices') {
-                                 trade.firstSkinUrl = encodeURI(`${steamBaseUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`);
-                                 trade.secondSkinUrl = encodeURI(`${steamBaseUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`);
-                                 trade.targetedSkinUrl = encodeURI(`${steamBaseUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`);
-                              }
-
-                              const pom2 = {
-                                 trade,
-                                 avg,
                                  total,
                                  totalTaxed,
-                                 targetedSkinsNumber,
-                                 wantedOutputChance,
-                                 chances: Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100,
+
+                                 avgFloat: avg,
+                                 priceCorrection,
+                                 minVolume,
+                                 allOutputsNumber,
+                                 positiveOutputsNumber,
+                                 chances: Math.round(positiveOutputsNumber / allOutputsNumber * 10000) / 100,
                               }
 
-                              const newTrade = new Trade({
-                                 amount: { amount1, amount2 },
-                                 priceCorrection,
-                                 name: newResearchName,
-                                 instance: pom2,
-                                 pricesType,
-                                 isHighlighted: false,
+                              const data = {
 
-                              })
+                                 rarity: rarities[r],
+                                 targetedRarity: rarities[r + 1],
+                                 amount: { amount1, amount2 },
+
+
+                                 firstSkin,
+                                 firstPrice,
+                                 firstQuality,
+                                 firstSkinAvgFloat,
+                                 // targetedSkin: maxSkin,
+
+                                 secondSkin,
+                                 secondPrice,
+                                 secondQuality,
+                                 secondSkinAvgFloat,
+                                 // targetedQuality: maxSkin.targetedQuality,
+
+                                 // targetedPrice: maxSkin.price,
+                                 // targetedPriceSteamTaxed: maxSkin.priceSteamTaxed,
+
+                                 // targetedSkinFloat: maxSkin.float,
+
+
+                              }
+
+                              // if (pricesType === 'stattrakPrices') {
+                              //    data.firstSkinUrl = encodeURI(`${steamBaseUrl}StatTrak™ ${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`);
+                              //    data.secondSkinUrl = encodeURI(`${steamBaseUrl}StatTrak™ ${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`);
+                              //    data.targetedSkinUrl = encodeURI(`${steamBaseUrl}StatTrak™ ${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`);
+                              // } else if (pricesType === 'prices') {
+                              //    data.firstSkinUrl = encodeURI(`${steamBaseUrl}${firstSkin.name} | ${firstSkin.skin} (${firstQuality})`);
+                              //    data.secondSkinUrl = encodeURI(`${steamBaseUrl}${secondSkin.name} | ${secondSkin.skin} (${secondQuality})`);
+                              //    data.targetedSkinUrl = encodeURI(`${steamBaseUrl}${maxSkin.name} | ${maxSkin.skin} (${maxSkin.targetedQuality})`);
+                              // }
+
+
+
+                              const newTrade = new Trade({
+                                 name: newResearchName,
+                                 pricesType,
+                                 favouritesInfo: {},
+                                 arrays,
+                                 statistics,
+                                 data,
+                                 isHighlighted: false,
+                              });
+
                               if (action === 'save') {
                                  await newTrade.save();
                               }

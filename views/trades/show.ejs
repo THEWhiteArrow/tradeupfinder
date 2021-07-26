@@ -1,6 +1,8 @@
 <% layout('layouts/boilerplate')%>
 
-   <%- include('../partials/tradeShow.ejs',{profit,trade:profit.instance.trade,isFavouriteShowPage:false})%>
+   <%- include('../partials/tradeShow.ejs',{ _id:profit._id, arrays:profit.arrays, statistics:profit.statistics,
+      data:profit.data, pricesType:profit.pricesType, favouritesInfo:profit.favouritesInfo,
+      recheckFormUrl:`/trades/${profit._id}`, isHighlighted:profit.isHighlighted, isOnFavouritePage:false })%>
 
 
       <script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>

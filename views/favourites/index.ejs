@@ -24,16 +24,21 @@
       <% if(favouriteTrades.length){ %>
          <ul class="mb-5 pb-5">
             <% let i=0;let directions=['right','left']; %>
-               <% for(let favouriteTrade of favouriteTrades){ %>
-                  <% ++i; %>
+               <% let animationData=`data-aos="fade-${directions[i%2]}" data-aos-duration="400" ` %>
 
-                     <% const tradeDetails=favouriteTrade.instance.trade %>
+                  <% for(let favouriteTrade of favouriteTrades){ %>
+                     <% ++i; %>
 
-                        <%-`
-                           ${include('../partials/tradeTile',{elementName:'li',title:false,trade:favouriteTrade,details:tradeDetails,manageTrade:favouriteTrade.orginalTrade,showPageLink:'/favourites/'+favouriteTrade._id+'/edit',
-                           animationData:`data-aos="fade-${directions[i%2]}" `})}`%>
+                        <% let
+                           wouldBeHighlighted=false;if(favouriteTrade.orginalTrade!=null){wouldBeHighlighted=favouriteTrade.orginalTrade.isHighlighted}
+                           %>
 
-                           <% } %>
+                           <%-`
+                              ${include('../partials/tradeTile.ejs',{elementName:'li',title:false,statistics:favouriteTrade.statistics,data:favouriteTrade.data,_id:favouriteTrade.orginalTradeId,
+                              favouritesInfo:null,isHighlighted:wouldBeHighlighted, isOnFavouritePage:true,
+                              showPageLink:`/favourites/${favouriteTrade._id}/edit`, animationData:animationData})}`%>
+
+                              <% } %>
 
 
 
@@ -48,13 +53,13 @@
                Let's dive right into them!
             </h2>
 
-            <a class="btn btn-success mt-2 d-flex justify-content-center" href="/explore">EXPLORE TRADES!</a>
+            <a class="btn btn-success my-4 d-flex justify-content-center" href="/explore">EXPLORE TRADES!</a>
 
             <% } %>
 
    </main>
 
 
-   <script src="/javascripts/onFavouritesPage/favourites.js"></script>
+   <script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>
 
    <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>

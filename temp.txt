@@ -1,0 +1,3 @@
+<%- `${include('../partials/tradeManaging',{trade:manageTrade,showMagnifier:false})}`%>
+
+      <% if (isFavouriteShowPage)actionUrl=`/favourites/${profit._id}/edit` %>
