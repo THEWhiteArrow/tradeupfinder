@@ -31,13 +31,34 @@ a.active-link:hover{color:black;} */
 
 
 
-.text-light-white{color:var(--text-light-white);}
 
-
-
- .bg-purple{background-color: var(--purple) !important;}
- .bg-dark-purple{background-color: var(--dark-purple) !important;}
- .bg-light-purple{background-color: var(--light-purple) !important;}
+.lift-on-hover{transition:all 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);}
+.lift-on-hover:hover{transform:translate3d(0,-7px,0);}
 
  h1,h2,h3{color:var(--title-color) !important;text-transform: capitalize;}
- h4,h5,h5,p{color:var(--text-color) !important;}
+ h4,h5,h5,p,li,div.lead{color:var(--text-color) !important;text-align: justify !important;} 
+
+ h3.popover-header,label:not(.text-dark){color:white !important;}
+
+
+ .enticing-svg{
+    position: absolute;
+    height:150px;
+    width: 150px;
+    top:0;
+
+    right:0;
+    transform: translate3d(0,-40%,0);
+
+ }
+/* 
+ .right-0{
+    right:0;
+    transform: translate3d(100%,-40%,0);
+ }
+
+ .left-0{
+    left:0;
+    transform: translate3d(-100%,-40%,0);
+ }
+  */

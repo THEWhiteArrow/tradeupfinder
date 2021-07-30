@@ -465,7 +465,7 @@ nav#settings select option{
 
 /* width */
 .slim-scrollbar::-webkit-scrollbar {
-   width: 9px;
+   width: 10px;
  }
  
  /* Track */
@@ -481,6 +481,14 @@ nav#settings select option{
  /* Handle on hover */
  .slim-scrollbar::-webkit-scrollbar-thumb:hover {
    background: #555;
+ }
+ .scrollbar-body::-webkit-scrollbar-thumb {
+   background: var(--hero-color-dark);
+ }
+ 
+ /* Handle on hover */
+ .scrollbar-body::-webkit-scrollbar-thumb:hover {
+   background:var(--hero-color-super-dark);
  }
 
 
@@ -566,6 +574,15 @@ nav#settings select option{
 /* #####################################    GRADIENS && COLORS     ###################################### */
 
 .bg-success-muted{background-color: #257c54cb !important;}
+.text-light-white{color:var(--text-light-white);}
+.bg-purple{background-color: var(--purple) !important;}
+.bg-dark-purple{background-color: var(--dark-purple) !important;}
+.bg-light-purple{background-color: var(--light-purple) !important;}
+
+
+
+
+
 
 .red{
    background-color: #eb4b4b;

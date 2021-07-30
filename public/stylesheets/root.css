@@ -1,31 +1,36 @@
 :root{
-   /* --dark-purple:#3f4146;
-   --purple:#54565d;
-   --light-purple:#696c74;  */
+ 
    --dark-purple:#1e2329;
    --purple:#495057;
-   --light-purple:#676F77; 
-   --light-2-purple:#706e85; 
+   --light-purple:#66707a; 
+   /* --dark-purple:#151a30;
+   --purple:#1a1f38;
+   --light-purple:#222b45;  */
+   /* --light-2-purple:#706e85;  */
+
    
    --text-light-white:rgba(255, 255, 255, 0.93);
    --text-white:rgb(255, 255, 255);
    --text-color:var(--text-light-white);
 
-   --hero-color:#35f138;
-   --hero-color-pale:rgba(53, 241, 56,0.5);
+   --hero-color:#35f138; 
+   --hero-color-dark:#27b929;
+   --hero-color-super-dark:#1b7c1d;
+    
 
-   /* CSS HEX */
---cultured: #f8f9faff;
---cultured-2: #e9ecefff;
---gainsboro: #dbe5ff; 
---light-gray: #ced4daff;
---cadet-blue-crayola: #adb5bdff;
---medium-gray: #828c96;
---slate-gray: #6c757dff;
---davys-grey: #495057ff; 
---light-gunmetal: #363c42;
---gunmetal: #1e2329;
---charleston-green: #181a20;
+
+      /* CSS HEX */
+   --cultured: #f8f9faff;
+   --cultured-2: #e9ecefff;
+   --gainsboro: #dbe5ff; 
+   --light-gray: #ced4daff;
+   --cadet-blue-crayola: #adb5bdff;
+   --medium-gray: #828c96;
+   --slate-gray: #6c757dff;
+   --davys-grey: #495057ff; 
+   --light-gunmetal: #363c42;
+   --gunmetal: #1e2329;
+   --charleston-green: #181a20;
 
 
 
@@ -36,20 +41,26 @@
    --nav-navbar-bg:var(--gunmetal);
    --nav-settings-bg:var(--charleston-green);
    
-   --title-color:var(--hero-color);
-   --title-color-pale:var(--hero-color-pale);
+   --title-color:var(--hero-color); 
     
    --main-grid-a-text:var(--text-light-white); 
    --main-grid-a-border:var(--text-light-white);
    --main-grid-a-bg:var(--purple);
-   --main-grid-a-after-bg:var(--light-2-purple);
+   /* --main-grid-a-after-bg:var( ); */
 
    --main-introduction-section-bg:var(--light-purple);
    --main-partners-bg:var(--light-purple);
    --main-highlight-section-bg:var(--light-purple);
-   /* --main-highlight-section-bg-img: linear-gradient(180deg,var(--light-purple) 0%, var(--dark-purple) 100%);; */
+   /* --main-highlight-section-bg-img: linear-gradient(180deg,var(--light-purple) 0%, var(--dark-purple) 100%); */
+   --main-highlight-section-bg-img: url('../assets/background/glamorous.svg');
 
+   --tradeShow-form-bg:var(--light-purple);
+   --tradeShow-form-bg-img: url("../assets/background/meteors.svg");
+   --tradeShow-skinCard-bg:var(--light-gunmetal);
+   --tradeShow-skinCard-indicators-bg:var(--davys-grey);
+   --tradeShow-skinCard-indicators-text-color:var(--text-color);
 
+   /* --tradeShow-text-color:var() */
 
    --trade-tile-bg:var(--light-purple);
    --trade-tile-border:var(--text-light-white);

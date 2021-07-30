@@ -11,11 +11,12 @@ const parallax = {
 
    calculateEffect: () => {
       const { scrollY } = window;
-      parallax.img.style.transform = `translate3d(0,-${scrollY * 0.25}px,0)`;
-      parallax.h1.style.transform = `translate3d(0,-${scrollY * 0.55}px,0)`;
-      parallax.p.style.transform = `translate3d(0,-${scrollY * 0.35}px,0)`;
-      parallax.btn1.style.transform = `translate3d(0,-${scrollY * 0.15}px,0)`;
-      parallax.btn2.style.transform = `translate3d(0,-${scrollY * 0.1}px,0)`;
+      parallax.img.style.transform = `translate3d(${scrollY * 0.15}px,-${scrollY * 0.3}px,0)`;
+      parallax.h1.style.transform = `translate3d(0,-${scrollY * 0.6}px,0)`;
+      parallax.p.style.transform = `translate3d(0,-${scrollY * 0.4}px,0)`;
+      parallax.btn1.style.transform = `translate3d(0,-${scrollY * 0.2}px,0)`;
+      parallax.btn2.style.transform = `translate3d(0,-${scrollY * 0.15}px,0)`;
+
    },
 
 

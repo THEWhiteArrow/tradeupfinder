@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/stylesheets/tradeShow.css">
 
-<main class="container d-flex flex-column mt-5">
+<main class="container d-flex flex-column my-5">
 
    <section class="stats my-4 confetti-container">
       <% const bg=data.rarity+"-"+data.targetedRarity %>
@@ -26,21 +26,21 @@
 
    </section>
 
-   <section class="card bg-transparent border-0">
+   <section class="card bg-transparent border-0 shadow-lg">
 
       <div class="d-flex-flex-row justify-content-start">
 
-         <a href="/trades?q=random" class="btn btn-primary rounded-0 border border-bottom-0 border-primary">
+         <a href="/trades?q=random" class="btn btn-primary rounded-0 border border-bottom-0 border-white">
             Show A Random Trade</a>
 
          <button id="compact-mode-btn"
-            class="position-relative btn btn-outline-primary rounded-0 border border-bottom-0 border-primary d-none d-md-inline">Switch
+            class="position-relative btn btn-outline-primary rounded-0 border border-bottom-0 border-white d-none d-md-inline">Switch
             To Normal Calculator Mode</button>
 
       </div>
 
 
-      <div class="card-header border border-top-0 d-flex justify-content-between align-items-center <%= bg %>">
+      <div class="card-header  border border-light d-flex justify-content-between align-items-center <%= bg %>">
 
          <% let h1='Trade-Up' %>
             <% if(pricesType=='stattrakPrices' )h1+='<span class=" ms-3 badge bg-warning">StatTrak</span>' %>
@@ -89,8 +89,8 @@
 
 
 
-      <form id="recheck-trade-form" class="card-body border border-top-0 bg-white validated-form"
-         action="<%= recheckFormUrl %>" novalidate>
+      <form id="recheck-trade-form" class="card-body border border-top-0  validated-form" action="<%= recheckFormUrl %>"
+         novalidate>
 
          <div class="row">
 
@@ -165,12 +165,12 @@
 
    </section>
 
-   <section class="card d-flex mt-5">
+   <section class="card d-flex mt-5 shadow-lg">
       <div class="card-header d-flex justify-content-between <%= bg %>">
          <h3 class="text-white">Alternative Input Skins</h3>
       </div>
 
-      <div class="card-body">
+      <div id="alternative-inputs-card-body" class="card-body">
 
          <div id="alternates" class="alternate-skins pt-3 slim-scrollbar">
             <% let type="alternate-skin-checkbox" ;if(!currentUser||currentUser.role=='guest' )type='alternate-skin' %>
@@ -196,14 +196,14 @@
       </div>
    </section>
 
-   <section class="card d-flex my-5">
+   <section class="card d-flex my-5 shadow-lg">
 
 
       <div class="card-header d-flex justify-content-start <%= bg %>">
          <h3 class="text-white">Trading Simulation</h3>
       </div>
 
-      <div class="card-body">
+      <div id="chart-card-body" class="card-body">
 
          <%- include("./chart.ejs") %>
 
