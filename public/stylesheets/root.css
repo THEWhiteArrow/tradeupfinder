@@ -32,11 +32,10 @@
    --gunmetal: #1e2329;
    --charleston-green: #181a20;
 
+ 
 
 
-
-
-
+ 
    --body-bg:var(--purple);
    --nav-navbar-bg:var(--gunmetal);
    --nav-settings-bg:var(--charleston-green);
@@ -54,11 +53,13 @@
    /* --main-highlight-section-bg-img: linear-gradient(180deg,var(--light-purple) 0%, var(--dark-purple) 100%); */
    --main-highlight-section-bg-img: url('../assets/background/glamorous.svg');
 
-   --tradeShow-form-bg:var(--light-gunmetal);
+   --tradeShow-form-bg:var(--light-purple);
+   /* --tradeShow-form-bg:var(--light-gunmetal); */
    /* --tradeShow-form-bg-img: url("../assets/background/meteors.svg"); */
    --tradeShow-skinCard-bg:var(--light-purple);
    --tradeShow-skinCard-indicators-bg:var(--davys-grey);
    --tradeShow-skinCard-indicators-text-color:var(--text-color);
+   --tradeShow-border-color:var(--text-white);
 
    /* --tradeShow-text-color:var() */
 

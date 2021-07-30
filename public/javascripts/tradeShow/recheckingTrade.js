@@ -8,10 +8,10 @@ const checkOnPageFormValidity = (form, e) => {
       e.preventDefault()
       e.stopPropagation()
       form.classList.add('is-invalid')
-      form.classList.add('was-validated')
+      // form.classList.add('was-validated')
    } else {
       form.classList.remove('is-invalid')
-      form.classList.add('was-validated')
+      // form.classList.add('was-validated')
    }
 }
 
@@ -55,7 +55,8 @@ const setUpRecheckingTrade = async () => {
                   const data = await getPricesAndFetchData(recheckForm, 'request', recheckingInfo);
                   // console.log(data)
                   if (data.success) {
-                     changeStats(data)
+                     changeStats(data);
+                     highlightTargetedSkin();
                   }
 
                   animateConfetti();
@@ -100,21 +101,19 @@ const changeStats = (data) => {
 
       for (let info of data.outputSkinsNewData) {
          const outputSkinCard = document.getElementById(`skin-${info._id}`)
-         const label = outputSkinCard.querySelector('label')
+         const labelQuality = outputSkinCard.querySelector('label.quality')
          const priceInput = outputSkinCard.querySelector('input.price-input')
-         const float = outputSkinCard.querySelector('.skin-card-float')
+         const float = outputSkinCard.querySelector('span.skin-card-float')
 
-         float.innerText = info.float;
-         let qIndex = label.innerText.indexOf('(');
 
-         // const oldQuality = label.innerText.slice(qIndex + 1, qIndex2)
-         // if (oldQuality != info.quality) {
+
 
 
          outputSkinCard.style.opacity = '0';
-         label.innerText = label.innerText.slice(0, qIndex) + `(${info.quality})`;
-         priceInput.value = info.price;
          setTimeout(() => {
+            float.innerText = info.float;
+            labelQuality.innerText = `(${info.quality})`;
+            priceInput.value = info.price;
             outputSkinCard.style.opacity = 1;
          }, 1000)
          // }
@@ -123,10 +122,10 @@ const changeStats = (data) => {
 
       for (let info of data.inputSkinsNewData) {
          const inputSkinCard = document.getElementById(`skin-${info.sn}`)
-         const label = inputSkinCard.querySelector('label')
+         const labelQuality = inputSkinCard.querySelector('label.quality')
 
-         let qIndex = label.innerText.indexOf('(');
-         label.innerText = label.innerText.slice(0, qIndex) + `(${info.quality})`;
+
+         labelQuality.innerText = `(${info.quality})`;
 
       }
 
@@ -196,18 +195,37 @@ const getPricesAndFetchData = async (form, action, info) => {
 
 const setUpCompactModeBtn = () => {
    compactModeBtn.addEventListener('click', () => {
-      compactModeBtn.classList.toggle('btn-primary');
-      compactModeBtn.classList.toggle('btn-outline-primary');
+      // compactModeBtn.classList.toggle('btn-primary');
+      // compactModeBtn.classList.toggle('btn-outline-primary');
 
 
       inputSkinsContainer.classList.toggle('col-md-6');
       outputSkinsContainer.classList.toggle('col-md-6');
 
-      !compactModeBtn.classList.contains('btn-outline-primary') ? compactModeBtn.innerText = 'Switch To Compact Calculator Mode' : compactModeBtn.innerText = "Switch To Normal Calculator Mode";
+      if (inputSkinsContainer.classList.contains('col-md-6')) {
+         compactModeBtn.innerText = "Switch To Normal Calculator Mode";
+      } else {
+         compactModeBtn.innerText = 'Switch To Compact Calculator Mode';
+      }
+
    })
 }
 
+const highlightTargetedSkin = () => {
+   const outputSkinsPricesArr = document.querySelectorAll('.output-skin input.price-input');
+   let localMax = 0, localMaxEl;
+
+   outputSkinsPricesArr.forEach((el) => {
+      el.parentElement.classList.remove('highlighted-shadow-green');
+      if (el.value > localMax) {
+         localMaxEl = el.parentElement;
+         localMax = Number(el.value);
+      }
+   })
+   localMaxEl.classList.add('highlighted-shadow-green')
+}
 
 setUpRecheckingTrade();
 setUpCompactModeBtn();
+highlightTargetedSkin();
 

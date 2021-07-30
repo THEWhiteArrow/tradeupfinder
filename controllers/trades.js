@@ -354,7 +354,7 @@ const mixedTwoPairs = async (req) => {
    const profits = [];
 
 
-   let collections = await Case.find({})
+   const collections = await Case.find({})
       .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
@@ -362,7 +362,6 @@ const mixedTwoPairs = async (req) => {
       .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
       .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } })
 
-   collections = collections.slice(0, 10)
 
    for (let r = 0; r < rarities.length - 1; r++) {
 

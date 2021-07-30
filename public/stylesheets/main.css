@@ -110,19 +110,19 @@
 
 
 .grid-1 a.grey-light_blue-pastell:after{
-   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#b0c3d9 0%, #5e98d9 100%);
+   background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),linear-gradient(90deg,#b0c3d9 0%, #5e98d9 100%);
 }
 .grid-1 a.light_blue-blue-pastell:after{
-   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#5e98d9 0%,#4b69ff 100%);
+   background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),linear-gradient(90deg,#5e98d9 0%,#4b69ff 100%);
 }
 .grid-1 a.blue-purple-pastell:after{
-   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#4b69ff 0%,#8847ff 100%);
+   background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),linear-gradient(90deg,#4b69ff 0%,#8847ff 100%);
 }
 .grid-1 a.purple-pink-pastell:after{
-   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#8847ff 0%,#d32ee6 100%);
+   background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),linear-gradient(90deg,#8847ff 0%,#d32ee6 100%);
 }
 .grid-1 a.pink-red-pastell:after{
-   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),linear-gradient(90deg,#d32ee6 0%,#eb4b4b 100%);
+   background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),linear-gradient(90deg,#d32ee6 0%,#eb4b4b 100%);
 }
 
 

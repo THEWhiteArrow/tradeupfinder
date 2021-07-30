@@ -1,11 +1,11 @@
-#compact-mode-btn{color:var(--text-light-white);}
+ 
 #compact-mode-btn:after{
    content:'';
    position:absolute;
    width:100%;
    height: 100%;
    top:0;left:0;
-   background-color: var(--dark-purple);
+   /* background-color: var(--davys-grey); */
    z-index: -1;
  
 }
@@ -26,6 +26,8 @@
    justify-content: center; 
    align-items: center; 
    margin:1rem;
+
+   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
 }
 
 .stats-item-title{
@@ -34,7 +36,7 @@
    transform:translate3d(0,-70%,0);
    width: max-content;
 
-   border: 1px solid white;
+   border: 1px solid var(--tradeShow-border-color) !important;
    
    border-radius: 8px ;
    padding:4px 5px;
@@ -46,7 +48,7 @@
    justify-content: center;
    align-items: center;
 
-   border: 1px solid white;
+   border: 1px solid var(--tradeShow-border-color) !important;
    border-radius: 8px ;
    padding:12px 20px;
    font-size: 1.5rem;
@@ -56,10 +58,34 @@
 
 /* RECHECK FORM */
 #recheck-trade-form,#alternative-inputs-card-body,#chart-card-body{
-   background-color: var(--tradeShow-form-bg);
+   /* background-color: var(--tradeShow-form-bg);
    background-image: var(--tradeShow-form-bg-img);
-   /* background-size: 100% 100%; */
-   background-size: cover;
+   background-size: cover; */
+
+   background: rgba( 0, 0, 0, 0.45 );
+   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+   backdrop-filter: blur( 7.0px );
+   -webkit-backdrop-filter: blur( 7.0px ); 
+   border: 1px solid rgba( 255, 255, 255, 0.18 );
+
+
+   
+}
+
+input[type=number].price-input{
+   border-left: none;
+   border-right: none;
+}
+input[type=number].skin-card-float{
+   border-top: none !important;
+   border-left: none !important;
+   border-right: none !important;
+
+}
+
+#recheck-trade-form h3,#alternative-inputs-card-body h3,#chart-card-body h3,
+#recheck-trade-form label,#alternative-inputs-card-body label,#chart-card-body label{
+   color: var(--tradeShow-skinCard-indicators-text-color) !important;
 }
 
 
@@ -73,99 +99,114 @@
 }
 
 .input-skins,.output-skins,.alternate-skins{
-   
+   width:100%;
    height: 100%;
    display: flex;
    flex-direction: row ;
    flex-wrap: wrap;
    justify-content: center  ; 
    align-items:center;
+
+   -webkit-box-shadow: inset 0px 0px 36px -14px #000000; 
+box-shadow: inset 0px 0px 36px -14px #000000;
+border-radius: 0.25rem;
 }
 
-.input-skins,.output-skins{
-   max-height: 460px;
-   overflow-y: auto;
-   align-items:start;
-}
-.alternate-skins{
-   height: min-content;
-   max-height: 460px;
-   overflow-y: auto;
-   align-items:center;
+.input-skins,.output-skins,.alternate-skins{ 
+   max-height: 550px;
+   overflow-y: auto; 
 }
 
 .skin-card{
    position: relative;
    width:8.5rem;
-   background-color: var( --tradeShow-skinCard-bg) !important;
+   /* background-color: var( --tradeShow-skinCard-bg) !important; */
+   
+   border-bottom: none !important;
    
    --scale:1;
    margin:calc(0.9rem*var(--scale)) calc(0.8rem*var(--scale));
    transform: scale(var(--scale));
 }
 
-.skin-card-float,.skin-card-number,.skin-card-float-left,.skin-card-chances,.skin-card input{
-   background-color: var(--tradeShow-skinCard-indicators-bg) !important;
+.skin-card.highlighted-shadow-green{
+   box-shadow: 0px 0px 15px 10px rgba(39,185,41,0.55) !important;
+-webkit-box-shadow: 0px 0px 15px 10px rgba(39,185,41,0.55) !important;
+-moz-box-shadow: 0px 0px 15px 10px rgba(39,185,41,0.55) !important;
+}
+
+#recheck-trade-form,a.btn,#compact-mode-btn,.card,.card-header,input{
+   border-color: var(--tradeShow-border-color) !important;
+}
+
+.skin-card-float,.skin-card-chances,.skin-card input{
+   border-color: var(--tradeShow-border-color) !important;
+   /* background-color: var(--tradeShow-skinCard-indicators-bg) !important; */
+   background-color: rgba(33,33,33,0.5);
    color:var(--tradeShow-skinCard-indicators-text-color) !important;
 }
+input:focus{
+   background-color: rgba(33,33,33,0.4) !important; 
+}
+
 
 .skin-card-label{
    font-size: 0.82rem;
 }
 
-.skin-card-float{
-   z-index: 10;
-   position: absolute;
-   top:0;
-   left:50%;
-   transform:translate3d(-50%,-70%,0);
-   
-   padding:2px 5px;
-   border-radius: 8px;
-   background-color: white;
-   /* border:1px solid #212529 !important; */
+ 
+.skin-card-img{ 
+   filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.3));
+   width:85% ;
 }
 
-.skin-card-img{ filter: drop-shadow(0 0 0.75rem rgba(0, 0, 0, 0.3));}
+.skin-card-market-link{
+   width:20px; 
+   height:20px;
+   opacity: 0.5;
+   transition:opacity 0.15s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+a:hover .skin-card-market-link{opacity:0.85;}
+
 
 .box-shadow-inset{
    /* background-color: rgba(8, 8, 8, 0.03); */
-   -webkit-box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.35); 
-   box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.35);
+   -webkit-box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.45); 
+   box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.45);
 }
 
-.skin-card-float-left{
-   left:0;
-   transform:translate3d(0,-70%,0);
+ 
+.skin-card-chances{
+   border-top: none !important;
+   border-right: none !important;
+   border-bottom-left-radius: 0.25rem;
+}
+span.skin-card-float{
+   border-top: none !important;
+   border-left: none !important;
+   border-bottom-right-radius: 0.25rem;
 }
 
-.skin-card-number,.skin-card-chances{
-   position: absolute;
-   top:0;
-   left:100%;
-   transform:translate3d(-100%,-70%,0);
-   
-   padding:2px 5px;
-   border-radius: 8px;
-   background-color: white;
-   
+ .skin-card-chances, span.skin-card-float{
+   padding:6px 6px !important;
+ 
 }
 
 hr[role="tournament6"] {
    border: 0px solid;  
    height: 1px; 
    width:80%;
-   background-color: white;
-   margin: 10px 0px;
+   background-color: var(--tradeShow-skinCard-indicators-text-color);
+   margin: 10px 0px 20px 0;
    display: flex;
    z-index: 1000;
 }
 
 hr[role="tournament6"]::before {
    position: absolute;
-   background-color: white;
+   background-color: var(--tradeShow-skinCard-indicators-text-color);
    border: 1px solid;
-   border-color: white;
+   border-color: var(--tradeShow-skinCard-indicators-text-color);
    padding: 5px;
    -webkit-transform: translate3d(50%,0,0) rotate(45deg);
    -ms-transform: translate3d(50%,0,0) rotate(45deg);

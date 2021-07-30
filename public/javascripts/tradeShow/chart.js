@@ -74,7 +74,7 @@ const createChart = (range) => {
          data: results,
          fill: true,
          borderColor: 'rgb(235, 64, 52)',
-         backgroundColor: 'rgba(255,255,255,0.5)',
+         backgroundColor: 'rgba(255,255,255,0.4)',
          tension: 0.01
       }]
    };
@@ -83,16 +83,12 @@ const createChart = (range) => {
       data: data,
       options: {
          responsive: true,
-         color: '#fff',
+         color: 'rgba(255,255,255,0.85)',
          scales: {
             x: {
-               grid: {
-                  drawBorder: true,
-                  color: 'rgba(255,255,255,0.25)',
-               },
                display: true,
                title: {
-                  color: '#fff',
+                  color: 'rgba(255,255,255,0.85)',
                   display: true,
                   text: 'Number of attempts',
                   font: {
@@ -100,17 +96,17 @@ const createChart = (range) => {
                   }
                },
                ticks: {
-                  color: '#fff',
+                  color: 'rgba(255,255,255,0.85)',
                },
             },
             y: {
                grid: {
                   drawBorder: true,
-                  color: 'rgba(255,255,255,0.25)',
+                  color: 'rgba(255,255,255,0.1)',
                },
                display: true,
                title: {
-                  color: '#fff',
+                  color: 'rgba(255,255,255,0.85)',
                   display: true,
                   text: `Profit`,
                   font: {
@@ -118,7 +114,7 @@ const createChart = (range) => {
                   }
                },
                ticks: {
-                  color: '#fff',
+                  color: 'rgba(255,255,255,0.85)',
                },
             }
          }

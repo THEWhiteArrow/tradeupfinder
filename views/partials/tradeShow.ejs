@@ -1,80 +1,56 @@
 <link rel="stylesheet" href="/stylesheets/tradeShow.css">
 
-<main class="container d-flex flex-column my-5">
-
-   <section class="stats my-4 confetti-container">
-      <% const bg=data.rarity+"-"+data.targetedRarity %>
-
-         <%- include('./statsItem.ejs',{statsTitle:'Avg. Float',
-            statsValue:(statistics.avgFloat+'00').slice(0,6),symbol:'',className:'avg-float',bg:bg,}) %>
-
-            <%- `${include('./statsItem.ejs',{statsTitle:'Cost',statsValue:Math.round(statistics.tradeCost*currency.multiplier*100)/100
-               ,symbol:currency.symbol,className:'input-price',bg:bg,}) }` %>
-
-               <%- `${include('./statsItem.ejs',{statsTitle:'Chances',statsValue:
-                  statistics.chances,symbol:'%',className:'chances',bg:bg,}) }`%>
-
-                  <%- `${include('./statsItem.ejs',{statsTitle:'Avg. Profit',
-                     statsValue:Math.round(statistics.profitPerTradeUpTaxed*currency.multiplier*100)/100 + ' / ' +
-                     Math.round(statistics.profitPerTradeUp*currency.multiplier*100)/100,
-                     symbol:currency.symbol,className:'perTradeUp',bg:bg,})}`%>
-
-                     <%- `${include('./statsItem.ejs',{statsTitle:'Profitability',
-                        statsValue:statistics.returnPercentageTaxed + ' / ' +
-                        statistics.returnPercentage,symbol:'%',className:'profitability',bg:bg,})}` %>
+<main>
+   <div class="container d-flex flex-column my-5">
 
 
-   </section>
+      <section class="stats my-4 confetti-container">
+         <% const bg=data.rarity+"-"+data.targetedRarity %>
 
-   <section class="card bg-transparent border-0 shadow-lg">
+            <%- include('./statsItem.ejs',{statsTitle:'Avg. Float',
+               statsValue:(statistics.avgFloat+'00').slice(0,6),symbol:'',className:'avg-float',bg:bg,}) %>
 
-      <div class="d-flex-flex-row justify-content-start">
+               <%- `${include('./statsItem.ejs',{statsTitle:'Cost',statsValue:Math.round(statistics.tradeCost*currency.multiplier*100)/100
+                  ,symbol:currency.symbol,className:'input-price',bg:bg,}) }` %>
 
-         <a href="/trades?q=random" class="btn btn-primary rounded-0 border border-bottom-0 border-white">
-            Show A Random Trade</a>
+                  <%- `${include('./statsItem.ejs',{statsTitle:'Chances',statsValue:
+                     statistics.chances,symbol:'%',className:'chances',bg:bg,}) }`%>
 
-         <button id="compact-mode-btn"
-            class="position-relative btn btn-outline-primary rounded-0 border border-bottom-0 border-white d-none d-md-inline">Switch
-            To Normal Calculator Mode</button>
+                     <%- `${include('./statsItem.ejs',{statsTitle:'Avg. Profit',
+                        statsValue:Math.round(statistics.profitPerTradeUpTaxed*currency.multiplier*100)/100 + ' / ' +
+                        Math.round(statistics.profitPerTradeUp*currency.multiplier*100)/100,
+                        symbol:currency.symbol,className:'perTradeUp',bg:bg,})}`%>
 
-      </div>
+                        <%- `${include('./statsItem.ejs',{statsTitle:'Profitability',
+                           statsValue:statistics.returnPercentageTaxed + ' / ' +
+                           statistics.returnPercentage,symbol:'%',className:'profitability',bg:bg,})}` %>
 
 
-      <div class="card-header  border border-light d-flex justify-content-between align-items-center <%= bg %>">
+      </section>
 
-         <% let h1='Trade-Up' %>
-            <% if(pricesType=='stattrakPrices' )h1+='<span class=" ms-3 badge bg-warning">StatTrak</span>' %>
+      <section class="card bg-transparent border-0 shadow-lg">
 
-               <% if (isOnFavouritePage ) { %>
-                  <h1 class="text-white">
-                     <%- h1 %>
-                  </h1>
-                  <span class="d-flex flex-row justify-content-end">
+         <div class="d-flex-flex-row justify-content-start">
 
-                     <%-
-                        `${include('../partials/tradeManaging',{_id,favouritesInfo,isHighlighted,isOnFavouritePage})}`%>
+            <a href="/trades?q=random" class="btn btn-primary rounded-0 border border-bottom-0 border-white">
+               Show A Random Trade</a>
 
-                  </span>
+            <button id="compact-mode-btn"
+               class="position-relative btn btn-success rounded-0 border border-bottom-0 d-none d-md-inline">Switch
+               To Normal Calculator Mode</button>
 
-                  <% }else{ %>
+         </div>
 
-                     <span class="d-flex flex-row">
 
-                        <h1 class="text-white">
-                           <%- h1 %>
-                        </h1>
+         <div class="card-header  border border-light d-flex justify-content-between align-items-center <%= bg %>">
 
-                        <% if (currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' ) ) { %>
+            <% let h1='Trade-Up' %>
+               <% if(pricesType=='stattrakPrices' )h1+='<span class=" ms-3 badge bg-warning">StatTrak</span>' %>
 
-                           <label class="switch ms-3 mt-1" for="editGloballySwitch">
-                              <input type="checkbox" id="editGloballySwitch" name="editGloballySwitch" />
-                              <div class="slider round"></div>
-                           </label>
-
-                           <% } %>
-
-                     </span>
-
+                  <% if (isOnFavouritePage ) { %>
+                     <h1 class="text-white">
+                        <%- h1 %>
+                     </h1>
                      <span class="d-flex flex-row justify-content-end">
 
                         <%-
@@ -82,140 +58,172 @@
 
                      </span>
 
-                     <% } %>
+                     <% }else{ %>
 
-      </div>
+                        <span class="d-flex flex-row">
 
+                           <h1 class="text-white">
+                              <%- h1 %>
+                           </h1>
 
+                           <% if (currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' ) ) { %>
 
+                              <label class="switch ms-3 mt-1" for="editGloballySwitch">
+                                 <input type="checkbox" id="editGloballySwitch" name="editGloballySwitch" />
+                                 <div class="slider round"></div>
+                              </label>
 
-      <form id="recheck-trade-form" class="card-body border border-top-0  validated-form" action="<%= recheckFormUrl %>"
-         novalidate>
+                              <% } %>
 
-         <div class="row">
+                        </span>
 
+                        <span class="d-flex flex-row justify-content-end">
 
-            <div id="inputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
-               <h3>INPUTS</h3>
-               <hr role=tournament6>
+                           <%-
+                              `${include('../partials/tradeManaging',{_id,favouritesInfo,isHighlighted,isOnFavouritePage})}`%>
 
-               <div class="py-3 input-skins slim-scrollbar">
-
-                  <% for(let inputSkin of arrays.inputSkinsArr){ %>
-
-                     <%- `${include('./skinCard.ejs',{ float:inputSkin.float,amount:'',
-                        price:Math.round(inputSkin.price*currency.multiplier*100)/100,type:'input-skin',
-                        link:inputSkin.link, icon:inputSkin.icon, _id:inputSkin._id, label:inputSkin.name + ' | ' +
-                        inputSkin.skin + ' (' + inputSkin.quality + ') ' , sn:inputSkin.sn,
-                        min_float:inputSkin.min_float, max_float:inputSkin.max_float, animationData:`data-aos="zoom-in"
-                        data-aos-anchor="#inputs" ` })}`%>
+                        </span>
 
                         <% } %>
-
-
-
-               </div>
-
-            </div>
-
-            <div id="outputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
-               <h3>OUTPUTS</h3>
-               <hr role=tournament6>
-
-               <div class="output-skins py-3 slim-scrollbar">
-                  <% for(let targetedSkin of arrays.targetedSkinsArr) {%>
-                     <%- `${include('./skinCard.ejs',{ float:targetedSkin.float, amount:targetedSkin.amount,
-                        price:Math.round(targetedSkin.price*currency.multiplier*100)/100,
-                        type:'output-skin',link:targetedSkin.url, icon:targetedSkin.icon, _id:targetedSkin._id,
-                        label:`${targetedSkin.name} | ${targetedSkin.skin}
-                        (${targetedSkin.quality})`,sn:targetedSkin._id, animationData:`data-aos="zoom-in"
-                        data-aos-anchor="#outputs" `,allOutputsNumber:statistics.allOutputsNumber })}` %>
-                        <% } %>
-
-
-               </div>
-
-            </div>
-
-
 
          </div>
 
-         <p class="text-justify mt-3 bg-muted border px-2 py-1 bg-success-muted text-light">
-
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-               class="bi bi-info-square mb-1" viewBox="0 0 16 16">
-               <path
-                  d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-               <path
-                  d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-            </svg>
-
-
-            <span>
-               Change the prices or floats and
-               the trade-up will be automatically recalculated!
-            </span>
-
-         </p>
-
-      </form>
 
 
 
-   </section>
+         <form id="recheck-trade-form" class="card-body border border-top-0  validated-form"
+            action="<%= recheckFormUrl %>" novalidate>
 
-   <section class="card d-flex mt-5 shadow-lg">
-      <div class="card-header d-flex justify-content-between <%= bg %>">
-         <h3 class="text-white">Alternative Input Skins</h3>
-      </div>
-
-      <div id="alternative-inputs-card-body" class="card-body">
-
-         <div id="alternates" class="alternate-skins pt-3 slim-scrollbar">
-            <% let type="alternate-skin-checkbox" ;if(!currentUser||currentUser.role=='guest' )type='alternate-skin' %>
-
-               <% for(let alternateSkin of arrays.alternateInputSkinsArr){ %>
+            <div class="row">
 
 
+               <div id="inputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
+                  <h3 class="mt-3">INPUTS</h3>
+                  <hr role=tournament6>
 
-                  <%- `${include('./skinCard.ejs',{ float:alternateSkin.float,
-                     price:Math.round(alternateSkin.price*currency.multiplier*100)/100, value: alternateSkin.replacement
-                     +' _ '+alternateSkin.amount + ' _ ' + alternateSkin.float + ' _ ' + alternateSkin.botPrice
+                  <div class="py-3 input-skins slim-scrollbar">
+
+                     <% for(let inputSkin of arrays.inputSkinsArr){ %>
+
+                        <%- `${include('./skinCard.ejs',{ float:inputSkin.float,amount:'',rarity:data.rarity,
+                           quality:inputSkin.quality,skin:inputSkin.skin,name:inputSkin.name,
+                           price:Math.round(inputSkin.price*currency.multiplier*100)/100,type:'input-skin',
+                           link:inputSkin.link, icon:inputSkin.icon, _id:inputSkin._id, label:inputSkin.name + ' | ' +
+                           inputSkin.skin + ' (' + inputSkin.quality + ') ' , sn:inputSkin.sn,
+                           min_float:inputSkin.min_float, max_float:inputSkin.max_float,
+                           animationData:`data-aos="zoom-in" data-aos-anchor="#inputs" ` })}`%>
+
+                           <% } %>
+
+
+
+                  </div>
+
+               </div>
+
+               <div id="outputs" class="col-12 col-md-6 d-flex flex-column align-items-center">
+                  <h3 class="mt-3">OUTPUTS</h3>
+                  <hr role=tournament6>
+
+                  <div class="output-skins py-3 slim-scrollbar">
+                     <% for(let targetedSkin of arrays.targetedSkinsArr) {%>
+                        <%- `${include('./skinCard.ejs',{ float:targetedSkin.float, amount:targetedSkin.amount,
+                           quality:targetedSkin.quality,skin:targetedSkin.skin,name:targetedSkin.name,rarity:data.targetedRarity,
+                           price:Math.round(targetedSkin.price*currency.multiplier*100)/100,
+                           type:'output-skin',link:targetedSkin.url, icon:targetedSkin.icon, _id:targetedSkin._id,
+                           label:`${targetedSkin.name} | ${targetedSkin.skin}
+                           (${targetedSkin.quality})`,sn:targetedSkin._id, animationData:`data-aos="zoom-in"
+                           data-aos-anchor="#outputs" `,allOutputsNumber:statistics.allOutputsNumber })}` %>
+                           <% } %>
+
+
+                  </div>
+
+               </div>
+
+
+
+            </div>
+
+            <p class="text-justify mt-3 bg-muted border px-2 py-1 bg-success-muted text-light">
+
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-info-square mb-1" viewBox="0 0 16 16">
+                  <path
+                     d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                  <path
+                     d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+               </svg>
+
+
+               <span>
+                  Change the prices or floats and
+                  the trade-up will be automatically recalculated!
+               </span>
+
+            </p>
+
+         </form>
+
+
+
+      </section>
+
+      <section class="card bg-transparent d-flex mt-5 shadow-lg">
+         <div class="card-header d-flex justify-content-between <%= bg %>">
+            <h3 class="text-white">Alternative Input Skins</h3>
+         </div>
+
+         <div id="alternative-inputs-card-body" class="card-body">
+            <h3 class=" text-center mb-3">ALTERNATIVES</h3>
+            <hr class="mx-auto" role=tournament6>
+
+            <div id="alternates" class="alternate-skins py-3 slim-scrollbar">
+               <% let type="alternate-skin-checkbox" ;if(!currentUser||currentUser.role=='guest' )type='alternate-skin'
+                  %>
+
+                  <% for(let alternateSkin of arrays.alternateInputSkinsArr){ %>
+
+
+
+                     <%- `${include('./skinCard.ejs',{ float:alternateSkin.float,
+                        price:Math.round(alternateSkin.price*currency.multiplier*100)/100,rarity:data.rarity,
+                        quality:alternateSkin.quality,skin:alternateSkin.skin,name:alternateSkin.name, value:
+                        alternateSkin.replacement +' _ '+alternateSkin.amount + ' _ ' + alternateSkin.float + ' _ ' + alternateSkin.botPrice
                            + ' _ ' + alternateSkin.url , link:alternateSkin.url, type:type, icon:alternateSkin.icon,
                            _id:alternateSkin.sn,amount:alternateSkin.amount, label:alternateSkin.name+ ' | ' +
                            alternateSkin.skin + ' (' + alternateSkin.quality + ') '
-                     ,symbol:currency.symbol,sn:alternateSkin.sn, animationData:`data-aos="zoom-in"
-                     data-aos-anchor=".alternate-skins" `})}`%>
+                        ,symbol:currency.symbol,sn:alternateSkin.sn, animationData:`data-aos="zoom-in"
+                        data-aos-anchor=".alternate-skins" `})}`%>
 
-                     <% } %>
+                        <% } %>
+            </div>
+
+            <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )){ %>
+               <button class=" btn btn-success w-100 mt-3" id="code-for-bot">Generate Bot's Code</button>
+               <% } %>
+
+
+         </div>
+      </section>
+
+      <section class="card bg-transparent d-flex my-5 shadow-lg">
+
+
+         <div class="card-header d-flex justify-content-start <%= bg %>">
+            <h3 class="text-white">Trading Simulation</h3>
          </div>
 
-         <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )){ %>
-            <button class=" btn btn-success w-100 mt-3" id="code-for-bot">Generate Bot's Code</button>
-            <% } %>
+         <div id="chart-card-body" class="card-body">
+
+            <%- include("./chart.ejs") %>
+
+         </div>
 
 
-      </div>
-   </section>
+      </section>
 
-   <section class="card d-flex my-5 shadow-lg">
-
-
-      <div class="card-header d-flex justify-content-start <%= bg %>">
-         <h3 class="text-white">Trading Simulation</h3>
-      </div>
-
-      <div id="chart-card-body" class="card-body">
-
-         <%- include("./chart.ejs") %>
-
-      </div>
-
-
-   </section>
-
-
+   </div>
 </main>
 
 <div class="toast-container z-index-1000">

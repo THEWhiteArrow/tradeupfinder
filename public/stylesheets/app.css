@@ -532,6 +532,9 @@ nav#settings select option{
 
 /* #####################################     FLEX & BOOTSTRAP PATCHES     ###################################### */
 
+.right-0{right:0;}
+.left-0{right:0;}
+ 
 .flex-1{flex:1;}
 .flex-2{flex:2;}
 .flex-3{flex:3;}
@@ -585,25 +588,25 @@ nav#settings select option{
 
 
 .red{
-   background-color: #eb4b4b;
+   background-color: rgb(235, 75, 75,0.75) !important;
 }
 
 .pink{
-   background-color: #d32ee6;
+   background-color: rgb(211, 46, 230,0.75) !important;
 }
 
 .purple{
-   background-color: #8847ff;
+   background-color: rgb(136, 71, 255,0.75) !important;
 }
 
 .blue{
-   background-color: #4b69ff;   
+   background-color: rgb(75, 105, 255,0.75) !important;   
 }
 .light_blue{
-   background-color: #5e98d9;   
+   background-color: rgb(94, 152, 217,0.75) !important;   
 }
 .grey{
-   background-color: #b0c3d9;   
+   background-color: rgb(176, 195, 217,0.75) !important;   
 }
 
 

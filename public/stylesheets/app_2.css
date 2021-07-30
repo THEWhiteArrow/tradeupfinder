@@ -37,9 +37,9 @@ a.active-link:hover{color:black;} */
 
  h1,h2,h3{color:var(--title-color) !important;text-transform: capitalize;}
  h4,h5,p,li,div.lead{color:var(--text-color) !important;text-align: justify !important;} 
-
- h5.card-title.new-highlight{color:black !important}
+ 
  h3.popover-header,label:not(.text-dark){color:white !important;}
+ .error p,.skin-card label ,.modal h5,.modal li,h5.card-title.new-highlight{color:black !important}
 
 
  .enticing-svg{
@@ -50,8 +50,7 @@ a.active-link:hover{color:black;} */
 
     right:0;
     transform: translate3d(0,-50%,0);
-
- }
+}
 /* 
  .right-0{
     right:0;
