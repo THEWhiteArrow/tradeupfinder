@@ -14,6 +14,7 @@
 
    <link rel="stylesheet" href="/stylesheets/root.css">
    <link rel="stylesheet" href="/stylesheets/app.css">
+   <link rel="stylesheet" href="/stylesheets/app_2.css">
 
    <script src="/javascripts/libraries/axios.min.js"></script>
 </head>
@@ -22,11 +23,12 @@
 
 
    <%- include('../partials/navbar')%>
-      <div class="navbarSpace d-none"></div>
+
+
+
 
 
       <%- body %>
-
 
          <%- include('../partials/footer')%>
 
@@ -35,7 +37,7 @@
                AOS.init({
                   easing: 'ease',
                   duration: 750,
-                  once: true,
+                  once: false,
                });
             </script>
 

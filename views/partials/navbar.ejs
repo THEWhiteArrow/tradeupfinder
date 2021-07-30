@@ -1,6 +1,6 @@
 <nav id="settings" class="d-flex flex-row justify-content-between">
 
-   <span class="nav-settings-item">
+   <span class="nav-settings-item d-flex flex-row align-items-center">
       <% const isSelectedCurrency=(code)=>{if(currency.code==code)return 'selected'} %>
 
 
@@ -170,26 +170,25 @@
             </div>
          </div>
 
-         <span class="d-flex flex-row">
-            <a href="https://steamcommunity.com/groups/kontrakciarze" target="_blank">
-               <img class="icons" src="/assets/social/steam.png" alt="Link to our steam group">
-            </a>
-            <% if(currentUser && currentUser.steam!=null){ %>
-               <!-- IDK WHERHER OR NOT IT SUPPORTS CUSTOM PROFILE LINKS -->
-               <a href="https://steamcommunity.com/profiles/<%= currentUser.steam.id %>/" target="_blank"
-                  class="link-light no-underline d-flex flex-row">
-                  <img src="<%= currentUser.steam.avatar  %> " alt="Your Avatar Image" class="icons">
-                  <p class="link-light ms-2 w-max-content">
-                     <%= currentUser.username %>
-                  </p>
-               </a>
 
-               <% } else if(currentUser){ %>
-                  <p class="link-light ms-2 w-max-content">
-                     <%= currentUser.username %>
-                  </p>
-                  <% } %>
-         </span>
+         <a href="https://steamcommunity.com/groups/kontrakciarze" target="_blank">
+            <img class="icons" src="/assets/social/steam.png" alt="Link to our steam group">
+         </a>
+         <% if(currentUser && currentUser.steam!=null){ %>
+            <!-- IDK WHERHER OR NOT IT SUPPORTS CUSTOM PROFILE LINKS -->
+            <a href="https://steamcommunity.com/profiles/<%= currentUser.steam.id %>/" target="_blank"
+               class="link-light no-underline d-flex flex-row">
+               <img src="<%= currentUser.steam.avatar  %> " alt="Your Avatar Image" class="icons">
+               <p class="link-light ms-2 w-max-content mb-0">
+                  <%= currentUser.username %>
+               </p>
+            </a>
+
+            <% } else if(currentUser){ %>
+               <p class="link-light ms-2 w-max-content mb-0">
+                  <%= currentUser.username %>
+               </p>
+               <% } %>
 
 
 
@@ -210,7 +209,7 @@
 
 </nav>
 
-<nav id="navbar" class=" navbar navbar-expand-md navbar-dark nav-gradient">
+<nav id="navbar" class="sticky-top navbar navbar-expand-md navbar-dark nav-gradient">
    <div id="menuToggle" class="container-fluid d-flex align-items-center">
       <a class="navbar-brand m-0 p-0" href="/" aria-current="page">Kontrakciarze</a>
 
@@ -270,6 +269,6 @@
          </ul>
       </div>
    </div>
-
-
 </nav>
+
+<!-- <div class="navbarSpace d-none"></div> -->

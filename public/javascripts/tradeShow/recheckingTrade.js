@@ -80,20 +80,21 @@ const setUpRecheckingTrade = async () => {
 }
 
 const changeStats = (data) => {
+   // console.log(data);
 
    const tradeUpCostEl = document.querySelector('.stats-item-value.input-price .content')
    const tradeUpChancesEl = document.querySelector('.stats-item-value.chances .content')
    const tradeUpProfitabilityEl = document.querySelector('.stats-item-value.profitability .content')
    const tradeUpProfitPerTradeUpEl = document.querySelector('.stats-item-value.perTradeUp .content')
 
-   tradeUpCostEl.innerText = data.inputPrice;
+   tradeUpCostEl.innerText = data.tradeCost;
    tradeUpChancesEl.innerText = data.chances;
    tradeUpProfitabilityEl.innerText = data.returnPercentageTaxed + ' / ' + data.returnPercentage;
    tradeUpProfitPerTradeUpEl.innerText = data.profitPerTradeUpTaxed + ' / ' + data.profitPerTradeUp;
 
-   console.log(data)
    if (data.isAvgFloatChanged) {
       console.log('...user changed floats...')
+
       const tradeUpAvgFloatEl = document.querySelector('.stats-item-value.avg-float .content')
       tradeUpAvgFloatEl.innerText = (data.avgFloat + '000').slice(0, 6);
 

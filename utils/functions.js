@@ -28,46 +28,29 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
    try {
       const foundTrade = await Instance.findById(instanceId);
 
-      // const { arrays, statistics, data } = foundTrade;
-      // const { inputSkinsArr, outputSkinsArr, alternateInputSkinsArr } = arrays;
-      // const { amount } = data;
+      const { arrays, statistics, data, pricesType } = foundTrade;
+      const { inputSkinsArr, targetedSkinsArr } = arrays;
+      const { amount } = data;
 
-
-
-      const { amount, instance, pricesType } = foundTrade;
-      const { targetedSkinsNumber, trade } = instance;
-
-      const { firstSkin, secondSkin, inputSkinsArr } = trade;
+      const { allOutputsNumber } = statistics;
+      const { firstSkin, secondSkin } = data;
       const firstCollection = firstSkin.case;
       const secondCollection = secondSkin.case;
 
-      const { inputPrice, newInputSkinsArr, newAvgFloat, newFirstSkinAvgFloat, newSecondSkinAvgFloat } = cookBody(req.body, currency, amount, inputSkinsArr);
-      // const firstPricePart = sumUpBodyPart('1', amount.amount1, req.body, firstSkin._id, '')
-      // const secondPricePart = sumUpBodyPart('2', amount.amount2, req.body, secondSkin._id, '')
-      // const inputPrice = Math.round((firstPricePart + secondPricePart) / currency.multiplier * 100) / 100;
+
+
+
+      const { tradeCost, newInputSkinsArr, newAvgFloat, newFirstSkinAvgFloat, newSecondSkinAvgFloat } = cookBody(req.body, currency, amount, inputSkinsArr);
 
       let total = 0;
       let totalTaxed = 0;
-      let newTargetedSkin = {}
-      let newMaxPrice = 0;
 
-      // const avgFloatFirstPart = Math.round(sumUpBodyPart('1', amount.amount1, req.body, firstSkin._id, 'float:') / amount.amount1 * 10000) / 10000;
-      // const avgFloatSecondPart = Math.round(sumUpBodyPart('2', amount.amount2, req.body, secondSkin._id, 'float:') / amount.amount2 * 10000) / 10000;
-
-      // const newFirstQuality = checkQuality(avgFloatFirstPart);
-      // const newSecondQuality = checkQuality(avgFloatSecondPart);
-
-      // const newAvgFloat = Math.round((sumUpBodyPart('1', amount.amount1, req.body, firstSkin._id, 'float:') + sumUpBodyPart('2', amount.amount2, req.body, secondSkin._id, 'float:')) / 10 * 10000) / 10000;
-
-      // JUST FOR THE SAKE OF PEACE FLOATS WILL BE CHECKED EVERY TIME 
 
       let inputSkinsNewData;
       if (isAvgFloatChanged) {
          console.log(newAvgFloat)
          inputSkinsNewData = newInputSkinsArr.map(el => ({ quality: el.quality, sn: el.sn }))
-         // CHANGE TARGETED SKINS PRICES RIGHT AWAY
-         //chaniging inthe part below
-         // AND LATER ON THOSE PRICES ARE NEEDED TO BE SENT BACK TO CHANGE ON PAGE PRICES BECAUSE IT WILL MAKE A DIFFERENCE
+
       }
       console.log('inputSkinsNewData : ', inputSkinsNewData)
 
@@ -75,63 +58,45 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
 
       const outputSkinsNewData = [];
       const newTargetedSkinsQuality = [];
-      for (let i = 0; i < trade.targetedSkinsArr.length; i++) {
+      for (let i = 0; i < targetedSkinsArr.length; i++) {
 
          let newPriceSteamTaxed = 0, newPrice = 0;
 
 
          if (isAvgFloatChanged) {
-            const newFloat = Math.round(((trade.targetedSkinsArr[i].max_float - trade.targetedSkinsArr[i].min_float) * newAvgFloat + trade.targetedSkinsArr[i].min_float) * 10000) / 10000;
+            const newFloat = Math.round(((targetedSkinsArr[i].max_float - targetedSkinsArr[i].min_float) * newAvgFloat + targetedSkinsArr[i].min_float) * 10000) / 10000;
             const newQuality = checkQuality(newFloat);
-            // CHANGE TARGETED SKINS PRICES RIGHT AWAY
-            // if (newQuality != trade.targetedSkinsArr[i].quality) {
-            trade.targetedSkinsArr[i].quality = newQuality;
+
+            targetedSkinsArr[i].quality = newQuality;
             //HERE THOSE OUTPUT SKINS SHOULD HAVE BEEN POPULATED AND THE PRICES CHECKED DIRECTLY FROM THE SKINS MODELS DB
-            newPrice = trade.targetedSkinsArr[i].prices[newQuality]
+            newPrice = targetedSkinsArr[i].prices[newQuality]
             newPriceSteamTaxed = Math.round(newPrice * steamTax * 100) / 100;
 
-            outputSkinsNewData.push({ _id: trade.targetedSkinsArr[i]._id, price: newPrice, float: newFloat, quality: newQuality })
+            outputSkinsNewData.push({ _id: targetedSkinsArr[i]._id, price: newPrice, float: newFloat, quality: newQuality })
             newTargetedSkinsQuality.push(newQuality);
-            // }
+
          } else {
-            newPriceSteamTaxed = Math.round(req.body['outputPrice:' + trade.targetedSkinsArr[i]._id] / currency.multiplier * steamTax * 100) / 100;
-            newPrice = Math.round(req.body['outputPrice:' + trade.targetedSkinsArr[i]._id] / currency.multiplier * 100) / 100;
-            trade.targetedSkinsArr[i].prices[trade.targetedSkinsArr[i].quality] = newPrice;
+            newPrice = Math.round(req.body['outputPrice:' + targetedSkinsArr[i]._id] / currency.multiplier * 100) / 100;
+            newPriceSteamTaxed = Math.round(newPrice * steamTax * 100) / 100;
+            targetedSkinsArr[i].prices[targetedSkinsArr[i].quality] = newPrice;
 
          }
 
 
 
-         if (newPriceSteamTaxed > newMaxPrice) {
-
-            newTargetedSkin = {
-               _id: trade.targetedSkinsArr[i]._id,
-               name: trade.targetedSkinsArr[i].name,
-               skin: trade.targetedSkinsArr[i].skin,
-               case: trade.targetedSkinsArr[i].case,
-               rarity: trade.targetedSkinsArr[i].rarity,
-               min_float: trade.targetedSkinsArr[i].min_float,
-               max_float: trade.targetedSkinsArr[i].max_float,
-               float: trade.targetedSkinsArr[i].float,
-               price: newPrice,
-               priceSteamTaxed: newPriceSteamTaxed,
-               targetedQuality: trade.targetedSkinsArr[i].quality,
-               icon: trade.targetedSkinsArr[i].icon,
-            }
-            newMaxPrice = newPriceSteamTaxed;
-         }
 
 
-         trade.targetedSkinsArr[i].price = newPrice;
-         trade.targetedSkinsArr[i].priceSteamTaxed = newPriceSteamTaxed;
 
-         if (trade.targetedSkinsArr[i].case == firstCollection && trade.targetedSkinsArr[i].case == secondCollection) {
+         targetedSkinsArr[i].price = newPrice;
+         targetedSkinsArr[i].priceSteamTaxed = newPriceSteamTaxed;
+
+         if (targetedSkinsArr[i].case == firstCollection && targetedSkinsArr[i].case == secondCollection) {
             total += (newPrice * 10);
             totalTaxed += (newPriceSteamTaxed * 10);
-         } else if (trade.targetedSkinsArr[i].case == firstCollection) {
+         } else if (targetedSkinsArr[i].case == firstCollection) {
             total += (newPrice * Number(amount.amount1));
             totalTaxed += (newPriceSteamTaxed * Number(amount.amount1));
-         } else if (trade.targetedSkinsArr[i].case == secondCollection) {
+         } else if (targetedSkinsArr[i].case == secondCollection) {
             total += (newPrice * Number(amount.amount2));
             totalTaxed += (newPriceSteamTaxed * Number(amount.amount2));
          }
@@ -144,46 +109,42 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
 
 
 
-      let wantedOutputChance = 0;
-      // const inputPrice = Math.round((amount.amount1 * firstPrice + amount.amount2 * secondPrice) * 100) / 100;
+      let positiveOutputsNumber = 0;
 
 
-      for (let outputSkin of trade.targetedSkinsArr) {
-         if (inputPrice <= outputSkin.priceSteamTaxed) {
-            wantedOutputChance += outputSkin.amount;
+      for (let outputSkin of targetedSkinsArr) {
+         if (tradeCost <= outputSkin.priceSteamTaxed) {
+            positiveOutputsNumber += outputSkin.amount;
          }
 
       }
 
-      const avgPrice = total / targetedSkinsNumber;
-      const avgPriceTaxed = totalTaxed / targetedSkinsNumber;
-      const profitPerTradeUp = Math.round((avgPrice - inputPrice) * 100) / 100;
-      const profitPerTradeUpTaxed = Math.round((avgPriceTaxed - inputPrice) * 100) / 100;
-      const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
-      const returnPercentageTaxed = Math.round(((avgPriceTaxed) / inputPrice * 100) * 100) / 100;
-      // inputPrice, newInputSkinsArr, newAvgFloat, newFirstSkinAvgFloat, newSecondSkinAvgFloat
-      instance.avg = newAvgFloat;
-      instance.total = total;
-      instance.totalTaxed = totalTaxed;
-      instance.wantedOutputChance = wantedOutputChance;
-      instance.chances = Math.round(wantedOutputChance / targetedSkinsNumber * 10000) / 100;
-      instance.trade.targetedSkin = newTargetedSkin
+      const avgPrice = total / allOutputsNumber;
+      const avgPriceTaxed = totalTaxed / allOutputsNumber;
+      const profitPerTradeUp = Math.round((avgPrice - tradeCost) * 100) / 100;
+      const profitPerTradeUpTaxed = Math.round((avgPriceTaxed - tradeCost) * 100) / 100;
+      const returnPercentage = Math.round(((avgPrice) / tradeCost * 100) * 100) / 100;
+      const returnPercentageTaxed = Math.round(((avgPriceTaxed) / tradeCost * 100) * 100) / 100;
 
-      // instance.trade.firstQuality = newFirstQuality;
-      // instance.trade.secondQuality = newSecondQuality;
-      instance.trade.firstSkinAvgFloat = newFirstSkinAvgFloat;
-      instance.trade.secondSkinAvgFloat = newSecondSkinAvgFloat;
 
-      // instance.trade.firstPrice = firstPricePart;
-      // instance.trade.secondPrice = secondPricePart;
-      // instance.trade.targetedPrice = newMaxPrice;
-      instance.trade.inputPrice = inputPrice;
-      instance.trade.profitPerTradeUp = profitPerTradeUp;
-      instance.trade.returnPercentage = returnPercentage;
-      instance.trade.profitPerTradeUpTaxed = profitPerTradeUpTaxed;
-      instance.trade.returnPercentageTaxed = returnPercentageTaxed;
+      arrays.inputSkinsArr = inputSkinsArr;
+      arrays.targetedSkinsArr = targetedSkinsArr;
 
-      instance.trade.targetedSkinsArr = trade.targetedSkinsArr;
+      statistics.tradeCost = tradeCost;
+      statistics.profitPerTradeUp = profitPerTradeUp;
+      statistics.profitPerTradeUpTaxed = profitPerTradeUpTaxed;
+      statistics.returnPercentage = returnPercentage;
+      statistics.returnPercentageTaxed = returnPercentageTaxed;
+      statistics.total = total;
+      statistics.totalTaxed = totalTaxed;
+      statistics.avgFloat = newAvgFloat;
+      statistics.allOutputsNumber = allOutputsNumber;
+      statistics.positiveOutputsNumber = positiveOutputsNumber;
+      statistics.chances = Math.round(positiveOutputsNumber / allOutputsNumber * 100 * 100) / 100;
+
+      data.firstSkinAvgFloat = newFirstSkinAvgFloat;
+      data.secondSkinAvgFloat = newSecondSkinAvgFloat;
+
 
 
 
@@ -195,38 +156,36 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
          if (foundTrade.isHighlighted) {
 
             if (returnPercentage > 100) {
-               const updatedTrade = await Instance.findByIdAndUpdate(foundTrade._id, { instance })
-               const updatedHighlight = await Highlight.findByIdAndUpdate(foundTrade.highlightedTrade, { instance })
+               const updatedTrade = await Instance.findByIdAndUpdate(foundTrade._id, { arrays, statistics, data })
+               const updatedHighlight = await Highlight.findByIdAndUpdate(foundTrade.highlightedTrade, { arrays, statistics, data })
             } else {
-               const updatedTrade = await Instance.findByIdAndUpdate(foundTrade._id, { instance, isHighlighted: false })
+               const updatedTrade = await Instance.findByIdAndUpdate(foundTrade._id, { arrays, statistics, data, isHighlighted: false })
                // WTEDY USUŃ HIGHLIGHT BO JUZ NIE JEST OPŁACALNY
                await Highlight.findByIdAndDelete(foundTrade.highlightedTrade)
             }
          } else {
-            const updatedTrade = await Instance.findByIdAndUpdate(foundTrade._id, { instance }, { new: true })
+            const updatedTrade = await Instance.findByIdAndUpdate(foundTrade._id, { arrays, statistics, data }, { new: true })
          }
 
       }
       else if (instanceName == 'Favourite') {
-         const updatedFavourite = await Instance.findByIdAndUpdate(foundTrade._id, { instance }, { new: true });
+         const updatedFavourite = await Instance.findByIdAndUpdate(foundTrade._id, { arrays, statistics, data }, { new: true });
       }
 
 
       const feedback = {
          success: true,
-         inputPrice: Math.round(inputPrice * currency.multiplier * 100) / 100,
+         tradeCost: Math.round(tradeCost * currency.multiplier * 100) / 100,
          profitPerTradeUp: Math.round(profitPerTradeUp * currency.multiplier * 100) / 100,
          profitPerTradeUpTaxed: Math.round(profitPerTradeUpTaxed * currency.multiplier * 100) / 100,
          returnPercentage,
          returnPercentageTaxed,
-         wantedOutputChance,
-         targetedSkinsNumber,
+         positiveOutputsNumber,
+         allOutputsNumber,
          avgFloat: newAvgFloat,
-         // firstPrice: Math.round(firstPricePart * currency.multiplier * 100) / 100,
-         // secondPrice: Math.round(secondPricePart * currency.multiplier * 100) / 100,
-         // targetedPrice: Math.round(newMaxPrice * currency.multiplier * 100) / 100,
+
          symbol: currency.symbol,
-         chances: Math.round(wantedOutputChance / targetedSkinsNumber * 100 * 100) / 100,
+         chances: Math.round(positiveOutputsNumber / allOutputsNumber * 100 * 100) / 100,
          editedGlobally: editGloballySwitch,
       };
 
@@ -249,14 +208,8 @@ module.exports.recheckTrade = async (req, res, steamTax, Instance, instanceName,
 
 
 
-
-
-const normalizePrice = (p, currency) => {
-   return Math.round(p / currency.multiplier * 100) / 100;
-}
-
 const cookBody = (body, currency, amount, arr) => {
-   let inputPrice = 0;
+   let tradeCost = 0;
    let newAvgFloat = 0;
    let newFirstSkinAvgFloat = 0;
    let newSecondSkinAvgFloat = 0;
@@ -266,8 +219,10 @@ const cookBody = (body, currency, amount, arr) => {
 
       const float = body[`float:${arr[i].sn}`];
       let newPrice = body[`inputPrice:${arr[i].sn}`];
+
+
       newPrice = normalizePrice(newPrice, currency);
-      inputPrice += newPrice;
+      tradeCost += newPrice;
       newAvgFloat += float;
 
       arr[i].price = newPrice;
@@ -281,8 +236,14 @@ const cookBody = (body, currency, amount, arr) => {
    newSecondSkinAvgFloat = Math.round(newSecondSkinAvgFloat / amount.amount2 * 10000) / 10000;
    newAvgFloat = Math.round(newAvgFloat / 10 * 10000) / 10000;
 
-   return { inputPrice, newInputSkinsArr: arr, newAvgFloat, newFirstSkinAvgFloat, newSecondSkinAvgFloat };
+   return { tradeCost, newInputSkinsArr: arr, newAvgFloat, newFirstSkinAvgFloat, newSecondSkinAvgFloat };
 }
+
+
+const normalizePrice = (p, currency) => {
+   return Math.round(p / currency.multiplier * 100) / 100;
+}
+
 
 const checkQuality = (float) => {
 

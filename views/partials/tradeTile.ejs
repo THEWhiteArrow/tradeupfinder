@@ -1,4 +1,4 @@
-<%- `<${elementName} class="trade-tile card mt-5 ${data.rarity}-${data.targetedRarity}" ${animationData}>` %>
+<%- `<${elementName} class="trade-tile card mt-5  ${data.rarity}-${data.targetedRarity}-pastell " ${animationData}>` %>
 
 
 
@@ -8,9 +8,9 @@
 
          <% if(title!=false){ %>
 
-            <h3 class="card-title px-2 ">
+            <h4 class="card-title px-2 ">
                <%= title %>
-            </h3>
+            </h4>
             <% } else{%>
                <span></span>
                <% } %>
@@ -117,7 +117,7 @@
          </a>
 
          <a href='<%= showPageLink %>' class="no-underline d-flex flex-row">
-            <div class="rarity  d-flex justify-content-around">
+            <div class="rarity  d-flex justify-content-around <%= `${data.rarity}-${data.targetedRarity}-rarity`%>">
                <span>
                   <%= data.rarity %>
                </span>

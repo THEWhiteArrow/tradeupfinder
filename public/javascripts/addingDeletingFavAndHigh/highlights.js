@@ -47,8 +47,8 @@ const sendHighlightTrade = async (action, highlight, highlightName) => {
          alt="">`;
 
          // SPRAWDZAM CZY TO JEST STRONA GŁÓWNA Z HIGHLIGHTSAMI
-         const h3 = document.querySelectorAll('h3.card-title')
-         h3.length != 0 ? highlight.parentElement.parentElement.parentElement.parentElement.remove() : null;
+         const h4s = document.querySelectorAll('h4.card-title')
+         h4s.length != 0 ? highlight.parentElement.parentElement.parentElement.parentElement.remove() : null;
       }
       highlight.classList.toggle('filled')
    } else if (data.success == false) {

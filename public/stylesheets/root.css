@@ -1,47 +1,23 @@
 :root{
- 
-   /* CSS HEX */
-   /* --prussian-blue: #012a4a;
-   --indigo-dye: #013a63ff;
-   --indigo-dye-2: #01497cff;
-   --usafa-blue: #014f86ff;
-   --sapphire-blue: #2a6f97ff;
-   --celadon-blue: #2c7da0ff;
-   --blue-green: #468fafff;
-   --maximum-blue: #61a5c2ff;
-   --dark-sky-blue: #89c2d9ff;
-   --light-blue: rgb(179, 214, 226);
-   --azure: #d4eef5;
-   --light-azure: #f0fbff; */
+   /* --dark-purple:#3f4146;
+   --purple:#54565d;
+   --light-purple:#696c74;  */
+   --dark-purple:#1e2329;
+   --purple:#495057;
+   --light-purple:#676F77; 
+   --light-2-purple:#706e85; 
+   
+   --text-light-white:rgba(255, 255, 255, 0.93);
+   --text-white:rgb(255, 255, 255);
+   --text-color:var(--text-light-white);
 
-   /* CSS HEX */
-   /* --black: #000000ff;
-   --oxford-blue: #14213dff;
-   --orange-web: #fca311ff;
-   --light-orange-web: rgb(238, 181, 89);
-   --platinum: #eeeeee;
-   --white: #ffffffff; */
-
-   /* CSS HEX */
-   /* --navy-blue: #03045eff;
-   --dark-cornflower-blue: #023e8aff;
-   --star-command-blue: #0077b6ff;
-   --blue-green: #0096c7ff;
-   --cerulean-crayola: #00b4d8ff;
-   --sky-blue-crayola: #48cae4ff;
-   --sky-blue-crayola-2: #90e0efff;
-   --blizzard-blue: #ade8f4ff;
-   --powder-blue: #caf0f8ff;
-   --powder-white: #e9e9e9; */
-
-
+   --hero-color:#35f138;
+   --hero-color-pale:rgba(53, 241, 56,0.5);
 
    /* CSS HEX */
 --cultured: #f8f9faff;
 --cultured-2: #e9ecefff;
---gainsboro: #dbe5ff;
-/* --gainsboro: #dee2e6ff; */
-
+--gainsboro: #dbe5ff; 
 --light-gray: #ced4daff;
 --cadet-blue-crayola: #adb5bdff;
 --medium-gray: #828c96;
@@ -54,26 +30,38 @@
 
 
 
-   --text-light-white:rgba(255, 255, 255, 0.93);
 
 
-   --body-bg:var(--gainsboro);
+   --body-bg:var(--purple);
    --nav-navbar-bg:var(--gunmetal);
    --nav-settings-bg:var(--charleston-green);
    
-   --main-grid-a-bg:var(--cadet-blue-crayola);
+   --title-color:var(--hero-color);
+   --title-color-pale:var(--hero-color-pale);
+    
    --main-grid-a-text:var(--text-light-white); 
-   --main-grid-a-after-bg:var(--light-gray);
-   --main-grid-a-border:var(--gunmetal);
-   
-   --trade-tile-bg:var(--light-gray);
-   --trade-tile-border:var(--gunmetal);
+   --main-grid-a-border:var(--text-light-white);
+   --main-grid-a-bg:var(--purple);
+   --main-grid-a-after-bg:var(--light-2-purple);
+
+   --main-introduction-section-bg:var(--light-purple);
+   --main-partners-bg:var(--light-purple);
+   --main-highlight-section-bg:var(--light-purple);
+   /* --main-highlight-section-bg-img: linear-gradient(180deg,var(--light-purple) 0%, var(--dark-purple) 100%);; */
+
+
+
+   --trade-tile-bg:var(--light-purple);
+   --trade-tile-border:var(--text-light-white);
    --trade-tile-rarity-bg:var(--davys-grey);
 
-   --explore-grid-2-jeden:var(--text-light-white); 
-   --explore-grid-2-dwa:var(--text-light-white);  
-   --explore-h3-color:var(--text-light-white);
+   --explore-grid-2-item-bg:var(--light-purple);  
+   --explore-grid-2-item-border-color:var(--text-light-white);
+   --explore-h2-color:var(--text-white);
    
    --footer-bg:var(--gunmetal); 
    --footer-feature-bg:var(--light-gunmetal);
+
+
+
 }

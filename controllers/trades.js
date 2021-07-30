@@ -49,7 +49,7 @@ module.exports.manageTrades = async (req, res) => {
       // // const sortedTrades = sortingTrades(trades, sort, order).slice(0, maxShownTrades:res.locals.maxShownTrades);
       const sortedTrades = mergeSort(trades, sort, order).slice(0, res.locals.maxShownTrades);
 
-      sortedTrades.forEach(el => { console.log(el.favouritesInfo) })
+      // sortedTrades.forEach(el => { console.log(el.favouritesInfo) })
 
       var endDate = new Date();
       var seconds = (endDate.getTime() - startDate.getTime()) / 1000;

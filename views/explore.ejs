@@ -7,9 +7,10 @@
    <% let animationDataPart='data-aos="zoom-in" data-aos-anchor="#engine-form" ' %>
       <header class="container mt-5" data-aos="flip-up">
 
-         <h1 class="display-5">Explore Our Engine</h1>
-         <p class="lead">If you are not similar with our search trades engine it is advised to you to check our "Search
-            Engine" guide. <a href="/guide#search-engine" class="link-dark">Click here to learn more.</a></p>
+         <h1 class="display-5 ">Explore Our Engine</h1>
+         <p class="lead text-light-white">If you are not similar with our search trades engine it is advised to you to
+            check our "Search
+            Engine" guide. <a href="/guide#search-engine" class="link-light">Click here to learn more.</a></p>
 
       </header>
 
@@ -18,139 +19,142 @@
 
          <section class="my-5">
 
-            <form id="engine-form" class="container-2 d-flex flex-column flex-lg-row flex-wrap" action="/trades"
-               method="GET">
+            <form id="engine-form" class="shadow-lg container-2 d-flex flex-column" action="/trades" method="GET">
 
+               <div class="d-flex flex-column flex-lg-row justify-content-between">
 
-               <div <%- animationDataPart %> class="order-2 mb-2 mb-lg-0 w-search-options red-gold-pastell p-4 d-flex
-                  flex-column border border-2 border-success rounded rounded-3">
+                  <div <%- animationDataPart %> class="order-2 red-gold-pastell mb-2 mb-lg-0 w-search-options p-4 d-flex
+                     flex-column rounded-3">
 
-                  <h3 class="px-1 pb-2  border-bottom">Search Options</h3>
+                     <h4 class="px-1 pb-2  border-bottom">Search Options</h4>
 
-                  <div class="search-inputs">
-                     <% const disableIfNeeded=()=>
-                        {if(!currentUser||(currentUser.role!='admin'&&currentUser.role!='moderator'))return 'disabled'};
-                        %>
-                        <div <%- animationDataPart %> data-aos-delay="0" class=" form-floating">
-                           <select class="form-select" name="order" id="order" aria-label="">
-                              <option value="descending" selected>Descending</option>
-                              <option value="ascending">Ascending</option>
-                           </select>
-                           <label for="order">Order Type</label>
-                        </div>
-
-
-                        <div <%- animationDataPart %> data-aos-delay="50" class=" form-floating">
-                           <select class="form-select" name="sort" id="sort" aria-label="">
-                              <option value="returnPercentage" selected>Profitability</option>
-                              <option value="inputPrice">Cost perTradeUp</option>
-                              <option value="profitPerTradeUp">Avg. Profit per TradeUp</option>
-                              <option value="chances">Chances</option>
-                           </select>
-                           <label for="sort">Sort By</label>
-                        </div>
-
-                        <div <%- animationDataPart %> data-aos-delay="100" class=" form-floating">
-                           <select class="form-select" id="action" name="action" aria-label="">
-                              <option value="display" selected>Display</option>
-
-                              <%if(currentUser&&(currentUser.role=='admin'||currentUser.role=='moderator')){%>
-                                 <option value="save">Save</option>
-                                 <%}%>
-
-                           </select>
-                           <label for="action">Action Type</label>
-                        </div>
-
-                        <div <%- animationDataPart %> data-aos-delay="150" class=" form-floating">
-                           <select name="ratio" id="ratio" class="form-select" <%=disableIfNeeded() %>>
-                              <option value="5-5">5-5</option>
-                              <option value="4-6" selected>4-6</option>
-                              <option value="3-7">3-7</option>
-                              <option value="2-8">2-8</option>
-                              <option value="1-9">1-9</option>
-                           </select>
-                           <label for="ratio">Ratio Type</label>
-                        </div>
-
-                        <div <%- animationDataPart %> data-aos-delay="200" class=" form-floating">
-                           <select name="checkStattraks" id="checkStattraks" class="form-select" <%=disableIfNeeded() %>
-                              >
-                              <option value="no" selected>No</option>
-                              <option value="yes">Yes</option>
-                           </select>
-                           <label for="checkStattraks">Check Stattraks</label>
-                        </div>
-
-                        <div <%- animationDataPart %> data-aos-delay="250" class=" form-floating">
-                           <input type="text" class="form-control" name="newResearchName" id="newResearchName"
-                              autocomplete="true" <%=disableIfNeeded() %> >
-                           <label for="newResearchName" class="form-label">New Research's Name</label>
-                        </div>
-
-                        <div <%- animationDataPart %> data-aos-delay="300" class=" form-floating">
-                           <input type="number" class="form-control" name="priceCorrection" id="priceCorrection"
-                              autocomplete="true" min="0" step="0.01" value="0" <%=disableIfNeeded() %> >
-                           <label for="priceCorrection">Price Correction</label>
-                        </div>
-                        <div <%- animationDataPart %> data-aos-delay="350" class=" form-floating">
-                           <input type="number" class="form-control" name="minVolume" id="minVolume" autocomplete="true"
-                              min="0" step="1" value="100" <%=disableIfNeeded() %> >
-                           <label for="minVolume">Minimal Volume</label>
-                        </div>
-
-                        <div <%- animationDataPart %> data-aos-delay="400" class=" form-floating">
-                           <select name="pairs" id="pairs" class="form-select" <%=disableIfNeeded() %>>
-                              <option value="2" selected>2</option>
-                              <option value="3">3</option>
-
-                           </select>
-                           <label for="pairs"># of Pairs</label>
-                        </div>
-
-
-                  </div>
-
-               </div>
-
-               <div <%- animationDataPart %> class="order-1 mb-2 mb-lg-0 w-avaible-trades pink-red-pastell d-flex
-                  flex-column p-4 border border-2 border-primary rounded rounded-3">
-                  <h3 class="px-1 pb-2   border-bottom">Available Trades</h3>
-
-                  <div class="researches slim-scrollbar">
-                     <% let i=0;for(let research of researchesName){ %>
-                        <% ++i; %>
-                           <div <%- animationDataPart %> data-aos-delay="<%= 50*i %>"
-                                 class="d-flex flex-row m-1">
-
-                                 <label class="lead form-control flex-1 rounded-0 rounded-start"
-                                    for="success-outlined-<%= research.name %>">
-                                    <%= research.name %>
-                                 </label>
-                                 <div class="bg-light-primary rounded-end">
-
-                                    <input type="radio" class="btn-check" name="researchName"
-                                       id="success-outlined-<%= research.name %>" value="<%= research.name %>"
-                                       autocomplete="off" <% if(i==1){ %>checked <% } %> >
-                                       <label class="btn  btn-outline-primary border-0 h-100 rounded-0 rounded-end"
-                                          for="success-outlined-<%= research.name %>">
-
-                                          <svg class="svg-icon-tick  " viewBox="0 0 20 20">
-                                             <path fill="transparent"
-                                                d="M10.219,1.688c-4.471,0-8.094,3.623-8.094,8.094s3.623,8.094,8.094,8.094s8.094-3.623,8.094-8.094S14.689,1.688,10.219,1.688 M10.219,17.022c-3.994,0-7.242-3.247-7.242-7.241c0-3.994,3.248-7.242,7.242-7.242c3.994,0,7.241,3.248,7.241,7.242C17.46,13.775,14.213,17.022,10.219,17.022 M15.099,7.03c-0.167-0.167-0.438-0.167-0.604,0.002L9.062,12.48l-2.269-2.277c-0.166-0.167-0.437-0.167-0.603,0c-0.166,0.166-0.168,0.437-0.002,0.603l2.573,2.578c0.079,0.08,0.188,0.125,0.3,0.125s0.222-0.045,0.303-0.125l5.736-5.751C15.268,7.466,15.265,7.196,15.099,7.03">
-                                             </path>
-                                          </svg>
-
-                                       </label>
-                                 </div>
-
+                     <div class="search-inputs">
+                        <% const disableIfNeeded=()=>
+                           {if(!currentUser||(currentUser.role!='admin'&&currentUser.role!='moderator'))return
+                           'disabled'};
+                           %>
+                           <div <%- animationDataPart %> data-aos-delay="0" class=" form-floating">
+                              <select class="form-select" name="order" id="order" aria-label="">
+                                 <option value="descending" selected>Descending</option>
+                                 <option value="ascending">Ascending</option>
+                              </select>
+                              <label for="order">Order Type</label>
                            </div>
 
 
-                           <% } %>
-                  </div>
-               </div>
+                           <div <%- animationDataPart %> data-aos-delay="50" class=" form-floating">
+                              <select class="form-select" name="sort" id="sort" aria-label="">
+                                 <option value="returnPercentage" selected>Profitability</option>
+                                 <option value="inputPrice">Cost perTradeUp</option>
+                                 <option value="profitPerTradeUp">Avg. Profit per TradeUp</option>
+                                 <option value="chances">Chances</option>
+                              </select>
+                              <label for="sort">Sort By</label>
+                           </div>
 
+                           <div <%- animationDataPart %> data-aos-delay="100" class=" form-floating">
+                              <select class="form-select" id="action" name="action" aria-label="">
+                                 <option value="display" selected>Display</option>
+
+                                 <%if(currentUser&&(currentUser.role=='admin'||currentUser.role=='moderator')){%>
+                                    <option value="save">Save</option>
+                                    <%}%>
+
+                              </select>
+                              <label for="action">Action Type</label>
+                           </div>
+
+                           <div <%- animationDataPart %> data-aos-delay="150" class=" form-floating">
+                              <select name="ratio" id="ratio" class="form-select" <%=disableIfNeeded() %>>
+                                 <option value="5-5">5-5</option>
+                                 <option value="4-6" selected>4-6</option>
+                                 <option value="3-7">3-7</option>
+                                 <option value="2-8">2-8</option>
+                                 <option value="1-9">1-9</option>
+                              </select>
+                              <label for="ratio">Ratio Type</label>
+                           </div>
+
+                           <div <%- animationDataPart %> data-aos-delay="200" class=" form-floating">
+                              <select name="checkStattraks" id="checkStattraks" class="form-select" <%=disableIfNeeded()
+                                 %>
+                                 >
+                                 <option value="no" selected>No</option>
+                                 <option value="yes">Yes</option>
+                              </select>
+                              <label for="checkStattraks">Check Stattraks</label>
+                           </div>
+
+                           <div <%- animationDataPart %> data-aos-delay="250" class=" form-floating">
+                              <input type="text" class="form-control" name="newResearchName" id="newResearchName"
+                                 autocomplete="true" <%=disableIfNeeded() %> >
+                              <label for="newResearchName" class="form-label">New Research's Name</label>
+                           </div>
+
+                           <div <%- animationDataPart %> data-aos-delay="300" class=" form-floating">
+                              <input type="number" class="form-control" name="priceCorrection" id="priceCorrection"
+                                 autocomplete="true" min="0" step="0.01" value="0" <%=disableIfNeeded() %> >
+                              <label for="priceCorrection">Price Correction</label>
+                           </div>
+                           <div <%- animationDataPart %> data-aos-delay="350" class=" form-floating">
+                              <input type="number" class="form-control" name="minVolume" id="minVolume"
+                                 autocomplete="true" min="0" step="1" value="100" <%=disableIfNeeded() %> >
+                              <label for="minVolume">Minimal Volume</label>
+                           </div>
+
+                           <div <%- animationDataPart %> data-aos-delay="400" class=" form-floating">
+                              <select name="pairs" id="pairs" class="form-select" <%=disableIfNeeded() %>>
+                                 <option value="2" selected>2</option>
+                                 <option value="3">3</option>
+
+                              </select>
+                              <label for="pairs"># of Pairs</label>
+                           </div>
+
+
+                     </div>
+
+                  </div>
+
+                  <div <%- animationDataPart %> class="order-1 pink-red-pastell mb-2 mb-lg-0 w-avaible-trades d-flex
+                     flex-column p-4 rounded-3">
+                     <h4 class="px-1 pb-2   border-bottom">Available Trades</h4>
+
+                     <div class="researches slim-scrollbar">
+                        <% let i=0;for(let research of researchesName){ %>
+                           <% ++i; %>
+                              <div <%- animationDataPart %> data-aos-delay="<%= 50*i %>"
+                                    class="d-flex flex-row m-1">
+
+                                    <label class="lead form-control flex-1 rounded-0 rounded-start"
+                                       for="success-outlined-<%= research.name %>">
+                                       <%= research.name %>
+                                    </label>
+                                    <div class="bg-light-primary rounded-end">
+
+                                       <input type="radio" class="btn-check" name="researchName"
+                                          id="success-outlined-<%= research.name %>" value="<%= research.name %>"
+                                          autocomplete="off" <% if(i==1){ %>checked <% } %> >
+                                          <label class="btn  btn-outline-primary border-0 h-100 rounded-0 rounded-end"
+                                             for="success-outlined-<%= research.name %>">
+
+                                             <svg class="svg-icon-tick  " viewBox="0 0 20 20">
+                                                <path fill="transparent"
+                                                   d="M10.219,1.688c-4.471,0-8.094,3.623-8.094,8.094s3.623,8.094,8.094,8.094s8.094-3.623,8.094-8.094S14.689,1.688,10.219,1.688 M10.219,17.022c-3.994,0-7.242-3.247-7.242-7.241c0-3.994,3.248-7.242,7.242-7.242c3.994,0,7.241,3.248,7.241,7.242C17.46,13.775,14.213,17.022,10.219,17.022 M15.099,7.03c-0.167-0.167-0.438-0.167-0.604,0.002L9.062,12.48l-2.269-2.277c-0.166-0.167-0.437-0.167-0.603,0c-0.166,0.166-0.168,0.437-0.002,0.603l2.573,2.578c0.079,0.08,0.188,0.125,0.3,0.125s0.222-0.045,0.303-0.125l5.736-5.751C15.268,7.466,15.265,7.196,15.099,7.03">
+                                                </path>
+                                             </svg>
+
+                                          </label>
+                                    </div>
+
+                              </div>
+
+
+                              <% } %>
+                     </div>
+                  </div>
+
+               </div>
 
                <button <%- animationDataPart %> class="order-3 discover-btn btn btn-success m-0 w-100
                   text-uppercase">Discover
@@ -158,12 +162,21 @@
             </form>
 
             <% if(currentUser && (currentUser.role==='admin' || currentUser.role==='moderator' ) ){ %>
-               <form<%- animationDataPart %> class="d-flex flex-row justify-content-end"
+               <form <%- animationDataPart %> class="d-flex flex-row justify-content-end"
                   action="/trades/delete?_method=DELETE" method="POST">
                   <button class="btn btn-danger">Delete Saved Researches</button>
-                  </form>
-                  <% } %>
+               </form>
+               <% } %>
 
+         </section>
+
+         <section id="help">
+            <h2 class="">Alright what to do now?!?</h2>
+            <p class="lead text-light-white">There are a few things you might want to set up. First of all, you need to
+               choose which research you wish to review. You can do it by selecting certain row in "Available Trades"
+               column. In the "Search Options" column you can set some basics factors by which you wish to filter and
+               sort found trades. Those actions will allow you to speed up the process of finding a proper trade that
+               will suit you. </p>
          </section>
 
       </main>

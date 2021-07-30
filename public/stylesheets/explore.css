@@ -53,22 +53,22 @@
  } */
 
 
-.container-2 > .jeden { 
-   /* grid-area: jeden;   */
-   background-color: var(--explore-grid-2-jeden);
+/* .container-2 > .jeden { 
+   grid-area: jeden;  
+   background-color: var(--explore-grid-2-jeden) !important;
    
 }
 
 .container-2 > .dwa { 
-   /* grid-area: dwa;  */
-   background-color: var(--explore-grid-2-dwa)
-}
+   grid-area: dwa; 
+   background-color: red;
+} */
 
 /* .container-2 > .trzy { 
    grid-area: trzy;  
 } */
 
-.container-2 h3{color:var(--explore-h3-color);}
+.container-2 h2{color:var(--explore-h2-color);}
 
 .svg-icon-tick{
    width: 20px;
@@ -88,6 +88,17 @@
    overflow-y: auto;
 }
 
+.w-avaible-trades,.w-search-options{
+   background-color: var(--explore-grid-2-item-bg);
+   border: 2px solid var(--explore-grid-2-item-border-color) !important;
+}
+.discover-btn{
+   border-color: var(--explore-grid-2-item-border-color) !important;
+   border-width: 2px;
+
+   transition: background-color .15s  cubic-bezier(0.455, 0.03, 0.515, 0.955) !important;
+}
+
 @media (min-width: 992px) { 
 
    .w-avaible-trades{
@@ -98,7 +109,7 @@
    }
    .w-search-options{
       width: calc(70% - 7px) !important; 
-      margin-left:auto !important ;
+ 
       border-bottom-left-radius: 0 !important;
       border-bottom-right-radius: 0 !important;
       border-bottom:0 !important;

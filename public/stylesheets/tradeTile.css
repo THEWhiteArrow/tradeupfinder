@@ -19,7 +19,7 @@
    height:auto;
    position: relative;
    
-   filter: drop-shadow(0 0 0.75rem rgb(41, 41, 41));
+   filter: drop-shadow(0 0 0.35rem rgba(255, 255, 255,0.5));
 }
 
 @media (min-width: 576px) { .skin-tile-img{width:150px;} }
@@ -72,7 +72,7 @@
    display:flex;
    justify-content: center;
    align-items: center;
-   background-color: rgba(69, 180, 69, 0.932);
+
 
    
    padding: 10px 0;
@@ -87,9 +87,9 @@
    border-bottom-left-radius: .25rem;
    border-bottom-right-radius: .25rem;
    
-   background-size: 90px 24px;
-   background-color: var(--trade-tile-rarity-bg);
-   background-image: url("../assets/svgs/other/chevron-right-solid.svg");
+   /* background-size: 90px 24px; */
+   /* background-color: var(--trade-tile-rarity-bg); */
+   /* background-image: url("../assets/svgs/other/chevron-right-solid.svg"); */
 }
 
 .average-profit h5,.average-profit p,.trade-cost h5,.trade-cost p{
@@ -100,14 +100,16 @@
 
 .trade-cost{
    border-top-left-radius: .25rem;
-   background-color: rgba(179, 54, 54, 0.932);
+   background-color: #f05365;
 }
 
 .trade-cost:hover{
-   background-color: rgba(145, 53, 41, 0.932);
+   background-color: rgb(212, 76, 92);
 }
 
+
+.average-profit{background-color: #67af80;}
 .average-profit:hover{
    border-top-right-radius: .25rem;
-   background-color: rgba(45, 119, 45, 0.932);
+   background-color: #57946d;
 }

@@ -1,3 +1,211 @@
-<%- `${include('../partials/tradeManaging',{trade:manageTrade,showMagnifier:false})}`%>
+ <nav id="settings" class="sticky-top d-flex flex-row justify-content-between">
 
-      <% if (isFavouriteShowPage)actionUrl=`/favourites/${profit._id}/edit` %>
+   <span class="nav-settings-item">
+      <% const isSelectedCurrency=(code)=>{if(currency.code==code)return 'selected'} %>
+
+
+         <div class="custom-select-wrapper">
+            <div class="custom-select">
+               <div class="custom-select__trigger"><span>
+                     <%= `${currency.code} (${currency.symbol})` %>
+                  </span>
+                  <div class="arrow"></div>
+               </div>
+               <div class="custom-options slim-scrollbar">
+
+
+                  <a href="/currency?code=AED&symbol=د.إ.&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`AED`) %> link-dark no-underline custom-option">
+                        AED (د.إ.)</option>
+
+                     <a href="/currency?code=AUD&symbol=A$&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`AUD`) %> link-dark no-underline custom-option">
+                     AUD (A$)</a>
+
+                  <a href="/currency?code=BGN&symbol=лв&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`BGN`) %> link-dark no-underline custom-option">
+                        BGN (лв)</a>
+
+                     <a href="/currency?code=BRL&symbol=R$&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`BRL`) %> link-dark no-underline custom-option">
+                     BRL (R$)</a>
+
+                  <a href="/currency?code=CAD&symbol=C$&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`CAD`) %> link-dark no-underline custom-option">
+                        CAD (C$)</a>
+
+                     <a href="/currency?code=CHF&symbol=CHF&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`CHF`) %> link-dark no-underline custom-option">
+                     CHF (CHF)</a>
+
+                  <a href="/currency?code=CNY&symbol=¥&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`CNY`) %> link-dark no-underline custom-option">
+                        CNY (¥)</a>
+
+                     <a href="/currency?code=CZK&symbol=Kč&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`CZK`) %> link-dark no-underline custom-option">
+                     CZK (Kč)</a>
+
+                  <a href="/currency?code=DKK&symbol=kr&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`DKK`) %> link-dark no-underline custom-option">
+                        DKK (kr)</a>
+
+                     <a href="/currency?code=EUR&symbol=€&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`EUR`) %> link-dark no-underline custom-option">
+                     EUR (€)</a>
+
+                  <a href="/currency?code=GBP&symbol=£&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`GBP`) %> link-dark no-underline custom-option">
+                        GBP (£)</a>
+
+                     <a href="/currency?code=HKD&symbol=HK$&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`HKD`) %> link-dark no-underline custom-option">
+                     HKD (HK$)</a>
+
+                  <a href="/currency?code=HRK&symbol=kn&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`HRK`) %> link-dark no-underline custom-option">
+                        HRK (kn)</a>
+
+                     <a href="/currency?code=HUF&symbol=Ft&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`HUF`) %> link-dark no-underline custom-option">
+                     HUF (Ft)</a>
+
+                  <a href="/currency?code=IDR&symbol=Rp&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`IDR`) %> link-dark no-underline custom-option">
+                        IDR (Rp)</a>
+
+                     <a href="/currency?code=ILS&symbol=₪&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`ILS`) %> link-dark no-underline custom-option">
+                     ILS (₪)</a>
+
+                  <a href="/currency?code=INR&symbol=₹&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`INR`) %> link-dark no-underline custom-option">
+                        INR (₹)</a>
+
+                     <a href="/currency?code=ISK&symbol=kr&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`ISK`) %> link-dark no-underline custom-option">
+                     ISK (kr)</a>
+
+                  <a href="/currency?code=JPY&symbol=¥&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`JPY`) %> link-dark no-underline custom-option">
+                        JPY (¥)</a>
+
+                     <a href="/currency?code=KRW&symbol=₩&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`KRW`) %> link-dark no-underline custom-option">
+                     KRW (₩)</a>
+
+                  <a href="/currency?code=MXN&symbol=$&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`MXN`) %> link-dark no-underline custom-option">
+                        MXN ($)</a>
+
+                     <a href="/currency?code=MYR&symbol=MR&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`MYR`) %> link-dark no-underline custom-option">
+                     MYR (MR)</a>
+
+                  <a href="/currency?code=NOK&symbol=kr&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`NOK`) %> link-dark no-underline custom-option">
+                        NOK (kr)</a>
+
+                     <a href="/currency?code=NZD&symbol=NZ$&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`NZD`) %> link-dark no-underline custom-option">
+                     NZD (NZ$)</a>
+
+                  <a href="/currency?code=PLN&symbol=zł&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`PLN`) %> link-dark no-underline custom-option">
+                        PLN (zł)</a>
+
+                     <a href="/currency?code=PHP&symbol=₱&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`PHP`) %> link-dark no-underline custom-option">
+                     PHP (₱)</a>
+
+                  <a href="/currency?code=RON&symbol=L&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`RON`) %> link-dark no-underline custom-option">
+                        RON (L)</a>
+
+                     <a href="/currency?code=RUB&symbol=₽&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`RUB`) %> link-dark no-underline custom-option">
+                     RUB (₽)</a>
+
+                  <a href="/currency?code=SEK&symbol=kr&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`SEK`) %> link-dark no-underline custom-option">
+                        SEK (kr)</a>
+
+                     <a href="/currency?code=SGD&symbol=S$&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`SGD`) %> link-dark no-underline custom-option">
+                     SGD (S$)</a>
+
+                  <a href="/currency?code=USD&symbol=$&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`USD`) %> link-dark no-underline custom-option">
+                        USD ($)</a>
+
+                     <a href="/currency?code=THB&symbol=฿&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`THB`) %> link-dark no-underline custom-option">
+                     THB (฿)</a>
+
+                  <a href="/currency?code=TRY&symbol=₺&currentPage=<%=
+                        url.replace(/&/g,'"') %>" class="<%=isSelectedCurrency(`TRY`) %> link-dark no-underline custom-option">
+                        TRY (₺)</a>
+
+                     <a href="/currency?code=ZAR&symbol=R&currentPage=<%=
+                        url.replace(/&/g,'"') %>"
+                     class="<%=isSelectedCurrency(`ZAR`) %> link-dark no-underline custom-option">
+                     ZAR (R)</a>
+               </div>
+            </div>
+         </div>
+
+         <span class="d-flex flex-row">
+            <a href="https://steamcommunity.com/groups/kontrakciarze" target="_blank">
+               <img class="icons" src="/assets/social/steam.png" alt="Link to our steam group">
+            </a>
+            <% if(currentUser && currentUser.steam!=null){ %>
+               <!-- IDK WHERHER OR NOT IT SUPPORTS CUSTOM PROFILE LINKS -->
+               <a href="https://steamcommunity.com/profiles/<%= currentUser.steam.id %>/" target="_blank"
+                  class="link-light no-underline d-flex flex-row">
+                  <img src="<%= currentUser.steam.avatar  %> " alt="Your Avatar Image" class="icons">
+                  <p class="link-light ms-2 w-max-content">
+                     <%= currentUser.username %>
+                  </p>
+               </a>
+
+               <% } else if(currentUser){ %>
+                  <p class="link-light ms-2 w-max-content">
+                     <%= currentUser.username %>
+                  </p>
+                  <% } %>
+         </span>
+
+
+
+   </span>
+
+   <span class="nav-settings-item">
+      <!-- SELECTING THEMS WILL BE POSSIBLY DEVELOPED LATER ON -->
+      <!-- <select name="theme-mode" id="theme-mode" class="form-select width-fit-content nav-settings-item">
+         <option value="dark">Dark Mode</option>
+         <option value="light">Light Mode</option>
+         <option value="random">Random Theme</option>
+      </select> -->
+      <% if(currentUser ){ %>
+         <a id="managment" href="/managment" class="managment ms-2">
+            <img src="/assets/svgs/other/gear-fill.svg" alt="Managment" class="icons"></a>
+         <% } %>
+   </span>
+
+</nav>
