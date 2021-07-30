@@ -174,15 +174,18 @@
 
          <div id="alternates" class="alternate-skins pt-3 slim-scrollbar">
             <% let type="alternate-skin-checkbox" ;if(!currentUser||currentUser.role=='guest' )type='alternate-skin' %>
+
                <% for(let alternateSkin of arrays.alternateInputSkinsArr){ %>
+
+
 
                   <%- `${include('./skinCard.ejs',{ float:alternateSkin.float,
                      price:Math.round(alternateSkin.price*currency.multiplier*100)/100, value: alternateSkin.replacement
                      +' _ '+alternateSkin.amount + ' _ ' + alternateSkin.float + ' _ ' + alternateSkin.botPrice
                            + ' _ ' + alternateSkin.url , link:alternateSkin.url, type:type, icon:alternateSkin.icon,
-                           _id:alternateSkin._id,amount:alternateSkin.amount, label:alternateSkin.name+ ' | ' +
+                           _id:alternateSkin.sn,amount:alternateSkin.amount, label:alternateSkin.name+ ' | ' +
                            alternateSkin.skin + ' (' + alternateSkin.quality + ') '
-                     ,symbol:currency.symbol,sn:alternateSkin._id, animationData:`data-aos="zoom-in"
+                     ,symbol:currency.symbol,sn:alternateSkin.sn, animationData:`data-aos="zoom-in"
                      data-aos-anchor=".alternate-skins" `})}`%>
 
                      <% } %>
@@ -246,6 +249,5 @@
 <script src="/javascripts/tradeShow/recheckingTrade.js"></script>
 
 <% if(currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )){ %>
-   <script src="/javascripts/tradeShow/alternateSkinsCheckbox.js"></script>
    <script src="/javascripts/tradeShow/bot.js"></script>
    <% } %>

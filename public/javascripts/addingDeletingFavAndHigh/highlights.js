@@ -71,7 +71,7 @@ const manageHighlight = async (action, highlight) => {
       <form id="highlightNameForm" >
       
       <label for="highlightNameInput">
-      <h5 class="card-title">Enter Highlighted Name</h5>
+      <h5 class="card-title new-highlight">Enter Highlighted Name</h5>
       </label>
       <input id="highlightNameInput" name="highlightName" type="text" class="form-control my-2 text-center"
       maxlength="30" minlength="5" required>

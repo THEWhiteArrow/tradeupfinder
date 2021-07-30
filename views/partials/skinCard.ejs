@@ -57,10 +57,12 @@
 
                         <input class="btn-check" type="checkbox" value="<%= value %>" id="<%= _id %>"
                            autocomplete="off">
+
                         <label for="<%= _id %>"
-                           class="btn btn-outline-primary btn-checkbox text-center form-label mb-0 mt-1">
+                           class="btn btn-outline-primary btn-checkbox form-label text-center mb-0 mt-1">
                            <%= `${price}${symbol}` %>
                         </label>
+
                         <% }else if(type=='alternate-skin' ){ %>
                            <label for="<%= _id %>" class="text-center form-label mb-0 mt-1">
                               <%= `${price}${symbol}` %>

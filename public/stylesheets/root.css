@@ -2,7 +2,7 @@
  
    --dark-purple:#1e2329;
    --purple:#495057;
-   --light-purple:#66707a; 
+   --light-purple:#676f77; 
    /* --dark-purple:#151a30;
    --purple:#1a1f38;
    --light-purple:#222b45;  */
@@ -54,9 +54,9 @@
    /* --main-highlight-section-bg-img: linear-gradient(180deg,var(--light-purple) 0%, var(--dark-purple) 100%); */
    --main-highlight-section-bg-img: url('../assets/background/glamorous.svg');
 
-   --tradeShow-form-bg:var(--light-purple);
-   --tradeShow-form-bg-img: url("../assets/background/meteors.svg");
-   --tradeShow-skinCard-bg:var(--light-gunmetal);
+   --tradeShow-form-bg:var(--light-gunmetal);
+   /* --tradeShow-form-bg-img: url("../assets/background/meteors.svg"); */
+   --tradeShow-skinCard-bg:var(--light-purple);
    --tradeShow-skinCard-indicators-bg:var(--davys-grey);
    --tradeShow-skinCard-indicators-text-color:var(--text-color);
 

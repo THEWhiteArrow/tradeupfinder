@@ -461,9 +461,9 @@ const mixedTwoPairs = async (req) => {
                            // let max = 0;
                            // let maxSkin = {};
 
-
                            for (let targetedCollection of collections) {
                               if (targetedCollection.name == firstSkin.case || targetedCollection.name == secondSkin.case) {
+                                 let k = -1;
 
                                  for (let targetedSkin of targetedCollection.skins[rarities[r + 1]]) {
 
@@ -546,10 +546,12 @@ const mixedTwoPairs = async (req) => {
                                  }
 
                                  for (let alternateSkin of targetedCollection.skins[rarities[r]]) {
+                                    ++k;
                                     if (alternateSkin.case == firstSkin.case && alternateSkin.prices[firstQuality] > 0) {
 
                                        const alternate = {
                                           _id: alternateSkin._id,
+                                          sn: `1:${k}:${alternateSkin._id}`,
                                           replacement: firstSkin._id,
                                           name: alternateSkin.name,
                                           skin: alternateSkin.skin,
@@ -575,6 +577,8 @@ const mixedTwoPairs = async (req) => {
                                     if ((alternateSkin.case == secondSkin.case && alternateSkin.prices[secondQuality] > 0) && (firstSkin.name != secondSkin.name || firstSkin.skin != secondSkin.skin || firstQuality != secondQuality)) {
 
                                        const alternate = {
+                                          _id: alternateSkin._id,
+                                          sn: `2:${k}:${alternateSkin._id}`,
                                           replacement: secondSkin._id,
                                           name: alternateSkin.name,
                                           skin: alternateSkin.skin,

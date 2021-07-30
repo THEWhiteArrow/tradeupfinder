@@ -36,8 +36,9 @@ a.active-link:hover{color:black;} */
 .lift-on-hover:hover{transform:translate3d(0,-7px,0);}
 
  h1,h2,h3{color:var(--title-color) !important;text-transform: capitalize;}
- h4,h5,h5,p,li,div.lead{color:var(--text-color) !important;text-align: justify !important;} 
+ h4,h5,p,li,div.lead{color:var(--text-color) !important;text-align: justify !important;} 
 
+ h5.card-title.new-highlight{color:black !important}
  h3.popover-header,label:not(.text-dark){color:white !important;}
 
 
@@ -48,7 +49,7 @@ a.active-link:hover{color:black;} */
     top:0;
 
     right:0;
-    transform: translate3d(0,-40%,0);
+    transform: translate3d(0,-50%,0);
 
  }
 /* 
