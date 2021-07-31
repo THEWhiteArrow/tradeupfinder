@@ -49,13 +49,31 @@
                      </div>
                   </label>
 
-                  <a target="_blank" href="<%= link %>"
-                     class="d-flex justify-content-center align-items-center position-relative">
-                     <img class="card-img-top  skin-card-img" src="<%= icon %> " alt="<%= label %>">
-                     <img class="position-absolute top-0 right-0 me-1 mt-1 skin-card-market-link"
-                        src="/assets/social/steam-circle.png" width="20" height="20"
-                        alt="View That Skin On Steam Market">
-                  </a>
+
+                  <div class="position-relative">
+                     <a target="_blank" href="<%= link %>"
+                        class="d-flex justify-content-center align-items-center position-relative">
+                        <img class="card-img-top  skin-card-img" src="<%= icon %> " alt="<%= label %>">
+                     </a>
+
+                     <a target="_blank" href="<%= link %>" class="position-absolute top-0 right-0  me-1  ">
+                        <img class="skin-card-market-link" src="/assets/social/steam-circle.png" width="20" height="20"
+                           alt="View That Skin On Steam Market">
+                     </a>
+
+                     <a target="_blank" <% const qualityObj={ 'Factory New' : 0, 'Minimal Wear' : 1, 'Field-Tested' :
+                        2, 'Well-Worn' :3, 'Battle-Scarred' : 4,} %>
+                        <% let
+                           skinWalletLink=`https://www.skinwallet.com/market/offers?appId=730&page=1&search=${encodeURI(name
+                           + ' ' + skin )}&sortBy=Cheapest&exterior%5B%5D=WearCategory${qualityObj[quality]}`%>
+                           <% skinWalletLink=skinWalletLink.replace(/ /g,"") %>
+                              href="<%= skinWalletLink %>"
+                                 class="position-absolute top-0 right-0 me-1 mt-4">
+                                 <img class="skin-card-market-link" src="/assets/social/skinwallet.png" width="20"
+                                    height="20" alt="View That Skin On SkinWallet Market">
+                     </a>
+
+                  </div>
 
                   <label for="<%= `${labelPrefix}${sn}` %>" class="text-center skin-card-label quality">
                      <%= `(${quality})` %>

@@ -33,7 +33,23 @@ const random = (range) => (Math.floor(Math.random() * range) + 1)
 
 const getLabels = (range) => { const arr = []; for (let i = 0; i <= range; i++) { arr[i] = i; } return arr; }
 
-const getResults = (range) => {
+const getDatasetsArr = (range) => {
+   const isNotNegative = (v) => (v >= 0);
+   let isPrevPositive = null;
+   const setNullArr = (l) => {
+      let nullArr = [];
+      for (let i = 1; i <= l; ++i)nullArr.push(null);
+      return nullArr;
+   }
+   const COLORS = {
+      negative: '#d62828ff',
+      positive: '#38b000ff',
+      draw: '#ffffffaa',
+   }
+
+
+   const datasets = [];
+
    const inputSkins = document.querySelectorAll('.input-skin input.price-input')
    inputPrice = 0;
    for (let el of inputSkins) inputPrice += Math.abs(el.value)
@@ -46,16 +62,82 @@ const getResults = (range) => {
 
 
 
+
    const arr = [0];
    for (let i = 0; i < range; ++i) {
       const randomIndex = random(targetedSkinsNumber);
       const outputIndex = checkOutput(randomIndex);
 
       isSteamFeeApplied ? arr.push(arr[arr.length - 1] - inputPrice + Math.round(targetedSkinsArrPrices[outputIndex] * steamFeeMultiplier * 100) / 100) : arr.push(arr[arr.length - 1] - inputPrice + targetedSkinsArrPrices[outputIndex]);
-
-
    }
-   return arr;
+
+
+
+   for (let i = 0; i < range + 1; ++i) {
+
+      if (isPrevPositive == null || isNotNegative(arr[i]) != isPrevPositive) {
+
+         if (i > 0) {
+
+
+            let localDataset = {
+               tension: 0.04,
+               fill: true,
+               data: setNullArr(range + 1),
+
+               pointHitRadius: 20,
+
+               borderDash: [],
+               borderColor: null,
+               backgroundColor: 'rgba(230, 230, 230, 0.3)',
+            };
+
+            localDataset.data[i - 1] = arr[i - 1];
+            localDataset.data[i] = arr[i];
+            localDataset.borderDash = [5, 5];
+            if (isNotNegative(arr[i])) localDataset.borderColor = COLORS.positive;
+            else localDataset.borderColor = COLORS.negative;
+
+            datasets.push(localDataset)
+
+
+         }
+
+
+
+
+
+
+
+
+
+
+         let localDataset = {
+            tension: 0.04,
+            fill: true,
+            data: setNullArr(range + 1),
+
+            pointHitRadius: 20,
+
+            borderDash: [],
+            borderColor: null,
+            backgroundColor: 'rgba(230, 230, 230, 0.3)',
+         };
+         localDataset.data[i] = arr[i];
+         if (isNotNegative(arr[i])) localDataset.borderColor = COLORS.positive;
+         else localDataset.borderColor = COLORS.negative;
+
+         datasets.push(localDataset)
+         isPrevPositive = isNotNegative(arr[i]);
+
+      } else {
+         datasets[datasets.length - 1].data[i] = arr[i];
+         if (isNotNegative(arr[i])) datasets[datasets.length - 1].borderColor = COLORS.positive;
+         else datasets[datasets.length - 1].borderColor = COLORS.negative;
+      }
+   }
+   // console.log(datasets)
+   return datasets;
 }
 
 const manageClasses = (elements, classNameDelete, classNameAdd) => {
@@ -63,30 +145,43 @@ const manageClasses = (elements, classNameDelete, classNameAdd) => {
 }
 
 
+
 const createChart = (range) => {
+
    const symbol = document.querySelector('.input-price .symbol').innerText;
    const labels = getLabels(range);
-   const results = getResults(range);
+   const datasets = getDatasetsArr(range);
    const data = {
       labels: labels,
-      datasets: [{
-         label: 'Trade-Up Simulation',
-         data: results,
-         fill: true,
-         borderColor: 'rgb(235, 64, 52)',
-         backgroundColor: 'rgba(255,255,255,0.4)',
-         tension: 0.01
-      }]
+      datasets: datasets,
    };
    const config = {
       type: 'line',
       data: data,
       options: {
+         plugins: {
+            legend: {
+               display: false
+            },
+            tooltip: {
+               callbacks: {
+                  title: (el) => {
+                     return `Trade #${el[0].dataIndex}`;
+                  },
+                  label: (el) => {
+                     if (el.dataset.borderDash.length != 0) {
+                        return null;
+                     } else {
+                        return ` ${el.formattedValue} ${symbol}`;
+                     }
+                  }
+               },
+            },
+         },
          responsive: true,
          color: 'rgba(255,255,255,0.85)',
          scales: {
             x: {
-               display: true,
                title: {
                   color: 'rgba(255,255,255,0.85)',
                   display: true,
@@ -104,7 +199,6 @@ const createChart = (range) => {
                   drawBorder: true,
                   color: 'rgba(255,255,255,0.1)',
                },
-               display: true,
                title: {
                   color: 'rgba(255,255,255,0.85)',
                   display: true,
@@ -121,14 +215,14 @@ const createChart = (range) => {
       }
 
    };
-   var ctx = document.getElementById('myChart').getContext('2d');
+   ctx = document.getElementById('myChart').getContext('2d');
    myChart = new Chart(ctx, config);
 }
 
 const destroyChart = () => {
    myChart.destroy();
 }
-
+var ctx;
 
 
 
