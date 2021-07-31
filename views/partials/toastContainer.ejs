@@ -1,0 +1,24 @@
+<div class="d-none d-md-block toast-container z-index-1000">
+
+   <% if(info && info.length){ %>
+
+      <%- include( "./toast.ejs" , { className : "toast-server-info" , color : "#007aff" , time : "just now" ,
+         title:"Server Information", content:info, }) %>
+
+         <% } %>
+
+            <% if(success && success.length){ %>
+
+
+               <%- include( './toast.ejs' , { className:'toast-success', color:'#198754', title:'Congratulations!',
+                  content:success,time:'just now' }) %>
+
+                  <% } %>
+
+                     <% if(error && error.length){ %>
+
+                        <%- include('./toast.ejs',{ className:'toast-danger', color:'#dc3545', title:'Error',
+                           content:error,time:'just now' }) %>
+
+                           <% } %>
+</div>

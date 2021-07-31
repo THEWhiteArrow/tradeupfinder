@@ -70,10 +70,10 @@ const manageHighlight = async (action, highlight) => {
       <div class="card-body">
       <form id="highlightNameForm" >
       
-      <label for="highlightNameInput">
-      <h5 class="card-title new-highlight">Enter Highlighted Name</h5>
+      <label for="highlightNameInput" class="w-100">
+      <h5 class="d-flex flex-row justify-content-between card-title new-highlight"> <span>Enter Highlighted Name</span> <span id="btn-highlight-form-close" class="ms-auto pointer">&#10005;</span>   </h5>
       </label>
-      <input id="highlightNameInput" name="highlightName" type="text" class="form-control my-2 text-center"
+      <input id="highlightNameInput" name="highlightName" type="text" class="shadow-lg box-shadow-inset form-control my-2 text-center"
       maxlength="30" minlength="5" required>
       <div class="invalid-feedback my-3">
       Name must be longer than no shorter than 5 characters
@@ -97,6 +97,11 @@ const manageHighlight = async (action, highlight) => {
       const highlightNameForm = document.querySelector('#highlightNameForm');
       const highlightNameInput = document.querySelector('#highlightNameInput');
       const sectionBlur = document.querySelector('#bg-blur');
+      const btnHighlightFormClose = document.querySelector('#btn-highlight-form-close');
+
+      btnHighlightFormClose.addEventListener('click', () => {
+         sectionBlur.remove();
+      })
 
       highlightNameForm.addEventListener('submit', async (e) => {
          e.stopPropagation();

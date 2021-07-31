@@ -151,6 +151,7 @@
 
 #highlights{background-color: var(--main-highlight-section-bg);background-image: var(--main-highlight-section-bg-img);}
 
+
 #hero{ 
    z-index: 2;
    height:100%;
@@ -169,6 +170,9 @@
 }
 
 #hero h1{color:white;}
+
+ 
+
 /* #hero p{color:var(--text-light-white);} */
 
 /* // Large devices (desktops, 992px and up) */

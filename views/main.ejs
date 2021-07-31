@@ -184,29 +184,13 @@
       </main>
 
 
-      <div class="toast-container z-index-1000">
 
-
-         <% if(success && success.length){ %>
-
-            <%- include( './partials/toast.ejs' , { className:'toast-success', color:'#198754',
-               title:'Congratulations!', content:success,time:'just now' }) %>
-
-               <% } %>
-
-                  <% if(error && error.length){ %>
-
-                     <%- include('./partials/toast.ejs',{ className:'toast-danger', color:'#dc3545', title:'Error',
-                        content:error,time:'just now' }) %>
-
-                        <% } %>
-      </div>
+      <%- include('./partials/toastContainer.ejs')%>
 
 
 
+         <script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>
+         <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
 
-      <script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>
-      <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
-
-      <script src="/javascripts/libraries/vanillaTilt.min.js"></script>
-      <script src="/javascripts/hero/hero-parallax.js"></script>
+         <script src="/javascripts/libraries/vanillaTilt.min.js"></script>
+         <script src="/javascripts/hero/hero-parallax.js"></script>

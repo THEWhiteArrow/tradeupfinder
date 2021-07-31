@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const flash = require('connect-flash');
 
-const maxShownSkins = 200;
+
 const Highlight = require('../models/highlightModel');
 const Name = require('../models/nameModel');
 const ServerInfo = require('../models/serverInfoModel');
@@ -11,14 +11,16 @@ module.exports.renderExplore = async (req, res) => {
    const researchesName = await Name.find({});
    const { skinsUpdateInfo } = await ServerInfo.findOne({});
 
-   res.render('explore', { researchesName, skinsUpdateInfo });
+
+   res.locals.info.push(`Skin Prices Updated Last Time : ${skinsUpdateInfo}`)
+   res.render('explore', { researchesName });
 }
 
 module.exports.renderMain = async (req, res, next) => {
    const highlights = await Highlight.find({}).populate('orginalTrade');
 
 
-   req.flash('info', `For your comfort we have no displayed more than ${maxShownSkins} trades on the page!`)
+   // req.flash('info', `For your comfort we have displayed no more than ${res.locals.maxShownTrades} trades on the page!`)
    res.render('main', { highlights });
 };
 

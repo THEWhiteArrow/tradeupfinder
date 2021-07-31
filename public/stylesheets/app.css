@@ -59,6 +59,9 @@ body {
 .crosshair {
 	cursor: crosshair;
 }
+.pointer{
+   cursor:pointer;
+}
 
 .star ,.highlight-btn,.magnifier{
    background-color: white;

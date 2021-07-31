@@ -51,6 +51,14 @@ a.active-link:hover{color:black;} */
     right:0;
     transform: translate3d(0,-50%,0);
 }
+
+.box-shadow-inset{
+   /* background-color: rgba(8, 8, 8, 0.03); */
+   -webkit-box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.45) !important; 
+   box-shadow: inset 0px 0px 15px -6px rgba(8, 8, 8, 0.45) !important;
+}
+ 
+
 /* 
  .right-0{
     right:0;
