@@ -154,17 +154,18 @@
 
 #hero{ 
    z-index: 2;
+   box-sizing: border-box !important;
    height:100%;
 
-   padding-top: 100px;
-   padding-bottom: 100px;
-
+   padding-top: 85px;
+   padding-bottom: 85px;
    
-   background-color: white;
-
+    background-color: var(--light-purple);
    background-image: url("../assets/svgs/waves/wave_hero.svg");
+  
    
-   background-size: cover;
+
+   background-size:cover !important;
 
 
 }

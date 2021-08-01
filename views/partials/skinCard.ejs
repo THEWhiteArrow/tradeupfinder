@@ -53,12 +53,12 @@
                   <div class="position-relative">
                      <a target="_blank" href="<%= link %>"
                         class="d-flex justify-content-center align-items-center position-relative">
-                        <img class="card-img-top  skin-card-img" src="<%= icon %> " alt="<%= label %>">
+                        <img loading="lazy" class="card-img-top  skin-card-img" src="<%= icon %> " alt="<%= label %>">
                      </a>
 
                      <a target="_blank" href="<%= link %>" class="position-absolute top-0 right-0  me-1  ">
-                        <img class="skin-card-market-link" src="/assets/social/steam-circle.png" width="20" height="20"
-                           alt="View That Skin On Steam Market">
+                        <img loading="lazy" class="skin-card-market-link" src="/assets/social/steam-circle.png"
+                           width="20" height="20" alt="View That Skin On Steam Market">
                      </a>
 
                      <a target="_blank" <% const qualityObj={ 'Factory New' : 0, 'Minimal Wear' : 1, 'Field-Tested' :
@@ -69,8 +69,8 @@
                            <% skinWalletLink=skinWalletLink.replace(/ /g,"") %>
                               href="<%= skinWalletLink %>"
                                  class="position-absolute top-0 right-0 me-1 mt-4">
-                                 <img class="skin-card-market-link" src="/assets/social/skinwallet.png" width="20"
-                                    height="20" alt="View That Skin On SkinWallet Market">
+                                 <img loading="lazy" class="skin-card-market-link" src="/assets/social/skinwallet.png"
+                                    width="20" height="20" alt="View That Skin On SkinWallet Market">
                      </a>
 
                   </div>

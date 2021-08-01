@@ -7,15 +7,21 @@
       <% if (currentUser) { %>
 
          <% if (currentUser.steam) { %>
-            <h3 class="fs-3">Avatar : <img src="<%= currentUser.steam.avatar %>" width="35px" alt="Your steam avatar">
+            <h3 class="fs-3">Avatar : <img loading="lazy" src="<%= currentUser.steam.avatar %>" width="35px"
+                  alt="Your steam avatar">
             </h3>
             <% } %>
                <h3 class="fs-3">Username : <span class="fw-light">
                      <%= currentUser.username %>
+
                   </span>
                </h3>
                <h3 class="fs-3">Role : <span class="fw-light">
                      <%= currentUser.role %>
+                  </span>
+               </h3>
+               <h3 class="fs-3">Premium account : <span class="fw-light">
+                     <%= currentUser.premium %>
                   </span>
                </h3>
                <h3 class="fs-3">Email or steam identificator : <span class="fw-light">

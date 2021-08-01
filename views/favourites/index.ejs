@@ -7,7 +7,7 @@
 
 
       <h1 class="position-relative flex-1 display-3 my-2 py-2">Favourite Trade-Ups
-         <img class="enticing-svg left-0" src="/assets/undraw/undraw_Appreciation_re_p6rl.svg"
+         <img loading="lazy" class="enticing-svg left-0" src="/assets/undraw/undraw_Appreciation_re_p6rl.svg"
             alt="Favourite Svg Element">
       </h1>
 
@@ -42,7 +42,8 @@
 
                            <%-`
                               ${include('../partials/tradeTile.ejs',{elementName:'li',title:false,statistics:favouriteTrade.statistics,data:favouriteTrade.data,_id:favouriteTrade.orginalTradeId,
-                              favouritesInfo:null,isHighlighted:wouldBeHighlighted, isOnFavouritePage:true,
+                              favouritesInfo:null,isHighlighted:wouldBeHighlighted,
+                              isOnFavouritePage:true,pricesType:favouriteTrade.pricesType,
                               showPageLink:`/favourites/${favouriteTrade._id}/edit`, animationData:animationData})}`%>
 
                               <% } %>

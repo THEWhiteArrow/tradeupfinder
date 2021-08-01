@@ -11,7 +11,7 @@
 
             <h1 class="position-relative display-3 my-2 py-2">
                Trade-Ups : <%= name %>
-                  <img class="enticing-svg left-0" src="/assets/undraw/undraw_File_searching_re_3evy.svg"
+                  <img loading="lazy" class="enticing-svg left-0" src="/assets/undraw/undraw_File_searching_re_3evy.svg"
                      alt="Trades Svg Element">
             </h1>
 
@@ -47,7 +47,8 @@
                         <% i<=2 ? animationData='' :null; %>
 
                            <%-`
-                              ${include('../partials/tradeTile',{elementName:'li',title:false,statistics:profitableTrade.statistics,data:profitableTrade.data,_id:profitableTrade._id,
+                              ${include('../partials/tradeTile',{elementName:'li',pricesType:profitableTrade.pricesType,title:false,
+                              statistics:profitableTrade.statistics, data:profitableTrade.data,_id:profitableTrade._id,
                               favouritesInfo:profitableTrade.favouritesInfo,isHighlighted:profitableTrade.isHighlighted,isOnFavouritePage:false,
                               showPageLink:'/trades/'+profitableTrade._id, animationData:animationData})}`%>
 

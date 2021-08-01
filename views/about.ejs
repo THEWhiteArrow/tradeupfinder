@@ -60,7 +60,7 @@
 
       </section>
 
-      <section id="collaboration" class="pt-10  w-100">
+      <section id="collaboration" class="py-10  w-100">
 
          <h3 class="title display-5 mb-4">Collaboration!</h3>
 
@@ -76,7 +76,7 @@
 
             <div class="lift-on-hover card mx-3 my-1 rounded-pill overflow-hidden" style="width: 11.5rem;">
                <a href="#izak">
-                  <img src="/assets/collaboration/izak.jpg" class="card-img-top" alt="...">
+                  <img loading="lazy" src="/assets/collaboration/izak.jpg" class="card-img-top" alt="...">
                </a>
                <div class="card-body">
                   <h5 class="card-title text-center lead text-dark">Izak</h5>
@@ -85,7 +85,7 @@
 
             <div class="lift-on-hover card mx-3 my-1 rounded-pill overflow-hidden" style="width: 11.5rem;">
                <a href="#pasha">
-                  <img src="./assets/collaboration/pasha.jpg" class="card-img-top" alt="...">
+                  <img loading="lazy" src="./assets/collaboration/pasha.jpg" class="card-img-top" alt="...">
                </a>
                <div class="card-body">
                   <h5 class="card-title text-center lead text-dark">Pasha</h5>
@@ -94,7 +94,7 @@
 
             <div class="lift-on-hover card mx-3 my-1 rounded-pill overflow-hidden" style="width: 11.5rem;">
                <a href="#jacob">
-                  <img src="./assets/collaboration/jacob.jpg" class="card-img-top" alt="...">
+                  <img loading="lazy" src="./assets/collaboration/jacob.jpg" class="card-img-top" alt="...">
                </a>
                <div class="card-body">
                   <h5 class="card-title text-center lead text-dark">Jacob</h5>
@@ -105,50 +105,4 @@
 
       </section>
 
-      <form id="contact" class="mt-5 mb-5 pb-5  d-flex flex-column validated-form" action="/about" method="POST"
-         novalidate="">
-
-         <h3 class="title display-5 my-4">Contact us!</h3>
-         <h5 class="pb-3 lead">In order to start our dialogue we made it easy for YOU to tell us what is on your
-            MIND. You can either write to us directly on our mail <a class="mailto link-light"
-               href="mailto:contact@kontrakciarze.com">contact@kontrakciarze.com</a> or fill a contact form here on the
-            page below.</h5>
-
-         <div class="d-flex flex-column position-relative mb-2">
-            <label for="name" class="form-label paragraph">Name</label>
-            <input id="name" name="name" type="text" class="form-control" required>
-            <div class="invalid-feedback">
-               Please insert your name
-            </div>
-
-         </div>
-
-         <div class="d-flex flex-column position-relative mb-2">
-            <label for="email" class="form-label paragraph">E-mail</label>
-            <div class="input-group has-validation">
-               <span class="input-group-text text-dark" id="inputGroupPrepend">@</span>
-               <input type="email" class="form-control" id="email" name="email" aria-describedby="inputGroupPrepend"
-                  required>
-               <div class="invalid-feedback">
-                  Please insert your email
-               </div>
-            </div>
-
-         </div>
-         <div class="d-flex flex-column position-relative mb-2">
-            <label for="text" class="form-label paragraph">Your thoughts</label>
-            <textarea name="text" id="text" class="form-control" required rows="6"></textarea>
-            <div class="invalid-feedback">
-               Please say something
-            </div>
-         </div>
-
-         <button id="submit" class="btn btn-success my-1 text-uppercase" type="submit">Submit</button>
-      </form>
-
-
-
    </main>
-
-   <script src=" /javascripts/bootstrapJs/bs-custom-file-input.min.js"></script>
-   <script src="/javascripts/bootstrapJs/validateForms.js"></script>

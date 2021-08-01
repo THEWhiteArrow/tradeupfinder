@@ -35,21 +35,28 @@ a.active-link:hover{color:black;} */
 .lift-on-hover{transition:all 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);}
 .lift-on-hover:hover{transform:translate3d(0,-7px,0);}
 
- h1,h2,h3{color:var(--title-color) !important;text-transform: capitalize;}
- h4,h5,p,li,div.lead{color:var(--text-color) !important;text-align: justify !important;} 
+h1{text-shadow: 0px 2px 6px rgba(0,0,0,0.35);}
+h1,h2,h3{color:var(--title-color) !important;text-transform: capitalize;}
+h4,h5,p,li,div.lead{color:var(--text-color) !important;text-align: justify !important;} 
  
- h3.popover-header,label:not(.text-dark){color:white !important;}
- .error p,.skin-card label ,.modal h5,.modal li,h5.card-title.new-highlight{color:black !important}
+label:not(.text-dark){color:white !important;}
+h3.popover-header,.error p,.skin-card label ,.modal h5,.modal li,h5.card-title.new-highlight{color:black !important}
 
 
- .enticing-svg{
-    position: absolute;
-    height:150px;
-    width: 150px;
-    top:0;
+.enticing-svg{
+   position: absolute;
+   display:none;
+   height:150px;
+   width: 150px;
+   top:0;
 
-    right:0;
-    transform: translate3d(0,-50%,0);
+
+   right:0;
+   transform: translate3d(0,-50%,0);
+}
+
+@media (min-width: 576px) {  
+   .enticing-svg{display: block;}
 }
 
 .box-shadow-inset{

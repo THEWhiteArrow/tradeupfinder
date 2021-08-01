@@ -1,8 +1,13 @@
-const isMobile = () => {
-   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}
-
 const parallax = {
+   breakpoints: {
+      xs: 0,
+      sm: 576,
+      md: 768,
+      lg: 992,
+      xl: 1200,
+      xxl: 1400,
+   },
+   active: null,
    img: document.querySelector('#parallax-img'),
    h1: document.querySelector('#parallax-h1'),
    p: document.querySelector('#parallax-p'),
@@ -10,9 +15,20 @@ const parallax = {
    btn2: document.querySelector('#parallax-btn2'),
 
    start: () => {
-      window.addEventListener('scroll', parallax.calculateEffect);
+      // window.addEventListener('scroll', parallax.calculateEffect);
+      parallax.checkResize();
+      window.addEventListener('resize', parallax.checkResize)
    },
+   checkResize: () => {
+      if (window.innerWidth >= parallax.breakpoints['lg']) {
+         window.removeEventListener('scroll', parallax.calculateEffect);
 
+         parallax.calculateEffect();
+         window.addEventListener('scroll', parallax.calculateEffect);
+      } else {
+         window.removeEventListener('scroll', parallax.calculateEffect);
+      }
+   },
    calculateEffect: () => {
       const { scrollY } = window;
       parallax.img.style.transform = `translate3d(${scrollY * 0.15}px,-${scrollY * 0.3}px,0)`;
@@ -24,7 +40,6 @@ const parallax = {
 
 
 }
-
 
 const glitching = {
    morseCode: {
@@ -118,4 +133,6 @@ const glitching = {
    }
 }
 
-if (!isMobile()) { parallax.start(); glitching.start(); }
+parallax.start();
+glitching.start();
+

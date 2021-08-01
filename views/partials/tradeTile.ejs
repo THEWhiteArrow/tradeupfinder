@@ -6,49 +6,59 @@
    <div class="card-body d-flex flex-column text-light-white">
 
       <section class="d-flex flex-row justify-content-between">
+         <% const addStattrakBadge=(pricesType)=> { %>
+            <% if(pricesType=='stattrakPrices' ) return `<span
+               class="mx-3 fs-5 badge btn-warning text-white d-flex align-items-center ">StatTrak</span>`
+               }%>
 
-         <% if(title!=false){ %>
 
-            <h4 class="card-title px-2 ">
-               <%= title %>
-            </h4>
-            <% } else{%>
-               <span></span>
-               <% } %>
-                  <span class="d-flex flex-row">
+               <% if(title!=false){ %>
 
-                     <%-
-                        `${include('../partials/tradeManaging',{_id,favouritesInfo,isHighlighted,isOnFavouritePage})}`%>
-                  </span>
+                  <h4 class="card-title px-2 d-flex ">
+                     <%= title %>
+                        <%- addStattrakBadge(pricesType) %>
+                  </h4>
+
+                  <% } else{%>
+                     <span>
+                        <%- addStattrakBadge(pricesType) %>
+
+                     </span>
+                     <% } %>
+                        <span class="d-flex flex-row">
+
+                           <%-
+                              `${include('../partials/tradeManaging',{_id,favouritesInfo,isHighlighted,isOnFavouritePage})}`%>
+                        </span>
       </section>
 
 
 
       <section class="d-flex flex-column flex-lg-row">
 
-         <div class="my-3 my-lg-1 d-flex flex-column flex-sm-row align-items-center justify-content-center flex-3">
+         <div class="my-3 my-lg-1 d-flex flex-row align-items-center justify-content-center flex-3">
 
             <span class="position-relative skin-tile-container" type="button" data-bs-container="body"
                data-bs-toggle="popover" data-bs-placement="top"
                data-bs-title="<%= `${data.firstSkin.name} | ${data.firstSkin.skin}` %>"
                data-bs-content="Float : <%= data.firstSkinAvgFloat %>">
 
-               <img src="<%= data.firstSkin.icon %>" alt="<%= `${data.firstSkin.name} | ${data.firstSkin.skin}` %>"
-                  class="skin-tile-img mx-3">
+               <img loading="lazy" src="<%= data.firstSkin.icon %>"
+                  alt="<%= `${data.firstSkin.name} | ${data.firstSkin.skin}` %>" class="skin-tile-img mx-3">
                <div class="skin-number">
                   <%= data.amount.amount1 %>
                </div>
 
             </span>
 
-            <img src="/assets/plus-lg.svg" alt="plus" class="plus">
+            <img loading="lazy" src="/assets/plus-lg.svg" alt="plus" class="plus">
 
             <span class="position-relative skin-tile-container" type="button" data-bs-container="body"
                data-bs-toggle="popover" data-bs-placement="top"
                data-bs-title="<%= `${data.secondSkin.name} | ${data.secondSkin.skin}` %>"
                data-bs-content="Float : <%= data.secondSkinAvgFloat %>">
-               <img src="<%= data.secondSkin.icon %>" alt="<%= `${data.secondSkin.name} | ${data.secondSkin.skin}` %>"
-                  class="skin-tile-img mx-3">
+               <img loading="lazy" src="<%= data.secondSkin.icon %>"
+                  alt="<%= `${data.secondSkin.name} | ${data.secondSkin.skin}` %>" class="skin-tile-img mx-3">
                <div class="skin-number">
                   <%= data.amount.amount2 %>
                </div>
@@ -89,7 +99,7 @@
          <a href='<%= showPageLink %>' class="no-underline d-flex flex-row">
 
             <div class="trade-cost w-50">
-               <h5 class="px-2 m-0 d-flex flex-column flex-md-row text-center">
+               <h5 class="fs-6 fs-md-5 fs-lg-4 px-2 m-0 d-flex flex-column flex-md-row text-center">
                   <span>
                      Cost :&nbsp;
                   </span>
@@ -101,7 +111,7 @@
 
 
             <div class="average-profit w-50">
-               <h5 class="px-2 m-0 d-flex flex-column flex-md-row text-center">
+               <h5 class="fs-6 fs-md-5 fs-lg-4 px-2 m-0 d-flex flex-column flex-md-row text-center">
                   <span>
                      Profit :&nbsp;
                   </span>

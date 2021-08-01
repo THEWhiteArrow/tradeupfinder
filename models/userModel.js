@@ -9,12 +9,6 @@ const userSchema = new Schema({
    },
    steam: {
       type: Object,
-      // id: {
-      //    type: String,
-      // },
-      // avatar: {
-      //    type: String
-      // }
    },
    email: {
       type: String,

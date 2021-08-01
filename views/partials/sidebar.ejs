@@ -7,7 +7,7 @@
    <nav id="sidebar" class="sidebar-hidden fixed-top d-flex flex-column flex-shrink-0 p-3 text-white "
       style="width: 280px;">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-         <img src="/assets/svgs/other/gear.svg" alt="Managment" class="icons">
+         <img loading="lazy" src="/assets/svgs/other/gear.svg" alt="Managment" class="icons">
          <span class="fs-6 ms-3">Settings</span>
       </a>
       </a>
@@ -254,8 +254,8 @@
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
 
                <% if( currentUser.steam !=null){ %>
-                  <img src="<%= currentUser.steam.avatar %>" alt="Your steam profile's avatar" width="32" height="32"
-                     class="rounded-circle me-2">
+                  <img loading="lazy" src="<%= currentUser.steam.avatar %>" alt="Your steam profile's avatar" width="32"
+                     height="32" class="rounded-circle me-2">
 
                   <% } %>
 

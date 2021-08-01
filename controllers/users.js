@@ -46,3 +46,7 @@ module.exports.logout = async (req, res) => {
    req.flash('success', 'Goodbye! It was an honour to have you here!')
    res.redirect('/');
 };
+
+module.exports.renderAccountPage = async (req, res) => {
+   res.render('users/account')
+}

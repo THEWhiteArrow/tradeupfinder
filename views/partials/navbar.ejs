@@ -172,13 +172,13 @@
 
 
          <a href="https://steamcommunity.com/groups/kontrakciarze" target="_blank">
-            <img class="icons" src="/assets/social/steam.png" alt="Link to our steam group">
+            <img loading="lazy" class="icons" src="/assets/social/steam.png" alt="Link to our steam group">
          </a>
          <% if(currentUser && currentUser.steam!=null){ %>
             <!-- IDK WHERHER OR NOT IT SUPPORTS CUSTOM PROFILE LINKS -->
             <a href="https://steamcommunity.com/profiles/<%= currentUser.steam.id %>/" target="_blank"
                class="link-light no-underline d-flex flex-row">
-               <img src="<%= currentUser.steam.avatar  %> " alt="Your Avatar Image" class="icons">
+               <img loading="lazy" src="<%= currentUser.steam.avatar  %> " alt="Your Avatar Image" class="icons">
                <p class="link-light ms-2 w-max-content mb-0">
                   <%= currentUser.username %>
                </p>
@@ -202,8 +202,8 @@
          <option value="random">Random Theme</option>
       </select> -->
       <% if(currentUser ){ %>
-         <a href="/managment" class="managment ms-2">
-            <img src="/assets/svgs/other/gear-fill.svg" alt="Managment" class="icons"></a>
+         <a href="/user/account" class="managment ms-2">
+            <img loading="lazy" src="/assets/svgs/other/gear-fill.svg" alt="Managment" class="icons"></a>
          <% } %>
    </span>
 
@@ -241,7 +241,8 @@
 
 
                   <li class="nav-item"><a href="/guide" class="px-2 link-light">Guide</a></li>
-                  <li class="nav-item"><a href="/about#contact" class="px-2 link-light">Contact Us</a></li>
+                  <li class="nav-item"><a href="/about" class="px-2 link-light">About</a></li>
+                  <li class="nav-item"><a href="/contact" class="px-2 link-light">Contact</a></li>
                   <li class="nav-item"><a href="/explore" class="px-2 link-light">Explore</a></li>
                   <li class="nav-item"><a href="/favourites" class="px-2 link-light">Favourites</a></li>
 
@@ -269,28 +270,6 @@
          </ul>
       </div>
    </div>
-   <!-- <input type="color" name="color1" id="colorInputFormBg">
-   <input type="color" name="color2" id="colorInputSkinCardBg">
-   <input type="color" name="color3" id="colorInputSkinIndicatorsBg">
-   <input type="color" name="color4" id="colorInputSkinIndicatorsTextColor">
-   <input type="color" name="color5" id="colorInputBorderColor">
-   <input type="color" name="color6" id="bodyColor"> -->
+
+
 </nav>
-
-
-<!-- <script>
-   const colorInputFormBg = document.querySelector('#colorInputFormBg');
-   const colorInputSkinCardBg = document.querySelector('#colorInputSkinCardBg');
-   const colorInputSkinIndicatorsBg = document.querySelector('#colorInputSkinIndicatorsBg');
-   const colorInputSkinIndicatorsTextColor = document.querySelector('#colorInputSkinIndicatorsTextColor');
-   const bodyColor = document.querySelector('#bodyColor');
-   const colorInputBorderColor = document.querySelector('#colorInputBorderColor');
-
-   colorInputFormBg.addEventListener('input', () => { document.documentElement.style.setProperty('--tradeShow-form-bg', colorInputFormBg.value); })
-   colorInputSkinCardBg.addEventListener('input', () => { document.documentElement.style.setProperty('--tradeShow-skinCard-bg', colorInputSkinCardBg.value); })
-   colorInputSkinIndicatorsBg.addEventListener('input', () => { document.documentElement.style.setProperty('--tradeShow-skinCard-indicators-bg', colorInputSkinIndicatorsBg.value); })
-   colorInputSkinIndicatorsTextColor.addEventListener('input', () => { document.documentElement.style.setProperty('--tradeShow-skinCard-indicators-text-color', colorInputSkinIndicatorsTextColor.value); })
-   colorInputBorderColor.addEventListener('input', () => { document.documentElement.style.setProperty('--tradeShow-border-color', colorInputBorderColor.value); })
-   bodyColor.addEventListener('input', () => { document.documentElement.style.setProperty('--body-bg', bodyColor.value); })
-</script> -->
-<!-- <div class="navbarSpace d-none"></div> -->

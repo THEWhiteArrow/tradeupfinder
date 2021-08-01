@@ -48,13 +48,9 @@ body {
    background-color: var(--body-bg);
    background-image: url('../assets/background/glamorous.svg');
 }
+ 
 
-
-
- .navbarSpace{ 
-    width: 100% ;
-    padding-top: 61px;
- }
+ 
  
 .crosshair {
 	cursor: crosshair;
@@ -62,6 +58,7 @@ body {
 .pointer{
    cursor:pointer;
 }
+ 
 
 .star ,.highlight-btn,.magnifier{
    background-color: white;
@@ -573,6 +570,46 @@ nav#settings select option{
 .pb-25{padding-bottom:15rem! important;}
 .py-25{padding-bottom:15rem! important;padding-top:15rem! important;}
 .p-10{padding:6rem! important;}
+
+
+@media (min-width: 576px) { 
+.pt-sm-10{padding-top:6rem! important;}
+.pb-sm-10{padding-bottom:6rem! important;}
+.py-sm-10{padding-top:6rem! important;padding-bottom:6rem! important;}
+.py-sm-15{padding-top:9rem! important;padding-bottom:9rem! important;}
+.pt-sm-15{padding-top:9rem! important; }
+.pb-sm-15{ padding-bottom:9rem! important;}
+.pt-sm-25{padding-top:15rem! important;}
+.pb-sm-25{padding-bottom:15rem! important;}
+.py-sm-25{padding-bottom:15rem! important;padding-top:15rem! important;}
+.p-sm-10{padding:6rem! important;} }
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) { 
+   .pt-md-10{padding-top:6rem! important;}
+.pb-md-10{padding-bottom:6rem! important;}
+.py-md-10{padding-top:6rem! important;padding-bottom:6rem! important;}
+.py-md-15{padding-top:9rem! important;padding-bottom:9rem! important;}
+.pt-md-15{padding-top:9rem! important; }
+.pb-md-15{ padding-bottom:9rem! important;}
+.pt-md-25{padding-top:15rem! important;}
+.pb-md-25{padding-bottom:15rem! important;}
+.py-md-25{padding-bottom:15rem! important;padding-top:15rem! important;}
+.p-md-10{padding:6rem! important;} }
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { .pt-sm-10{padding-top:6rem! important;}
+.pb-lg-10{padding-bottom:6rem! important;}
+.py-lg-10{padding-top:6rem! important;padding-bottom:6rem! important;}
+.py-lg-15{padding-top:9rem! important;padding-bottom:9rem! important;}
+.pt-lg-15{padding-top:9rem! important; }
+.pb-lg-15{ padding-bottom:9rem! important;}
+.pt-lg-25{padding-top:15rem! important;}
+.pb-lg-25{padding-bottom:15rem! important;}
+.py-lg-25{padding-bottom:15rem! important;padding-top:15rem! important;}
+.p-lg-10{padding:6rem! important;} }
+
+ 
 
 .mx-auto{margin-left: auto !important;margin-right: auto !important;}
 

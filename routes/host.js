@@ -13,12 +13,13 @@ router.route('/explore')
    .get(catchAsync(host.renderExplore));
 
 
-router.route('/managment')
-   .get(isLoggedIn, catchAsync(host.renderManagment));
-
 
 router.route('/about')
-   .get(catchAsync(host.renderAboutUs))
+   .get(catchAsync(host.renderAboutUs));
+
+
+router.route('/contact')
+   .get(catchAsync(host.renderContactUs))
    .post(catchAsync(host.sendEmail));
 
 router.route('/guide')

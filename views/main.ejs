@@ -8,11 +8,11 @@
 
 
       <main>
-         <section id="introduction" class="d-flex flex-column">
-            <div class="container py-5">
+         <section id="introduction" class="py-2 py-lg-5 d-flex flex-column">
+            <div class="container">
 
                <h2 class="display-5 position-relative" data-aos="fade-right">Our strengths
-                  <img class="enticing-svg right-0" src="/assets/undraw/undraw_be_the_hero_ssr2.svg"
+                  <img loading="lazy" class="enticing-svg right-0" src="/assets/undraw/undraw_be_the_hero_ssr2.svg"
                      alt="Strength Svg Element">
                </h2>
                <p class="lead text-light-white text-justify mb-0 ">
@@ -26,13 +26,13 @@
 
          <div id="wave1"></div>
 
-         <section id="tiles" class="py-15">
+         <section id="tiles" class="py-5 py-lg-15">
             <div class="container">
 
                <h2 class="display-5 position-relative" data-aos="fade-left">
                   Unlimited opportunities
-                  <img class="enticing-svg left-0" src="/assets/undraw/undraw_Investment_data_re_sh9x.svg"
-                     alt="Opportunities Svg Element">
+                  <img loading="lazy" class="enticing-svg left-0"
+                     src="/assets/undraw/undraw_Investment_data_re_sh9x.svg" alt="Opportunities Svg Element">
                </h2>
                <p class="lead text-light-white text-justify">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
                   Nesciunt rerum
@@ -46,27 +46,29 @@
                   <a data-aos="flip-left" data-aos-delay="0" data-aos-anchor=".grid-1" href='/trades?q=random'
                      class="jeden  grey-light_blue-pastell">
                      <span class=" grid-1-content">Show A Random Trade</span>
-                     <img class="grid-1-content-bg" src="/assets/svgs/other/dice-solid.svg" alt="">
+                     <img loading="lazy" class="grid-1-content-bg" src="/assets/svgs/other/dice-solid.svg" alt="">
                   </a>
                   <a data-aos="flip-right" data-aos-delay="50" data-aos-anchor=".grid-1" href='/favourites'
                      class="dwa  light_blue-blue-pastell">
                      <span class="grid-1-content">Favourites</span>
-                     <img class="grid-1-content-bg" src="/assets/svgs/other/star-half.svg" alt="">
+                     <img loading="lazy" class="grid-1-content-bg" src="/assets/svgs/other/star-half.svg" alt="">
                   </a>
                   <a data-aos="flip-left" data-aos-delay="100" data-aos-anchor=".grid-1" href='/guide'
                      class="trzy blue-purple-pastell">
                      <span class=" grid-1-content">Guide - First Steps</span>
-                     <img class="grid-1-content-bg" src="/assets/svgs/other/info-circle-solid.svg" alt="">
+                     <img loading="lazy" class="grid-1-content-bg" src="/assets/svgs/other/info-circle-solid.svg"
+                        alt="">
                   </a>
                   <a data-aos="flip-right" data-aos-delay="150" data-aos-anchor=".grid-1" href='/about#collaboration'
                      class="cztery  purple-pink-pastell">
                      <span class=" grid-1-content">Collaboration</span>
-                     <img class="grid-1-content-bg" src="/assets/svgs/other/hands-helping-solid.svg" alt="">
+                     <img loading="lazy" class="grid-1-content-bg" src="/assets/svgs/other/hands-helping-solid.svg"
+                        alt="">
                   </a>
                   <a data-aos="flip-down" data-aos-delay="200" data-aos-anchor=".grid-1" href='/explore'
                      class="piec  pink-red-pastell">
                      <span class=" grid-1-content">Explore Our Engine</span>
-                     <img class="grid-1-content-bg" src="/assets/svgs/other/graph-up.svg" alt="">
+                     <img loading="lazy" class="grid-1-content-bg" src="/assets/svgs/other/graph-up.svg" alt="">
                   </a>
 
                </div>
@@ -76,15 +78,15 @@
 
          <div id="wave2"></div>
 
-         <section id="highlights" class="py-15">
+         <section id="highlights" class="py-5 py-lg-15">
             <div class="container">
 
 
                <h2 class="d-flex flex-row display-5 position-relative" data-aos="fade-right">Highlighted Trades&nbsp;
-                  <img class="enticing-svg right-0" src="/assets/undraw/undraw_House_searching_re_stk8.svg"
-                     alt="Highlights Svg Element">
+                  <img loading="lazy" class="enticing-svg right-0"
+                     src="/assets/undraw/undraw_House_searching_re_stk8.svg" alt="Highlights Svg Element">
                   <span class="badge bg-dark d-flex align-items-center">
-                     <img src="/assets/svgs/other/fire.svg" height="23" alt="Fire" class="me-1">
+                     <img loading="lazy" src="/assets/svgs/other/fire.svg" height="23" alt="Fire" class="me-1">
                      <span>Hot</span>
                   </span>
                </h2>
@@ -105,11 +107,13 @@
 
 
 
-                                 <%-`
-                                    ${include('./partials/tradeTile.ejs',{elementName:'li',title:highlightedTrade.highlightName,statistics:highlightedTrade.orginalTrade.statistics,data:highlightedTrade.orginalTrade.data,_id:highlightedTrade.orginalTrade._id,
+                                 <%-` ${include('./partials/tradeTile.ejs',{
+                                    elementName:'li',pricesType:highlightedTrade.pricesType,
+                                    title:highlightedTrade.highlightName,statistics:highlightedTrade.orginalTrade.statistics,
+                                    data:highlightedTrade.orginalTrade.data,_id:highlightedTrade.orginalTrade._id,
                                     favouritesInfo:highlightedTrade.orginalTrade.favouritesInfo,isHighlighted:true,
                                     showPageLink:'/trades/'+highlightedTrade.orginalTrade._id,isOnFavouritePage:false,
-                                    animationData:animationData})}` %>
+                                    animationData:animationData,})}` %>
 
 
                                     <% } %>
@@ -193,4 +197,4 @@
          <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
 
          <script src="/javascripts/libraries/vanillaTilt.min.js"></script>
-         <script src="/javascripts/hero/hero-parallax.js"></script>
+         <script src="/javascripts/hero/hero.js"></script>

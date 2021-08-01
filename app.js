@@ -187,7 +187,7 @@ passport.use('steam', new SteamStrategy({
          try {
 
             const doesExist = await User.any({ "steam.id": steamId })
-            console.log(`Is a new steam user : ${doesExist}`);
+            console.log(`Is an existing steam user : ${doesExist}`);
 
             if (doesExist) {
                const user = await User.findOne({ "steam.id": steamId })

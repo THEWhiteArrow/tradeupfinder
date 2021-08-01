@@ -24,9 +24,7 @@ module.exports.renderMain = async (req, res, next) => {
    res.render('main', { highlights });
 };
 
-module.exports.renderManagment = async (req, res) => {
-   res.render('managment')
-}
+
 
 module.exports.renderAboutUs = async (req, res) => {
    res.render('about')
@@ -37,6 +35,10 @@ module.exports.renderGuide = async (req, res) => {
 module.exports.renderPolicy = async (req, res) => {
    res.render('policy')
 }
+module.exports.renderContactUs = async (req, res) => {
+   res.render('contact')
+}
+
 
 module.exports.sendEmail = async (req, res) => {
    const { body } = req;
