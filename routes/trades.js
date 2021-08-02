@@ -14,8 +14,8 @@ router.route('/custom-search')
 router.route('/delete')
    .delete(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(trade.deleteSavedTrades));
 
-router.route('/update-current')
-   .get(isModeratorAtLeast, isPermitted, catchAsync(trade.updateCurrentTradesByOuterServer))
+// router.route('/update-current')
+//    .get(isModeratorAtLeast, isPermitted, catchAsync(trade.updateCurrentTradesByOuterServer))
 
 router.route('/:tradeId')
    .get(trade.showTrade)

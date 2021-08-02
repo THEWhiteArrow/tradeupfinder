@@ -45,7 +45,7 @@
                            <div <%- animationDataPart %> data-aos-delay="50" class=" form-floating">
                               <select class="form-select" name="sort" id="sort" aria-label="">
                                  <option value="returnPercentage" selected>Profitability</option>
-                                 <option value="inputPrice">Cost perTradeUp</option>
+                                 <option value="tradeCost">Cost per TradeUp</option>
                                  <option value="profitPerTradeUp">Avg. Profit per TradeUp</option>
                                  <option value="chances">Chances</option>
                               </select>
@@ -64,6 +64,12 @@
                               <label class="text-dark fw-bolder" for="action">Action Type</label>
                            </div>
 
+                           <div <%- animationDataPart %> data-aos-delay="400" class=" form-floating">
+                              <input type="number" class="form-control" name="maxCost" id="maxCost" autocomplete="true"
+                                 min="0" step="0.01" value="100">
+                              <label class="text-dark fw-bolder" for="maxCost">Maximum Cost</label>
+                           </div>
+
                            <div <%- animationDataPart %> data-aos-delay="150" class=" form-floating">
                               <select name="ratio" id="ratio" class="form-select" <%- disableIfNeeded() %>>
                                  <option value="5-5">5-5</option>
@@ -75,6 +81,13 @@
                               <label class="text-dark fw-bolder" for="ratio">Ratio Type</label>
                            </div>
 
+                           <div <%- animationDataPart %> data-aos-delay="250" class=" form-floating">
+                              <input type="text" class="form-control" name="newResearchName" id="newResearchName"
+                                 autocomplete="true" <%- disableIfNeeded() %> >
+                              <label class="form-label text-dark fw-bolder" for="newResearchName">New Research's
+                                 Name</label>
+                           </div>
+
                            <div <%- animationDataPart %> data-aos-delay="200" class=" form-floating">
                               <select name="checkStattraks" id="checkStattraks" class="form-select" <%-
                                  disableIfNeeded()%> >
@@ -82,13 +95,6 @@
                                  <option value="yes">Yes</option>
                               </select>
                               <label class="text-dark fw-bolder" for="checkStattraks">Check Stattraks</label>
-                           </div>
-
-                           <div <%- animationDataPart %> data-aos-delay="250" class=" form-floating">
-                              <input type="text" class="form-control" name="newResearchName" id="newResearchName"
-                                 autocomplete="true" <%- disableIfNeeded() %> >
-                              <label class="form-label text-dark fw-bolder" for="newResearchName">New Research's
-                                 Name</label>
                            </div>
 
                            <div <%- animationDataPart %> data-aos-delay="300" class=" form-floating">
@@ -102,14 +108,15 @@
                               <label class="text-dark fw-bolder" for="minVolume">Minimal Volume</label>
                            </div>
 
-                           <div <%- animationDataPart %> data-aos-delay="400" class=" form-floating">
+                           <!-- <div <%- animationDataPart %> data-aos-delay="400" class=" form-floating">
                               <select name="pairs" id="pairs" class="form-select" <%- disableIfNeeded() %>>
                                  <option value="2" selected>2</option>
                                  <option value="3">3</option>
 
                               </select>
                               <label class="text-dark fw-bolder" for="pairs"># of Pairs</label>
-                           </div>
+                           </div> -->
+
 
 
                      </div>

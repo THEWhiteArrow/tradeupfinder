@@ -185,6 +185,10 @@
 #introduction{
    background-color: var(--main-introduction-section-bg);
 }
+#introduction div.container{
+   z-index: 2;
+}
+
 
 #wave1,#wave2,#wave3{  
    width:100%;

@@ -15,10 +15,12 @@ const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
 
 module.exports.manageTrades = async (req, res) => {
-   let { action = 'nothing', researchName = 'noname', pairs = 2, sort = 'returnPercentage', order = 'descending', q = null } = req.query;
+   let { action = 'nothing', researchName = 'noname', pairs = 2, sort = 'returnPercentage', order = 'descending', q = null, maxCost = 10000000 } = req.query;
    if (action != 'nothing' && action != 'save' && action != 'display') {
       action = 'nothing';
    }
+
+   maxCost = Number(maxCost);
    console.log(req.query)
 
 
@@ -45,7 +47,7 @@ module.exports.manageTrades = async (req, res) => {
 
       var startDate = new Date();
       // Do your operations
-      const trades = await Trade.find({ name: researchName });
+      const trades = await Trade.find({ name: researchName, "statistics.tradeCost": { $lt: maxCost } });
       // // const sortedTrades = sortingTrades(trades, sort, order).slice(0, maxShownTrades:res.locals.maxShownTrades);
       const sortedTrades = mergeSort(trades, sort, order).slice(0, res.locals.maxShownTrades);
 
