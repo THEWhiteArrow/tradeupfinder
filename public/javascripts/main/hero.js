@@ -27,6 +27,11 @@ const parallax = {
          window.addEventListener('scroll', parallax.calculateEffect);
       } else {
          window.removeEventListener('scroll', parallax.calculateEffect);
+         parallax.img.style.transform = `none`;
+         parallax.h1.style.transform = `none`;
+         parallax.p.style.transform = `none`;
+         parallax.btn1.style.transform = `none`;
+         parallax.btn2.style.transform = `none`;
       }
    },
    calculateEffect: () => {

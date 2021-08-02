@@ -54,7 +54,7 @@ const animateNumbers = {
    checkScroll: () => {
 
       for (let i = 0; i < animateNumbers.containers.length; ++i) {
-         if (window.scrollY >= animateNumbers.containers[i].getBoundingClientRect().top && animateNumbers.containers[i].wasUsed == undefined) {
+         if (window.scrollY + window.innerHeight >= animateNumbers.containers[i].getBoundingClientRect().top && animateNumbers.containers[i].wasUsed == undefined) {
             animateNumbers.containers[i].wasUsed = true,
                animateNumbers.animateContainer(animateNumbers.containers[i]);
 
