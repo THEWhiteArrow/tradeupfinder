@@ -49,10 +49,10 @@ const parallax = {
 const glitching = {
    morseCode: {
       timing: {
-         '.': 250,
+         '.': 350,
          '-': 1000,
-         space: 250,
-         sleep: 800,
+         space: 300,
+         sleep: 900,
       },
       alfabet: {
          'a': '.-',
