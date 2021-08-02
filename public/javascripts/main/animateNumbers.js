@@ -1,6 +1,8 @@
 const animateNumbers = {
    duration: null,
    smoothness: null,
+   smoothnessCorrection: null,
+
    containers: document.querySelectorAll('.animateNumbersContainer'),
 
    animateConfetti: (el) => {
@@ -29,9 +31,10 @@ const animateNumbers = {
       })
    },
 
-   start: (data = { isConfetti: false, duration: 5000, smoothness: 1, }) => {
+   start: (data = { isConfetti: false, duration: 5000, smoothness: 1, smoothnessCorrection: 1 }) => {
       animateNumbers.duration = data.duration;
       animateNumbers.smoothness = data.smoothness;
+      animateNumbers.smoothnessCorrection = data.smoothnessCorrection;
 
       animateNumbers.checkScroll();
       window.addEventListener('scroll', animateNumbers.checkScroll)
@@ -83,15 +86,19 @@ const animateNumbers = {
       const number = Number(el.innerText);
       el.innerText = 0;
       const delay = Math.round(animateNumbers.duration / number * animateNumbers.smoothness * 100) / 100;
+      let localDelayMultiplier = 1;
+      delay < 10 ? localDelayMultiplier = animateNumbers.smoothnessCorrection : null;
 
-      for (let i = 1; i <= number; i += animateNumbers.smoothness) {
-         await animateNumbers.sleep(delay);
+      for (let i = 1; i <= number; i += animateNumbers.smoothness * localDelayMultiplier) {
+         await animateNumbers.sleep(delay * localDelayMultiplier);
          el.innerText = i;
       }
+      el.innerText = number;
 
    }
 
 
 }
 
-if (!animateNumbers.isMobile()) { animateNumbers.start({ isConfetti: true, duration: 2000, smoothness: 6, }); }
+//WHEN THERE WILL BE MORE VISITORS THE SMOOTHNESS WILL BE CHANGED
+if (!animateNumbers.isMobile()) { animateNumbers.start({ isConfetti: true, duration: 2000, smoothness: 1, smoothnessCorrection: 11, }); }
