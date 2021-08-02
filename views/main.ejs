@@ -19,7 +19,30 @@
                   We do not beat about the bush! If you wish to see trades
                   highlighted by the community and our moderators you can do it right away!
                </p>
-               <a href="#highlights" class="link-light lead">Click here to see featured ones!</a>
+               <a href="#highlights" class="link-light lead ">Click here to see featured ones!</a>
+
+               <div class="animateNumbersContainer mt-5 d-flex flex-row flex-wrap justify-content-evenly">
+
+                  <span class="p-3 mx-1 my-3 mx-md-2 my-md-0 shadow-lg rounded-3 lift-on-hover animateItem">
+                     <h3 class="display-6 text-center animateNumbers">
+                        <%= skinsCount %>
+                     </h3>
+                     <p class="mb-0 lead text-center">Skins</p>
+                  </span>
+                  <span class="p-3 mx-1 my-3 mx-md-2 my-md-0 shadow-lg rounded-3 lift-on-hover animateItem">
+                     <h3 class="display-6 text-center animateNumbers">
+                        <%= visitorsCount %>
+                     </h3>
+                     <p class="mb-0 lead text-center">All Visitors</p>
+                  </span>
+                  <span class="p-3 mx-1 my-3 mx-md-2 my-md-0 shadow-lg rounded-3 lift-on-hover animateItem">
+                     <h3 class="display-6 text-center animateNumbers">
+                        <%= tradesCount %>
+                     </h3>
+                     <p class="mb-0 lead text-center">Trades</p>
+                  </span>
+
+               </div>
             </div>
 
          </section>
@@ -197,4 +220,5 @@
          <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
 
          <script src="/javascripts/libraries/vanillaTilt.min.js"></script>
-         <script src="/javascripts/hero/hero.js"></script>
+         <script src="/javascripts/main/hero.js"></script>
+         <script src="/javascripts/main/animateNumbers.js"></script>

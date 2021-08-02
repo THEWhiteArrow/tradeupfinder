@@ -36,6 +36,7 @@ const currencyRoutes = require('./routes/currency');
 const serverRoutes = require('./routes/server');
 
 const User = require('./models/userModel');
+const ServerInfo = require('./models/serverInfoModel');
 
 const maxShownTrades = process.env.MAX_SHOWN_TRADES || 69;
 
@@ -130,6 +131,8 @@ const store = new MongoStore({
 store.on('error', function () {
    console.log('SESSION STORE ERROR', e);
 })
+
+
 const sessionConfig = {
    store,
    name: 'session',
@@ -224,9 +227,15 @@ app.use(async (req, res, next) => {
    res.locals.error = req.flash('error');
    res.locals.cookiesAcceptance = req.session.cookiesAcceptance;
 
-   // SETTING CURRENCY
+   // SETTING CURRENCY IF A NEW VISITOR AND INCREASING ALLVISITORS NUMBER
    if (req.session.currency == undefined) {
       req.session.currency = { code: 'PLN', symbol: 'zł', multiplier: 1 };
+      try {
+         const serverInfo = await ServerInfo.findOne({});
+         await ServerInfo.findOneAndUpdate(serverInfo._id, { allVisitors: serverInfo.allVisitors + 1 })
+      } catch (e) {
+         console.log('Failed to add a new visitor count')
+      }
    }
    res.locals.currency = req.session.currency;
 

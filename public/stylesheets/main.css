@@ -189,6 +189,12 @@
    z-index: 2;
 }
 
+.animateNumbersContainer span {
+   cursor: pointer;
+   width:150px;
+   background-color: rgba(230,230,230,0.1);
+}
+
 
 #wave1,#wave2,#wave3{  
    width:100%;
@@ -203,8 +209,8 @@
 
 #partners{background-color: var(--main-partners-bg);}
 #partners div.container div.row div{display: flex; justify-content: center;}
-
-
-
-
 .svg{width:50px;height:50px;opacity:0.75;}
+
+
+
+

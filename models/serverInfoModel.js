@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const serverInfoSchema = new Schema({
+   allVisitors: { type: Number },
+
    lastChanged: { type: String },
    skinsUpdateInfo: {
       type: String

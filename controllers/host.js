@@ -5,6 +5,9 @@ const flash = require('connect-flash');
 const Highlight = require('../models/highlightModel');
 const Name = require('../models/nameModel');
 const ServerInfo = require('../models/serverInfoModel');
+const User = require('../models/userModel');
+const Trade = require('../models/tradeModel');
+const Skin = require('../models/skinModel');
 
 module.exports.renderExplore = async (req, res) => {
 
@@ -19,9 +22,13 @@ module.exports.renderExplore = async (req, res) => {
 module.exports.renderMain = async (req, res, next) => {
    const highlights = await Highlight.find({}).populate('orginalTrade');
 
+   const tradesCount = await Trade.estimatedDocumentCount();
+   const skinsCount = await Skin.estimatedDocumentCount();
+   const serverInfo = await ServerInfo.findOne({});
+   const visitorsCount = serverInfo.allVisitors;
 
    // req.flash('info', `For your comfort we have displayed no more than ${res.locals.maxShownTrades} trades on the page!`)
-   res.render('main', { highlights });
+   res.render('main', { highlights, tradesCount, skinsCount, visitorsCount });
 };
 
 

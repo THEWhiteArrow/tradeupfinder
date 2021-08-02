@@ -1,7 +1,7 @@
-const confettiContainer = document.querySelector('.confetti-container');
 const compactModeBtn = document.querySelector('#compact-mode-btn');
 const inputSkinsContainer = document.querySelector('#inputs');
 const outputSkinsContainer = document.querySelector('#outputs');
+const confettiContainer = document.querySelector('.confetti-container');
 
 const checkOnPageFormValidity = (form, e) => {
    if (!form.checkValidity()) {
