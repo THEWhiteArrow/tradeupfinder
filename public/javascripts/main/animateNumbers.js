@@ -100,5 +100,5 @@ const animateNumbers = {
 
 }
 
-//WHEN THERE WILL BE MORE VISITORS THE SMOOTHNESS WILL BE CHANGED
+//WHEN THERE WILL BE MORE VISITORS THE SMOOTHNESS SHOULD BE CHANGED
 if (!animateNumbers.isMobile()) { animateNumbers.start({ isConfetti: true, duration: 2000, smoothness: 1, smoothnessCorrection: 11, }); }

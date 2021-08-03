@@ -207,8 +207,7 @@
 #wave2{background-image: url('../assets/svgs/waves/wave2.svg') ;}
 #wave3{transform:rotate(180deg);background-image: url('../assets/svgs/waves/wave3.svg') ;}
 
-#partners{background-color: var(--main-partners-bg);}
-#partners div.container div.row div{display: flex; justify-content: center;}
+#partners{background-color: var(--main-partners-bg);} 
 .svg{width:50px;height:50px;opacity:0.75;}
 
 
