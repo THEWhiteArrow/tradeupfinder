@@ -31,7 +31,7 @@
       <% if(favouriteTrades.length){ %>
          <ul class="mb-5 pb-5">
             <% let i=0;let directions=['right','left']; %>
-               <% let animationData=`data-aos="fade-${directions[i%2]}" data-aos-duration="400" ` %>
+               <% let animationData=`data-aos="fade-${directions[i%2]}" data-aos-once="true" ` %>
 
                   <% for(let favouriteTrade of favouriteTrades){ %>
                      <% ++i; %>

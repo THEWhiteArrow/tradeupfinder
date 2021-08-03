@@ -43,7 +43,7 @@
                   <% ++i; %>
 
 
-                     <% let animationData=`data-aos="fade-${directions[i%2]}" data-aos-duration="400" `; %>
+                     <% let animationData=`data-aos="fade-${directions[i%2]}" data-aos-once="true" `; %>
                         <% i<=2 ? animationData='' :null; %>
 
                            <%-`

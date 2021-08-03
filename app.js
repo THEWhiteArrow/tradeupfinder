@@ -230,14 +230,7 @@ app.use(async (req, res, next) => {
    // SETTING CURRENCY IF A NEW VISITOR AND INCREASING ALLVISITORS NUMBER
    if (req.session.currency == undefined) {
       req.session.currency = { code: 'PLN', symbol: 'zł', multiplier: 1 };
-      //THERE SHOULD BE INCREMENTING VISITORS COUNT
-      try {
-         const info = await ServerInfo.findOne({});
-         await ServerInfo.findOneAndUpdate({ _id: info._id }, { allVisitors: info.allVisitors + 1 })
 
-      } catch (e) {
-         console.log('Failed to add a new visitor count', e)
-      }
    }
    res.locals.currency = req.session.currency;
 

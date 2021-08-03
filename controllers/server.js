@@ -22,5 +22,14 @@ module.exports.cookiesAccepted = async (req, res) => {
    req.session.cookiesAcceptance = true;
    res.locals.cookiesAcceptance = true;
 
+   //THERE SHOULD BE INCREMENTING VISITORS COUNT
+   try {
+      const info = await ServerInfo.findOne({});
+      await ServerInfo.findOneAndUpdate({ _id: info._id }, { allVisitors: info.allVisitors + 1 })
+
+   } catch (e) {
+      console.log('Failed to add a new visitor count', e)
+   }
+
    res.json({ success: true, message: 'Cookies Accepted' });
 }
