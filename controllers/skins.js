@@ -227,15 +227,15 @@ module.exports.updatePrices = async (req, res, next) => {
 
 module.exports.updateSkinPrice = async (req, res) => {
    const { id } = req.params;
-   const { prices, stattrakPrices } = req.body;
    const { currency } = req.session;
+   let { prices, stattrakPrices } = req.body;
 
-   console.log(prices)
+   console.log(prices, stattrakPrices)
 
    let updatedSkin;
    if (stattrakPrices != undefined) {
       prices = uniteCurrency(prices, currency);
-      stattrakPrice = uniteCurrency(stattrakPrice, currency);
+      stattrakPrices = uniteCurrency(stattrakPrices, currency);
       updatedSkin = await Skin.findByIdAndUpdate(id, { prices, stattrakPrices }, { new: true });
    } else {
       prices = uniteCurrency(prices, currency);

@@ -60,7 +60,7 @@ body {
 }
  
 
-.star ,.highlight-btn,.magnifier{
+.star ,.highlight-btn, .trash{
    background-color: white;
    border-radius: 10px;
    display: flex;
@@ -77,6 +77,15 @@ body {
    height: 20px;
    width: 20px;
    color: goldenrod;
+}
+
+.trash svg{
+   position: relative;
+   
+   margin-bottom: 1px;
+   height: 20px;
+   width: 20px;
+   color: steelblue;
 }
 
 .hide {

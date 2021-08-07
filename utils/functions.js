@@ -366,7 +366,7 @@ module.exports.createNewSteamUser = async (profile) => {
 
    const newUser = new User({
       steam,
-      premium: true,
+      isPremium: true,
       role: 'guest',
       favourites: [],
       email: profile.identifier,

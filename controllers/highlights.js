@@ -1,4 +1,5 @@
 const Trade = require('../models/tradeModel');
+const Favourite = require('../models/favouriteModel');
 const Highlight = require('../models/highlightModel');
 
 module.exports.manageHighlightTrade = async (req, res) => {
@@ -15,23 +16,43 @@ module.exports.manageHighlightTrade = async (req, res) => {
       if (orginalTrade.isHighlighted == false && action == 'add') {
          // ADDING NEW HIGHLIGHT
          const newHighlightId = await addNewHighlight(orginalTrade, highlightName);
-         res.json({ success: true, action });
+         return res.json({ success: true, action });
       }
       else if (orginalTrade.isHighlighted == true && action == 'delete') {
          // DELETING THE HIGHLIGHT THAT IS CONNECTED TO ORGINAL TRADE ID
          await deleteHighlight(orginalTrade);
-         res.json({ success: true, action });
+         return res.json({ success: true, action });
       }
       else {
          // IN CASE OF CONFLICT JUST FORWARDING THE RESPONSE IN ORDER TO CHANGE STATE ON THE SITE
-         res.json({ success: true, action })
+         return res.json({ success: true, action })
       }
    } else {
-      res.json({ success: false, message: 'Orginal trade does not exist!' })
+
+      try {
+
+         if (action === 'add') {
+
+            const user = req.user;
+            createNewLegacyAndHighlight(user, orginalTradeId, highlightName)
+            return res.json({ success: true, action });
+         } else if (action === 'delete') {
+
+            await deleteLegacyHighlight(orginalTradeId);
+            return res.json({ success: true, action });
+         }
+      } catch (e) {
+
+         return res.json({ success: false, message: `Wtf ?!?. Stop playing around here! ${e}` })
+
+
+      }
+
    }
 }
 
 const deleteHighlight = async (orginalTrade) => {
+
    await Highlight.findByIdAndDelete(orginalTrade.highlightedTrade._id);
 
    const doesExist = Trade.any({ _id: orginalTrade._id });
@@ -62,3 +83,43 @@ const addNewHighlight = async (orginalTrade, highlightName) => {
 
    return newHighlightTrade._id;
 }
+
+const createNewLegacyAndHighlight = async (user, orginalTradeId, highlightName) => {
+
+   const favouriteTrade = await Favourite.findOne({ owner: user._id, orginalTradeId });
+
+   const newLegacyTrade = new Trade({
+      name: orginalTradeId,
+      arrays: favouriteTrade.arrays,
+      data: favouriteTrade.data,
+      statistics: favouriteTrade.statistics,
+      pricesType: favouriteTrade.pricesType,
+      favouritesInfo: {},
+      isHighlighted: true,
+   })
+
+   newLegacyTrade.favouritesInfo[user._id] = favouriteTrade._id
+
+   await newLegacyTrade.save();
+
+   const newHighlightTrade = addNewHighlight(newLegacyTrade, highlightName)
+
+
+   const updatedFavouriteTrade = await Favourite.findByIdAndUpdate(
+      favouriteTrade._id,
+      {
+         orginalTrade: newLegacyTrade,
+         orginalTradeId: newLegacyTrade._id,
+      }
+   )
+
+}
+
+const deleteLegacyHighlight = async (orginalTradeId) => {
+
+   const legacyTrade = await Trade.find({ name: orginalTradeId })
+
+   await deleteHighlight(legacyTrade);
+
+}
+

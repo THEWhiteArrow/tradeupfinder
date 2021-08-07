@@ -4,7 +4,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const any = require('../plugins/mongoose/any');
 
 const userSchema = new Schema({
-   premium: {
+   isPremium: {
       type: Boolean,
    },
    steam: {

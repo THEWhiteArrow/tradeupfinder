@@ -151,12 +151,12 @@
  .bg-light-primary{background-color: #9dc4ff ;}
  .border-left-0{border-left: none;}
 
- input[type=radio]:checked + label svg path   {
+ input[type=radio]:checked + label svg path,input[type=checkbox]:checked + label svg path   {
     fill:white;
 } 
 
-input[type=radio]:hover + label svg path   {
-   fill:white;
+input[type=radio]:hover + label svg path,input[type=checkbox]:hover + label svg path   {
+   fill:rgba(255, 255, 255, 0.75);
 } 
 
 

@@ -22,16 +22,7 @@
 
 
       </div>
-      <% if(success && success.length){ %>
-         <div class="lead alert alert-success alert-dismissible fade show my-3" role="alert">
-            <h4 class="alert-heading">Congratulations!</h4>
-            <hr>
-            <p>
-               <%= success %>
-            </p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-         </div>
-         <% } %>
+
 
 
 
@@ -138,3 +129,5 @@
                <% } %>
       </div>
    </main>
+
+   <%- include('./partials/toastContainer.ejs')%>

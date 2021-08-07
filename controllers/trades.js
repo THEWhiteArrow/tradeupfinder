@@ -159,6 +159,85 @@ module.exports.customSearch = async (req, res) => {
       },
 
 
+
+
+
+
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '5-5',
+         checkStattraks: 'no',
+         newResearchName: 'd55-v25-c0.02',
+         priceCorrection: '0.02',
+         minVolume: '25',
+         pairs: '2',
+         researchName: ''
+      },
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '4-6',
+         checkStattraks: 'no',
+         newResearchName: 'd46-v25-c0.02',
+         priceCorrection: '0.02',
+         minVolume: '25',
+         pairs: '2',
+         researchName: ''
+      },
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '3-7',
+         checkStattraks: 'no',
+         newResearchName: 'd37-v25-c0.02',
+         priceCorrection: '0.02',
+         minVolume: '25',
+         pairs: '2',
+         researchName: ''
+      },
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '2-8',
+         checkStattraks: 'no',
+         newResearchName: 'd28-v25-c0.02',
+         priceCorrection: '0.02',
+         minVolume: '25',
+         pairs: '2',
+         researchName: ''
+      },
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '1-9',
+         checkStattraks: 'no',
+         newResearchName: 'd19-v25-c0.02',
+         priceCorrection: '0.02',
+         minVolume: '25',
+         pairs: '2',
+         researchName: ''
+      },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       {
          order: 'descending',
          sort: 'returnPercentage',
@@ -306,7 +385,8 @@ module.exports.updateCurrentTradesByOuterServer = async (req, res) => {
 
 module.exports.deleteSavedTrades = async (req, res) => {
    await Name.deleteMany({});
-   await Trade.deleteMany({ isHighlighted: false, favouritesInfo: {} });
+   // await Trade.deleteMany({ isHighlighted: false, favouritesInfo: {} });
+   await Trade.deleteMany({ isHighlighted: false });
 
    const newLegacyTrades = await Trade.find({ name: { $ne: 'legacy' } })
    for (let trade of newLegacyTrades) {
@@ -317,6 +397,23 @@ module.exports.deleteSavedTrades = async (req, res) => {
    res.redirect('/explore');
 }
 
+module.exports.deleteCertainTrade = async (req, res) => {
+   const { tradeId } = req.params;
+   console.log(`...deleting certain trade & highlight : ${tradeId}...`)
+   const doesTradeExist = await Trade.any({ _id: tradeId })
+   const doesHighlightExist = await Highlight.any({ orginalTrade: tradeId })
+
+   if (doesTradeExist) {
+      await Trade.findByIdAndDelete(tradeId)
+   }
+   if (doesHighlightExist) {
+      await Highlight.findOneAndDelete({ orginalTrade: tradeId })
+   }
+
+   await req.flash('success', `Deleted trade of id : ${tradeId}`);
+   res.redirect('/explore');
+
+}
 
 
 const mixedTwoPairs = async (req) => {
