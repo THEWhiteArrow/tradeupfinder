@@ -7,7 +7,6 @@ const findBest = (() => {
    'use strict';
 
 
-   const trades = document.querySelectorAll('li.trade-tile')
 
 
    const getTradeInfo = (el, i) => {
@@ -22,16 +21,16 @@ const findBest = (() => {
 
       const chancesElText = el.querySelector('h5.chances span:nth-of-type(2)').innerText;
       const chances = Number(chancesElText.slice(0, chancesElText.indexOf(' ')))
-
       return { cost, profitability, profit, chances, index: i };
 
    }
 
+
    const find = (e) => {
       e.preventDefault();
 
+      const trades = document.querySelectorAll('li.trade-tile')
       const errorBox = document.querySelector('#filter-form .error-box');
-
       errorBox.classList.add('d-none');
 
       const maxCost = Number(filterForm.querySelector('input#maxCost').value) || 1000;
@@ -45,10 +44,11 @@ const findBest = (() => {
       trades.forEach((el, i) => {
          tradesInfoArr.push(getTradeInfo(el, i))
       })
+      console.log(tradesInfoArr)
 
       const filteredTradesArr = tradesInfoArr.filter(el => el.cost <= maxCost && el.profitability >= minProfitability && el.profit >= minProfit && el.chances >= minChances)
 
-      let bestTrade
+      let bestTrade;
       let maxProfitability = 0;
       filteredTradesArr.forEach(el => {
          if (el.profitability > maxProfitability) {
