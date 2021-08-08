@@ -66,6 +66,21 @@ h3.popover-header,.error p,.skin-card label ,.modal h5,.modal li,h5.card-title.n
 }
  
 
+#cookies-notification{
+   font-size: 18px;
+   background-color: rgba(20,20,20,0.9);
+
+   transition: var(--my-transition);
+   
+}
+
+
+
+
+
+
+
+
 
 
 /* CONFETTI */

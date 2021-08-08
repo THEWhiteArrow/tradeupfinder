@@ -1,0 +1,38 @@
+<section id="collaboration" class="<%= classes %>   w-100">
+   <div class="container">
+
+
+
+
+      <h2 class="display-5 position-relative" <%- animationData %>>Collaboration
+         <% if (isImg) { %>
+            <img loading="lazy" class="enticing-svg right-0" src="/assets/undraw/undraw_Collaboration_re_vyau.svg"
+               alt="Collaboration Svg Element">
+            <% } %>
+      </h2>
+
+      <p class="lead text-justify">
+         If you wish to learn more about trade-ups or would like to see other trades that are not depicted on our page
+         please visit our partners' channels. Theu will surely show you the ropes!
+         Currently we are trying to establish collaborations that would help us gain popularity and more traffic.
+         Down
+         below are going to appear people that we are working with. If you are intrested in a collaboration please
+         give
+         us a notice.
+      </p>
+
+      <div class="mt-4 d-flex flex-row justify-content-center flex-wrap">
+
+         <%- include('./partner.ejs',{ imgSrc:'/assets/collaboration/izak.jpg', link:'#',
+            countryCode:'pl',partnerName:'Izak' }) %>
+
+            <%- include('./partner.ejs',{ imgSrc:'/assets/collaboration/pasha.jpg', link:'#',
+               countryCode:'pl',partnerName:'Pasha' }) %>
+
+               <%- include('./partner.ejs',{ imgSrc:'/assets/collaboration/jacob.jpg', link:'#',
+                  countryCode:'pl',partnerName:'Jacob' }) %>
+
+      </div>
+
+   </div>
+</section>

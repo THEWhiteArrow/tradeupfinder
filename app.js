@@ -75,6 +75,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 const scriptSrcUrls = [];
 const styleSrcUrls = [];
 const connectSrcUrls = [];
+const imgSrcUrls = [
+   "https://steamcdn-a.akamaihd.net/",
+   "https://flagcdn.com",
+];
 const fontSrcUrls = [
    "https://fonts.gstatic.com/",
 ];
@@ -92,7 +96,7 @@ app.use(
             "'self'",
             "blob:",
             "data:",
-            "https://steamcdn-a.akamaihd.net/",
+            ...imgSrcUrls,
          ],
          fontSrc: [
             "'self'",

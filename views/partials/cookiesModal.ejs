@@ -1,11 +1,9 @@
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<!-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
    aria-labelledby="staticBackdropLabel" aria-hidden="true">
    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content px-2">
          <div class="modal-header">
             <h5 class="modal-title display-6" id="staticBackdropLabel">We value your privacy</h5>
-            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
          </div>
          <div class="modal-body">
             <h5>Our policy :</h5>
@@ -21,20 +19,48 @@
          </form>
       </div>
    </div>
-</div>
+</div> -->
 
+<section id="cookies-notification" class="fixed-bottom py-3 px-4 text-light d-flex justify-content-between">
+
+   <span>
+
+      This website uses cookies ONLY to provide essential services and ensure that you get the best experience while
+      navigating.&nbsp;
+      <a class="link-light" href="/policy">Read&nbsp;more</a>
+   </span>
+
+
+
+   <form id="cookies-form" action="/server/cookies" method="POST"
+      class="h-auto ms-4 d-flex align-items-center rounded-3 ">
+      <button type="submit" class="m-0 p-0 border-0 bg-transparent  text-light">
+         <svg width="24" height="24" class="bi bi-x-circle" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+            viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path
+               d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+         </svg>
+      </button>
+   </form>
+
+</section>
 
 
 <script>
-   const myModal = new bootstrap.Modal(document.getElementById("staticBackdrop"), {});
-   document.onreadystatechange = function () {
-      myModal.show();
-   };
-
+   const cookiesNotification = document.querySelector('#cookies-notification');
    const cookieForm = document.querySelector('#cookies-form');
    cookieForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const cookieResponse = await fetch(cookieForm.getAttribute('action'), { method: 'POST' });
-      console.log(await cookieResponse.json())
+      const data = await cookieResponse.json();
+      if (data.success) {
+         cookiesNotification.style.transition = 'all 0.20s linear'
+         cookiesNotification.style.transform = 'translate3d(0,100%,0)'
+
+         setTimeout(() => {
+            cookiesNotification.remove();
+         }, 200)
+      }
    })
 </script>

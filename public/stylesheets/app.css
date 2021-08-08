@@ -48,6 +48,12 @@ body {
    background-color: var(--body-bg);
    background-image: url('../assets/background/glamorous.svg');
 }
+
+.bg-diamonds{
+   background-image: url('../assets/background/glamorous.svg');
+   
+}
+
  
 
  

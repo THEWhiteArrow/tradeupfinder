@@ -240,29 +240,29 @@
                <% } %>
 
 
-                  <li class="nav-item"><a href="/guide" class="px-2 link-light">Guide</a></li>
-                  <li class="nav-item"><a href="/about" class="px-2 link-light">About</a></li>
-                  <li class="nav-item"><a href="/contact" class="px-2 link-light">Contact</a></li>
-                  <li class="nav-item"><a href="/explore" class="px-2 link-light">Explore</a></li>
-                  <li class="nav-item"><a href="/favourites" class="px-2 link-light">Favourites</a></li>
+                  <li class="nav-item"><a href="/guide" class="px-2 link-light w-100">Guide</a></li>
+                  <li class="nav-item"><a href="/about" class="px-2 link-light w-100">About</a></li>
+                  <li class="nav-item"><a href="/contact" class="px-2 link-light w-100">Contact</a></li>
+                  <li class="nav-item"><a href="/explore" class="px-2 link-light w-100">Explore</a></li>
+                  <li class="nav-item"><a href="/favourites" class="px-2 link-light w-100">Favourites</a></li>
 
                   <% if (currentUser && (currentUser.role=='admin' || currentUser.role=='moderator' )) { %>
-                     <li class="nav-item"><a href="/skins/database" class="px-2 link-light">Database</a></li>
+                     <li class="nav-item"><a href="/skins/database" class="px-2 link-light w-100">Database</a></li>
                      <% } %>
 
                         <% if(!currentUser){ %>
                            <li class="nav-item">
-                              <a href="/user/login" class="ms-0 ms-md-3 me-md-1 px-2 link-light">Login</a>
+                              <a href="/user/login" class="ms-0 ms-md-3 me-md-1 px-2 link-light w-100">Login</a>
                            </li>
                            <li class="nav-item">
                               <a href="/user/register"
-                                 class="m-0 my-2 my-md-0 px-2 py-1 link-light   border-md-log rounded">Register</a>
+                                 class="m-0 my-2 my-md-0 px-2 py-1 link-light   border-md-log rounded w-100">Register</a>
                            </li>
                            <% } else{%>
 
                               <li class="nav-item">
                                  <a href="/user/logout"
-                                    class="m-0 my-2 my-md-0 px-2 py-1 link-light border-md-log rounded ">Logout</a>
+                                    class="m-0 my-2 my-md-0 px-2 py-1 link-light border-md-log rounded  w-100">Logout</a>
                               </li>
                               <% } %>
 
