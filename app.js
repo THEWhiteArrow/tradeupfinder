@@ -37,8 +37,8 @@ const serverRoutes = require('./routes/server');
 
 const User = require('./models/userModel');
 const ServerInfo = require('./models/serverInfoModel');
+const { Server } = require('http');
 
-const maxShownTrades = process.env.MAX_SHOWN_TRADES || 150;
 
 
 
@@ -223,13 +223,13 @@ passport.use('steam', new SteamStrategy({
 
 app.use(async (req, res, next) => {
    res.locals.server = server;
-   res.locals.maxShownTrades = maxShownTrades;
    res.locals.currentUser = req.user;
    res.locals.url = req.originalUrl;
    res.locals.info = req.flash('info');
    res.locals.success = req.flash('success');
    res.locals.error = req.flash('error');
    res.locals.cookiesAcceptance = req.session.cookiesAcceptance;
+   res.locals.cookiesAcceptance = false;
 
    // SETTING CURRENCY IF A NEW VISITOR AND INCREASING ALLVISITORS NUMBER
    if (req.session.currency == undefined) {
@@ -237,6 +237,17 @@ app.use(async (req, res, next) => {
 
    }
    res.locals.currency = req.session.currency;
+
+
+
+   try {
+      const serverData = await ServerInfo.findOne({});
+      res.locals.maxShownTrades = serverData.maxShownTrades;
+   } catch (e) {
+      console.log(e)
+      res.locals.maxShownTrades = 100;
+   }
+
 
    // CHECKING UPDATES IN CURRENT USER EXCEPT OF LOGGING IN AND OUT!!!
    const exceptions = ['/auth', '/auth/steam', '/auth/steam/return', '/user/register', '/user/login', '/user/logout'];

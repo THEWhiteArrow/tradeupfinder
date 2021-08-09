@@ -4,6 +4,8 @@ const { Schema } = mongoose;
 const serverInfoSchema = new Schema({
    allVisitors: { type: Number },
 
+   maxShownTrades: { type: Number },
+
    lastChanged: { type: String },
    skinsUpdateInfo: {
       type: String

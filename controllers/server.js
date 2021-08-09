@@ -33,3 +33,21 @@ module.exports.cookiesAccepted = async (req, res) => {
 
    res.json({ success: true, message: 'Cookies Accepted' });
 }
+
+module.exports.changeVariables = async (req, res) => {
+   const { body } = req;
+
+   //SANITY CHECK
+   for (let key in body) {
+      if (body[key] === undefined || body[key] === null || body[key] === '') body[key] = 0;
+   }
+
+   await ServerInfo.findOneAndUpdate({}, { ...body });
+
+   const bodyKeys = Object.keys(body);
+   let flashData = '';
+   bodyKeys.forEach(el => flashData += `${el} : ${body[el]}; `)
+
+   req.flash('success', `Successfully changed server variables ${flashData}`)
+   res.redirect('/user/account')
+}

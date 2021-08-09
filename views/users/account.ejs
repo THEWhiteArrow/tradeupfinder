@@ -42,39 +42,59 @@
                   </h3>
                   <% } %>
 
+                     <% if(currentUser.role==='admin' ){ %>
 
-                     <% } %>
+                        <form action="/server/variables" method="POST" class="my-4 d-flex flex-column">
 
+                           <div class="form-group">
+                              <label for="maxShownTrades">Max Shown Trades</label>
+                              <input type="number" min="0" step="1" class="form-control" id="maxShownTrades"
+                                 name="maxShownTrades" placeholder="Enter number of maxShownTrades">
 
+                           </div>
 
-                        <% if (currentUser&& (currentUser.role=='moderator' || currentUser.role=='admin' ) ) { %>
+                           <button type="submit" class="ms-auto btn btn-primary">Submit</button>
+                        </form>
+                        <% } %>
 
-
-
-                           <a href="/trades/custom-search" class="mb-1 px-2 link-light btn btn-danger flex-1">Custom
-                              Search</a>
-                           <a href="/skins/update-thru-servers"
-                              class="mb-1 px-2 link-light btn btn-success flex-1">Update
-                              Skins'
-                              Prices</a>
-                           <a href="/trades/update-current"
-                              class="mb-1 btn btn-info d-flex justify-content-center align-items-center disabled">Update
-                              Trades</a>
-                           <form class="" action="/trades/delete?_method=DELETE" method="POST">
-                              <button class="mb-1 btn btn-danger w-100">Delete Saved Trades</button>
-                           </form>
                            <% } %>
 
 
-                              <% if(currentUser&&currentUser.role=='admin' ){ %>
-                                 <a href="/server/validate"
-                                    class="mb-1 btn btn-primary d-flex justify-content-center align-items-center">Validate
-                                    Outer Server's Last Action</a>
-                                 <a href="/currency/update"
-                                    class="mb-1 btn btn-warning d-flex justify-content-center align-items-center">Update
-                                    Currencies</a>
-                                 <a href="/map/map-collection" class="mb-1 px-2 btn btn-secondary">Mapping</a>
+
+                              <% if (currentUser&& (currentUser.role=='moderator' || currentUser.role=='admin' ) ) { %>
+
+
+
+                                 <a href="/trades/custom-search"
+                                    class="mb-1 px-2 link-light btn btn-danger flex-1">Custom
+                                    Search</a>
+                                 <a href="/skins/update-thru-servers"
+                                    class="mb-1 px-2 link-light btn btn-success flex-1">Update
+                                    Skins'
+                                    Prices</a>
+                                 <a href="/trades/update-current"
+                                    class="mb-1 btn btn-info d-flex justify-content-center align-items-center disabled">Update
+                                    Trades</a>
+                                 <form class="" action="/trades/delete?_method=DELETE" method="POST">
+                                    <button class="mb-1 btn btn-danger w-100">Delete Saved Trades</button>
+                                 </form>
                                  <% } %>
 
-                                    <a href="/" class="btn btn-dark my-3">View Main Page</a>
+                                    <% if(currentUser&&currentUser.role=='admin' ){ %>
+                                       <a href="/server/validate"
+                                          class="mb-1 btn btn-primary d-flex justify-content-center align-items-center">Validate
+                                          Outer Server's Last Action</a>
+                                       <a href="/currency/update"
+                                          class="mb-1 btn btn-warning d-flex justify-content-center align-items-center">Update
+                                          Currencies</a>
+                                       <a href="/map/map-collection" class="mb-1 px-2 btn btn-secondary">Mapping</a>
+                                       <% } %>
+
+
+                                          <a href="/" class="btn btn-dark my-3">View Main Page</a>
+
+
+
    </section>
+
+   <%- include(`../partials/toastContainer.ejs`)%>
