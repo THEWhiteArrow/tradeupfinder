@@ -68,10 +68,15 @@ h3.popover-header,.error p,.skin-card label ,.modal h5,.modal li,h5.card-title.n
 
 #cookies-notification{
    font-size: 18px;
-   background-color: rgba(20,20,20,0.9);
+   background-color: rgba(20,20,20,0.9);  
+}
 
-   transition: var(--my-transition);
+
+#filter-form{ 
    
+   background: rgb(53,241,56);
+   background: linear-gradient(90deg, rgba(53,241,56,0.4990371148459384) 0%, rgba(62,60,65,0.5) 10%, rgba(62,60,65,0.5) 90%, rgba(52,165,54,0.4990371148459384) 100%);
+
 }
 
 

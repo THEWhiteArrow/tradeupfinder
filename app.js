@@ -38,7 +38,7 @@ const serverRoutes = require('./routes/server');
 const User = require('./models/userModel');
 const ServerInfo = require('./models/serverInfoModel');
 
-const maxShownTrades = process.env.MAX_SHOWN_TRADES || 69;
+const maxShownTrades = process.env.MAX_SHOWN_TRADES || 150;
 
 
 

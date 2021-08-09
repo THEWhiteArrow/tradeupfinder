@@ -44,7 +44,6 @@ const findBest = (() => {
       trades.forEach((el, i) => {
          tradesInfoArr.push(getTradeInfo(el, i))
       })
-      console.log(tradesInfoArr)
 
       const filteredTradesArr = tradesInfoArr.filter(el => el.cost <= maxCost && el.profitability >= minProfitability && el.profit >= minProfit && el.chances >= minChances)
 
@@ -63,6 +62,13 @@ const findBest = (() => {
          const bounds = trades[bestTrade.index].getBoundingClientRect();
          const scrollYCoords = window.scrollY + bounds.y - (window.innerHeight - bounds.height) / 2;
          window.scroll(0, scrollYCoords)
+
+
+         filterForm.querySelector('input#maxCost').value = ''
+         filterForm.querySelector('input#minProfitability').value = ''
+         filterForm.querySelector('input#minProfit').value = ''
+         filterForm.querySelector('input#minChances').value = ''
+
          return bestTrade.index;
       } else {
 
