@@ -55,8 +55,15 @@ module.exports.manageTrades = async (req, res) => {
 
       var endDate = new Date();
       var seconds = (endDate.getTime() - startDate.getTime()) / 1000;
-      console.log(seconds)
-      res.render('trades/index', { profitableTrades: sortedTrades, maxShownTrades: res.locals.maxShownTrades, steamBaseUrl, action })
+      let tradeUpsTitle = 'currently not avaible'
+      if (typeof (researchName) === 'object' && researchName.length > 1) {
+         tradeUpsTitle = `${researchName.length} types`
+      } else if (typeof (researchName) === 'object' && researchName.length === 1) {
+         tradeUpsTitle = `${researchName[0]}`
+      } else {
+         tradeUpsTitle = researchName;
+      }
+      res.render('trades/index', { profitableTrades: sortedTrades, maxShownTrades: res.locals.maxShownTrades, steamBaseUrl, action, tradeUpsTitle })
       // res.render('trades/index', { profitableTrades: trades, maxShownTrades: res.locals.maxShownTrades, steamBaseUrl, action })
 
    } else {

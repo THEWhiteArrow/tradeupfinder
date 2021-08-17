@@ -4,34 +4,31 @@
 
    <header class="container my-5 d-flex flex-column">
 
-      <% let name='currently not avaible' ; %>
-         <% if(profitableTrades.length)name=profitableTrades[0].name %>
 
 
-
-            <h1 class="position-relative display-3 my-2 py-2">
-               Trade-Ups : <%= name %>
-                  <img loading="lazy" class="enticing-svg left-0" src="/assets/undraw/undraw_File_searching_re_3evy.svg"
-                     alt="Trades Svg Element">
-            </h1>
+      <h1 class="position-relative display-3 my-2 py-2">
+         Trade-Ups : <%= tradeUpsTitle %>
+            <img loading="lazy" class="enticing-svg left-0" src="/assets/undraw/undraw_File_searching_re_3evy.svg"
+               alt="Trades Svg Element">
+      </h1>
 
 
 
 
 
-            <p class="lead text-justify">
-               Trade-ups here has been gathered just for YOU. Discover and research the best ones that suits you the
-               most. To
-               see a certain trade-up just click "View Trade-up"
-            </p>
-            <div class="d-flex flex-row">
+      <p class="lead text-justify">
+         Trade-ups here has been gathered just for YOU. Discover and research the best ones that suits you the
+         most. To
+         see a certain trade-up just click "View Trade-up"
+      </p>
+      <div class="d-flex flex-row">
 
-               <a class="btn btn-outline-light mt-2 me-1 d-flex width-fit-content" href="/">View Main Page</a>
-               <a class="btn btn-outline-light mt-2 ms-1 d-flex width-fit-content" href="/explore">View Our Engine</a>
-            </div>
+         <a class="btn btn-outline-light mt-2 me-1 d-flex width-fit-content" href="/">View Main Page</a>
+         <a class="btn btn-outline-light mt-2 ms-1 d-flex width-fit-content" href="/explore">View Our Engine</a>
+      </div>
 
 
-            <%- include('../partials/filterForm.ejs') %>
+      <%- include('../partials/filterForm.ejs') %>
 
 
 

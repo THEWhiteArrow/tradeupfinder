@@ -228,8 +228,7 @@ app.use(async (req, res, next) => {
    res.locals.info = req.flash('info');
    res.locals.success = req.flash('success');
    res.locals.error = req.flash('error');
-   res.locals.cookiesAcceptance = req.session.cookiesAcceptance;
-   res.locals.cookiesAcceptance = false;
+   res.locals.cookiesAcceptance = req.session.cookiesAcceptance; 
 
    // SETTING CURRENCY IF A NEW VISITOR AND INCREASING ALLVISITORS NUMBER
    if (req.session.currency == undefined) {

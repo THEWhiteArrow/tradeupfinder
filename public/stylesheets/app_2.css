@@ -29,8 +29,7 @@ a.active-link{
 }
 a.active-link:hover{color:black;} */
 
-
-
+ 
 
 .lift-on-hover{transition:all 0.25s cubic-bezier(0.455, 0.03, 0.515, 0.955);}
 .lift-on-hover:hover{transform:translate3d(0,-7px,0);}
