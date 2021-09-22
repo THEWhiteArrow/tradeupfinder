@@ -1,6 +1,6 @@
+require('newrelic');
 if (process.env.NODE_ENV !== "production") {
    require('dotenv').config();
-   require('newrelic');
 }
 
 const express = require('express');

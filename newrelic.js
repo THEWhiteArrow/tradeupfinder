@@ -9,11 +9,11 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['TradeupFinder'],
+  app_name: ['tradeupfinder'],
   /**
    * Your New Relic license key.
    */
-  license_key: 'eu01xx218ac4beffabacbda3da3587534526NRAL',
+  license_key: '14b21db869c38f38ebbdbea7e08b634ef18dNRAL',
   /**
    * This setting controls distributed tracing.
    * Distributed tracing lets you see the path that a request takes through your
