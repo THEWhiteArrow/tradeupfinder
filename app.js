@@ -38,7 +38,6 @@ const serverRoutes = require('./routes/server');
 
 const User = require('./models/userModel');
 const ServerInfo = require('./models/serverInfoModel');
-const { Server } = require('http');
 
 
 
@@ -233,7 +232,7 @@ app.use(async (req, res, next) => {
 
    // SETTING CURRENCY IF A NEW VISITOR AND INCREASING ALLVISITORS NUMBER
    if (req.session.currency == undefined) {
-      req.session.currency = { code: 'PLN', symbol: 'zł', multiplier: 1 };
+      req.session.currency = { code: 'USD', symbol: '$', multiplier: 0.260379 };
 
    }
    res.locals.currency = req.session.currency;
