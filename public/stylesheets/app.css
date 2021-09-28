@@ -31,11 +31,11 @@ html {
 }
 
 body {
+   font-family: 'QucikSand', serif;
    /* font-family: 'LibreFranklin', serif; */
    /* font-family: 'Mulish', serif; */
    /* font-family: 'Raleway', serif; */
-   font-family: 'QucikSand', serif;
-   /* font-family: 'Caveat', serif; */
+   /* font-family: 'Caveat', serif;  */
 
    overflow-x: hidden;
 

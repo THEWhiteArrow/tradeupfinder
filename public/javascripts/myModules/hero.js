@@ -55,10 +55,10 @@ const glitching = (() => {
 
    const morseCode = {
       timing: {
-         '.': 350,
-         '-': 1000,
-         space: 300,
-         sleep: 900,
+         '.': 400,
+         '-': 1200,
+         space: 400,
+         sleep: 1200,
       },
       alfabet: {
          'a': '.-',

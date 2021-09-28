@@ -1,4 +1,3 @@
-require('newrelic');
 if (process.env.NODE_ENV !== "production") {
    require('dotenv').config();
 }
@@ -81,6 +80,7 @@ const imgSrcUrls = [
 ];
 const fontSrcUrls = [
    "https://fonts.gstatic.com/",
+   "https://fonts.googleapis.com",
 ];
 
 app.use(
