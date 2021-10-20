@@ -70,8 +70,14 @@ module.exports.sendEmail = async (req, res) => {
          from: body.email, // sender address
          to: "damian.trafialek@gmail.com", // list of receivers
          subject: "An Email From Kontrakciarze.com", // Subject line
-         text: body.text, // plain text body
-         html: `<b>${body.text}</b>`, // html body
+         text: `Email : ${body.email} , \nName : ${body.name} , \nMessage : ${body.text}`, // plain text body
+         html: `
+         
+            <h2>Email : ${body.email}</h2>
+            <strong style="display:flex; margin-bottom:10px;">${body.name}</strong>
+            <span>${body.text}</span>
+         
+         `, // html body
          // replyTo: body.email,
       }
       const info = await transporter.sendMail(options);
