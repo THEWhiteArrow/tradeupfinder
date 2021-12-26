@@ -18,17 +18,21 @@
 
 
       <% if( typeof(emptySkins) !='undefined' ){ %>
-         <div class="lead alert alert-warning alert-dismissible fade show my-3" role="alert">
-            <h3 class="alert-heading">Warning!</h3>
-            <p class="lead">Some of skins have invalid prices</p>
-            <a href="/skins/show-database" class="btn btn-danger">Skins Database</a>
-            <hr>
-            <% for(let emptySkin of emptySkins){ %>
-               <p>
-                  <%= emptySkin.name %> | <%= emptySkin.skin %> - <%= emptySkin.case %>
+         <div class="card error lead alert alert-light alert-dismissible fade show my-3" role="alert">
+            <div class="card-body">
+
+               <h3 class="alert-heading">Warning!</h3>
+               <p class="lead">Some of skins have invalid prices : <%= emptySkins.length %>
                </p>
-               <% } %>
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+               <a href="/skins/show-database" class="btn btn-danger">Skins Database</a>
+               <hr>
+               <% for(let emptySkin of emptySkins){ %>
+                  <p>
+                     <%= emptySkin.name %> | <%= emptySkin.skin %> - <%= emptySkin.case %>
+                  </p>
+                  <% } %>
+                     <button type=" button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
          </div>
          <% } %>
 

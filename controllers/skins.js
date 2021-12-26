@@ -9,7 +9,7 @@ const ServerInfo = require('../models/serverInfoModel');
 // NUMBER BY WHICH YOU NEED TO MULTIPLY TO SIMULATE MONEY THAT YOU ARE LEFT WITH, AFTER STEAM TAXES YOUR SELLING
 const steamTax = 0.87;
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
-const updatingDaysSpan = 2;
+const updatingDaysSpan = 7;
 
 // module.exports.showMain = async (req, res, next) => {
 //    // console.log(req.user)
@@ -252,10 +252,10 @@ module.exports.useServers = async (req, res) => {
    const server4 = { start: 200, end: 300 };
    const server5 = { start: 300, end: 400 };
    const server6 = { start: 400, end: 500 };
-   const server7 = { start: 500, end: 600 };
-   const server8 = { start: 600, end: 700 };
-   const server9 = { start: 700, end: 800 };
-   const server10 = { start: 800, end: 1000 };
+   const server7 = { start: 500, end: 550 };
+   const server8 = { start: 550, end: 800 };
+   const server9 = { start: 800, end: 950 };
+   const server10 = { start: 950, end: 1100 };
    const variant = 'backpack';
    const stattrak = true;
 

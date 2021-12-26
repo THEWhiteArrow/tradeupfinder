@@ -424,7 +424,7 @@ module.exports.deleteCertainTrade = async (req, res) => {
 
 
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', newResearchName = 'noname', action = 'nothing', checkStattraks = 'no', minVolume = 100 } = req.query;
+   const { ratio = '4-6', newResearchName = 'noname', action = 'nothing', checkStattraks = 'no', minVolume = 20 } = req.query;
    // CONVERTS PRICE CORRECTION
    let { priceCorrection } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'))
@@ -718,7 +718,7 @@ const mixedTwoPairs = async (req) => {
                            const profitPerTradeUpTaxed = Math.round((avgPriceTaxed - inputPrice) * 100) / 100;
                            const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
                            const returnPercentageTaxed = Math.round(((avgPriceTaxed) / inputPrice * 100) * 100) / 100;
-
+                           console.log(avgPrice + " " + profitPerTradeUp + " " + returnPercentage + " | " + returnPercentageTaxed)
                            if (returnPercentageTaxed > 100) {
 
                               const arrays = {
@@ -813,7 +813,7 @@ const mixedTwoPairs = async (req) => {
    // for (let profit of profits) {
    //    console.log(profit.trades[0].returnPercentage)
    // }
-   if (action === 'save') {
+   if (action === 'save' && profits.length) {
       const newName = new Name({ name: newResearchName })
       await newName.save();
    }
