@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV !== "production") {
-   require('dotenv').config();
+    require('dotenv').config();
 }
 
 const express = require('express');
@@ -43,15 +43,15 @@ const ServerInfo = require('./models/serverInfoModel');
 
 // MONGO DATABASE
 mongoose.connect(dbUrl, {
-   useNewUrlParser: true,
-   useCreateIndex: true,
-   useUnifiedTopology: true,
-   useFindAndModify: false
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
-   console.log("Database connected");
+    console.log("Database connected");
 });
 
 
@@ -75,36 +75,37 @@ const scriptSrcUrls = [];
 const styleSrcUrls = [];
 const connectSrcUrls = [];
 const imgSrcUrls = [
-   "https://steamcdn-a.akamaihd.net/",
-   "https://flagcdn.com",
+    "https://steamcdn-a.akamaihd.net",
+    "https://avatars.steamstatic.com",
+    "https://flagcdn.com",
 ];
 const fontSrcUrls = [
-   "https://fonts.gstatic.com/",
-   "https://fonts.googleapis.com",
+    "https://fonts.gstatic.com/",
+    "https://fonts.googleapis.com",
 ];
 
 app.use(
-   helmet.contentSecurityPolicy({
-      directives: {
-         defaultSrc: [],
-         connectSrc: ["'self'", ...connectSrcUrls],
-         scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-         styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-         workerSrc: ["'self'", "blob:"],
-         objectSrc: [],
-         imgSrc: [
-            "'self'",
-            "blob:",
-            "data:",
-            ...imgSrcUrls,
-         ],
-         fontSrc: [
-            "'self'",
-            "data:",
-            ...fontSrcUrls
-         ],
-      },
-   })
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                ...imgSrcUrls,
+            ],
+            fontSrc: [
+                "'self'",
+                "data:",
+                ...fontSrcUrls
+            ],
+        },
+    })
 );
 
 
@@ -127,28 +128,28 @@ app.use(
 
 const secret = process.env.SECRET || 'thisshoulbeabettersecret!';
 const store = new MongoStore({
-   url: dbUrl,
-   secret: secret,
-   touchAfter: 24 * 60 * 60
+    url: dbUrl,
+    secret: secret,
+    touchAfter: 24 * 60 * 60
 });
 
 store.on('error', function () {
-   console.log('SESSION STORE ERROR', e);
+    console.log('SESSION STORE ERROR', e);
 })
 
 
 const sessionConfig = {
-   store,
-   name: 'session',
-   secret: secret,
-   resave: false,
-   saveUninitialized: true,
-   cookie: {
-      httpOnly: true,
-      // secure: true,
-      expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-      maxAge: 1000 * 60 * 60 * 24 * 7
-   },
+    store,
+    name: 'session',
+    secret: secret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        // secure: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    },
 }
 app.use(session(sessionConfig));
 app.use(flash());
@@ -162,10 +163,10 @@ app.use(passport.session());
 // PASSPORT STRATEGIES
 
 passport.serializeUser(function (user, done) {
-   done(null, user);
+    done(null, user);
 });
 passport.deserializeUser(function (obj, done) {
-   done(null, obj);
+    done(null, obj);
 });
 
 
@@ -176,42 +177,42 @@ passport.deserializeUser(User.deserializeUser());
 
 
 passport.use('steam', new SteamStrategy({
-   returnURL: process.env.STEAM_RETURN_URL,
-   realm: process.env.STEAM_REALM,
-   apiKey: process.env.STEAM_KEY,
+    returnURL: process.env.STEAM_RETURN_URL,
+    realm: process.env.STEAM_REALM,
+    apiKey: process.env.STEAM_KEY,
 },
-   async function (identifier, profile, done) {
-      // asynchronous verification, for effect...
-      await process.nextTick(async function () {
+    async function (identifier, profile, done) {
+        // asynchronous verification, for effect...
+        await process.nextTick(async function () {
 
-         // To keep the example simple, the user's Steam profile is returned to
-         // represent the logged-in user.  In a typical application, you would want
-         // to associate the Steam account with a user record in your database,
-         // and return that user instead.
-         profile.identifier = identifier;
-         const steamId = profile.id;
+            // To keep the example simple, the user's Steam profile is returned to
+            // represent the logged-in user.  In a typical application, you would want
+            // to associate the Steam account with a user record in your database,
+            // and return that user instead.
+            profile.identifier = identifier;
+            const steamId = profile.id;
 
-         try {
+            try {
 
-            const doesExist = await User.any({ "steam.id": steamId })
-            console.log(`Is an existing steam user : ${doesExist}`);
+                const doesExist = await User.any({ "steam.id": steamId })
+                console.log(`Is an existing steam user : ${doesExist}`);
 
-            if (doesExist) {
-               const user = await User.findOne({ "steam.id": steamId })
-               console.log('Logged in an existing user!')
-               console.log(user);
-               return done(null, user);
-            } else {
-               const newUser = await createNewSteamUser(profile);
-               console.log('Logged in a new user!')
-               return done(null, newUser);
+                if (doesExist) {
+                    const user = await User.findOne({ "steam.id": steamId })
+                    console.log('Logged in an existing user!')
+                    console.log(user);
+                    return done(null, user);
+                } else {
+                    const newUser = await createNewSteamUser(profile);
+                    console.log('Logged in a new user!')
+                    return done(null, newUser);
+                }
+            } catch (e) {
+                console.log('Failed to login via steam', e)
+                return done(null, false, { message: e })
             }
-         } catch (e) {
-            console.log('Failed to login via steam', e)
-            return done(null, false, { message: e })
-         }
-      });
-   }
+        });
+    }
 ));
 
 
@@ -222,57 +223,57 @@ passport.use('steam', new SteamStrategy({
 
 
 app.use(async (req, res, next) => {
-   res.locals.server = server;
-   res.locals.currentUser = req.user;
-   res.locals.url = req.originalUrl;
-   res.locals.info = req.flash('info');
-   res.locals.success = req.flash('success');
-   res.locals.error = req.flash('error');
-   res.locals.cookiesAcceptance = req.session.cookiesAcceptance;
+    res.locals.server = server;
+    res.locals.currentUser = req.user;
+    res.locals.url = req.originalUrl;
+    res.locals.info = req.flash('info');
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    res.locals.cookiesAcceptance = req.session.cookiesAcceptance;
 
-   // SETTING CURRENCY IF A NEW VISITOR AND INCREASING ALLVISITORS NUMBER
-   if (req.session.currency == undefined) {
-      req.session.currency = { code: 'USD', symbol: '$', multiplier: 0.260379 };
+    // SETTING CURRENCY IF A NEW VISITOR AND INCREASING ALLVISITORS NUMBER
+    if (req.session.currency == undefined) {
+        req.session.currency = { code: 'USD', symbol: '$', multiplier: 0.260379 };
 
-   }
-   res.locals.currency = req.session.currency;
-
-
-
-   try {
-      const serverData = await ServerInfo.findOne({});
-      res.locals.maxShownTrades = serverData.maxShownTrades;
-   } catch (e) {
-      console.log(e)
-      res.locals.maxShownTrades = 100;
-   }
+    }
+    res.locals.currency = req.session.currency;
 
 
-   // CHECKING UPDATES IN CURRENT USER EXCEPT OF LOGGING IN AND OUT!!!
-   const exceptions = ['/auth', '/auth/steam', '/auth/steam/return', '/user/register', '/user/login', '/user/logout'];
-   const index = exceptions.indexOf(req.originalUrl);
-   if (index == -1) {
-      try {
 
-         if (req.user != null && req.user != undefined) {
-
-            const user = await User.findById(req.user._id);
-            res.locals.currentUser = user;
-            req.user = user;
-            // console.log('User is present : true')
-            // console.log(res.locals.currentUser)
-         }
-         // } else { console.log('User is present : false') }
-      } catch (e) {
-         console.log(`Failed to update a user : ${req.user.username}`, e)
-      }
-   }
+    try {
+        const serverData = await ServerInfo.findOne({});
+        res.locals.maxShownTrades = serverData.maxShownTrades;
+    } catch (e) {
+        console.log(e)
+        res.locals.maxShownTrades = 100;
+    }
 
 
-   // console.log(res.locals.currentUser)
-   if (res.locals.url.indexOf('/auth/steam/return') == -1) { app.use(mongoSanitize({ replaceWith: '_' })); }
+    // CHECKING UPDATES IN CURRENT USER EXCEPT OF LOGGING IN AND OUT!!!
+    const exceptions = ['/auth', '/auth/steam', '/auth/steam/return', '/user/register', '/user/login', '/user/logout'];
+    const index = exceptions.indexOf(req.originalUrl);
+    if (index == -1) {
+        try {
 
-   next();
+            if (req.user != null && req.user != undefined) {
+
+                const user = await User.findById(req.user._id);
+                res.locals.currentUser = user;
+                req.user = user;
+                // console.log('User is present : true')
+                // console.log(res.locals.currentUser)
+            }
+            // } else { console.log('User is present : false') }
+        } catch (e) {
+            console.log(`Failed to update a user : ${req.user.username}`, e)
+        }
+    }
+
+
+    // console.log(res.locals.currentUser)
+    if (res.locals.url.indexOf('/auth/steam/return') == -1) { app.use(mongoSanitize({ replaceWith: '_' })); }
+
+    next();
 })
 
 
@@ -292,7 +293,7 @@ app.use('/', hostRoutes)
 
 
 app.all('*', (req, res, next) => {
-   next(new ExpressError('Page Not Found', 404))
+    next(new ExpressError('Page Not Found', 404))
 });
 
 
@@ -301,12 +302,12 @@ app.all('*', (req, res, next) => {
 
 
 app.use((err, req, res, next) => {
-   const { statusCode = 500 } = err;
-   if (!err.message) err.message = 'Oh No, Something Went Wrong!';
-   res.status(statusCode).render('error', { err });
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = 'Oh No, Something Went Wrong!';
+    res.status(statusCode).render('error', { err });
 })
 
 
 app.listen(port, () => {
-   console.log(`Serving on port ${port}`)
+    console.log(`Serving on port ${port}`)
 })
