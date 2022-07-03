@@ -1,100 +1,110 @@
 <% layout('layouts/boilerplate')%>
 
-   <section class="container d-flex flex-column my-5  ">
+    <section class="container d-flex flex-column my-5  ">
 
-      <h1 class="display-3 mb-5">Manage Your Account</h1>
+        <h1 class="display-3 mb-5">Manage Your Account</h1>
 
-      <% if (currentUser) { %>
+        <% if (currentUser) { %>
 
-         <% if (currentUser.steam) { %>
-            <h3 class="fs-3">Avatar : <img loading="lazy" src="<%= currentUser.steam.avatar %>" width="35px"
-                  alt="Your steam avatar">
-            </h3>
-            <% } %>
-               <h3 class="fs-3">Username : <span class="text-light">
-                     <%= currentUser.username %>
+            <% if (currentUser.steam) { %>
+                <h3 class="fs-3">Avatar : <img loading="lazy" src="<%= currentUser.steam.avatar %>" width="35px"
+                        alt="Your steam avatar">
+                </h3>
+                <% } %>
+                    <h3 class="fs-3">Username : <span class="text-light">
+                            <%= currentUser.username %>
 
-                  </span>
-               </h3>
-               <h3 class="fs-3">Role : <span class="text-light">
-                     <%= currentUser.role %>
-                  </span>
-               </h3>
-               <h3 class="fs-3">Is Premium account : <span class="text-light">
-                     <%= currentUser.isPremium %>
-                  </span>
-               </h3>
-               <h3 class="fs-3">Email or steam identificator : <span class="text-light">
-                     <%= currentUser.email %>
-                  </span>
-               </h3>
-               <% if (currentUser.favourites) { %>
+                        </span>
+                    </h3>
+                    <h3 class="fs-3">Role : <span class="text-light">
+                            <%= currentUser.role %>
+                        </span>
+                    </h3>
+                    <h3 class="fs-3">Is Premium account : <span class="text-light">
+                            <%= currentUser.isPremium %>
+                        </span>
+                    </h3>
+                    <h3 class="fs-3">Email or steam identificator : <span class="text-light">
+                            <%= currentUser.email %>
+                        </span>
+                    </h3>
+                    <% if (currentUser.favourites) { %>
 
-                  <h3 class="fs-3">Favourite Trade-Ups' ids :
+                        <h3 class="fs-3">Favourite Trade-Ups' ids :
 
-                     <ul class="fw-light bullets ps-5">
-                        <% for(let favouriteId of currentUser.favourites) {%>
-                           <li>
-                              <%= favouriteId%>
-                           </li>
-                           <% } %>
-                     </ul>
-                  </h3>
-                  <% } %>
-
-                     <% if(currentUser.role==='admin' ){ %>
-
-                        <form action="/server/variables" method="POST" class="my-4 d-flex flex-column">
-
-                           <div class="form-group">
-                              <label for="maxShownTrades">Max Shown Trades</label>
-                              <input type="number" min="0" step="1" class="form-control" id="maxShownTrades"
-                                 name="maxShownTrades" placeholder="Enter number of maxShownTrades">
-
-                           </div>
-
-                           <button type="submit" class="ms-auto btn btn-primary">Submit</button>
-                        </form>
+                            <ul class="fw-light bullets ps-5">
+                                <% for(let favouriteId of currentUser.favourites) {%>
+                                    <li>
+                                        <%= favouriteId%>
+                                    </li>
+                                    <% } %>
+                            </ul>
+                        </h3>
                         <% } %>
 
-                           <% } %>
+                            <% if(currentUser.role==='admin' ){ %>
+
+                                <form action="/server/variables" method="POST" class="my-4 d-flex flex-column">
+
+                                    <div class="form-group">
+                                        <label for="maxShownTrades">Max Shown Trades</label>
+                                        <input type="number" min="0" step="1" class="form-control" id="maxShownTrades"
+                                            name="maxShownTrades" placeholder="Enter number of maxShownTrades">
+
+                                    </div>
+
+                                    <button type="submit" class="ms-auto btn btn-primary">Submit</button>
+                                </form>
+                                <% } %>
+
+                                    <% } %>
+
+                                        <div class="d-flex row col-12 flex-wrap">
+
+                                            <% if (currentUser&& (currentUser.role=='moderator' ||
+                                                currentUser.role=='admin' ) ) { %>
 
 
 
-                              <% if (currentUser&& (currentUser.role=='moderator' || currentUser.role=='admin' ) ) { %>
+                                                <a href="/trades/custom-search"
+                                                    class="col-4 mb-1 px-2 link-light btn btn-danger">Custom
+                                                    Search</a>
+
+                                                <a href="/skins/database/update"
+                                                    class="col-4 mb-1 px-2 link-light btn btn-dark">Database update
+                                                    all</a>
+
+                                                <a href="/skins/update-thru-servers"
+                                                    class="col-4 mb-1 px-2 link-light btn btn-success">Update
+                                                    Skins'
+                                                    Prices</a>
+                                                <a href="/trades/update-current"
+                                                    class="col-4 mb-1 btn btn-info d-flex justify-content-center align-items-center disabled">Update
+                                                    Trades</a>
+                                                <form class="col-4 px-0 mx-0" action="/trades/delete?_method=DELETE"
+                                                    method="POST">
+                                                    <button class="btn btn-danger w-100">Delete Saved
+                                                        Trades</button>
+                                                </form>
+                                                <% } %>
+
+                                                    <% if(currentUser&&currentUser.role=='admin' ){ %>
+                                                        <a href="/server/validate"
+                                                            class="col-4 mb-1 btn btn-primary d-flex justify-content-center align-items-center">Validate
+                                                            Outer Server's Last Action</a>
+                                                        <a href="/currency/update"
+                                                            class="col-4 mb-1 btn btn-warning d-flex justify-content-center align-items-center">Update
+                                                            Currencies</a>
+                                                        <a href="/map/map-collection"
+                                                            class="col-4 mb-1 px-2 btn btn-secondary">Mapping</a>
+                                                        <% } %>
+
+                                        </div>
+
+                                        <a href="/" class="btn btn-dark my-3">View Main Page</a>
 
 
 
-                                 <a href="/trades/custom-search"
-                                    class="mb-1 px-2 link-light btn btn-danger flex-1">Custom
-                                    Search</a>
-                                 <a href="/skins/update-thru-servers"
-                                    class="mb-1 px-2 link-light btn btn-success flex-1">Update
-                                    Skins'
-                                    Prices</a>
-                                 <a href="/trades/update-current"
-                                    class="mb-1 btn btn-info d-flex justify-content-center align-items-center disabled">Update
-                                    Trades</a>
-                                 <form class="" action="/trades/delete?_method=DELETE" method="POST">
-                                    <button class="mb-1 btn btn-danger w-100">Delete Saved Trades</button>
-                                 </form>
-                                 <% } %>
+    </section>
 
-                                    <% if(currentUser&&currentUser.role=='admin' ){ %>
-                                       <a href="/server/validate"
-                                          class="mb-1 btn btn-primary d-flex justify-content-center align-items-center">Validate
-                                          Outer Server's Last Action</a>
-                                       <a href="/currency/update"
-                                          class="mb-1 btn btn-warning d-flex justify-content-center align-items-center">Update
-                                          Currencies</a>
-                                       <a href="/map/map-collection" class="mb-1 px-2 btn btn-secondary">Mapping</a>
-                                       <% } %>
-
-
-                                          <a href="/" class="btn btn-dark my-3">View Main Page</a>
-
-
-
-   </section>
-
-   <%- include(`../partials/toastContainer.ejs`)%>
+    <%- include(`../partials/toastContainer.ejs`)%>
