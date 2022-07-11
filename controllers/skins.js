@@ -301,16 +301,27 @@ module.exports.databaseUpdate = async (req, res) => {
     res.redirect('/user/account')
 }
 
+/**
+ * function for testing
+ */
+const test = async () => {
+    const skins = await Skin.find({})
+    skins.forEach((skin, index) => {
+        console.log(index, skin.isInStattrak)
+    })
+}
+
 module.exports.useServers = async (req, res) => {
     const server2 = { start: 0, end: 100 };
     const server3 = { start: 100, end: 200 };
     const server4 = { start: 200, end: 300 };
     const server5 = { start: 300, end: 400 };
     const server6 = { start: 400, end: 500 };
-    const server7 = { start: 500, end: 550 };
-    const server8 = { start: 550, end: 800 };
-    const server9 = { start: 800, end: 950 };
-    const server10 = { start: 950, end: 1100 };
+    const server7 = { start: 500, end: 600 };
+    const server8 = { start: 600, end: 800 };
+    const server9 = { start: 800, end: 1000 };
+    const server10 = { start: 1000, end: 1200 };
+
     const variant = 'backpack';
     const stattrak = true;
 
@@ -332,18 +343,18 @@ module.exports.useServers = async (req, res) => {
     const skinsUpdateInfo = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}  -  ${date.getHours()} : ${date.getMinutes()}`;
 
 
-    await ServerInfo.findOneAndUpdate({}, { outerServerInfo: { valid: true }, skinsUpdateInfo, lastChanged: new Date() }, { new: true });
+    const serverInfo = await ServerInfo.findOneAndUpdate({}, { outerServerInfo: { valid: true }, skinsUpdateInfo, lastChanged: new Date() }, { new: true });
+    const { updatingDaysSpan = 3 } = serverInfo
 
-
-    const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}&stattrak=${stattrak}`;
-    const server3Url = `https://steam-market3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}&variant=${variant}&stattrak=${stattrak}`;
-    const server4Url = `https://steam-market4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}&variant=${variant}&stattrak=${stattrak}`;
-    const server5Url = `https://steam-market5.herokuapp.com/skins/update?start=${server5.start}&end=${server5.end}&variant=${variant}&stattrak=${stattrak}`;
-    const server6Url = `https://steam-market6.herokuapp.com/skins/update?start=${server6.start}&end=${server6.end}&variant=${variant}&stattrak=${stattrak}`;
-    const server7Url = `https://steam-market7.herokuapp.com/skins/update?start=${server7.start}&end=${server7.end}&variant=${variant}&stattrak=${stattrak}`;
-    const server8Url = `https://steam-market8.herokuapp.com/skins/update?start=${server8.start}&end=${server8.end}&variant=${variant}&stattrak=${stattrak}`;
-    const server9Url = `https://steam-market9.herokuapp.com/skins/update?start=${server9.start}&end=${server9.end}&variant=${variant}&stattrak=${stattrak}`;
-    const server10Url = `https://steam-market10.herokuapp.com/skins/update?start=${server10.start}&end=${server10.end}&variant=${variant}&stattrak=${stattrak}`;
+    const server2Url = `https://steam-market2.herokuapp.com/skins/update?start=${server2.start}&end=${server2.end}&variant=${variant}&stattrak=${stattrak}&updatingDaysSpan=${updatingDaysSpan}`;
+    const server3Url = `https://steam-market3.herokuapp.com/skins/update?start=${server3.start}&end=${server3.end}&variant=${variant}&stattrak=${stattrak}&updatingDaysSpan=${updatingDaysSpan}`;
+    const server4Url = `https://steam-market4.herokuapp.com/skins/update?start=${server4.start}&end=${server4.end}&variant=${variant}&stattrak=${stattrak}&updatingDaysSpan=${updatingDaysSpan}`;
+    const server5Url = `https://steam-market5.herokuapp.com/skins/update?start=${server5.start}&end=${server5.end}&variant=${variant}&stattrak=${stattrak}&updatingDaysSpan=${updatingDaysSpan}`;
+    const server6Url = `https://steam-market6.herokuapp.com/skins/update?start=${server6.start}&end=${server6.end}&variant=${variant}&stattrak=${stattrak}&updatingDaysSpan=${updatingDaysSpan}`;
+    const server7Url = `https://steam-market7.herokuapp.com/skins/update?start=${server7.start}&end=${server7.end}&variant=${variant}&stattrak=${stattrak}&updatingDaysSpan=${updatingDaysSpan}`;
+    const server8Url = `https://steam-market8.herokuapp.com/skins/update?start=${server8.start}&end=${server8.end}&variant=${variant}&stattrak=${stattrak}&updatingDaysSpan=${updatingDaysSpan}`;
+    const server9Url = `https://steam-market9.herokuapp.com/skins/update?start=${server9.start}&end=${server9.end}&variant=${variant}&stattrak=${stattrak}&updatingDaysSpan=${updatingDaysSpan}`;
+    const server10Url = `https://steam-market10.herokuapp.com/skins/update?start=${server10.start}&end=${server10.end}&variant=${variant}&stattrak=${stattrak}&updatingDaysSpan=${updatingDaysSpan}`;
 
     const response2 = fetch(server2Url, {
         method: 'GET',
