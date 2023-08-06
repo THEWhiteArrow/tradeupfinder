@@ -13,6 +13,9 @@ const steamTax = 0.87;
 
 const steamBaseUrl = 'https://steamcommunity.com/market/listings/730/';
 
+module.exports.experimentalUpdate = async (req, res) => { 
+   res.render('trades/experimental')
+}
 
 module.exports.manageTrades = async (req, res) => {
    let { action = 'nothing', researchName = 'noname', pairs = 2, sort = 'returnPercentage', order = 'descending', q = null, maxCost = 10000000 } = req.query;

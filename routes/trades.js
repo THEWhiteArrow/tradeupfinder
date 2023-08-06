@@ -5,11 +5,16 @@ const { isLoggedIn, isModeratorAtLeast, isAdmin, isPermitted, isResearchAllowed 
 
 const trade = require('../controllers/trades');
 
+
+
 router.route('/')
    .get(catchAsync(isResearchAllowed), catchAsync(trade.manageTrades));
 
 router.route('/custom-search')
    .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(trade.customSearch));
+
+router.route('/experimental-update')
+   .get(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(trade.experimentalUpdate));
 
 router.route('/delete')
    .delete(isLoggedIn, isModeratorAtLeast, isPermitted, catchAsync(trade.deleteSavedTrades));

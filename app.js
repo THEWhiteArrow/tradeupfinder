@@ -21,7 +21,7 @@ const { createNewSteamUser } = require('./utils/functions');
 
 const server = process.env.SERVER || 'local';
 const port = process.env.PORT || 3000;
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/steamApi';
 const MongoStore = require('connect-mongo')(session);
 
 const skinRoutes = require('./routes/skins');
@@ -73,7 +73,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const scriptSrcUrls = [];
 const styleSrcUrls = [];
-const connectSrcUrls = [];
+const connectSrcUrls = [
+    "https://steamcommunity.com",
+];
 const imgSrcUrls = [
     "https://steamcdn-a.akamaihd.net",
     "https://avatars.steamstatic.com",

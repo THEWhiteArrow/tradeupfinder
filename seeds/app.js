@@ -6,8 +6,9 @@ const mongoose = require('mongoose');
 const data = require('./data.js')
 const Case = require('../models/caseModel');
 const Skin = require('../models/skinModel');
+const ServerInfo = require('../models/serverInfoModel.js');
 // MONGO DATABASE
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/steamApi';
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/steamApi';
 mongoose.connect(dbUrl, {
    useNewUrlParser: true,
    useCreateIndex: true,
@@ -27,6 +28,7 @@ const seedDB = async () => {
 
    await Case.deleteMany({});
    await Skin.deleteMany({});
+   await ServerInfo.deleteMany({});
 
    for (let collectionName of dataKeys) {
       const newCollection = new Case({
@@ -98,6 +100,17 @@ const seedDB = async () => {
       await newCollection.save();
 
    }
+
+   const serverInfo = new ServerInfo({
+      updatingDaysSpan: 1,
+      allVisitors: 0,
+      maxShownTrades: 100,
+      lastChanged: '',
+      skinsUpdateInfo: '',
+   })
+
+   await serverInfo.save();
+
 }
 
 
