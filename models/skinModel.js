@@ -69,10 +69,38 @@ const skinSchema = new Schema({
    },
 
    volumes: {
-      type: Object
+      'Factory New': {
+         type: Number,
+      },
+      'Minimal Wear': {
+         type: Number,
+      },
+      'Field-Tested': {
+         type: Number,
+      },
+      'Well-Worn': {
+         type: Number,
+      },
+      'Battle-Scarred': {
+         type: Number,
+      },
    },
    stattrakVolumes: {
-      type: Object,
+      'Factory New': {
+         type: Number,
+      },
+      'Minimal Wear': {
+         type: Number,
+      },
+      'Field-Tested': {
+         type: Number,
+      },
+      'Well-Worn': {
+         type: Number,
+      },
+      'Battle-Scarred': {
+         type: Number,
+      },
    },
    icon: {
       type: String,

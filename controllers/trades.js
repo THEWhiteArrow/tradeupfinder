@@ -107,15 +107,81 @@ module.exports.manageTrades = async (req, res) => {
 
 module.exports.customSearch = async (req, res) => {
    const arr = [
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '5-5',
+      //    checkStattraks: 'no',
+      //    newResearchName: 'd55-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '4-6',
+      //    checkStattraks: 'no',
+      //    newResearchName: 'd46-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '3-7',
+      //    checkStattraks: 'no',
+      //    newResearchName: 'd37-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '2-8',
+      //    checkStattraks: 'no',
+      //    newResearchName: 'd28-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '1-9',
+      //    checkStattraks: 'no',
+      //    newResearchName: 'd19-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
+
+
+
+
+      // CORRECTION
+
       {
          order: 'descending',
          sort: 'returnPercentage',
          action: 'save',
          ratio: '5-5',
          checkStattraks: 'no',
-         newResearchName: 'd55-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
+         newResearchName: 'd55-v25-c0.03',
+         priceCorrection: '0.03',
+         minVolume: '25',
          pairs: '2',
          researchName: ''
       },
@@ -125,74 +191,8 @@ module.exports.customSearch = async (req, res) => {
          action: 'save',
          ratio: '4-6',
          checkStattraks: 'no',
-         newResearchName: 'd46-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
-         pairs: '2',
-         researchName: ''
-      },
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '3-7',
-         checkStattraks: 'no',
-         newResearchName: 'd37-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
-         pairs: '2',
-         researchName: ''
-      },
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '2-8',
-         checkStattraks: 'no',
-         newResearchName: 'd28-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
-         pairs: '2',
-         researchName: ''
-      },
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '1-9',
-         checkStattraks: 'no',
-         newResearchName: 'd19-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
-         pairs: '2',
-         researchName: ''
-      },
-
-
-
-
-
-
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '5-5',
-         checkStattraks: 'no',
-         newResearchName: 'd55-v25-c0.02',
-         priceCorrection: '0.02',
-         minVolume: '25',
-         pairs: '2',
-         researchName: ''
-      },
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '4-6',
-         checkStattraks: 'no',
-         newResearchName: 'd46-v25-c0.02',
-         priceCorrection: '0.02',
+         newResearchName: 'd46-v25-c0.03',
+         priceCorrection: '0.03',
          minVolume: '25',
          pairs: '2',
          researchName: ''
@@ -203,8 +203,8 @@ module.exports.customSearch = async (req, res) => {
          action: 'save',
          ratio: '3-7',
          checkStattraks: 'no',
-         newResearchName: 'd37-v25-c0.02',
-         priceCorrection: '0.02',
+         newResearchName: 'd37-v25-c0.03',
+         priceCorrection: '0.03',
          minVolume: '25',
          pairs: '2',
          researchName: ''
@@ -215,8 +215,8 @@ module.exports.customSearch = async (req, res) => {
          action: 'save',
          ratio: '2-8',
          checkStattraks: 'no',
-         newResearchName: 'd28-v25-c0.02',
-         priceCorrection: '0.02',
+         newResearchName: 'd28-v25-c0.03',
+         priceCorrection: '0.03',
          minVolume: '25',
          pairs: '2',
          researchName: ''
@@ -227,8 +227,8 @@ module.exports.customSearch = async (req, res) => {
          action: 'save',
          ratio: '1-9',
          checkStattraks: 'no',
-         newResearchName: 'd19-v25-c0.02',
-         priceCorrection: '0.02',
+         newResearchName: 'd19-v25-c0.03',
+         priceCorrection: '0.03',
          minVolume: '25',
          pairs: '2',
          researchName: ''
@@ -246,68 +246,68 @@ module.exports.customSearch = async (req, res) => {
 
 
 
+      // STATTRAKS
 
-
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '5-5',
-         checkStattraks: 'yes',
-         newResearchName: 'Stattrak_d55-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
-         pairs: '2',
-         researchName: ''
-      },
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '4-6',
-         checkStattraks: 'yes',
-         newResearchName: 'Stattrak_d46-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
-         pairs: '2',
-         researchName: ''
-      },
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '3-7',
-         checkStattraks: 'yes',
-         newResearchName: 'Stattrak_d37-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
-         pairs: '2',
-         researchName: ''
-      },
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '2-8',
-         checkStattraks: 'yes',
-         newResearchName: 'Stattrak_d28-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
-         pairs: '2',
-         researchName: ''
-      },
-      {
-         order: 'descending',
-         sort: 'returnPercentage',
-         action: 'save',
-         ratio: '1-9',
-         checkStattraks: 'yes',
-         newResearchName: 'Stattrak_d19-v75-c0',
-         priceCorrection: '0',
-         minVolume: '75',
-         pairs: '2',
-         researchName: ''
-      },
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '5-5',
+      //    checkStattraks: 'yes',
+      //    newResearchName: 'Stattrak_d55-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '4-6',
+      //    checkStattraks: 'yes',
+      //    newResearchName: 'Stattrak_d46-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '3-7',
+      //    checkStattraks: 'yes',
+      //    newResearchName: 'Stattrak_d37-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '2-8',
+      //    checkStattraks: 'yes',
+      //    newResearchName: 'Stattrak_d28-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
+      // {
+      //    order: 'descending',
+      //    sort: 'returnPercentage',
+      //    action: 'save',
+      //    ratio: '1-9',
+      //    checkStattraks: 'yes',
+      //    newResearchName: 'Stattrak_d19-v75-c0',
+      //    priceCorrection: '0',
+      //    minVolume: '75',
+      //    pairs: '2',
+      //    researchName: ''
+      // },
    ];
 
    if (process.env.SERVER != 'local') {
@@ -330,7 +330,7 @@ module.exports.customSearch = async (req, res) => {
 
       for (let el of arr) {
          await mixedTwoPairs({ query: el })
-      }
+      } 
 
       var endDate = new Date();
       var seconds = (endDate.getTime() - startDate.getTime()) / 1000;
@@ -427,7 +427,7 @@ module.exports.deleteCertainTrade = async (req, res) => {
 
 
 const mixedTwoPairs = async (req) => {
-   const { ratio = '4-6', newResearchName = 'noname', action = 'nothing', checkStattraks = 'no', minVolume = 20 } = req.query;
+   const { ratio = '4-6', newResearchName = 'noname', action = 'nothing', checkStattraks = 'no', minVolume = 100 } = req.query;
    // CONVERTS PRICE CORRECTION
    let { priceCorrection } = req.query;
    priceCorrection = Number(priceCorrection.replace(',', '.'))
@@ -462,16 +462,16 @@ const mixedTwoPairs = async (req) => {
    let counter = 0;
    const profits = [];
 
-
    const collections = await Case.find({})
-      .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
-      .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } })
-
-
+   .populate({ path: 'skins', populate: { path: 'grey', model: 'Skin' } })
+   .populate({ path: 'skins', populate: { path: 'light_blue', model: 'Skin' } })
+   .populate({ path: 'skins', populate: { path: 'blue', model: 'Skin' } })
+   .populate({ path: 'skins', populate: { path: 'purple', model: 'Skin' } })
+   .populate({ path: 'skins', populate: { path: 'pink', model: 'Skin' } })
+   .populate({ path: 'skins', populate: { path: 'red', model: 'Skin' } })
+   
+   
+   
    for (let r = 0; r < rarities.length - 1; r++) {
 
       for (let firstCollection of collections) {
@@ -479,14 +479,15 @@ const mixedTwoPairs = async (req) => {
 
             for (let secondCollection of collections) {
                if (secondCollection.skins[rarities[r + 1]].length !== 0) {
-
+                 
                   for (let firstQuality of qualities) {
                      for (let secondQuality of qualities) {
-
                         const firstSkin = findCheapestSkin(firstCollection, rarities[r], firstQuality, pricesType, volumesType, minVolume);
                         const secondSkin = findCheapestSkin(secondCollection, rarities[r], secondQuality, pricesType, volumesType, minVolume);
-
+                        
+                       
                         if (firstSkin != null && secondSkin != null) {
+                     
 
                            let firstSkinAvgFloat = avg_floats[firstQuality];
                            let secondSkinAvgFloat = avg_floats[secondQuality];
@@ -721,7 +722,7 @@ const mixedTwoPairs = async (req) => {
                            const profitPerTradeUpTaxed = Math.round((avgPriceTaxed - inputPrice) * 100) / 100;
                            const returnPercentage = Math.round(((avgPrice) / inputPrice * 100) * 100) / 100;
                            const returnPercentageTaxed = Math.round(((avgPriceTaxed) / inputPrice * 100) * 100) / 100;
-                           console.log(avgPrice + " " + profitPerTradeUp + " " + returnPercentage + " | " + returnPercentageTaxed)
+
                            if (returnPercentageTaxed > 100) {
 
                               const arrays = {
@@ -816,7 +817,7 @@ const mixedTwoPairs = async (req) => {
    // for (let profit of profits) {
    //    console.log(profit.trades[0].returnPercentage)
    // }
-   if (action === 'save' && profits.length) {
+   if (action === 'save') {
       const newName = new Name({ name: newResearchName })
       await newName.save();
    }

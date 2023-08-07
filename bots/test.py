@@ -1,7 +1,12 @@
-from db import get_database
+from util import *
 
-dbname = get_database()
-collection_skins = dbname["skins"]
+targets = get_update_targets()
 
+t = targets[0]
+
+print( f"{t.name} {t.skin} {t.quality}" )
+
+t.update_price(12.12)
+        
 
 

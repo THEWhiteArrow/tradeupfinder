@@ -72,8 +72,20 @@ const seedDB = async () => {
                'Well-Worn': 0,
                'Battle-Scarred': 0,
             },
-            volumes: {},
-            stattrakVolumes: {},
+            volumes: {
+               'Factory New': 10000,
+               'Minimal Wear': 10000,
+               'Field-Tested': 10000,
+               'Well-Worn': 10000,
+               'Battle-Scarred': 10000,
+            },
+            stattrakVolumes: {
+               'Factory New': 10000,
+               'Minimal Wear': 10000,
+               'Field-Tested': 10000,
+               'Well-Worn': 10000,
+               'Battle-Scarred': 10000,
+            },
             icon,
          })
 
