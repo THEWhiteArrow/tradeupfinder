@@ -37,7 +37,7 @@ else:
  
 targets = get_update_targets()
 for i, target in enumerate(targets): 
-    if i<3264:
+    if i<3840:
         continue
     driver.get(target.get_market_link())
     print(f"{i} out of {len(targets)}")

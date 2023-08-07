@@ -107,66 +107,66 @@ module.exports.manageTrades = async (req, res) => {
 
 module.exports.customSearch = async (req, res) => {
    const arr = [
-      // {
-      //    order: 'descending',
-      //    sort: 'returnPercentage',
-      //    action: 'save',
-      //    ratio: '5-5',
-      //    checkStattraks: 'no',
-      //    newResearchName: 'd55-v75-c0',
-      //    priceCorrection: '0',
-      //    minVolume: '75',
-      //    pairs: '2',
-      //    researchName: ''
-      // },
-      // {
-      //    order: 'descending',
-      //    sort: 'returnPercentage',
-      //    action: 'save',
-      //    ratio: '4-6',
-      //    checkStattraks: 'no',
-      //    newResearchName: 'd46-v75-c0',
-      //    priceCorrection: '0',
-      //    minVolume: '75',
-      //    pairs: '2',
-      //    researchName: ''
-      // },
-      // {
-      //    order: 'descending',
-      //    sort: 'returnPercentage',
-      //    action: 'save',
-      //    ratio: '3-7',
-      //    checkStattraks: 'no',
-      //    newResearchName: 'd37-v75-c0',
-      //    priceCorrection: '0',
-      //    minVolume: '75',
-      //    pairs: '2',
-      //    researchName: ''
-      // },
-      // {
-      //    order: 'descending',
-      //    sort: 'returnPercentage',
-      //    action: 'save',
-      //    ratio: '2-8',
-      //    checkStattraks: 'no',
-      //    newResearchName: 'd28-v75-c0',
-      //    priceCorrection: '0',
-      //    minVolume: '75',
-      //    pairs: '2',
-      //    researchName: ''
-      // },
-      // {
-      //    order: 'descending',
-      //    sort: 'returnPercentage',
-      //    action: 'save',
-      //    ratio: '1-9',
-      //    checkStattraks: 'no',
-      //    newResearchName: 'd19-v75-c0',
-      //    priceCorrection: '0',
-      //    minVolume: '75',
-      //    pairs: '2',
-      //    researchName: ''
-      // },
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '5-5',
+         checkStattraks: 'no',
+         newResearchName: 'd55-v75-c0',
+         priceCorrection: '0',
+         minVolume: '75',
+         pairs: '2',
+         researchName: ''
+      },
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '4-6',
+         checkStattraks: 'no',
+         newResearchName: 'd46-v75-c0',
+         priceCorrection: '0',
+         minVolume: '75',
+         pairs: '2',
+         researchName: ''
+      },
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '3-7',
+         checkStattraks: 'no',
+         newResearchName: 'd37-v75-c0',
+         priceCorrection: '0',
+         minVolume: '75',
+         pairs: '2',
+         researchName: ''
+      },
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '2-8',
+         checkStattraks: 'no',
+         newResearchName: 'd28-v75-c0',
+         priceCorrection: '0',
+         minVolume: '75',
+         pairs: '2',
+         researchName: ''
+      },
+      {
+         order: 'descending',
+         sort: 'returnPercentage',
+         action: 'save',
+         ratio: '1-9',
+         checkStattraks: 'no',
+         newResearchName: 'd19-v75-c0',
+         priceCorrection: '0',
+         minVolume: '75',
+         pairs: '2',
+         researchName: ''
+      },
 
 
 
