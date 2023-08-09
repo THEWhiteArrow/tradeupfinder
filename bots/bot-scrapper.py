@@ -1,5 +1,7 @@
 import os
 from time import sleep
+import sys
+
 
 
 # SELENIUM
@@ -14,6 +16,17 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 
 # UTILS
 from util import *
+
+print('Number of arguments:', len(sys.argv), 'arguments.')
+print('Argument List:', str(sys.argv))
+
+update_start=0
+update_end=10_000_000_000
+for arg in sys.argv:
+    if arg.startswith("start="):
+        update_start = int(arg.replace("start=", ""))
+    elif arg.startswith("end="):
+        update_end = int(arg.replace("end=", ""))
 
 
 # SETTING UP DRIVER
@@ -37,8 +50,9 @@ else:
  
 targets = get_update_targets()
 for i, target in enumerate(targets): 
-    if i<3840:
+    if i < update_start or i > update_end:
         continue
+    
     driver.get(target.get_market_link())
     print(f"{i} out of {len(targets)}")
 

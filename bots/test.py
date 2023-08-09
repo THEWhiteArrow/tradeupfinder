@@ -1,12 +1,7 @@
+import sys
 from util import *
+from db import *
 
-targets = get_update_targets()
-
-t = targets[0]
-
-print( f"{t.name} {t.skin} {t.quality}" )
-
-t.update_price(12.12)
         
-
-
+print('Number of arguments:', len(sys.argv), 'arguments.')
+print('Argument List:', str(sys.argv))
