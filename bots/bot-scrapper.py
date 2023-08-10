@@ -20,8 +20,8 @@ from util import *
 print('Number of arguments:', len(sys.argv), 'arguments.')
 print('Argument List:', str(sys.argv))
 
-update_start=0
-update_end=10_000_000_000
+update_start=1
+update_end=-1
 for arg in sys.argv:
     if arg.startswith("start="):
         update_start = int(arg.replace("start=", ""))
@@ -49,12 +49,16 @@ else:
 # GETTING DATA
  
 targets = get_update_targets()
+if update_end == -1:
+    update_end = len(targets)
+
+
 for i, target in enumerate(targets): 
-    if i < update_start or i > update_end:
+    if i < update_start-1 or i > update_end-1:
         continue
     
     driver.get(target.get_market_link())
-    print(f"{i} out of {len(targets)}")
+    
 
     try:
         elem = WebDriverWait(driver, 5).until(
@@ -64,10 +68,12 @@ for i, target in enumerate(targets):
         if elem.text == "There are no listings for this item.":
             print(f"ERROR:{i} - {target.name} {target.skin} {target.quality}")
             continue
-
+        
         price = float(elem.text.replace(currency, "").replace(",", ".").replace(" ", "")) 
+        print(
+            f"{i} out of ${update_end} | {target.name} {target.skin} {target.quality} - {price}")
         target.update_price(price)
     except:
-        print(f"ERROR: {i} - {target.name} {target.skin} {target.quality}")
+        print(f"ERROR LOADING: {i} - {target.name} {target.skin} {target.quality}")
 
         continue
