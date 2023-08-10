@@ -51,6 +51,8 @@ else:
 targets = get_update_targets()
 if update_end == -1:
     update_end = len(targets)
+else :
+    update_end = min(update_end, len(targets))
 
 
 for i, target in enumerate(targets): 
