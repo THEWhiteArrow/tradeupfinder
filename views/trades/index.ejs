@@ -1,69 +1,60 @@
 <% layout('layouts/boilerplate')%>
 
-   <link rel="stylesheet" href="/stylesheets/tradeTile.css">
+<link rel="stylesheet" href="/stylesheets/tradeTile.css">
 
-   <header class="container my-5 d-flex flex-column">
+<header class="container my-5 d-flex flex-column">
 
+   <h1 class="position-relative display-3 my-2 py-2">
+      Trade-Ups : <%= tradeUpsTitle || null %>
+      <img loading="lazy" class="enticing-svg left-0"
+         src="/assets/undraw/undraw_File_searching_re_3evy.svg"
+         alt="Trades Svg Element">
+   </h1>
 
+   <p class="lead text-justify">
+      Trade-ups here has been gathered just for YOU. Discover and research the
+      best ones that suits you the
+      most. To
+      see a certain trade-up just click "View Trade-up"
+   </p>
+   <div class="d-flex flex-row">
 
-      <h1 class="position-relative display-3 my-2 py-2">
-         Trade-Ups : <%= tradeUpsTitle || null %>
-            <img loading="lazy" class="enticing-svg left-0" src="/assets/undraw/undraw_File_searching_re_3evy.svg"
-               alt="Trades Svg Element">
-      </h1>
+      <a class="btn btn-outline-light mt-2 me-1 d-flex width-fit-content"
+         href="/">View Main Page</a>
+      <a class="btn btn-outline-light mt-2 ms-1 d-flex width-fit-content"
+         href="/explore">View Our Engine</a>
+   </div>
 
+   <%- include('../partials/filterForm.ejs') %>
 
+</header>
 
+<main class="container pb-4">
+   <% if(profitableTrades){ %>
 
+   <ul>
+      <% let i=0;let directions=['right','left']; %>
+      <% for(let profitableTrade of profitableTrades){ %>
+      <% ++i; %>
 
-      <p class="lead text-justify">
-         Trade-ups here has been gathered just for YOU. Discover and research the best ones that suits you the
-         most. To
-         see a certain trade-up just click "View Trade-up"
-      </p>
-      <div class="d-flex flex-row">
+      <% let animationData=`data-aos="fade-${directions[i%2]}"
+      data-aos-duration="250" data-aos-once="true" `; %>
+      <% i<=2 ? animationData='' :null; %>
 
-         <a class="btn btn-outline-light mt-2 me-1 d-flex width-fit-content" href="/">View Main Page</a>
-         <a class="btn btn-outline-light mt-2 ms-1 d-flex width-fit-content" href="/explore">View Our Engine</a>
-      </div>
+      <%-`
+      ${include('../partials/tradeTile',{elementName:'li',pricesType:profitableTrade.pricesType,title:false,
+      statistics:profitableTrade.statistics,
+      data:profitableTrade.data,_id:profitableTrade._id,
+      favouritesInfo:profitableTrade.favouritesInfo,isHighlighted:profitableTrade.isHighlighted,isOnFavouritePage:false,
+      showPageLink:'/trades/'+profitableTrade._id,
+      animationData:animationData})}`%>
 
+      <% } %>
 
-      <%- include('../partials/filterForm.ejs') %>
+   </ul>
+   <% } %>
 
+</main>
 
-
-
-   </header>
-
-
-   <main class="container pb-4">
-      <% if(profitableTrades){ %>
-
-         <ul>
-            <% let i=0;let directions=['right','left']; %>
-               <% for(let profitableTrade of profitableTrades){ %>
-                  <% ++i; %>
-
-
-                     <% let animationData=`data-aos="fade-${directions[i%2]}" data-aos-once="true" `; %>
-                        <% i<=2 ? animationData='' :null; %>
-
-                           <%-`
-                              ${include('../partials/tradeTile',{elementName:'li',pricesType:profitableTrade.pricesType,title:false,
-                              statistics:profitableTrade.statistics, data:profitableTrade.data,_id:profitableTrade._id,
-                              favouritesInfo:profitableTrade.favouritesInfo,isHighlighted:profitableTrade.isHighlighted,isOnFavouritePage:false,
-                              showPageLink:'/trades/'+profitableTrade._id, animationData:animationData})}`%>
-
-                              <% } %>
-
-
-
-         </ul>
-         <% } %>
-
-   </main>
-
-
-
-   <script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>
-   <script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>
+<script src="/javascripts/addingDeletingFavAndHigh/favourites.js"></script>
+<script src="/javascripts/addingDeletingFavAndHigh/highlights.js"></script>

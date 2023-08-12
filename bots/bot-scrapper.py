@@ -79,3 +79,6 @@ for i, target in enumerate(targets):
         print(f"ERROR LOADING: {i} - {target.name} {target.skin} {target.quality}")
 
         continue
+
+
+update_server_info_skin_update_time()
